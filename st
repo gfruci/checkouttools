@@ -1,5 +1,6 @@
 #!/bin/bash -i
 
+ST_DIR=`dirname $0`
 APPS=
 REBUILD=
 START=
@@ -14,31 +15,34 @@ do
     *) APPS="$APPS $p"
   esac
 done
-[ $VERBOSE ] && echo -e "Apps: $APPS\nRebuild apps: ${REBUILD:-false}\nStart apps: ${START:-false}"
+[ $VERBOSE ] && echo -e "Apps: $APPS\nRebuild apps: ${REBUILD:-false}\nStart apps: ${START:-false}\n\n"
 
 [ $VERBOSE ] && echo "Validating apps..."
 for app in $APPS;
 do
-  if [ -f "rebuild_$app" ] && [ -f "start_$app" ]; then
+  if [ -f "$ST_DIR/rebuild_$app" ] && [ -f "$ST_DIR/start_$app" ]; then
     [ $VERBOSE ] && echo "$app is valid"
   else
     echo "ERROR - $app has no builder or starter script (rebuild_$app or start_$app is missing)"
     exit 1
   fi
 done
+echo
 
 if [ $REBUILD ]; then
+  [ $VERBOSE ] && echo "Rebuilding apps..."
   for app in $APPS;
   do
     [ $VERBOSE ] && echo "Rebuilding app: $app"
-    eval rebuild_$app
+    eval $ST_DIR/rebuild_$app
   done
 fi
 
 if [ $START ]; then
+  [ $VERBOSE ] && echo "Starting apps..."
   for app in $APPS;
   do
     [ $VERBOSE ] && echo "Starting app: $app"
-    eval start_$app
+    eval $ST_DIR/start_$app
   done
 fi
