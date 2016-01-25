@@ -1,0 +1,5 @@
+#!/bin/bash -i
+. `dirname $0`/env.conf
+[ $VERBOSE ] && echo "HermesWebApp dir is set to $HWA_DIR"
+cd "$HWA_DIR"
+start //MAX cmd //T:05 run-hwa.bat -s=8090
