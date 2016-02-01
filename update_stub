@@ -1,0 +1,8 @@
+#!/bin/bash
+. `dirname $0`/env.conf
+LOG="$(mktemp -t stub_update-XXXX.log)"
+[ ! -z $STUB_DIR ] || exit 1
+[ $VERBOSE ] && echo "Stub dir is set to $STUB_DIR"
+echo "Stub update log from $1 branch: $LOG"
+cd "$STUB_DIR"
+git checkout $1 &> $LOG && git pull &> $LOG

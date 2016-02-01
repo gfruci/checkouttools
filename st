@@ -42,7 +42,7 @@ if [ $UPDATE ]; then
   for app in $APPS;
   do
     [ $VERBOSE ] && echo "Updating app: $app"
-    eval $ST_DIR/update_$app $UPDATE || handleError "updating $app" 
+    $ST_DIR/update_$app $UPDATE || handleError "updating $app" 
   done
 fi
 
@@ -51,7 +51,7 @@ if [ $REBUILD ]; then
   for app in $APPS;
   do
     [ $VERBOSE ] && echo "Rebuilding app: $app"
-    eval $ST_DIR/rebuild_$app || handleError "rebuilding $app"
+    $ST_DIR/rebuild_$app || handleError "rebuilding $app"
   done
 fi
 
@@ -60,7 +60,7 @@ if [ $START ]; then
   for app in $APPS;
   do
     [ $VERBOSE ] && echo "Starting app: $app"
-    eval $ST_DIR/start_$app || handleError "starting $app"
+    $ST_DIR/start_$app || handleError "starting $app"
   done
 fi
 
