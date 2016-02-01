@@ -2,4 +2,4 @@
 . `dirname $0`/env.conf
 [ $VERBOSE ] && echo "BookingApp dir is set to $BA_DIR"
 cd "$BA_DIR"
-start //MAX cmd //T:0E //c "run-ba.bat -s=8090 -assetsversion=33.0 -d=9000"
+start //MAX cmd //T:0E //k "run-ba.bat -s=8090 -assetsversion=33.0 -d=9000"
