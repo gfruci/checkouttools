@@ -19,7 +19,7 @@ do
     -r) REBUILD=true ;;
     -s) START=true ;;
     -u) UPDATE=master ;;
-    -v) VERBOSE=true ;;
+    -v) export VERBOSE=true ;;
     *) APPS="$APPS $p"
   esac
 done
