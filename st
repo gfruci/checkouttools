@@ -28,11 +28,14 @@ done
 [ $VERBOSE ] && echo "Validating apps..."
 for app in $APPS;
 do
-  if [ -f "$ST_DIR/rebuild_$app" ] && [ -f "$ST_DIR/start_$app" ] && [ -f "$ST_DIR/update_$app" ]; then
-    [ $VERBOSE ] && echo "$app is valid"
-  else
-    echo "ERROR - $app has no builder or starter or updater script (rebuild_$app or start_$app or update_$app is missing)"
-    exit 1
+  if [ $REBUILD ] && [ ! -f "$ST_DIR/rebuild_$app" ]; then
+    echo "$app doesn't have rebuild script" && exit 1
+  fi
+  if [ $START ] && [ ! -f "$ST_DIR/start_$app" ]; then
+    echo "$app doesn't have start script" && exit 1
+  fi
+  if [ $UPDATE ] && [ ! -f "$ST_DIR/update_$app" ]; then
+    echo "$app doesn't have update script" && exit 1
   fi
 done
 echo
