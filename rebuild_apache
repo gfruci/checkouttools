@@ -1,0 +1,3 @@
+#!/bin/bash -i
+[ $VERBOSE ] && echo "Apache doesn't require build"
+exit 0
