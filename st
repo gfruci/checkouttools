@@ -13,9 +13,23 @@ function handleError(){
   exit 1
 }
 
+function printHelp(){
+  echo "Application starter scripts to simplify stubbed environment startup."
+  echo "Usage: $0 [-s] [-r] [-u] [-v] app [app..]"
+  echo "Parameters:"
+  echo "-s    start application (start_'app')"
+  echo "-r    rebuild application (rebuild_'app')"
+  echo "-u    update application from master branch (update_'app')"
+  echo "-v    verbose logging"
+  echo "app   list of applications. Available values: apache, stub, ba, hwa"
+  echo
+  exit 0
+}
+
 for p in $@;
 do
   case ${p} in
+    -h) printHelp ;;
     -r) REBUILD=true ;;
     -s) START=true ;;
     -u) UPDATE=master ;;
