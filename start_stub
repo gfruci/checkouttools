@@ -2,4 +2,4 @@
 . `dirname $0`/env.conf
 [ $VERBOSE ] && echo "Stub dir is set to $STUB_DIR"
 cd "$STUB_DIR"
-start //MAX cmd //T:0B //k "java -jar target/checkito-standalone.jar -p 8090 --cap-config -v"
+start //MAX cmd //T:0B //k "java -jar target/checkito-standalone.jar -p 8090 --cap-config --proxy-all -v"
