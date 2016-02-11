@@ -1,7 +1,0 @@
-#!/bin/bash
-. `dirname $0`/env.conf
-LOG="$(mktemp -t cap_update-XXXX.log)"
-[ $VERBOSE ] && echo "Commonassetspack dir is set to $CAP_DIR"
-echo "Commonassetspack update log from $1 branch: $LOG"
-cd "$CAP_DIR"
-git checkout $1 &> $LOG && git pull &> $LOG

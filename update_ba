@@ -1,7 +1,0 @@
-#!/bin/bash -i
-. `dirname $0`/env.conf
-BA_UPDATE_LOG="$(mktemp -t ba_update-XXXX.log)"
-[ $VERBOSE ] && echo "BookingApp dir is set to $BA_DIR"
-echo "Booking App update log from $1 branch: $BA_UPDATE_LOG"
-cd "$BA_DIR"
-git checkout $1 &> $BA_UPDATE_LOG && git pull &> $BA_UPDATE_LOG

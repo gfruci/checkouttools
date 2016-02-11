@@ -1,7 +1,0 @@
-#!/bin/bash -i
-. `dirname $0`/env.conf
-HWA_UPDATE_LOG="$(mktemp -t hwa_update-XXXX.log)"
-[ $VERBOSE ] && echo "HermesWebApp dir is set to $HWA_DIR"
-echo "Hermes Web App update log from $1 branch: $HWA_UPDATE_LOG"
-cd "$HWA_DIR"
-git checkout $1 &> $HWA_UPDATE_LOG && git pull &> $HWA_UPDATE_LOG

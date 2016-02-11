@@ -1,3 +1,0 @@
-#!/bin/bash -i
-[ $VERBOSE ] && echo "Dionysusuipack doesn't require start"
-exit 0

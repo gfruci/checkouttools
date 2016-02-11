@@ -1,7 +1,0 @@
-#!/bin/bash
-. `dirname $0`/env.conf
-LOG="$(mktemp -t dio_update-XXXX.log)"
-[ $VERBOSE ] && echo "Dio dir is set to $DIO_DIR"
-echo "Dionysusuipack update log from $1 branch: $LOG"
-cd "$DIO_DIR"
-git checkout $1 &> $LOG && git pull &> $LOG

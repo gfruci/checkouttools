@@ -1,7 +1,0 @@
-#!/bin/bash
-. `dirname $0`/env.conf
-LOG="$(mktemp -t mvt_update-XXXX.log)"
-[ $VERBOSE ] && echo "Mvt dir is set to $MVT_DIR"
-echo "Mvtconfigpack update log from $1 branch: $LOG"
-cd "$MVT_DIR"
-git checkout $1 &> $LOG && git pull &> $LOG
