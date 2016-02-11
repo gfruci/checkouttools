@@ -21,7 +21,7 @@ function printHelp(){
   echo "-r    rebuild application (rebuild_'app')"
   echo "-u    update application from master branch (update_'app')"
   echo "-v    verbose logging"
-  echo "app   list of applications. Available values: apache, stub, ba, hwa"
+  echo "app   list of applications. Available values: apache, stub, ba, hwa, cap, dio, mvt"
   echo
   exit 0
 }
