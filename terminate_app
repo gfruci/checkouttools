@@ -1,0 +1,18 @@
+#!/bin/bash -i
+. `dirname $0`/env.conf
+app="$1"
+terminate_cmd="${ENV_CONF["$app,start_cmd"]}"
+
+function getStartingCommand(){
+	echo ${terminate_cmd#*\"} | sed -e 's#\"##g'
+}
+
+function getFormattedId(){
+	echo $(wmic Process Where "Caption Like '%cmd.exe%' AND CommandLine Like '%$(getStartingCommand)%'" get processId) | sed 's/[^0-9]*//g'
+}
+
+echo -e "\n${COLOR_STEP} Step: Terminating $app ${COLOR_RESET}"
+[ ! "$terminate_cmd" ] && echo "$app has no start command" && exit 0
+echo
+
+[ $(getFormattedId) ] && taskkill //PID $(getFormattedId) //T //F >/dev/null
