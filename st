@@ -32,6 +32,8 @@ function printHelp(){
 
 function checkForUpdates(){
   echo "Checking for updates..."
+  pushd . &> /dev/null
+  cd "$ST_DIR"
   git fetch origin master &> /dev/null
   updates=`git status master -sb`
   if [[ "$updates" == *behind* ]]; then
@@ -43,7 +45,9 @@ function checkForUpdates(){
       git stash
       git pull origin master
       git stash pop
+      popd
     else
+      popd
       exit 1
     fi
   fi
