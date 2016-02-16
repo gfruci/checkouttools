@@ -39,17 +39,7 @@ function checkForUpdates(){
   if [[ "$updates" == *behind* ]]; then
     echo "Updates available. Please get the latest version"
     echo "$updates"
-    echo -n "Would you like to pull the latest version? (y/N)"
-    read answer
-    if [[ "$answer" =~ [yYzZ] ]]; then
-      git stash
-      git pull origin master
-      git stash pop
-      popd
-    else
-      popd
-      exit 1
-    fi
+    exit 1
   fi
 }
 
