@@ -31,12 +31,21 @@ function printHelp(){
 }
 
 function checkForUpdates(){
+  echo "Checking for updates..."
   git fetch origin master &> /dev/null
   updates=`git status master -sb`
   if [[ "$updates" == *behind* ]]; then
     echo "Updates available. Please get the latest version"
     echo "$updates"
-    exit 1
+    echo -n "Would you like to pull the latest version? (y/N)"
+    read answer
+    if [[ "$answer" =~ [yYzZ] ]]; then
+      git stash
+      git pull origin master
+      git stash pop
+    else
+      exit 1
+    fi
   fi
 }
 
