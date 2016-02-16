@@ -30,6 +30,18 @@ function printHelp(){
   exit 0
 }
 
+function checkForUpdates(){
+  git fetch origin master &> /dev/null
+  updates=`git status master -sb`
+  if [[ "$updates" == *behind* ]]; then
+    echo "Updates available. Please get the latest version"
+    echo "$updates"
+    exit 1
+  fi
+}
+
+checkForUpdates
+
 for p in $@;
 do
   case ${p} in
