@@ -3,7 +3,7 @@ import sys
 import tempfile
 import zipfile
 from pathlib import Path
-from xml.etree import ElementTree as ET
+from xml.etree import ElementTree
 
 NAME_SPACES = {'spring': "http://www.springframework.org/schema/beans",
                'util': "http://www.springframework.org/schema/util"}
@@ -33,7 +33,7 @@ def parse_module_descriptors(path):
         return
     for f in Path(path).glob("**/*module-descriptor.xml"):
         debug_log("Parse file: {}", str(f))
-        dom = ET.parse(str(f)).getroot()
+        dom = ElementTree.parse(str(f)).getroot()
         xml_file = str(f).split("\\")[-1]
         modules[xml_file] = {}
         for i in dom.findall("util:set", NAME_SPACES):
