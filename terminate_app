@@ -1,18 +1,22 @@
-#!/bin/bash -i
+#!/usr/bin/env bash -i
 . `dirname $0`/env.conf
 app="$1"
-terminate_cmd="${ENV_CONF["$app,start_cmd"]}"
+terminate_cmd="${ENV_CONF["$app,grep_finding_string"]}"
+if [[ ! $terminate_cmd ]]; then
+    terminate_cmd="${ENV_CONF["$app,start_cmd"]}"
+fi
 
 function getStartingCommand(){
-	echo ${terminate_cmd#*\"} | sed -e 's#\"##g'
+	echo ${terminate_cmd#*\"} | sed -e 's/[[:space:]]*nohup[[:space:]]*//g; s/[[:space:]]*>>.*//g;'
 }
 
 function getFormattedId(){
-	echo $(wmic Process Where "Caption Like '%cmd.exe%' AND CommandLine Like '%$(getStartingCommand)%'" get processId) | sed 's/[^0-9]*//g'
+    echo `ps -ef | grep "$(getStartingCommand)" | grep -v "grep" | awk '{print $2}'`
 }
 
 echo -e "\n${COLOR_STEP} Step: Terminating $app ${COLOR_RESET}"
 [ ! "$terminate_cmd" ] && echo "$app has no start command" && exit 0
 echo
 
-[ $(getFormattedId) ] && taskkill //PID $(getFormattedId) //T //F >/dev/null
+FORMATTED_ID=$(getFormattedId)
+[ "$FORMATTED_ID" ] && sudo kill -9 $FORMATTED_ID `pgrep -P $FORMATTED_ID` >> /dev/null
