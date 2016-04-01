@@ -1,7 +1,7 @@
 #!/usr/bin/env bash -i
 . `dirname $0`/env.conf
 app="$1"
-terminate_cmd="${ENV_CONF["$app,grep_finding_string"]}"
+terminate_cmd="${ENV_CONF["$app,terminate_regexp"]}"
 if [[ ! $terminate_cmd ]]; then
     terminate_cmd="${ENV_CONF["$app,start_cmd"]}"
 fi
@@ -11,7 +11,7 @@ function getStartingCommand(){
 }
 
 function getFormattedId(){
-    echo `ps -ef | grep "$(getStartingCommand)" | grep -v "grep" | awk '{print $2}'`
+    echo `ps -ef | grep -e "$(getStartingCommand)" | grep -v "grep" | awk '{print $2}'`
 }
 
 echo -e "\n${COLOR_STEP} Step: Terminating $app ${COLOR_RESET}"
