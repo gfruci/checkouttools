@@ -6,7 +6,6 @@ start_cmd="${ENV_CONF["$app,start_cmd"]}"
 
 echo -e "\n${COLOR_STEP} Step: Starting $app ${COLOR_RESET}"
 [ ! "$start_cmd" ] && echo "$app has no start command" && exit 0
-echo
 
 #Validate config
 [ ! -d $appdir ] && echo "$appdir does not exist" && exit 1

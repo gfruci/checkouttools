@@ -16,7 +16,6 @@ function getFormattedId(){
 
 echo -e "\n${COLOR_STEP} Step: Terminating $app ${COLOR_RESET}"
 [ ! "$terminate_cmd" ] && echo "$app has no start command" && exit 0
-echo
 
 FORMATTED_ID=$(getFormattedId)
 [ "$FORMATTED_ID" ] && sudo kill -9 $FORMATTED_ID `pgrep -P $FORMATTED_ID` >> /dev/null
