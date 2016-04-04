@@ -1,4 +1,4 @@
-#!/bin/bash -i
+#!/usr/bin/env bash -i
 
 ST_DIR=`dirname $0`
 APPS=
@@ -61,7 +61,7 @@ done
 [ $VERBOSE ] && echo -e "Apps: $APPS\nRebuild apps: ${REBUILD:-false}\nStart apps: ${START:-false}Update branch:$UPDATE\n\n"
 
 if [ $TERMINATE ]; then
-  echo -e "${COLOR_HEADER} Terminating apps ${COLOR_RESET}"
+  echo -e "\n${COLOR_HEADER} Terminating apps ${COLOR_RESET}"
   for app in $APPS;
   do
     [ $VERBOSE ] && echo "Terminating app: $app"
@@ -70,7 +70,7 @@ if [ $TERMINATE ]; then
 fi
 
 if [ $UPDATE ]; then
-  echo -e "${COLOR_HEADER} Updating apps ${COLOR_RESET}"
+  echo -e "\n${COLOR_HEADER} Updating apps ${COLOR_RESET}"
   for app in $APPS;
   do
     [ $VERBOSE ] && echo "Updating app: $app"
@@ -79,7 +79,7 @@ if [ $UPDATE ]; then
 fi
 
 if [ $REBUILD ]; then
-  echo -e "${COLOR_HEADER} Rebuilding apps ${COLOR_RESET}"
+  echo -e "\n${COLOR_HEADER} Rebuilding apps ${COLOR_RESET}"
   for app in $APPS;
   do
     [ $VERBOSE ] && echo "Rebuilding app: $app"
@@ -88,7 +88,7 @@ if [ $REBUILD ]; then
 fi
 
 if [ $START ]; then
-  echo -e "${COLOR_HEADER} Starting apps ${COLOR_RESET}"
+  echo -e "\n${COLOR_HEADER} Starting apps ${COLOR_RESET}"
   for app in $APPS;
   do
     [ $VERBOSE ] && echo "Starting app: $app"

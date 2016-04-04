@@ -1,4 +1,4 @@
-#!/bin/bash -i
+#!/usr/bin/env bash -i
 . `dirname $0`/env.conf
 app="$1"
 appdir="${ENV_CONF["$app,dir"]}"
@@ -6,7 +6,6 @@ start_cmd="${ENV_CONF["$app,start_cmd"]}"
 
 echo -e "\n${COLOR_STEP} Step: Starting $app ${COLOR_RESET}"
 [ ! "$start_cmd" ] && echo "$app has no start command" && exit 0
-echo
 
 #Validate config
 [ ! -d $appdir ] && echo "$appdir does not exist" && exit 1
