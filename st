@@ -1,4 +1,4 @@
-#!/usr/bin/env bash -i
+#!/usr/bin/env bash
 
 ST_DIR=`dirname $0`
 APPS=

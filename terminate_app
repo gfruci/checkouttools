@@ -1,4 +1,4 @@
-#!/usr/bin/env bash -i
+#!/usr/bin/env bash
 . `dirname $0`/env.conf
 app="$1"
 terminate_cmd="${ENV_CONF["$app,start_cmd"]}"
