@@ -8,7 +8,7 @@ START=
 TESTS=
 VERBOSE=
 
-. $ST_DIR/env.conf_windows
+. $ST_DIR/env.conf
 
 function handleError(){
   echo "ERROR - Something went wrong during $1"
@@ -77,7 +77,7 @@ if [ $UPDATE ]; then
   for app in $APPS;
   do
     [ $VERBOSE ] && echo "Updating app: $app"
-    $ST_DIR/version_control_update $app $UPDATE || handleError "updating $app"
+    $ST_DIR/version_control_update $app $UPDATE || handleError "updating $app" 
   done
 fi
 
