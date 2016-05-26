@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+. `dirname $0`/env.conf_windows
+test_dir="${ENV_CONF["ba,dir"]}"bookingapp-ui-test/
+start_cmd="start //MAX cmd //T:0C //k \"mvn clean verify -Pstubbed,parallel\""\
+
+cd $test_dir
+eval $start_cmd

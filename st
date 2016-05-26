@@ -5,9 +5,10 @@ APPS=
 UPDATE=
 REBUILD=
 START=
+TESTS=
 VERBOSE=
 
-. $ST_DIR/env.conf
+. $ST_DIR/env.conf_windows
 
 function handleError(){
   echo "ERROR - Something went wrong during $1"
@@ -25,6 +26,7 @@ function printHelp(){
   echo "-u=<branch>   update application from <branch>"
   echo "-v            verbose logging"
   echo "-k            terminate application"
+  echo "-t            execute ui tests"
   echo "app           list of applications. Available values: apache, stub, ba, hwa, cap, dio, mvt"
   echo
   exit 0
@@ -53,6 +55,7 @@ do
     -s) START=true ;;
     -u) UPDATE=master ;;
     -k) TERMINATE=true ;;
+    -t) TESTS=true ;;
     -u=*) UPDATE=`echo "$p" | sed -e 's/^-u=//'` ;;
     -v) export VERBOSE=true ;;
     *) APPS="$APPS $p"
@@ -74,7 +77,7 @@ if [ $UPDATE ]; then
   for app in $APPS;
   do
     [ $VERBOSE ] && echo "Updating app: $app"
-    $ST_DIR/version_control_update $app $UPDATE || handleError "updating $app" 
+    $ST_DIR/version_control_update $app $UPDATE || handleError "updating $app"
   done
 fi
 
@@ -96,3 +99,7 @@ if [ $START ]; then
   done
 fi
 
+if [ $TESTS ]; then
+  echo  -e "\n${COLOR_HEADER} Execute UI tests ${COLOR_RESET}"
+  $ST_DIR/ui_tests
+fi
