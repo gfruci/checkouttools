@@ -53,7 +53,6 @@ do
     -s) START=true ;;
     -u) UPDATE=master ;;
     -k) TERMINATE=true ;;
-    -t) TESTS=true ;;
     -u=*) UPDATE=`echo "$p" | sed -e 's/^-u=//'` ;;
     -v) export VERBOSE=true ;;
     *) APPS="$APPS $p"
