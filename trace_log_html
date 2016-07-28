@@ -1,0 +1,94 @@
+#!/usr/bin/awk -f
+BEGIN {
+  FS=": "
+  OFS=" "
+  print "<html>"
+  print "<head>"
+  print "<style type=\"text/css\">\
+            body {\
+              font-family: monospace;              \
+              background-color: #F2F5DE;\
+            }\
+\
+            p {\
+              font-weight: bold;\
+              padding: 12px;\
+              border-radius: 4px;\
+            }\
+\
+            .returning {\
+              background-color: #F3DA91;\
+              border: 1px solid #E4CD8A; \
+            }\
+\
+            .entering {\
+              background-color: #B9DA93; \
+              border: 1px solid #ABCC85; \
+            }\
+\
+            .entering-wrapper {\
+              display: none;\
+            }\
+\
+            body > .entering-wrapper {\
+              display: block;\
+            }\
+\
+            .entering-wrapper.opened > div {\
+              display: block;\
+            }\
+\
+            .pointer {\
+              cursor: pointer;\
+            }\
+\
+            .pointer > span {\
+              display: inline;\
+            }\
+\
+            p > span {\
+              display: none;\
+            }\
+        </style>"
+  print "<script type=\"text/javascript\">"
+  print "function toggleFirstLevel(id){\
+            var element = document.getElementById(id);\
+            element.classList.toggle('opened');\
+          }\
+\
+          function toggleDownLevel(id){\
+            var elements = document.querySelectorAll(\"div[id='\"+id+\"'] div\");\
+            Array.prototype.forEach.call(elements, function(element){\
+              element.classList.add('opened');\
+            })\
+          }\
+\
+          document.addEventListener('DOMContentLoaded', function(event) { \
+            var enteringElements = document.querySelectorAll('.entering');\
+\
+            Array.prototype.filter.call(enteringElements, function (element) {\
+              return element.nextElementSibling && element.nextElementSibling.tagName === 'DIV';\
+            }).forEach(function (element) {\
+              element.classList.add('pointer');\
+            })\
+          });\
+        "
+  print "</script>"
+  print "</head>"
+  print "<body>"
+  indent=0
+}
+{
+  if ( $1 == "Returning" ) {
+    print "<p class='returning'>"$1,$2"</p></div>";
+    indent--
+  }
+  if ($1 == "Entering") {
+    print "<div class='entering-wrapper' style='margin-left:",indent*1"em;' id='"NR"'><p class='entering' onclick='toggleFirstLevel("NR")'><span onmouseup='toggleDownLevel("NR")'>+</span>",$1,$2"</p>";
+    indent++
+  } 
+}
+END {
+  print "</body>"
+  print "</html>"
+}

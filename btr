@@ -1,0 +1,12 @@
+#!/bin/bash
+TIMESTAMP=`date +"%Y-%m-%d_%H.%M"`
+TESTDIR="/c/work/git/bookingapp/bookingapp-ui-test/target/site/cucumber-html-reports/"
+BACKUPDIR="/c/work/LocalStubbedTestResults/$TIMESTAMP"
+INDEX="/c/work/LocalStubbedTestResults/index.html.default"
+
+mkdir $BACKUPDIR
+cp -R $TESTDIR $BACKUPDIR
+cp $INDEX $BACKUPDIR/index.html
+
+start chrome http://localhost:8080/$TIMESTAMP
+
