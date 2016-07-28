@@ -1,0 +1,46 @@
+#!/usr/bin/env bash
+. `dirname $0`/env.conf
+app="$1"
+terminate_cmd="${ENV_CONF["$app,start_cmd"]}"
+
+# OSX and UNIX functions
+
+function getOsxUnixStartingCommand() {
+    terminate_regexp="${ENV_CONF["$app,terminate_regexp"]}"
+    if [[ $terminate_regexp ]]; then
+        terminate_cmd=$terminate_regexp
+    fi
+    echo ${terminate_cmd#*\"} | sed -e 's/[[:space:]]*nohup[[:space:]]*//g; s/[[:space:]]*>>.*//g;'
+}
+
+function getOsxUnixFormattedId(){
+    echo `ps -ef | grep -e "$(getOsxUnixStartingCommand)" | grep -v "grep" | awk '{print $2}'`
+}
+
+# WIN functions
+
+function getWinStartingCommand(){
+    echo ${terminate_cmd#*\"} | sed -e 's#\"##g'
+}
+
+function getWinFormattedId(){
+	echo $(wmic Process Where "Caption Like '%cmd.exe%' AND CommandLine Like '%$(getWinStartingCommand)%'" get processId) | sed 's/[^0-9]*//g'
+}
+
+# Common part
+
+echo -e "\n${COLOR_STEP} Step: Terminating $app ${COLOR_RESET}"
+[ ! "$terminate_cmd" ] && echo "$app has no start command" && exit 0
+
+WIN=true
+if [[ "$(uname -s)" =~ "Darwin" ]] || [[ "$(uname -s)" =~ "Linux" ]]; then
+    WIN=false
+fi
+
+if [[ $WIN = true ]]; then
+    FORMATTED_ID=$(getWinFormattedId)
+    [ "$FORMATTED_ID" ] && taskkill //PID $FORMATTED_ID //T //F >/dev/null
+else
+    FORMATTED_ID=$(getOsxUnixFormattedId)
+    [ "$FORMATTED_ID" ] && sudo kill -9 $FORMATTED_ID `pgrep -P $FORMATTED_ID` >> /dev/null
+fi

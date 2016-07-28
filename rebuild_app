@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+. `dirname $0`/env.conf
+app="$1"
+appdir="${ENV_CONF["$app,dir"]}"
+build_cmd="${ENV_CONF["$app,build_cmd"]}"
+LOG=`mktemp -t ${app}_build-XXXX.log`
+
+
+echo -e "\n${COLOR_STEP} Step: Rebuilding $app ${COLOR_RESET}"
+[ ! "$build_cmd" ] && echo "$app has no build command" && exit 0
+echo -e "Log file:\t$LOG"
+echo
+
+#Validate config
+[ ! -d $appdir ] && echo "$appdir does not exist" && exit 1
+cd $appdir
+
+eval $build_cmd &>> $LOG

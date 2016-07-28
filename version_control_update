@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+. `dirname $0`/env.conf
+app="$1"
+branch="$2"
+vctype="${ENV_CONF["$app,version_control"]}"
+appdir="${ENV_CONF["$app,dir"]}"
+LOG=`mktemp -t ${app}_update-XXXX.log`
+
+forced_branch="${ENV_CONF["$app,forced_branch"]}"
+[ "$forced_branch" ] && branch=$forced_branch
+
+echo -e "\n${COLOR_STEP} Step: Updating $app ${COLOR_RESET}"
+[ ! "$vctype" ] && echo "$app is not version controlled" && exit 0
+echo -e "Log file:\t\t$LOG"
+echo -e "Version Control:\t$vctype"
+echo -e "Branch:\t\t\t$branch"
+echo
+
+#Validate config
+[ ! -d $appdir ] && echo "$appdir does not exist" && exit 1
+cd $appdir
+
+if [ "git" == "$vctype" ]; then
+    echo "Switch to $branch"
+    git checkout $branch &>> $LOG || exit 1
+    echo "Pull latest changes"
+    git pull &>> $LOG || exit 1
+else
+    echo "Unknown version control type: $vctype"
+    exit 1
+fi
