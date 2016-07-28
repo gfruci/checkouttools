@@ -1,5 +1,5 @@
 FROM registry.docker.hcom/hotels/apache:latest
-MAINTAINER Checkout SDET Team
+MAINTAINER Checkout SDET Team <HcomTechCKOSDETs@expedia.com>
 
 RUN echo 'RewriteRule ^/(booking/car_trawler\.html.*) /ba/$1                        	[L,PT]' >> /etc/httpd/conf/rewrite.rules
 RUN echo 'RewriteRule ^/(booking/confirmation/car_trawler.html.*) /ba/$1            	[L,PT]' >> /etc/httpd/conf/rewrite.rules
