@@ -23,4 +23,18 @@ RUN echo 'RewriteRule ^/(auth/externalauth/.*/reauth.html) /ba/$1               
 RUN echo 'RewriteRule ^/(auth/externalauth/.*/reauth) /$1.html                          [R,L]'  >> /etc/httpd/conf/rewrite.rules
 RUN echo 'RewriteRule ^/(auth/externalauth/.*/logout.html) /ba/$1                       [L,PT]' >> /etc/httpd/conf/rewrite.rules
 RUN echo 'RewriteRule ^/(auth/externalauth/.*/logout) /$1.html                          [R,L]'  >> /etc/httpd/conf/rewrite.rules
+#
+# devrom
+#
+RUN sed -i '/RewriteRule ^\/(assets\/.\*)/d' /etc/httpd/conf/rewrite.rules
+RUN sed -i '/RewriteRule ^\/(da\/daassets\/.\*)/d' /etc/httpd/conf/rewrite.rules
 
+RUN echo 'RewriteCond %{REQUEST_URI} !^/assets/.*\.[a-z]+$' >> /etc/httpd/conf/rewrite.rules
+RUN echo 'RewriteRule ^/(assets/.*) /da/$1                                                      [L,PT]' >> /etc/httpd/conf/rewrite.rules
+RUN echo 'RewriteRule ^/(da/daassets/.*) /da/$1                                                 [L,PT]' >> /etc/httpd/conf/rewrite.rules
+
+RUN echo 'RewriteRule ^/assets/(?!cat\/)(?:s/)?(?:[0-9]+(?:\.[0-9]+)?/)?(.*) /dup/assets/$1     [L,PT]' >> /etc/httpd/conf/rewrite.rules
+RUN echo 'RewriteRule ^/(assets/cat/js/.*) http://localhost:8080/$1                             [R,L]'  >> /etc/httpd/conf/rewrite.rules
+
+RUN echo 'JkUnMount /dup/* hwa'                                                                         >> /etc/httpd/conf/rewrite.rules
+RUN echo 'JkUnMount /cat/* hwa'                                                                         >> /etc/httpd/conf/rewrite.rules
