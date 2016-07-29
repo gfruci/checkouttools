@@ -13,5 +13,7 @@ RUN echo 'RewriteRule ^/(booking/resend_conf_mail.html.*) /ba/$1                
 RUN echo 'RewriteRule ^/(booking/resend_conf_sms.html.*) /ba/$1                     	[L,PT]' >> /etc/httpd/conf/rewrite.rules
 RUN echo 'RewriteRule ^/(booking/travelhook\.html.*) /ba/$1                         	[L,PT]' >> /etc/httpd/conf/rewrite.rules
 RUN echo 'RewriteRule ^/(partner_booking_confirmation.html.*) /ba/$1                	[L,PT]' >> /etc/httpd/conf/rewrite.rules
-RUN echo 'RewriteRule ^/(profile/instant_signin.html) /ba/fakehwa/$1                	[PT]'   >> /etc/httpd/conf/rewrite.rules
-RUN echo 'RewriteRule ^/(profile/signout.html) /ba/fakehwa/$1                       	[L,PT]' >> /etc/httpd/conf/rewrite.rules
+RUN echo 'RewriteRule ^/(profile/instant_signin.html) /ba/$1                	        [PT]'   >> /etc/httpd/conf/rewrite.rules
+RUN echo 'RewriteRule ^/(profile/signout.html) /ba/$1                       	        [L,PT]' >> /etc/httpd/conf/rewrite.rules
+RUN echo 'RewriteRule ^/(auth/externalauth/.*/redirect.html) /ba/$1                     [L,PT]' >> /etc/httpd/conf/rewrite.rules
+RUN echo 'RewriteRule ^/(auth/externalauth/.*/redirect) /$1.html                        [R,L]'  >> /etc/httpd/conf/rewrite.rules
