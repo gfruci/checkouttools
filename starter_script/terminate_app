@@ -42,5 +42,5 @@ if [[ $WIN = true ]]; then
     [ "$FORMATTED_ID" ] && taskkill //PID $FORMATTED_ID //T //F >/dev/null
 else
     FORMATTED_ID=$(getOsxUnixFormattedId)
-    [ "$FORMATTED_ID" ] && sudo kill -9 $FORMATTED_ID `pgrep -P $FORMATTED_ID` >> /dev/null
+    [ "$FORMATTED_ID" ] && kill -9 $FORMATTED_ID `pgrep -P $FORMATTED_ID` >> /dev/null
 fi
