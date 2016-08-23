@@ -28,6 +28,7 @@ RUN echo 'RewriteRule ^/(auth/externalauth/.*/logout) /$1.html                  
 #
 RUN sed -i '/RewriteRule ^\/(assets\/.\*)/d' /etc/httpd/conf/rewrite.rules
 RUN sed -i '/RewriteRule ^\/(da\/daassets\/.\*)/d' /etc/httpd/conf/rewrite.rules
+RUN sed -i '/RewriteRule ^\/(auth\/.\*)/d' /etc/httpd/conf/rewrite.rules
 
 RUN echo 'RewriteCond %{REQUEST_URI} !^/assets/.*\.[a-z]+$' >> /etc/httpd/conf/rewrite.rules
 RUN echo 'RewriteRule ^/(assets/.*) /da/$1                                                      [L,PT]' >> /etc/httpd/conf/rewrite.rules
