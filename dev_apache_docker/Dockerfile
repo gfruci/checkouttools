@@ -17,3 +17,8 @@ RUN echo 'RewriteRule ^/(profile/instant_signin.html) /ba/$1                	   
 RUN echo 'RewriteRule ^/(profile/signout.html) /ba/$1                       	        [L,PT]' >> /etc/httpd/conf/rewrite.rules
 RUN echo 'RewriteRule ^/(auth/externalauth/.*/redirect.html) /ba/$1                     [L,PT]' >> /etc/httpd/conf/rewrite.rules
 RUN echo 'RewriteRule ^/(auth/externalauth/.*/redirect) /$1.html                        [R,L]'  >> /etc/httpd/conf/rewrite.rules
+RUN echo 'RewriteRule ^/(auth/externalauth/.*/reauthredirect.html) /ba/$1               [L,PT]' >> /etc/httpd/conf/rewrite.rules
+RUN echo 'RewriteRule ^/(auth/externalauth/.*/reauthredirect) /$1.html                  [R,L]'  >> /etc/httpd/conf/rewrite.rules
+RUN echo 'RewriteRule ^/(auth/externalauth/.*/reauth.html) /ba/$1                       [L,PT]' >> /etc/httpd/conf/rewrite.rules
+RUN echo 'RewriteRule ^/(auth/externalauth/.*/reauth) /$1.html                          [R,L]'  >> /etc/httpd/conf/rewrite.rules
+
