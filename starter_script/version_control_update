@@ -25,6 +25,9 @@ if [ "git" == "$vctype" ]; then
     git checkout $branch &>> $LOG || exit 1
     echo "Pull latest changes"
     git pull &>> $LOG || exit 1
+elif [ "git_svn" == "$vctype" ]; then
+    echo "Pull latest changes"
+    git svn rebase &>> $LOG || exit 1
 else
     echo "Unknown version control type: $vctype"
     exit 1

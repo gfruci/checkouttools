@@ -42,7 +42,7 @@ function parse_maven_settings(){
 }
 
 function parse_default_properties(){
-  cat ${1}/bookingapp-acceptance-test/src/test/resources/conf/acceptance_test_dev_system.properties \
+  cat ${1}/bookingapp-acceptance-test/src/at/resources/conf/acceptance_test_dev_system.properties \
   | awk '{printf("-D%s\n", $0)}'
 }
 
@@ -84,11 +84,11 @@ function main(){
   debug_log "${settings_from_pom_xml}"
 
   if [[ "${COPY_TO_CLIPBOARD}" == "true" ]]; then
-    echo -e "${settings_from_maven}\n${settings_from_properties}\n${settings_from_pom_xml}" > /dev/clipboard
+    echo -e "${settings_from_maven//\\/\\\\}\n${settings_from_properties//\\/\\\\}\n${settings_from_pom_xml//\\/\\\\}" > /dev/clipboard
     echo "Result copied to the clipboard"
   else
     echo -e "\nJVM args:\n"
-    echo -e "${settings_from_maven}\n${settings_from_properties}\n${settings_from_pom_xml}"
+    echo -e "${settings_from_maven//\\/\\\\}\n${settings_from_properties//\\/\\\\}\n${settings_from_pom_xml//\\/\\\\}"
   fi
 }
 
