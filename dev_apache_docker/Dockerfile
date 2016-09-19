@@ -21,4 +21,6 @@ RUN echo 'RewriteRule ^/(auth/externalauth/.*/reauthredirect.html) /ba/$1       
 RUN echo 'RewriteRule ^/(auth/externalauth/.*/reauthredirect) /$1.html                  [R,L]'  >> /etc/httpd/conf/rewrite.rules
 RUN echo 'RewriteRule ^/(auth/externalauth/.*/reauth.html) /ba/$1                       [L,PT]' >> /etc/httpd/conf/rewrite.rules
 RUN echo 'RewriteRule ^/(auth/externalauth/.*/reauth) /$1.html                          [R,L]'  >> /etc/httpd/conf/rewrite.rules
+RUN echo 'RewriteRule ^/(auth/externalauth/.*/logout.html) /ba/$1                       [L,PT]' >> /etc/httpd/conf/rewrite.rules
+RUN echo 'RewriteRule ^/(auth/externalauth/.*/logout) /$1.html                          [R,L]'  >> /etc/httpd/conf/rewrite.rules
 
