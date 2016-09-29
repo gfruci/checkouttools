@@ -1,0 +1,9 @@
+#!/bin/sh
+
+#Check that commit message starts with a jira issue id
+if [[ ${1} =~ ^[A-Z][A-Z]*-[0-9][0-9]* ]]; then
+  echo "Comment message is valid"
+else
+  echo "Comment message has to start with a Jira issue id. E.g.: 'CKO-1: there I fixed it'"
+  exit 1
+fi
