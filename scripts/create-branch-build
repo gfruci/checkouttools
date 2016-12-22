@@ -15,6 +15,15 @@ function _help(){
   --project (-p) <project-name> : http://stash.hcom/projects/COP/repos/bookingapp/pull-requests -> COP
   --username (-u) <user-name>   : User for jira (SEA)
   --help (-h)                   : Print this help
+
+  Configuration to use without options:
+    git config
+      bamboo.plan
+      stash.repo
+      stash.project
+      jira.username
+      jira.password
+      
 HELP
 }
 
