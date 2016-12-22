@@ -1,0 +1,90 @@
+#!/bin/bash
+branch=""
+bamboo_plan=$(git config --get bamboo.plan)
+repo=$(git config --get stash.repo)
+project=$(git config --get stash.project)
+username=$(\git config --get jira.username)
+password=$(\git config --get jira.password)
+
+function _help(){
+  cat <<HELP
+  Usage:
+  --branch (-b) <branch-name>   : default is current branch
+  --bamboo-plan (-i) <plan-name>: http://bamboo.hcom/browse/BOOKING-BA -> BOOKING-BA
+  --repository (-r) <repo-name> : http://stash.hcom/projects/COP/repos/bookingapp/pull-requests -> bookingapp
+  --project (-p) <project-name> : http://stash.hcom/projects/COP/repos/bookingapp/pull-requests -> COP
+  --username (-u) <user-name>   : User for jira (SEA)
+  --help (-h)                   : Print this help
+HELP
+}
+
+
+while [[ $# -ne 0 ]]; do
+  case $1 in
+    --branch|-b)
+      branch=$2
+      shift
+      ;;
+    --bamboo-plan|-i)
+      bamboo_plan=$2
+      shift
+      ;;
+    --repository|-r)
+      repo=$2
+      shift
+      ;;
+    --project|-p)
+      project=$2
+      shift
+      ;;
+    --username|-u)
+      username=$2
+      shift
+      ;;
+    --help|-h)
+      _help
+      exit 0
+      ;;
+    *)
+      echo "Unknown parameter: $1"
+      _help
+      exit 0
+      ;;
+  esac
+  shift
+done
+
+[[ -z "${bamboo_plan}" ]] && echo "bamboo-plan cannot be empty. Use --bamboo-plan or set 'git config bamboo.plan <bambooplan>" && exit 1
+[[ -z "${repo}" ]] && echo "repo name is empty. Use --repository (-r) or set 'git config stash.repo <reponame>'" && exit 1
+[[ -z "${project}" ]] && echo "project name is empty. Use --project (-p) or set 'git config stash.project <projectname>'" && exit 1
+[[ -z "${username}" ]] && echo "User name is empty. Use --username(-u) or set 'git config jira.username <username>'" && exit 1
+if [[ -z "${branch}" ]]; then
+  branch=$(git rev-parse --abbrev-ref HEAD)
+fi
+if [[ -z "${password}" ]]; then
+  echo "I need you password. (you can set permanently with 'git config jira.password <yourpassword>'"
+  read -s password
+fi
+
+
+cat <<EOO
+Branch: ${branch}
+Build id: ${bamboo_plan}
+Repository: ${repo}
+Project: ${project}
+Username: ${username}
+EOO
+current_branches=$(curl  http://bamboo.hcom/rest/api/latest/plan/${bamboo_plan}/vcsBranches.json)
+echo ${current_branches}
+if [[ "$current_branches" == *${branch}* ]]; then
+  echo "There is an active branch build for ${branch}"
+  exit 0
+fi
+output=$(curl -ksS -u ${username}:${password} -X POST --data '{"fields": {"project": { "key": "PSUP" },"summary": "New branch build '${branch}'","issuetype": { "name" : "Branch Plan Request" },"customfield_14235" : "'${project}'","customfield_14233" : "'${repo}'","customfield_14234" : "'${branch}'","customfield_14236" : "'${bamboo_plan}'"}}' -H "Content-Type: application/json" https://jira.hotels.com/rest/api/2/issue)
+echo ""
+psup=$(echo $output | sed 's/.*key.*\(PSUP-[0-9]*\).*/\1/' )  
+address_to_submit=$(echo 'https://jira.hotels.com/rest/api/2/issue/'$psup'/transitions?expand=transitions.fields')   
+
+curl -ksS -u ${username}:${password} -X POST --data  '{"transition": {"id": "61"}}' -H "Content-Type: application/json" $address_to_submit
+
+echo "PSUP ticket: https://jira.hotels.com/browse/${psup}"
