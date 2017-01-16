@@ -8,6 +8,10 @@
 
 ## How to build it
 1. Build docker image
-  ```docker build -t registry.docker.hcom/v_ltarcsanyi/apache-checkout-test:latest .```
+  ```docker build -t registry.docker.hcom/v_ltarcsanyi/apache-checkout-test:<version> .```
 2. Push image to the repository
+  ```docker push registry.docker.hcom/v_ltarcsanyi/apache-checkout-test:<version>```
+3. Tag latest
+  ```docker tag registry.docker.hcom/v_ltarcsanyi/apache-checkout-test:<version> registry.docker.hcom/v_ltarcsanyi/apache-checkout-test:latest```
+4. Push latest
   ```docker push registry.docker.hcom/v_ltarcsanyi/apache-checkout-test:latest```
