@@ -3,8 +3,8 @@ branch=""
 bamboo_plan=$(git config --get bamboo.plan)
 repo=$(git config --get stash.repo)
 project=$(git config --get stash.project)
-username=$(\git config --get jira.username)
-password=$(\git config --get jira.password)
+username=$(\git config --get sea.username)
+password=$(\git config --get sea.password)
 
 function _help(){
   cat <<HELP
@@ -21,8 +21,8 @@ function _help(){
       bamboo.plan
       stash.repo
       stash.project
-      jira.username
-      jira.password
+      sea.username
+      sea.password
       
 HELP
 }
@@ -66,12 +66,12 @@ done
 [[ -z "${bamboo_plan}" ]] && echo "bamboo-plan cannot be empty. Use --bamboo-plan or set 'git config bamboo.plan <bambooplan>" && exit 1
 [[ -z "${repo}" ]] && echo "repo name is empty. Use --repository (-r) or set 'git config stash.repo <reponame>'" && exit 1
 [[ -z "${project}" ]] && echo "project name is empty. Use --project (-p) or set 'git config stash.project <projectname>'" && exit 1
-[[ -z "${username}" ]] && echo "User name is empty. Use --username(-u) or set 'git config jira.username <username>'" && exit 1
+[[ -z "${username}" ]] && echo "User name is empty. Use --username(-u) or set 'git config sea.username <username>'" && exit 1
 if [[ -z "${branch}" ]]; then
   branch=$(git rev-parse --abbrev-ref HEAD)
 fi
 if [[ -z "${password}" ]]; then
-  echo "I need you password. (you can set permanently with 'git config jira.password <yourpassword>'"
+  echo "I need you password. (you can set permanently with 'git config sea.password <yourpassword>'"
   read -s password
 fi
 
@@ -83,9 +83,11 @@ Repository: ${repo}
 Project: ${project}
 Username: ${username}
 EOO
-current_branches=$(curl  http://bamboo.hcom/rest/api/latest/plan/${bamboo_plan}/vcsBranches.json)
+current_branches=$(curl  --user "${username}:${password}" http://bamboo.hcom/rest/api/1.0/search/branches?masterPlanKey=${bamboo_plan})
 echo ${current_branches}
-if [[ "$current_branches" == *${branch}* ]]; then
+echo "Bamboo branch name: ${branch//\//-}"
+if [[ "$current_branches" == *${branch//\//-}* ]]; then
+  echo
   echo "There is an active branch build for ${branch}"
   exit 0
 fi
