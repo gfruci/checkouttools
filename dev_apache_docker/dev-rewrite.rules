@@ -20,6 +20,4 @@ RewriteRule ^/(auth/externalauth/.*/reauth.html) /ba/$1                       [L
 RewriteRule ^/(auth/externalauth/.*/reauth) /$1.html                          [R,L]
 RewriteRule ^/(auth/externalauth/.*/logout.html) /ba/$1                       [L,PT]
 RewriteRule ^/(auth/externalauth/.*/logout)$ /$1.html                         [R,L]
-RewriteRule ^/(auth/externalauth/.*/logoutredirect.html) /ba/$1               [L,PT]
-RewriteRule ^/(auth/externalauth/.*/logoutsuccess.html) /ba/$1                [L,PT]
 RewriteRule ^/(partners/.*) /ba/$1                                            [L,PT]
