@@ -21,6 +21,12 @@ format tracelog for console (colors and indentations)
 ###trace_log_html
 format tracelog into html (colors, collapsable, fancy)
 
+###get_all_repos.py
+Collects all repository from Codesearch where query applied
+1. Usage: ```./get_all_repos.py "front-end-app-base" "Dockerfile"```
+2. Usage: ```./get_all_repos.py "<query>" "<files>"```
+
+
 ###module-desc
 Python script to parse all module-descriptor in the specified directory and also extract descriptor files from jars.
 
