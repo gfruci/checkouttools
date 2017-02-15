@@ -42,7 +42,7 @@ function parse_maven_settings(){
 }
 
 function parse_default_properties(){
-  cat ${1}/bookingapp-acceptance-test/src/at/resources/conf/acceptance_test_dev_system.properties \
+  cat ${1}/bookingapp-acceptance-test/src/at/resources/conf/acceptance_test_{dev,additional_context_fragments}_system.properties \
   | awk '{printf("-D%s\n", $0)}'
 }
 
