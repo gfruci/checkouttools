@@ -5,13 +5,15 @@
 DEBUG="false"
 BA_HOME=""
 COPY_TO_CLIPBOARD="false"
+ENV=dev
 
 
 function print_help(){
   echo "Usage:"
-  echo "${0} [-v] [-c] [-h] <bookingapp directory>"
+  echo "${0} [-v] [-c] [-h] [-e env] <bookingapp directory>"
   echo "-v  verbose"
   echo "-c  copy result to clipboard (Windows bash only, it uses /dev/clipboard)"
+  echo "-e  acceptance tests env (e.g dev_rom). Default is dev."
   echo "-h  print this help"
 }
 
@@ -42,7 +44,7 @@ function parse_maven_settings(){
 }
 
 function parse_default_properties(){
-  cat ${1}/bookingapp-acceptance-test/src/at/resources/conf/acceptance_test_{dev,additional_context_fragments}_system.properties \
+  cat ${1}/bookingapp-acceptance-test/src/at/resources/conf/acceptance_test_{${ENV},additional_context_fragments}_system.properties \
   | awk '{printf("-D%s\n", $0)}'
 }
 
@@ -58,6 +60,7 @@ function process_args(){
     -v) DEBUG="true" ;;
     -c) COPY_TO_CLIPBOARD="true" ;;
     -h) print_help && exit 0 ;;
+    -e) ENV=${2} ;;
     *) BA_HOME=${1} ;;
     esac
     shift
