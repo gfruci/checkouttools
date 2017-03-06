@@ -60,7 +60,8 @@ function process_args(){
     -v) DEBUG="true" ;;
     -c) COPY_TO_CLIPBOARD="true" ;;
     -h) print_help && exit 0 ;;
-    -e) ENV=${2} ;;
+    -e) shift
+        ENV=${1} ;;
     *) BA_HOME=${1} ;;
     esac
     shift
