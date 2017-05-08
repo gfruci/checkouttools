@@ -44,7 +44,7 @@ function parse_maven_settings(){
 }
 
 function parse_default_properties(){
-  cat ${1}/bookingapp-acceptance-test/src/at/resources/conf/acceptance_test_{${ENV},additional_context_fragments}_system.properties \
+  awk '$1' ${1}/bookingapp-acceptance-test/src/at/resources/conf/acceptance_test_{${ENV},additional_context_fragments}_system.properties \
   | grep -v '#' | awk '{printf("-D%s\n", $0)}'
 }
 
