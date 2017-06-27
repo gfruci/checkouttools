@@ -51,8 +51,8 @@ public class I18nMockUpdater {
 
     }
 
-    private void update(String fromJson) throws IOException, InterruptedException {
-        Map<String, String> i18nMessages = loadJsonFileToMap(fromJson);
+    private void update(String jsonFile) throws IOException, InterruptedException {
+        Map<String, String> i18nMessages = loadJsonFileToMap(jsonFile);
         Map<String, String> newI18nMessages = new HashMap<>();
 
         int totalMessageCount = i18nMessages.size();
@@ -84,15 +84,17 @@ public class I18nMockUpdater {
         LOGGER.info("Updating mock data from localisation service finished.");
         LOGGER.info("Total calls: {}, unchanged values: {}, null values in service: {}.", totalMessageCount, sameAsBeforeCounter, nullValueCounter);
 
-        createJsonFileFromMap(newI18nMessages, fromJson);
+        createJsonFileFromMap(newI18nMessages, jsonFile);
     }
 
     private String downloadI18nValueFromLocalisationService(String key) throws IOException {
         URL url = new URL(LOCALISATIONSVC_STAGING + key);
+        LOGGER.debug("Opening connection to {}.", url);
         URLConnection urlConnection = url.openConnection();
         InputStream inputStream = urlConnection.getInputStream();
         BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
 
+        LOGGER.debug("Parsing data from service...");
         String newValueFromLocalisationService = new Gson().fromJson(reader, I18nMessagesLocalisationServiceModel.class).getEn_US();
 
         reader.close();
