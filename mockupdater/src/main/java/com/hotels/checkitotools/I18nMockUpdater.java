@@ -71,7 +71,7 @@ public class I18nMockUpdater {
             LOGGER.debug("[{} / {}] Getting {} from localisation service...", processed + 1, totalMessageCount, messageEntry.getKey());
             final String newLocalisationValue = getMockDataFromLocalisationService(key);
 
-            LOGGER.debug("[{} / {}] New value for {} is '{}'", processed++, totalMessageCount, messageEntry.getKey(), newLocalisationValue);
+            LOGGER.debug("[{} / {}] New value for {} is '{}'", ++processed, totalMessageCount, messageEntry.getKey(), newLocalisationValue);
             newI18nMessages.put(key, newLocalisationValue);
 
             if (null == newLocalisationValue) {
