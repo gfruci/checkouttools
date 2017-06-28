@@ -1,16 +1,21 @@
 package com.hotels.checkitotools.model;
 
+import com.google.gson.annotations.SerializedName;
+
 /**
  * Created by Marton_Kadar on 2017-06-26.
+ *
+ * Gson model for localisationsvc/messages response
  */
 public class I18nMessagesLocalisationServiceModel {
-    public String getEn_US() {
-        return en_US;
+    public String getEnUS() {
+        return enUS;
     }
 
-    public void setEn_US(String en_US) {
-        this.en_US = en_US;
+    public void setEnUS(String enUS) {
+        this.enUS = enUS;
     }
 
-    private String en_US;
+    @SerializedName("en_US")
+    private String enUS;
 }

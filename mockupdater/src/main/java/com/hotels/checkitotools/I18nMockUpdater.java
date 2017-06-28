@@ -14,6 +14,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,7 +27,7 @@ import com.hotels.checkitotools.model.I18nMessagesLocalisationServiceModel;
 /**
  * Created by Marton_Kadar on 2017-06-26.
  *
- * Updates the internationalisation mock in Checkito from the localisation service.
+ * Updates the internationalisation mock in Checkito from the localisation service with en_US values.
  * Helper class to fulfill the ACs of CKO-603.
  */
 public class I18nMockUpdater {
@@ -37,8 +38,8 @@ public class I18nMockUpdater {
 
     /**
      *
-     * @param args The first parameter should be the input json file for example:
-     * "d:/HDC-ODC/repositories/Checkout/checkito/checkito-checkout/src/main/resources/com/hotels/checkito/config/i18n_messages.json"
+     * @param args The first parameter should be the input json file.
+     *
      * @throws IOException File not found, or something IO went wrong.
      * @throws InterruptedException Thread.sleep can throw this, but the service went down when we tried it without wait.
      */
@@ -53,7 +54,7 @@ public class I18nMockUpdater {
 
     private void update(String jsonFile) throws IOException, InterruptedException {
         Map<String, String> i18nMessages = loadJsonFileToMap(jsonFile);
-        Map<String, String> newI18nMessages = new HashMap<>();
+        TreeMap<String, String> newI18nMessages = new TreeMap<>();
 
         int totalMessageCount = i18nMessages.size();
         int processed = 0;
@@ -67,7 +68,7 @@ public class I18nMockUpdater {
             Thread.sleep(MILLIS_TO_WAIT_BETWEEN_SERVICE_CALLS);
 
             LOGGER.debug("[{} / {}] Getting {} from localisation service...", processed++, totalMessageCount, messageEntry.getKey());
-            String newLocalisationValue = downloadI18nValueFromLocalisationService(key);
+            String newLocalisationValue = getMockDataFromLocalisationService(new URL(LOCALISATIONSVC_STAGING + key));
 
             LOGGER.debug("[{} / {}] New value for {} is '{}'", processed, totalMessageCount, messageEntry.getKey(), newLocalisationValue);
             newI18nMessages.put(key, newLocalisationValue);
@@ -87,23 +88,23 @@ public class I18nMockUpdater {
         createJsonFileFromMap(newI18nMessages, jsonFile);
     }
 
-    private String downloadI18nValueFromLocalisationService(String key) throws IOException {
-        URL url = new URL(LOCALISATIONSVC_STAGING + key);
+    private String getMockDataFromLocalisationService(URL url) throws IOException {
         LOGGER.debug("Opening connection to {}.", url);
         URLConnection urlConnection = url.openConnection();
         InputStream inputStream = urlConnection.getInputStream();
         BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
 
         LOGGER.debug("Parsing data from service...");
-        String newValueFromLocalisationService = new Gson().fromJson(reader, I18nMessagesLocalisationServiceModel.class).getEn_US();
+        String mockData = new Gson().fromJson(reader, I18nMessagesLocalisationServiceModel.class).getEnUS();
 
+        LOGGER.debug("Closing readers...");
         reader.close();
         inputStream.close();
 
-        return newValueFromLocalisationService;
+        return mockData;
     }
 
-    private void createJsonFileFromMap(Map<String, String> mapToSaveAsJson, String fileName) {
+    private void createJsonFileFromMap(TreeMap<String, String> mapToSaveAsJson, String fileName) {
         Gson gson = new GsonBuilder().serializeNulls().setPrettyPrinting().create();
         File file = new File(fileName);
 
