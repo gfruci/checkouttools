@@ -33,17 +33,14 @@ import com.hotels.checkitotools.model.I18nMessagesLocalisationServiceModel;
  */
 public class I18nMockUpdater {
     private static final Logger LOGGER = LoggerFactory.getLogger(I18nMockUpdater.class);
-
-    private static final int MILLIS_TO_WAIT_BETWEEN_SERVICE_CALLS = 100;
     private static final String LOCALISATION_SERVICE_STAGING_URL = "http://localisationsvc.staging.hcom/messages/";
 
     /**
      * @param args The first parameter should be the input json file.
      *
      * @throws IOException File not found, or something IO went wrong.
-     * @throws InterruptedException Thread.sleep can throw this, but the service went down when we tried it without wait.
      */
-    public static void main(final String[] args) throws IOException, InterruptedException {
+    public static void main(final String[] args) throws IOException {
         if (args.length < 1) {
             LOGGER.error("Mandatory parameter missing.\n"
                 + "\t\tUsage:\tjava -jar target/mockupdater-{version}-jar-with-dependencies.jar \"{path to the i18n_messages.json in the Checkout "
@@ -53,7 +50,7 @@ public class I18nMockUpdater {
         }
     }
 
-    private void update(final String jsonFile) throws IOException, InterruptedException {
+    private void update(final String jsonFile) throws IOException {
         final Map<String, String> i18nMessages = loadJsonFileToMap(jsonFile);
         final TreeMap<String, String> newI18nMessages = new TreeMap<>();
 
@@ -65,8 +62,6 @@ public class I18nMockUpdater {
         LOGGER.info("Updating mock data from localisation service started.");
         for (final Map.Entry messageEntry : i18nMessages.entrySet()) {
             final String key = messageEntry.getKey().toString();
-
-            Thread.sleep(MILLIS_TO_WAIT_BETWEEN_SERVICE_CALLS);
 
             LOGGER.debug("[{} / {}] Getting {} from localisation service...", processed + 1, totalMessageCount, messageEntry.getKey());
             final String newLocalisationValue = getMockDataFromLocalisationService(key);
