@@ -14,6 +14,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.TreeMap;
 
 import org.slf4j.Logger;
@@ -25,10 +26,10 @@ import com.google.gson.reflect.TypeToken;
 import com.hotels.checkitotools.model.I18nMessagesLocalisationServiceModel;
 
 /**
- * Created by Marton_Kadar on 2017-06-26.
- *
  * Updates the internationalisation mock in Checkito from the localisation service with en_US values.
- * Helper class to fulfill the ACs of CKO-603.
+ * Helper utility to fulfill the ACs of CKO-603.
+ *
+ * @author Marton_Kadar
  */
 public class I18nMockUpdater {
     private static final Logger LOGGER = LoggerFactory.getLogger(I18nMockUpdater.class);
@@ -37,7 +38,6 @@ public class I18nMockUpdater {
     private static final String LOCALISATION_SERVICE_STAGING_URL = "http://localisationsvc.staging.hcom/messages/";
 
     /**
-     *
      * @param args The first parameter should be the input json file.
      *
      * @throws IOException File not found, or something IO went wrong.
@@ -49,7 +49,6 @@ public class I18nMockUpdater {
         } else {
             new I18nMockUpdater().update(args[0]);
         }
-
     }
 
     private void update(final String jsonFile) throws IOException, InterruptedException {
@@ -67,20 +66,17 @@ public class I18nMockUpdater {
 
             Thread.sleep(MILLIS_TO_WAIT_BETWEEN_SERVICE_CALLS);
 
-            LOGGER.debug("[{} / {}] Getting {} from localisation service...", processed++, totalMessageCount, messageEntry.getKey());
-            final String newLocalisationValue = getMockDataFromLocalisationService(new URL(LOCALISATION_SERVICE_STAGING_URL + key));
+            LOGGER.debug("[{} / {}] Getting {} from localisation service...", processed + 1, totalMessageCount, messageEntry.getKey());
+            final String newLocalisationValue = getMockDataFromLocalisationService(key);
 
-            LOGGER.debug("[{} / {}] New value for {} is '{}'", processed, totalMessageCount, messageEntry.getKey(), newLocalisationValue);
+            LOGGER.debug("[{} / {}] New value for {} is '{}'", processed++, totalMessageCount, messageEntry.getKey(), newLocalisationValue);
             newI18nMessages.put(key, newLocalisationValue);
 
             if (null == newLocalisationValue) {
                 LOGGER.warn("Null value found for key: {}", messageEntry.getKey());
                 nullValueCounter++;
-                if (null == messageEntry.getValue()) {
-                    LOGGER.debug("Value in localisation service has not changed since last update for key: {}", messageEntry.getKey());
-                    sameAsBeforeCounter++;
-                }
-            } else if (newLocalisationValue.equals(messageEntry.getValue())) {
+            }
+            if (Objects.equals(messageEntry.getValue(), newLocalisationValue)) {
                 LOGGER.debug("Value in localisation service has not changed since last update for key: {}", messageEntry.getKey());
                 sameAsBeforeCounter++;
             }
@@ -92,8 +88,10 @@ public class I18nMockUpdater {
         createJsonFileFromMap(newI18nMessages, jsonFile);
     }
 
-    private String getMockDataFromLocalisationService(final URL url) throws IOException {
+    private String getMockDataFromLocalisationService(final String key) throws IOException {
+        final URL url = new URL(LOCALISATION_SERVICE_STAGING_URL + key);
         LOGGER.debug("Opening connection to {}.", url);
+
         final URLConnection urlConnection = url.openConnection();
         final InputStream inputStream = urlConnection.getInputStream();
         final BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));

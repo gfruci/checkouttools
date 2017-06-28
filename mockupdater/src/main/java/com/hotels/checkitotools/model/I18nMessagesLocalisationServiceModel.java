@@ -3,9 +3,9 @@ package com.hotels.checkitotools.model;
 import com.google.gson.annotations.SerializedName;
 
 /**
- * Created by Marton_Kadar on 2017-06-26.
- *
  * Gson model for localisationsvc/messages response
+ *
+ * @author Marton_Kadar
  */
 public class I18nMessagesLocalisationServiceModel {
     @SerializedName("en_US")
