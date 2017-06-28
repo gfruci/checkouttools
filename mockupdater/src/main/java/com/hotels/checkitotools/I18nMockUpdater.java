@@ -34,7 +34,7 @@ public class I18nMockUpdater {
     private static final Logger LOGGER = LoggerFactory.getLogger(I18nMockUpdater.class);
 
     private static final int MILLIS_TO_WAIT_BETWEEN_SERVICE_CALLS = 100;
-    private static final String LOCALISATIONSVC_STAGING = "http://localisationsvc.staging.hcom/messages/";
+    private static final String LOCALISATION_SERVICE_STAGING_URL = "http://localisationsvc.staging.hcom/messages/";
 
     /**
      *
@@ -43,7 +43,7 @@ public class I18nMockUpdater {
      * @throws IOException File not found, or something IO went wrong.
      * @throws InterruptedException Thread.sleep can throw this, but the service went down when we tried it without wait.
      */
-    public static void main(String[] args) throws IOException, InterruptedException {
+    public static void main(final String[] args) throws IOException, InterruptedException {
         if (args.length < 1) {
             LOGGER.error("Mandatory parameter missing.\n\t\tUsage: java I18nMockUpdater {path to the i18n_messages.json in the Checkout repository}");
         } else {
@@ -52,23 +52,23 @@ public class I18nMockUpdater {
 
     }
 
-    private void update(String jsonFile) throws IOException, InterruptedException {
-        Map<String, String> i18nMessages = loadJsonFileToMap(jsonFile);
-        TreeMap<String, String> newI18nMessages = new TreeMap<>();
+    private void update(final String jsonFile) throws IOException, InterruptedException {
+        final Map<String, String> i18nMessages = loadJsonFileToMap(jsonFile);
+        final TreeMap<String, String> newI18nMessages = new TreeMap<>();
 
-        int totalMessageCount = i18nMessages.size();
+        final int totalMessageCount = i18nMessages.size();
         int processed = 0;
         int nullValueCounter = 0;
         int sameAsBeforeCounter = 0;
 
         LOGGER.info("Updating mock data from localisation service started.");
-        for (Map.Entry messageEntry : i18nMessages.entrySet()) {
-            String key = messageEntry.getKey().toString();
+        for (final Map.Entry messageEntry : i18nMessages.entrySet()) {
+            final String key = messageEntry.getKey().toString();
 
             Thread.sleep(MILLIS_TO_WAIT_BETWEEN_SERVICE_CALLS);
 
             LOGGER.debug("[{} / {}] Getting {} from localisation service...", processed++, totalMessageCount, messageEntry.getKey());
-            String newLocalisationValue = getMockDataFromLocalisationService(new URL(LOCALISATIONSVC_STAGING + key));
+            final String newLocalisationValue = getMockDataFromLocalisationService(new URL(LOCALISATION_SERVICE_STAGING_URL + key));
 
             LOGGER.debug("[{} / {}] New value for {} is '{}'", processed, totalMessageCount, messageEntry.getKey(), newLocalisationValue);
             newI18nMessages.put(key, newLocalisationValue);
@@ -88,14 +88,14 @@ public class I18nMockUpdater {
         createJsonFileFromMap(newI18nMessages, jsonFile);
     }
 
-    private String getMockDataFromLocalisationService(URL url) throws IOException {
+    private String getMockDataFromLocalisationService(final URL url) throws IOException {
         LOGGER.debug("Opening connection to {}.", url);
-        URLConnection urlConnection = url.openConnection();
-        InputStream inputStream = urlConnection.getInputStream();
-        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+        final URLConnection urlConnection = url.openConnection();
+        final InputStream inputStream = urlConnection.getInputStream();
+        final BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
 
         LOGGER.debug("Parsing data from service...");
-        String mockData = new Gson().fromJson(reader, I18nMessagesLocalisationServiceModel.class).getEnUS();
+        final String mockData = new Gson().fromJson(reader, I18nMessagesLocalisationServiceModel.class).getEnUS();
 
         LOGGER.debug("Closing readers...");
         reader.close();
@@ -104,27 +104,27 @@ public class I18nMockUpdater {
         return mockData;
     }
 
-    private void createJsonFileFromMap(TreeMap<String, String> mapToSaveAsJson, String fileName) {
-        Gson gson = new GsonBuilder().serializeNulls().setPrettyPrinting().create();
-        File file = new File(fileName);
+    private void createJsonFileFromMap(final TreeMap<String, String> mapToSaveAsJson, final String fileName) {
+        final Gson gson = new GsonBuilder().serializeNulls().setPrettyPrinting().create();
+        final File file = new File(fileName);
 
         try (Writer writer = new FileWriter(file)) {
             LOGGER.info("Writing file to {}.", file.getAbsolutePath());
             gson.toJson(mapToSaveAsJson, writer);
-        } catch (IOException e) {
+        } catch (final IOException e) {
             LOGGER.error("File writing failed to {}.\nCause: {}", file.getAbsolutePath(), e);
         }
     }
 
-    private Map<String, String> loadJsonFileToMap(String jsonFile) {
+    private Map<String, String> loadJsonFileToMap(final String jsonFile) {
         LOGGER.debug("Loading JSON file from {} to map.", jsonFile);
-        Type mapType = new TypeToken<Map<String, String>>() {
+        final Type mapType = new TypeToken<Map<String, String>>() {
         }.getType();
 
         Map<String, String> resultMap = new HashMap<>();
         try {
             resultMap = new Gson().fromJson(new FileReader(jsonFile), mapType);
-        } catch (FileNotFoundException e) {
+        } catch (final FileNotFoundException e) {
             LOGGER.error("File not found {}.\nCause: {}", jsonFile, e);
         }
 
