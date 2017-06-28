@@ -46,8 +46,8 @@ public class I18nMockUpdater {
     public static void main(final String[] args) throws IOException, InterruptedException {
         if (args.length < 1) {
             LOGGER.error("Mandatory parameter missing.\n"
-                + "\t\tUsage:\tjava -jar target/mockupdater-{version}-jar-with-dependencies.jar {path to the i18n_messages.json in the Checkout "
-                + "repository}");
+                + "\t\tUsage:\tjava -jar target/mockupdater-{version}-jar-with-dependencies.jar \"{path to the i18n_messages.json in the Checkout "
+                + "repository}\"");
         } else {
             new I18nMockUpdater().update(args[0]);
         }
