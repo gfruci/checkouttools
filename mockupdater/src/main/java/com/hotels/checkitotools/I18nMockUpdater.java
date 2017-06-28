@@ -76,6 +76,10 @@ public class I18nMockUpdater {
             if (null == newLocalisationValue) {
                 LOGGER.warn("Null value found for key: {}", messageEntry.getKey());
                 nullValueCounter++;
+                if (null == messageEntry.getValue()) {
+                    LOGGER.debug("Value in localisation service has not changed since last update for key: {}", messageEntry.getKey());
+                    sameAsBeforeCounter++;
+                }
             } else if (newLocalisationValue.equals(messageEntry.getValue())) {
                 LOGGER.debug("Value in localisation service has not changed since last update for key: {}", messageEntry.getKey());
                 sameAsBeforeCounter++;
