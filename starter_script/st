@@ -30,16 +30,42 @@ function printHelp(){
   exit 0
 }
 
+function displaytime() {
+  local T=$1
+  local D=$((T/60/60/24))
+  local H=$((T/60/60%24))
+  local M=$((T/60%60))
+  local S=$((T%60))
+  (( $D > 0 )) && printf '%d days ' $D
+  (( $H > 0 )) && printf '%d hours ' $H
+  (( $M > 0 )) && printf '%d minutes ' $M
+  (( $D > 0 || $H > 0 || $M > 0 )) && (( $S > 0 )) && printf 'and '
+  (( $S > 0)) && printf '%d seconds\n' $S
+}
+
 function checkForUpdates(){
-  echo "Checking for updates..."
-  pushd . &> /dev/null
-  cd "$ST_DIR"
-  git fetch origin master &> /dev/null
-  updates=`git status master -sb`
-  if [[ "$updates" == *behind* ]]; then
-    echo "Updates available. Please get the latest version"
-    echo "$updates"
-    exit 1
+  TEMPFILE='/tmp/lastrun.tmp'
+  if [ ! -f $TEMPFILE ]; then
+    date +%s >$TEMPFILE
+  fi
+  LASTRUNTIME=$(cat /tmp/lastrun.tmp)
+  CURRENTRUNTIME=`date +%s`
+  DIFF=`expr $CURRENTRUNTIME - $LASTRUNTIME`
+  LIMITTIME=600
+  DISPLAYTIME=$(displaytime $DIFF)
+  echo "Last check for updates was $DISPLAYTIME ago. I'll check for new versions only once in every $(displaytime $LIMITTIME)"
+  if [ $DIFF -gt $LIMITTIME ]; then
+    date +%s >$TEMPFILE
+    echo "Checking for updates..."
+    pushd . &> /dev/null
+    cd "$ST_DIR"
+    git fetch origin master &> /dev/null
+    updates=`git status master -sb`
+    if [[ "$updates" == *behind* ]]; then
+      echo "Updates available. Please get the latest version"
+      echo "$updates"
+      exit 1
+    fi
   fi
 }
 
