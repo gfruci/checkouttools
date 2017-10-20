@@ -4,6 +4,7 @@
 
 DEBUG="false"
 BA_HOME=""
+ACC_TEST_DIR_NAME="bookingapp-acceptance-test"
 COPY_TO_CLIPBOARD="false"
 ENV=dev
 
@@ -44,12 +45,12 @@ function parse_maven_settings(){
 }
 
 function parse_default_properties(){
-  awk '$1' ${1}/bookingapp-acceptance-test/src/at/resources/conf/acceptance_test_{${ENV},additional_context_fragments}_system.properties \
+  awk '$1' ${1}/${ACC_TEST_DIR_NAME}/src/at/resources/conf/acceptance_test_{${ENV},additional_context_fragments}_system.properties \
   | grep -v '#' | awk '{printf("-D%s\n", $0)}'
 }
 
 function parse_pom_xml(){
-  cat ${1}/bookingapp-acceptance-test/pom.xml \
+  cat ${1}/${ACC_TEST_DIR_NAME}/pom.xml \
   | egrep "<(COOKIELESS_DOMAIN_ENABLED|LOCALISATION_DEV_LANGUAGE_TO_LOAD|UI_DEVELOPMENT_MODE_ENABLED)>" \
   | awk -F'[<>]' '{printf("-D%s=%s\n",$2,$3)}'
 }
@@ -71,6 +72,9 @@ function process_args(){
 
 function main(){
   local settings_from_maven settings_from_properties settings_from_pom_xml
+  
+  ACC_TEST_DIR_NAME="$(basename ${BA_HOME})-acceptance-test"
+  
   echo "Collecting properties..."
   echo -n "1. From maven settings..."
   settings_from_maven=`parse_maven_settings $(get_maven_settings_file)`
