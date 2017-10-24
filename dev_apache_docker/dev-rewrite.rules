@@ -21,3 +21,4 @@ RewriteRule ^/(auth/externalauth/.*/reauth) /$1.html                          [R
 RewriteRule ^/(auth/externalauth/.*/logout.html) /ba/$1                       [L,PT]
 RewriteRule ^/(auth/externalauth/.*/logout)$ /$1.html                         [R,L]
 RewriteRule ^/(partners/.*) /ba/$1                                            [L,PT]
+RewriteRule ^/(booking/installments.*) /ba/$1                                            [L,PT]
