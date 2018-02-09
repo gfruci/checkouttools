@@ -28,7 +28,6 @@ services:
       - FETCH_CREDENTIALS=1
     volumes:
       - ./conf/:/styxconf
-      - ./logs/:/logs/
       - ./appcert/:/appcert
 
   nginx:
