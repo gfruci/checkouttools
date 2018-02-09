@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 . `dirname $0`/env.conf
 app="$1"
-terminate_cmd="${ENV_CONF["$app,terminate_cmd"]}"
+terminate_cmd="${ENV_CONF["$app,start_cmd"]}"
 
 # OSX and UNIX functions
 
@@ -30,12 +30,6 @@ function getWinFormattedId(){
 # Common part
 
 echo -e "\n${COLOR_STEP} Step: Terminating $app ${COLOR_RESET}"
-if [[ $terminate_cmd ]]; then
-    eval $terminate_cmd
-    exit 0;
-fi
-
-terminate_cmd="${ENV_CONF["$app,start_cmd"]}"
 [ ! "$terminate_cmd" ] && echo "$app has no start command" && exit 0
 
 WIN=true
