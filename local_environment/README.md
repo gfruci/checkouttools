@@ -32,7 +32,7 @@ If you already have an installation of Docker Toolbox and you want to upgrade yo
 
 Add the internal registries in `Docker -> Preferences -> Daemon panel:`
 
-![add insecure registries](https://wiki.hcom/download/attachments/108639837/Screen%20Shot%202017-02-20%20at%2012.02.24.png)
+![add insecure registries](assets/add_insecure_registries.png)
 
 ### Login to the registry
 
@@ -46,7 +46,7 @@ Login to registry using your SEA credentials
 
 add the disable-legacy-registry flag set to false in `Docker -> Preferences -> Daemon
 
-![disable legacy registry](https://wiki.hcom/download/attachments/108639837/dockerDaemon.png)
+![disable legacy registry](assets/disable_legacy_registry.png)
 
 ### hosts file
 
