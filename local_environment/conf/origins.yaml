@@ -1,0 +1,27 @@
+# See origins-default.yaml for explanation of config format
+---
+- id: "book"
+  path: "/ba/"
+  rewrites:
+    - urlPattern: "/ba/(.*)"
+      replacement: "$1"
+  healthCheck:
+    uri: "/version.txt"
+  connectionPool:
+    maxConnectionsPerHost: 40
+    maxPendingConnectionsPerHost: 20
+    socketTimeoutMillis: 120000
+    connectTimeoutMillis: 8000
+  responseTimeoutMillis: 300000
+  tlsSettings:
+    trustAllCerts:       true
+    sslProvider:         OPENSSL     # Also supports JDK
+    addlCerts:
+      - alias:           "my certificate"
+        path:            "/appcert/pvclient.jks"
+    trustStorePath:      "/appcert/pvclient.jks"
+    trustStorePassword:  "tiajya"
+  origins:
+  - { id: "local-ba-mac", host: "docker.for.mac.localhost:30443" }
+  - { id: "local-ba-win", host: "docker.for.win.localhost:30433" }
+#  - { id: "milan2-book-01", host: "chhlapphot026.karmalab.net:7472" }
