@@ -1,10 +1,10 @@
 # Checkout Local Environment
 
-![local_env](assets/local_env_arch.png)
-
 The CKO local environment aims to simplify development and testing of checkout FE apps in local.
 
 It leverage the [local-app-server](http://stash.hcom/projects/STYX/repos/local-app-server/browse) to serve the CKO FE apps HTML pages using the dionysus styx plugin.
+
+![local_env](assets/local_env_arch.png)
 
 **Note:** In order to enable styx html page rendering you need to set MVT variant 4418.1
 
