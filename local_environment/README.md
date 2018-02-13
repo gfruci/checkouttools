@@ -1,5 +1,7 @@
 # Checkout Local Environment
 
+![local_env](assets/local_env_arch.png)
+
 The CKO local environment aims to simplify development and testing of checkout FE apps in local.
 
 It leverage the [local-app-server](http://stash.hcom/projects/STYX/repos/local-app-server/browse) to serve the CKO FE apps HTML pages using the dionysus styx plugin.
@@ -116,7 +118,11 @@ Please update your hosts file with the following.
 
     docker-compose up
 
-## FAQ    
+## Trouble shooting common issues
+
+* No CSS/JS - This indicates you have not accepted the `a*-cdn-hotels.com` domain certificates. Please trust like you do on staging or milan.
+
+## FAQ
 
 TBW
 
