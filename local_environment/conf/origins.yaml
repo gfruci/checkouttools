@@ -23,5 +23,5 @@
     trustStorePassword:  "tiajya"
   origins:
   - { id: "local-ba-mac", host: "docker.for.mac.localhost:30443" }
-  - { id: "local-ba-win", host: "docker.for.win.localhost:30433" }
+  - { id: "local-ba-win", host: "docker.for.win.localhost:30443" }
 #  - { id: "milan2-book-01", host: "chhlapphot026.karmalab.net:7472" }
