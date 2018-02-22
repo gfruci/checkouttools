@@ -116,11 +116,37 @@ Please update your hosts file with the following.
 
 ## Usage
 
-    docker-compose up
+    ./local_env.sh <command> <options>
+    Commands:
+    start                               Start the local environment
+      -ba <ba-version>                  default: latest
+      -checkito <checkito-version>      default: latest
+    stop                                Stop the local environment
+    status                              Print the local environment status
+
+### Start
+
+    ./local_env.sh start
+
+**Custom apps version example**
+* `./local_env.sh start -ba 120.0.7090`
+* `./local_env.sh start -ba 120.0.feature_CHOP_2658_availabilty_price_check_feature_branch.4`   
+    
+### Stop
+
+    ./local_env.sh stop
+
+### Status
+
+    ./local_env.sh status
+
 
 ## Trouble shooting common issues
 
 * No CSS/JS - This indicates you have not accepted the `a*-cdn-hotels.com` domain certificates. Please trust like you do on staging or milan.
+* Update the docker spotify plugin version to `0.4.13` if you have got the following error building your local image 
+
+    ```org.apache.http.conn.HttpHostConnectException: Connect to localhost:2375 [localhost/127.0.0.1] failed: Connection refused```
 
 ## FAQ
 

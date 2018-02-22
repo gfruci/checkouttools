@@ -38,3 +38,9 @@ services:
       - ./conf/nginx.conf:/etc/nginx/conf.d/default.conf:ro
       - ./conf/fe-app-rules:/etc/nginx/fe-app-rules:ro
       - ./certs/:/certs/
+
+  checkito:
+    image: registry.docker.hcom/hotels/checkito:$CHECKITO_VERSION
+    ports:
+      - "8089:8089"
+      - "8189:8189"
