@@ -28,6 +28,9 @@ CHECKITO_VERSION=latest
 
 function watch {
     echo -e "\n$COLOR_WATCH $1 $COLOR_RESET"
+
+    timeStart=`date +%s`
+
 	while :;
   	do
   		eval $2 > /dev/null
@@ -41,6 +44,14 @@ function watch {
   				return 1
   			fi
   		fi
+
+        timeEnd=`date +%s`
+        timeTotal=$((timeEnd-timeStart))
+        if [ ${timeTotal} -gt 300 ]
+  		then
+  			return 1
+        fi
+
   		sleep 2
 	done
 }

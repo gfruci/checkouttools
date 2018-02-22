@@ -69,7 +69,7 @@ function checkForUpdates(){
   fi
 }
 
-checkForUpdates
+#checkForUpdates
 
 for p in $@;
 do
