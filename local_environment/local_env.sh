@@ -121,13 +121,6 @@ function start {
         echo -e "\n$COLOR_ERROR Error: CHECKITO start error $COLOR_RESET"
         stop;
     fi
-
-
-
-
-    #Check for styx start: "Started styx server in"
-
-    #ERROR: for checkito  Cannot start service checkito: driver failed programming external connectivity on endpoint localenvironment_checkito_1 (2cad1cb74ec95dc56ca8ae12bbc51d9a7400f92494f94ca4efb6c77c80efc446): Error starting userland proxy: Bind for 0.0.0.0:8189 failed: port is already allocated
 }
 
 function stop {
