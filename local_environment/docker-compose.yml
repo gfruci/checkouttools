@@ -40,7 +40,7 @@ services:
       - ./certs/:/certs/
 
   checkito:
-    image: registry.docker.hcom/hotels/checkito:$CHECKITO_VERSION
+    image: registry.docker.hcom/hotels/checkito:latest
     ports:
       - "8089:8089"
       - "8189:8189"

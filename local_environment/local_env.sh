@@ -19,8 +19,7 @@ SCRIPT_DIR=$(dirname ${LINK})
 # APPS DEFAULT VERSIONS #
 #########################
 
-BA_VERSION=latest
-CHECKITO_VERSION=latest
+BA_VERSION=
 
 #####################
 # UTILITY FUNCTIONS #
@@ -56,13 +55,16 @@ function watch {
 	done
 }
 
-function docker_login {
-    loginResult=$(echo "" | docker pull registry.docker.hcom/hotels/styxpres:release > /dev/null 2>&1)
+function update_env_apps_images {
+    loginResult=$(echo "" | docker pull registry.docker.hcom/hotels/checkito:latest > /dev/null 2>&1)
 
     if [[ $loginResult = *"unauthorized"* ]]; then
       echo -e "\n$COLOR_HEADER Login to Docker ... $COLOR_RESET"
       docker login registry.docker.hcom
     fi
+
+    docker pull registry.docker.hcom/hotels/styxpres:release >> ${SCRIPT_DIR}/startup.log 2>&1
+    docker pull registry.docker.hcom/hotels/checkito:latest >> ${SCRIPT_DIR}/startup.log 2>&1
 }
 
 function setup_apps_versions {
@@ -72,16 +74,16 @@ function setup_apps_versions {
           BA_VERSION=$2
           shift
           ;;
-        -checkito)
-          CHECKITO_VERSION=$2
-          shift
-          ;;
       esac
       shift
     done
 
+    if [[ ! ${BA_VERSION} ]]; then
+        echo "Error! BA version specified (missing -ba parameter)!"
+        exit 1
+    fi
+
     export BA_VERSION=${BA_VERSION}
-    export CHECKITO_VERSION=${CHECKITO_VERSION}
 }
 
 ###############################
@@ -89,15 +91,16 @@ function setup_apps_versions {
 ###############################
 
 function start {
-
-    setup_apps_versions;
-
-    docker_login;
+    echo "Starting local environment" > ${SCRIPT_DIR}/startup.log
 
     echo -e "\n$COLOR_HEADER Starting local environment ... $COLOR_RESET"
 
+    setup_apps_versions $@;
+
+    update_env_apps_images;
+
     cd $SCRIPT_DIR
-    nohup docker-compose up --no-color > startup.log & 2>&1
+    nohup docker-compose up --no-color >> ${SCRIPT_DIR}/startup.log & 2>&1
     cd $PREV_DIR
 
     watch "Starting STYX ..." "grep \"Started styx server in\" ${SCRIPT_DIR}/startup.log" "grep \"styx\" ${SCRIPT_DIR}/startup.log | grep -e \"ERROR\""
@@ -192,8 +195,7 @@ function help {
     echo "Usage: $0 <command> <options>"
     echo "Commands:"
     echo "start                               Start the local environment"
-    echo "  -ba <ba-version>                  default: latest"
-    echo "  -checkito <checkito-version>      default: latest"
+    echo "  -ba <ba-version>                  BA version. Required."
     echo "stop                                Stop the local environment"
     echo "status                              Print the local environment status"
     echo
