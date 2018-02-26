@@ -56,15 +56,16 @@ function watch {
 }
 
 function update_env_apps_images {
-    loginResult=$(echo "" | docker pull registry.docker.hcom/hotels/checkito:latest > /dev/null 2>&1)
+    docker pull registry.docker.hcom/hotels/checkito:latest > /dev/null 2>&1
 
-    if [[ $loginResult = *"unauthorized"* ]]; then
-      echo -e "\n$COLOR_HEADER Login to Docker ... $COLOR_RESET"
+    if [ "$?" -eq "1" ]; then
+      echo -e "\n$COLOR_HEADER Login to Docker $COLOR_RESET"
       docker login registry.docker.hcom
     fi
 
     docker pull registry.docker.hcom/hotels/styxpres:release >> ${SCRIPT_DIR}/startup.log 2>&1
     docker pull registry.docker.hcom/hotels/checkito:latest >> ${SCRIPT_DIR}/startup.log 2>&1
+    docker pull registry.docker.hcom/hotels/cws:latest >> ${SCRIPT_DIR}/startup.log 2>&1
 }
 
 function setup_apps_versions {
@@ -79,7 +80,8 @@ function setup_apps_versions {
     done
 
     if [[ ! ${BA_VERSION} ]]; then
-        echo "Error! BA version specified (missing -ba parameter)!"
+        echo "Error! BA version NOT specified (missing -ba parameter)!"
+        help;
         exit 1
     fi
 
@@ -90,14 +92,23 @@ function setup_apps_versions {
 # START/STOP/STATUS FUNCTIONS #
 ###############################
 
-function start {
-    echo "Starting local environment" > ${SCRIPT_DIR}/startup.log
 
-    echo -e "\n$COLOR_HEADER Starting local environment ... $COLOR_RESET"
+function setup {
+    echo "" > ${SCRIPT_DIR}/startup.log
+
+    echo -e "\n$COLOR_HEADER Setting up local environment ... $COLOR_RESET"
 
     setup_apps_versions $@;
 
     update_env_apps_images;
+
+    echo "done"
+}
+
+function start {
+    setup $@;
+
+    echo -e "\n$COLOR_HEADER Starting local environment ... $COLOR_RESET"
 
     cd $SCRIPT_DIR
     nohup docker-compose up --no-color >> ${SCRIPT_DIR}/startup.log & 2>&1
@@ -111,7 +122,7 @@ function start {
         echo -e "\n$COLOR_SUCCESS STYX started $COLOR_RESET"
     else
         echo -e "\n$COLOR_ERROR Error: STYX start error $COLOR_RESET"
-        stop;
+        #stop;
     fi
 
     watch "Starting CHECKITO ..." "grep \"Checkito listening for HTTP requests\" ${SCRIPT_DIR}/startup.log" "grep \"checkito\" ${SCRIPT_DIR}/startup.log | grep -e \"ERROR\""
@@ -124,33 +135,31 @@ function start {
         echo -e "\n$COLOR_ERROR Error: CHECKITO start error $COLOR_RESET"
         stop;
     fi
+
+    watch "Starting CWS ..." "grep \"Server startup in\" ${SCRIPT_DIR}/startup.log" "grep \"cws\" ${SCRIPT_DIR}/startup.log | grep -e \"ERROR\""
+    START_CWS_RETURN_CODE=$?
+
+    if [ "$START_CWS_RETURN_CODE" -eq "0" ]
+    then
+        echo -e "\n$COLOR_SUCCESS CWS started $COLOR_RESET"
+    else
+        echo -e "\n$COLOR_ERROR Error: CWS start error $COLOR_RESET"
+        stop;
+    fi
+
+    echo -e "\n$COLOR_HEADER Local environment started $COLOR_RESET"
 }
 
 function stop {
-    NGNIX_PID=`docker ps -q -f name=nginx`;
-    if [ -n "$NGNIX_PID" ]
-	then
-		docker kill "$NGNIX_PID" > /dev/null
-	fi
-	STYX_PID=`docker ps -q -f name=styx`;
-    if [ -n "$STYX_PID" ]
-	then
-		docker kill "$STYX_PID" > /dev/null
-	fi
-	CHECKITO_PID=`docker ps -q -f name=checkito`;
-    if [ -n "$CHECKITO_PID" ]
-	then
-		docker kill "$CHECKITO_PID" > /dev/null
-	fi
-	BA_PID=`docker ps -q -f name=ba`;
-    if [ -n "$BA_PID" ]
-	then
-		docker kill "$BA_PID" > /dev/null
-	fi
+    echo -e "\n$COLOR_HEADER Stopping local environment ... $COLOR_RESET"
+
+    cd $SCRIPT_DIR
+    docker-compose rm -sf >> ${SCRIPT_DIR}/startup.log 2>&1
+    cd $PREV_DIR
+
+    echo "done"
 
     status;
-
-    exit;
 }
 
 function status {

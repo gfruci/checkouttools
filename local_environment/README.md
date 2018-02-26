@@ -116,17 +116,20 @@ Please update your hosts file with the following.
 
 ## Usage
 
-    ./local_env.sh <command> <options>
+Give execution permissions to the `local_env.sh` bash script and run it.
+
+    $ cd <local_env_root_folder>
+    $ chmod a+x local_env.sh 
+    $ ./local_env.sh <command> <options>
     Commands:
     start                               Start the local environment
-      -ba <ba-version>                  default: latest
-      -checkito <checkito-version>      default: latest
+      -ba <ba-version>                  BA version to run. Required.
     stop                                Stop the local environment
     status                              Print the local environment status
 
 ### Start
 
-    ./local_env.sh start
+    ./local_env.sh start -ba <ba-version>
 
 **Custom apps version example**
 * `./local_env.sh start -ba 120.0.7090`

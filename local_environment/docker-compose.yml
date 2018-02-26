@@ -44,3 +44,11 @@ services:
     ports:
       - "8089:8089"
       - "8189:8189"
+
+  configsvc:
+    image: registry.docker.hcom/hotels/cws:latest
+    ports:
+      - "8280:8080"
+    environment:
+      - RUN_EMBEDDED_ETCD=true
+    container_name: cws
