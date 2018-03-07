@@ -50,7 +50,7 @@ exit /b
     break > %SCRIPT_DIR%\startup.log
     echo Setting up local environment ...
     call :setup_loop %*
-    rem call :update_images
+    call :update_images
     call :start_environment
 exit /b
 
