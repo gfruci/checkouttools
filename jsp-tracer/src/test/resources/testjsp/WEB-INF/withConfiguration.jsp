@@ -1,0 +1,1 @@
+<%@ include file="/WEB-INF/${configuration.MOBILE_CHANNEL_TYPE}/includeA2.jsp"%>
