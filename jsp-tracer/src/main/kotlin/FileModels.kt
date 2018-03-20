@@ -17,6 +17,14 @@ data class JspFile(val file: String) {
         println("${"\t".repeat(currDepth)} ${if (fileExists()) "" else "INVALID" } ${file}")
         references.forEach { it.printTreeRecursive(currDepth + 1) }
     }
+
+    override fun equals(other: Any?): Boolean {
+        return (other is JspFile && this.file.equals(other.file, ignoreCase = true))
+    }
+
+    override fun hashCode(): Int {
+        return file.toUpperCase().hashCode()
+    }
 }
 
 data class XmlFile(val file: String, val references: Set<JspFile>)
