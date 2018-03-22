@@ -131,7 +131,7 @@ Give execution permissions to the `local_env.sh` bash script and run it.
     ./local_env.sh start -ba <ba-version>
     
 Note: 
-To test a specific branch/feature, build you branch on the BookingApp running the following command from the root foled of the bookingapp project:
+To test a specific feature branch, build your branch running the following command from the root folder of the bookingapp project:
      mvn clean install -Pbuild-local
 Once the build it will be created an image of the BookingApp with version dev.0
 To start this image run the command:  

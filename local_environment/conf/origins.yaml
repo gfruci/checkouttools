@@ -22,7 +22,4 @@
     trustStorePath:      "/appcert/pvclient.jks"
     trustStorePassword:  "tiajya"
   origins:
-#  - { id: "ba", host: "docker.for.mac.localhost:30443" }
-#  - { id: "local-ba-mac", host: "docker.for.mac.localhost:30443" }
-  - { id: "local-ba-mac", host: "docker.for.mac.localhost:30443" }
-#  - { id: "local-ba-win", host: "docker.for.win.localhost:30443" }
+  - { id: "bka", host: "bka:8443" }
