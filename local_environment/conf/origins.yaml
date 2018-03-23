@@ -16,10 +16,15 @@
   tlsSettings:
     trustAllCerts:       true
     sslProvider:         OPENSSL     # Also supports JDK
+  #  addlCerts:
+  #    - alias:           "my certificate"
+  #      path:            "/appcert/pvclient.jks"
+  #  trustStorePath:      "/appcert/pvclient.jks"
+  #  trustStorePassword:  "tiajya"
     addlCerts:
       - alias:           "my certificate"
-        path:            "/appcert/pvclient.jks"
-    trustStorePath:      "/appcert/pvclient.jks"
+        path:            "/hcom/servers/tomcat/certs/pvclient-karmalab.jks"
+    trustStorePath:      "/hcom/servers/tomcat/certs/pvclient-karmalab.jks"
     trustStorePassword:  "tiajya"
   origins:
   - { id: "bka", host: "bka:8443" }

@@ -128,10 +128,12 @@ Give execution permissions to the `local_env.sh` bash script and run it.
     status                              Print the local environment status
 
 ### Start
+From the folder containing the local_env.sh script (<local_env_root_folder>/local_environment/conf) run the following command:
     ./local_env.sh start -ba <ba-version>
-    
-Note: 
-To test a specific feature branch, build your branch running the following command from the root folder of the bookingapp project:
+where ba-version is the ba docker image taht you want to run.
+Note:
+    ba-version is a specific version of the ba docker image tag (i.e. 120.0.7090)
+Instead, if wou want to test a specific feature branch, build your branch running the following command from the root folder of the bookingapp project:
      mvn clean install -Pbuild-local
 Once the build it will be created an image of the BookingApp with version dev.0
 To start this image run the command:  
@@ -141,6 +143,8 @@ To start this image run the command:
 * `./local_env.sh start -ba 120.0.7090`
 * `./local_env.sh start -ba 120.0.feature_CHOP_2658_availabilty_price_check_feature_branch.4`   
     
+### Debug
+    you can degub the BookingApp connecting to the port 1901    
 ### Stop
 
     ./local_env.sh stop
