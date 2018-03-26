@@ -93,12 +93,14 @@ services:
       #- APP_port.ajp=38099
       - JAVA_JVM_ARGS=-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=1901
 
-      # Checkito resources
-      - APP_DIONYSUS_TEMPLATE_PATH=http://dispatcherapp.staging1.hcom/templates/dionysus_ui_pack_templates-63.0.zip
+      # Proxy resources
       #- APP_http.proxyHost=checkito
       #- APP_http.proxyPort=8089
       #- APP_https.proxyHost=checkito
       #- APP_https.proxyPort=8089
+
+      # Checkito resources
+      - APP_DIONYSUS_TEMPLATE_PATH=http://dispatcherapp.staging1.hcom/templates/dionysus_ui_pack_templates-63.0.zip
       - APP_DOSSIER_SERVICES_HOST=checkito
       - APP_DOSSIER_SERVICES_PORT=8089
       - APP_DOSSIER_BASE_URL=http://checkito:8089/dossier
@@ -110,11 +112,8 @@ services:
       - APP_LIS_DASUPPORT_XML_API_HOST=checkito
       - APP_LIS_DASUPPORT_XML_API_PLAIN_URL=http://checkito:8089/
       - APP_LIS_DASUPPORT_XML_API_PORT=8089
-      #- APP_PAYMENT_VAULT_SERVICE_HOST=checkito:8189
-      #- APP_PAYMENT_VAULT_SERVICE_HOST=checkito:8089
-      #- APP_PAYMENT_VAULT_SERVICE_PORT=8189
-      #- APP_PAYMENT_VAULT_SERVICE_ACCESS_PROTOCOL=https
-      #- APP_PAYMENT_VAULT_SERVICE_URL=https://checkito:8189/PaymentVault/v2?wsdl
+      - APP_PAYMENT_VAULT_SERVICE_HOST=checkito:8189
+      - APP_PAYMENT_VAULT_SERVICE_ACCESS_PROTOCOL=https
       - APP_PROPERTY_CATALOGUE_SERVICE_BASE_URL=http://checkito:8089/property_catalogue_svc
       - APP_LOYALTY_SERVICE_HOST=checkito:8089
       - APP_STORED_VALUE_GATEWAY_ACCESS_PROTOCOL=https
@@ -147,9 +146,9 @@ services:
       #- APP_LIS_DASUPPORT_XML_API_HOST=lodgingshoppingservicepoint.integration.bgb.karmalab.net
       #- APP_LIS_DASUPPORT_XML_API_PLAIN_URL=http://lodgingshoppingservicepoint.integration.bgb.karmalab.net:8080/
       #- APP_LIS_DASUPPORT_XML_API_PORT=8080
-      - APP_PAYMENT_VAULT_SERVICE_HOST=paymentvault.karmalab.net
+      #- APP_PAYMENT_VAULT_SERVICE_HOST=paymentvault.karmalab.net
       #- APP_PAYMENT_VAULT_SERVICE_PORT=443
-      - APP_PAYMENT_VAULT_SERVICE_ACCESS_PROTOCOL=https
+      #- APP_PAYMENT_VAULT_SERVICE_ACCESS_PROTOCOL=https
       #- APP_PAYMENT_VAULT_SERVICE_URL=https://paymentvault.karmalab.net/PaymentVault/v2?wsdl
       #- APP_PROPERTY_CATALOGUE_SERVICE_BASE_URL=http://hcom-pcs-stg.staging-hotels.com/property_catalogue_svc
       #- APP_STORED_VALUE_GATEWAY_ACCESS_PROTOCOL=http
