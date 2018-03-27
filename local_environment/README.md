@@ -28,29 +28,20 @@ If you already have an installation of Docker Toolbox and you want to upgrade yo
 * https://docs.docker.com/docker-for-mac/docker-toolbox/
 * https://wiki.hcom/display/HTS/Upgrading+to+Docker+for+Mac
 
-### Mark internal registries as "Insecure"
+NOTE:
+don’t need to start apache!!!!!
+don’t use docker terminal, let’s use a new terminal window
 
-Add the internal registries in `Docker -> Preferences -> Daemon panel:`
 
-![add insecure registries](assets/add_insecure_registries.png)
+################### Steps to follow for the BA:  ###################
 
-### Login to the registry
+1. update HOST file: use 127.0.0.1 instead of 192.168.99.100 (****)
+2. update docker-compose:
+    under APACHE -> ENVIRONMENT section
+        use localhost instead of 192.168.99.1
+        remove the remove property NET
 
-Login to registry using your SEA credentials
-
-    docker login registry.docker.hcom
-
-*Note*: If you get the following error:
-
-    Error response from daemon: login attempt to http://registry.docker.hcom/v2/ failed with status: 500 Internal Server Error
-
-add the disable-legacy-registry flag set to false in `Docker -> Preferences -> Daemon
-
-![disable legacy registry](assets/disable_legacy_registry.png)
-
-### hosts file
-
-Please update your hosts file with the following.
+**** hosts file
 
 `hosts` file location:
 * MAC/UNIX: `/etc/hosts`
@@ -114,7 +105,40 @@ Please update your hosts file with the following.
 127.0.0.1 hotels.dev-hcombest.com ssl.dev-hcombest.com
 ```
 
-## Usage
+################### Steps to follow for DOCKER setup:  ###################
+
+1. during the docker for mac installation choose to copy the local docker machine (if you already have one)
+2. increase the memory and the CPU to dedicate to docker: preferences -> advanced
+3. Mark internal registries as "Insecure": Preferences -> Daemon -> Basic add the following keys
+        registry.docker.hcom
+        registry.prod.hcom
+4. run the following cmd
+   sudo networksetup -createnetworkservice DockerLoopback lo0
+   sudo networksetup -setmanual DockerLoopback 192.168.78.79 255.255.255.255
+5. remove existing Docker variables
+   unset DOCKER_TLS_VERIFY
+   unset DOCKER_CERT_PATH
+   unset DOCKER_MACHINE_NAME
+   unset DOCKER_HOST
+6. update .bashrc to the add the follow key
+   export DOCKER_LOOPBACK=192.168.78.79
+7. close and reopen the terminal and login to registry using your SEA credentials using the following command
+    docker login registry.docker.hcom
+
+*Note*: If you get the following error:
+    Error response from daemon: login attempt to http://registry.docker.hcom/v2/ failed with status: 500 Internal Server Error
+add the disable-legacy-registry flag set to false in `Docker -> Preferences -> Daemon
+
+*Note*: If you get the following error:
+    "Error response from daemon: Get https://registry.docker.hcom/v1/users/: x509: certificate signed by unknown authority".
+    run this command before logging
+        docker-machine ssh default
+
+    see details on this wiki page   https://wiki.hcom/display/HCOMPM/Using+Docker+on+a+dev+environment
+
+
+
+################### Usage  ###################
 
 Give execution permissions to the `local_env.sh` bash script and run it.
 
@@ -141,7 +165,9 @@ To start this image run the command:
 
 **Custom apps version example**
 * `./local_env.sh start -ba 120.0.7090`
-* `./local_env.sh start -ba 120.0.feature_CHOP_2658_availabilty_price_check_feature_branch.4`   
+* `./local_env.sh start -ba 120.0.feature_CHOP_2658_availabilty_price_check_feature_branch.4`
+
+IMPORTANT: If you need to attach a DUP branch, you have to insert it in the deeplink url of the BF!!!
     
 ### Debug
     you can degub the BookingApp connecting to the port 1901    
