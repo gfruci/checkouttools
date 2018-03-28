@@ -18,9 +18,8 @@ services:
       - APP_LOC_CLIENT_CACHE_THREADPOOL_SIZE_FOR_BOOTSTRAP=50
       - MAX_TIME_TO_WAIT=60
       - JVM_HEAP_SIZE=-Xms1536m -Xmx1536m
-      - JVM_HEAP_SIZE=-Xmx4048M -Xms2000M
-      - JVM_METASPACE=-XX:MetaspaceSize=200m -XX:MaxMetaspaceSize=200m -XX:MinMetaspaceFreeRatio=0 -XX:MaxMetaspaceFreeRatio=100
-      - JVM_DIRECT_MEMORY=-XX:MaxDirectMemorySize=1536m
+      - JVM_METASPACE=-XX:MetaspaceSize=100m -XX:MaxMetaspaceSize=100m -XX:MinMetaspaceFreeRatio=0 -XX:MaxMetaspaceFreeRatio=100
+      - JVM_DIRECT_MEMORY=-XX:MaxDirectMemorySize=512m
       - JVM_OTHER_MEM=-XX:CompressedClassSpaceSize=20m -XX:InitialCodeCacheSize=50m -XX:ReservedCodeCacheSize=50m
       - JVM_HEAP_DUMP=-XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/var/tmp
       - JVM_FLIGHT_RECORDER=-XX:+UnlockCommercialFeatures -XX:+FlightRecorder
@@ -50,7 +49,6 @@ services:
 
   bka:
     ports:
-      - "30443:8443"
       - "1901:1901"
     volumes:
       - mvt:/mvt
@@ -90,7 +88,6 @@ services:
       - APP_DB_RW_PASSWORD=emea_app
       - APP_DSC_DATASTAX_SSL_ENABLED=false
       - APP_DSC_DATASTAX_KEYSPACE_NAME=hermes
-      #- APP_port.ajp=38099
       - JAVA_JVM_ARGS=-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=1901
 
       # Proxy resources
@@ -131,45 +128,6 @@ services:
       - APP_COUPON_SERVICE_PORT=8089
       - APP_BRAVOS_API_DOMAIN_NAME=checkito
       - APP_BRAVOS_API_PORT=8089
-
-      # Staging resources
-      #- APP_DIONYSUS_TEMPLATE_PATH=http://10.187.108.40:34401/templates/dionysus_ui_pack_templates-63.0.zip
-      #- APP_port.ajp=38099
-      #- APP_DOSSIER_SERVICES_HOST=dossiersvcdocker.staging.hcom
-      #- APP_DOSSIER_SERVICES_PORT=443
-      #- APP_DOSSIER_BASE_URL=https://dossiersvcdocker.staging.hcom:443/dossier
-      #- APP_EMAIL_SERVER_HOSTNAME=checkito
-      #- APP_EMAIL_SERVER_PORT=25
-      #- APP_LIS_DASUPPORT_BOOKING_XML_API_HOST=lodgingbookingservicepoint.integration.bgb.karmalab.net
-      #- APP_LIS_DASUPPORT_BOOKING_XML_API_PLAIN_URL=http://lodgingbookingservicepoint.integration.bgb.karmalab.net:8080/
-      #- APP_LIS_DASUPPORT_BOOKING_XML_API_PORT=8080
-      #- APP_LIS_DASUPPORT_XML_API_HOST=lodgingshoppingservicepoint.integration.bgb.karmalab.net
-      #- APP_LIS_DASUPPORT_XML_API_PLAIN_URL=http://lodgingshoppingservicepoint.integration.bgb.karmalab.net:8080/
-      #- APP_LIS_DASUPPORT_XML_API_PORT=8080
-      #- APP_PAYMENT_VAULT_SERVICE_HOST=paymentvault.karmalab.net
-      #- APP_PAYMENT_VAULT_SERVICE_PORT=443
-      #- APP_PAYMENT_VAULT_SERVICE_ACCESS_PROTOCOL=https
-      #- APP_PAYMENT_VAULT_SERVICE_URL=https://paymentvault.karmalab.net/PaymentVault/v2?wsdl
-      #- APP_PROPERTY_CATALOGUE_SERVICE_BASE_URL=http://hcom-pcs-stg.staging-hotels.com/property_catalogue_svc
-      #- APP_STORED_VALUE_GATEWAY_ACCESS_PROTOCOL=http
-      #- APP_CONFIRMATION_EMAIL_ADBANNER_OVER_HTTPS=false
-      #- APP_IOVATION_ENABLED=true
-      #- APP_TARGETING_BASE_URL=http://targettingservice.staging.hcom/targeting
-      #- APP_CAR_TRAWLER_BASE_URL=checkito:8090
-      #- APP_CAR_TRAWLER_SECURE_URL_ENABLED=false
-      #- APP_CRYPTO_SERVICE_URL=http://cryptosvc.karmalab.net:80/cryptosvc/cryptosvc.asmx
-      #- APP_LIS_XML_API_PLAIN_URL=http://lodgingshoppingservicepoint.integration.bgb.karmalab.net:8080
-      #- APP_LSS_HOTEL_CONTENT_SERVICE_URL=http://chellssint01:52420/lcs
-      #- APP_LSS_HOTEL_SHELL_SERVICE_URL=http://chellssint01:52410/lds
-      #- APP_MHCR_LIVE_HOTEL_CONTENT_SERVICE_HOST=vipcheilssmhr001.karmalab.net
-      #- APP_MHCR_LIVE_HOTEL_SHELL_SERVICE_HOST=vipcheilssmhr001.karmalab.net
-      #- APP_ORDER_SERVICE_URL=http://omsservice.int-maui.karmalab.net:80/OrderService?wsdl
-      #- APP_PASSBOOK_CERTIFICATES_PASSWORD=hotdEv12
-      #- APP_PAYMENT_OPTION_SERVICE_URL=http://paymentoption.karmalab.net:80/PaymentOptions/v2?wsdl
-      #- APP_PAYMENT_PROCESSOR_SERVICE_URL=https://paymentprocessor.karmalab.net:443/PaymentProcessor/v2?wsdl
-      #- APP_MVTSERVICE_BASE_URL=http://mvtservice.staging.hcom/mvtsvc
-      #- APP_BPAS_HOST=bookingpaymentavailabilityservice.staging.hcom
-      #- JVM_HEAP_SIZE=-Xmx2048M -Xms512M
 
   checkito:
     image: registry.docker.hcom/hotels/checkito:latest
