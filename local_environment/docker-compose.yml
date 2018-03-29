@@ -6,6 +6,7 @@ services:
 
   styxdev:
     image: registry.docker.hcom/hotels/styxpres:release
+    container_name: styxdev
     ports:
       - "9000:9000"
     environment:
@@ -35,6 +36,7 @@ services:
 
   nginx:
     image: nginx:mainline-alpine
+    container_name: nginx
     ports:
       - "443:443"
     volumes:
@@ -48,11 +50,12 @@ services:
     image: registry.docker.hcom/hotels/mvt:latest
 
   bka:
+    image: registry.docker.hcom/hotels/ba:${BA_VERSION}
+    container_name: bka
     ports:
       - "1901:1901"
     volumes:
       - mvt:/mvt
-    image: registry.docker.hcom/hotels/ba:${BA_VERSION}
     environment:
       - APP_javax.net.ssl.trustStore=/hcom/servers/tomcat/certs/pvclient-karmalab.jks
       - APP_javax.net.ssl.trustStorePassword=tiajya
@@ -119,8 +122,8 @@ services:
       - APP_customer.data.store.svc=http://checkito:8089/customer_data_store_svc/v1_0
       - APP_CRYPTO_SERVICE_URL=http://checkito:8089/cryptosvc/cryptosvc.asmx
       - APP_CUSTOMER_AUTH_APP_BASE_URL=http://checkito:8089
-      - APP_SPS_HOST=$LOCALHOST_NAME:8089
-      - APP_VPS_HOST=$LOCALHOST_NAME:8089
+      - APP_SPS_HOST=checkito:8089
+      - APP_VPS_HOST=checkito:8089
       - APP_CAR_TRAWLER_BASE_URL=checkito:8089
       - APP_CAR_TRAWLER_SECURE_URL_ENABLED=false
       - APP_BPAS_HOST=checkito:8089
@@ -131,14 +134,15 @@ services:
 
   checkito:
     image: registry.docker.hcom/hotels/checkito:latest
+    container_name: checkito
     ports:
       - "8089:8089"
       - "8189:8189"
 
   configsvc:
     image: registry.docker.hcom/hotels/cws:latest
+    container_name: cws
     ports:
       - "8280:8080"
     environment:
       - RUN_EMBEDDED_ETCD=true
-    container_name: cws

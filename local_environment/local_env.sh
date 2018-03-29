@@ -37,17 +37,19 @@ function watch {
   		then
   			return 0
   		else
-  			eval $3 > /dev/null
+  			ERROR=$(eval $3)
   			if [ "$?" -eq "0" ]
   			then
+  			    echo $ERROR
   				return 1
   			fi
   		fi
 
         timeEnd=`date +%s`
         timeTotal=$((timeEnd-timeStart))
-        if [ ${timeTotal} -gt 300 ]
+        if [ ${timeTotal} -gt 600 ]
   		then
+            echo "Error! The application took too much time to start."
   			return 1
         fi
 
@@ -114,7 +116,7 @@ function start {
     nohup docker-compose up --no-color >> ${SCRIPT_DIR}/startup.log & 2>&1
     cd $PREV_DIR
 
-    watch "Starting STYX ..." "grep \"Started styx server in\" ${SCRIPT_DIR}/startup.log" "grep \"styx\" ${SCRIPT_DIR}/startup.log | grep -e \"ERROR\""
+    watch "Starting STYX ..." "grep \"Started styx server in\" ${SCRIPT_DIR}/startup.log" "grep -e \"styx.*ERROR\" ${SCRIPT_DIR}/startup.log"
     START_STYX_RETURN_CODE=$?
 
     if [ "$START_STYX_RETURN_CODE" -eq "0" ]
@@ -122,10 +124,21 @@ function start {
         echo -e "\n$COLOR_SUCCESS STYX started $COLOR_RESET"
     else
         echo -e "\n$COLOR_ERROR Error: STYX start error $COLOR_RESET"
-        #stop;
+        stop;
     fi
 
-    watch "Starting CHECKITO ..." "grep \"Checkito listening for HTTP requests\" ${SCRIPT_DIR}/startup.log" "grep \"checkito\" ${SCRIPT_DIR}/startup.log | grep -e \"ERROR\""
+    watch "Starting BA ..." "grep \"bka.*Server startup\" ${SCRIPT_DIR}/startup.log" "grep -e \"bka.*ERROR\" ${SCRIPT_DIR}/startup.log"
+    START_BA_RETURN_CODE=$?
+
+    if [ "$START_BA_RETURN_CODE" -eq "0" ]
+    then
+        echo -e "\n$COLOR_SUCCESS BA started $COLOR_RESET"
+    else
+        echo -e "\n$COLOR_ERROR Error: BA start error $COLOR_RESET"
+        stop;
+    fi
+
+    watch "Starting CHECKITO ..." "grep \"checkito.*Checkito listening for HTTP requests\" ${SCRIPT_DIR}/startup.log" "grep -e \"checkito.*ERROR\" ${SCRIPT_DIR}/startup.log"
     START_CHECKITO_RETURN_CODE=$?
 
     if [ "$START_CHECKITO_RETURN_CODE" -eq "0" ]
@@ -136,7 +149,7 @@ function start {
         stop;
     fi
 
-    watch "Starting CWS ..." "grep \"Server startup in\" ${SCRIPT_DIR}/startup.log" "grep \"cws\" ${SCRIPT_DIR}/startup.log | grep -e \"ERROR\""
+    watch "Starting CWS ..." "grep \"cws.*Server startup in\" ${SCRIPT_DIR}/startup.log" "grep -e \"cws.*ERROR\" ${SCRIPT_DIR}/startup.log"
     START_CWS_RETURN_CODE=$?
 
     if [ "$START_CWS_RETURN_CODE" -eq "0" ]
@@ -160,6 +173,8 @@ function stop {
     echo "done"
 
     status;
+
+    exit 0;
 }
 
 function status {
