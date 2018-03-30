@@ -22,26 +22,56 @@ TBW
 
 Download and install Docker CE from https://www.docker.com/community-edition#/download
 
-**Upgrading from Docker Toolbox**
+**Note:** if your upgrading from Docker Toolbox, choose to copy the local docker machine (if you already have one)
 
-If you already have an installation of Docker Toolbox and you want to upgrade you can read these:
+### Upgrading from Docker Toolbox
+
+If you already have an installation of Docker Toolbox and you want to upgrade you need to remove the Docker ENV variables:
+
+    unset DOCKER_TLS_VERIFY
+    unset DOCKER_CERT_PATH
+    unset DOCKER_MACHINE_NAME
+    unset DOCKER_HOST
+
+Close all your terminal windows
+
+For more details on how to upgrade from Docker Toolbox read these:
 * https://docs.docker.com/docker-for-mac/docker-toolbox/
 * https://wiki.hcom/display/HTS/Upgrading+to+Docker+for+Mac
 
-NOTE:
-don’t need to start apache!!!!!
-don’t use docker terminal, let’s use a new terminal window
+### Mark internal registries as "Insecure"
 
+Add the insecure internal registries in `Docker -> Preferences -> Daemon -> Basic:`
+* registry.docker.hcom
+* registry.prod.hcom
 
-################### Steps to follow for the BA:  ###################
+![add insecure registries](assets/add_insecure_registries.png)
 
-1. update HOST file: use 127.0.0.1 instead of 192.168.99.100 (****)
-2. update docker-compose:
-    under APACHE -> ENVIRONMENT section
-        use localhost instead of 192.168.99.1
-        remove the remove property NET
+### Login to the registry
 
-**** hosts file
+Login to registry using your SEA credentials
+
+    docker login registry.docker.hcom
+
+*Note*: If you get the following error:
+
+    Error response from daemon: login attempt to http://registry.docker.hcom/v2/ failed with status: 500 Internal Server Error
+
+add the disable-legacy-registry flag set to false in `Docker -> Preferences -> Daemon -> Advanced`
+
+![disable legacy registry](assets/disable_legacy_registry.png)
+
+### Increase the docker resources
+
+In `Docker -> Preferences -> Advanced`
+* increase the docker memory to 4GB
+* Increase the number of CPU to 6
+
+![increase_docker_resources](assets/increase_docker_resources.png)
+
+### hosts file
+
+Please update your hosts file with the following.
 
 `hosts` file location:
 * MAC/UNIX: `/etc/hosts`
@@ -103,44 +133,23 @@ don’t use docker terminal, let’s use a new terminal window
 127.0.0.1 hotels.dev-multiplus.com ssl.dev-mulitplus.com
 127.0.0.1 hotels.dev-hotelurbano.com ssl.dev-hotelurbano.com
 127.0.0.1 hotels.dev-hcombest.com ssl.dev-hcombest.com
+
+#CHECKITO
+127.0.0.1 checkito.hcom checkito
 ```
 
-################### Steps to follow for DOCKER setup:  ###################
+### Checkout the local environment
 
-1. during the docker for mac installation choose to copy the local docker machine (if you already have one)
-2. increase the memory and the CPU to dedicate to docker: preferences -> advanced
-3. Mark internal registries as "Insecure": Preferences -> Daemon -> Basic add the following keys
-        registry.docker.hcom
-        registry.prod.hcom
-4. run the following cmd
-   sudo networksetup -createnetworkservice DockerLoopback lo0
-   sudo networksetup -setmanual DockerLoopback 192.168.78.79 255.255.255.255
-5. remove existing Docker variables
-   unset DOCKER_TLS_VERIFY
-   unset DOCKER_CERT_PATH
-   unset DOCKER_MACHINE_NAME
-   unset DOCKER_HOST
-6. update .bashrc to the add the follow key
-   export DOCKER_LOOPBACK=192.168.78.79
-7. close and reopen the terminal and login to registry using your SEA credentials using the following command
-    docker login registry.docker.hcom
+Checkout the `local_environment` repo with `git`
 
-*Note*: If you get the following error:
-    Error response from daemon: login attempt to http://registry.docker.hcom/v2/ failed with status: 500 Internal Server Error
-add the disable-legacy-registry flag set to false in `Docker -> Preferences -> Daemon
+    $ cd <workspace_folder>
+    $ git clone http://<sea_username>@stash.hcom/scm/cop/checkouttools.git
 
-*Note*: If you get the following error:
-    "Error response from daemon: Get https://registry.docker.hcom/v1/users/: x509: certificate signed by unknown authority".
-    run this command before logging
-        docker-machine ssh default
+## Usage
 
-    see details on this wiki page   https://wiki.hcom/display/HCOMPM/Using+Docker+on+a+dev+environment
+### Start/Stop
 
-
-
-################### Usage  ###################
-
-Give execution permissions to the `local_env.sh` bash script and run it.
+Move under the `local_env_root_folder`, give execution permissions to the `local_env.sh` bash script and run it.
 
     $ cd <local_env_root_folder>
     $ chmod a+x local_env.sh 
@@ -151,38 +160,51 @@ Give execution permissions to the `local_env.sh` bash script and run it.
     stop                                Stop the local environment
     status                              Print the local environment status
 
-### Start
-From the folder containing the local_env.sh script (<local_env_root_folder>/local_environment/conf) run the following command:
+#### Start
+
     ./local_env.sh start -ba <ba-version>
-where ba-version is the ba docker image taht you want to run.
-Note:
-    ba-version is a specific version of the ba docker image tag (i.e. 120.0.7090)
-Instead, if wou want to test a specific feature branch, build your branch running the following command from the root folder of the bookingapp project:
-     mvn clean install -Pbuild-local
-Once the build it will be created an image of the BookingApp with version dev.0
-To start this image run the command:  
-    ./local_env.sh start -ba dev.0
 
-**Custom apps version example**
+**Custom BA version example**
 * `./local_env.sh start -ba 120.0.7090`
-* `./local_env.sh start -ba 120.0.feature_CHOP_2658_availabilty_price_check_feature_branch.4`
-
-IMPORTANT: If you need to attach a DUP branch, you have to insert it in the deeplink url of the BF!!!
+* `./local_env.sh start -ba 120.0.feature_CHOP_2658_availabilty_price_check_feature_branch.4`   
     
-### Debug
-    you can degub the BookingApp connecting to the port 1901    
-### Stop
+#### Stop
 
     ./local_env.sh stop
 
-### Status
+#### Status
 
     ./local_env.sh status
 
+### BA testing
 
-## Trouble shooting common issues
+You can test the following BA use case:
+* BA stable version 
+* BA feature-branch
+* BA built in local
+
+TBW 
+
+### DUP Feature branch testing
+
+TBW
+
+### BA DEBUG
+
+TBW
+
+### Proxying
+
+TBW
+
+### Logging
+
+TBW
+
+## Troubleshooting common issues
 
 * No CSS/JS - This indicates you have not accepted the `a*-cdn-hotels.com` domain certificates. Please trust like you do on staging or milan.
+* Not seeing the header? You're not setting the MVT `4418.1`
 * Update the docker spotify plugin version to `0.4.13` if you have got the following error building your local image 
 
     ```org.apache.http.conn.HttpHostConnectException: Connect to localhost:2375 [localhost/127.0.0.1] failed: Connection refused```
@@ -208,4 +230,3 @@ Components involved:
 Styx DUP plugin only serves the html (rendering the soy files), the assets (JS, CSS) are served by the staging DispatcherApp (DA):
 * the DA reads the JS and CSS from File System DUP folders
 * there is a DUP folder for each branch
-
