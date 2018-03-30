@@ -202,7 +202,7 @@ function status {
 		echo -e "\n$COLOR_ERROR CHECKITO not running. $COLOR_RESET"
 	fi
 
-	BA_PID=`docker ps -q -f name=ba`;
+	BA_PID=`docker ps -q -f name=bka`;
 	if [ -n "$BA_PID" ]
 	then
 		echo -e "\n$COLOR_SUCCESS BookingApp running. $COLOR_RESET"
