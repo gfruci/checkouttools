@@ -57,6 +57,8 @@ services:
     volumes:
       - mvt:/mvt
     environment:
+      - APP_CONFIG_ENVIRONMENT=development
+      - APP_jvm.route=development
       - APP_javax.net.ssl.trustStore=/hcom/servers/tomcat/certs/pvclient-karmalab.jks
       - APP_javax.net.ssl.trustStorePassword=tiajya
       - APP_javax.net.ssl.keyStore=/hcom/servers/tomcat/certs/pvclient-karmalab.jks
@@ -68,7 +70,7 @@ services:
       - APP_COOKIELESS_DOMAIN_STATIC_ASSETS=a.staging1-cdn-hotels.com
       - APP_DB_RO_DRIVERCLASSNAME=com.inet.tds.TdsDriver
       - APP_DB_RW_DRIVERCLASSNAME=com.inet.tds.TdsDriver
-      - APP_CONFIG_ENVIRONMENT=hcom-devrom
+      - APP_CURRENCY_EXCHANGE_RATE_PROPERTY_FILE_REQUIRED_AT_STARTUP=false
       - APP_MVT_BUSINESS_CONFIGURATION_LOCATION=file:///mvt/
       - APP_DIONYSUS_UIPACK_HOME=file:///dionysusuipack/
       - APP_EMAIL_TEMPLATES_BASEPATH=file://${CATALINA_BASE}/appconfig/templates/
@@ -91,16 +93,27 @@ services:
       - APP_DB_RW_PASSWORD=emea_app
       - APP_DSC_DATASTAX_SSL_ENABLED=false
       - APP_DSC_DATASTAX_KEYSPACE_NAME=hermes
+      - APP_LVS_CLIENT_BASE_URL=http://hcomcdslivevisitsservice.staging.hcom
+      - APP_DIONYSUS_TEMPLATE_PATH=http://dispatcherapp.staging1.hcom/templates/dionysus_ui_pack_templates-63.0.zip
+      - APP_LOYALTY_REST_CLIENT_CONNECT_TIMEOUT=60000
+      - APP_LOYALTY_REST_CLIENT_READ_TIMEOUT=60000
+      - APP_LOYALTY_ESTIMATION_SERVICE_CLIENT_READ_TIMEOUT=60000
+      - APP_LOYALTY_ESTIMATION_SERVICE_CLIENT_CONNECTION_TIMEOUT=60000
+      - APP_BPAS_ON_PAYMENT_OPTION_REQUEST_CIRCUIT_BREAKER_TIMEOUT_MS=60000
+
+      # Development overrides
+      - APP_UNIFIED_DATA_TOOLKIT_ENABLED=true
+      - APP_LOCALIZATION_MESSAGE_PARALLEL_INITIALIZATION_ENABLED=true
+      - APP_MVT_CONFIGURATION_PARALLEL_INITIALIZATION_ENABLED=true
+      - APP_CACHE_PRELOAD_ENABLED=false
+      - APP_PSID_SERVICE_ENABLED=false
+      - APP_WEBSITE_DOMAIN_DISCRIMINATOR=dev-
+      - APP_FENCED_VAP_ENABLED=false
+      - APP_UNBRANDED_VIP_VAP_ENABLED=false
       - JAVA_JVM_ARGS=-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=1901
 
-      # Proxy resources
-      #- APP_http.proxyHost=checkito
-      #- APP_http.proxyPort=8089
-      #- APP_https.proxyHost=checkito
-      #- APP_https.proxyPort=8089
-
       # Checkito resources
-      - APP_DIONYSUS_TEMPLATE_PATH=http://dispatcherapp.staging1.hcom/templates/dionysus_ui_pack_templates-63.0.zip
+      - APP_DOSSIER_SERVICES_SCHEME=http
       - APP_DOSSIER_SERVICES_HOST=checkito
       - APP_DOSSIER_SERVICES_PORT=8089
       - APP_DOSSIER_BASE_URL=http://checkito:8089/dossier
@@ -117,12 +130,12 @@ services:
       - APP_PROPERTY_CATALOGUE_SERVICE_BASE_URL=http://checkito:8089/property_catalogue_svc
       - APP_LOYALTY_SERVICE_HOST=checkito:8089
       - APP_STORED_VALUE_GATEWAY_ACCESS_PROTOCOL=https
-      - APP_STORED_VALUE_GATEWAY_HOST=checkito:8089
+      - APP_STORED_VALUE_GATEWAY_HOST=checkito:8189
       - APP_ORDER_SERVICE_URL=http://checkito:8089/OrderService?wsdl
       - APP_customer.data.store.svc=http://checkito:8089/customer_data_store_svc/v1_0
       - APP_CRYPTO_SERVICE_URL=http://checkito:8089/cryptosvc/cryptosvc.asmx
       - APP_CUSTOMER_AUTH_APP_BASE_URL=http://checkito:8089
-      - APP_SPS_HOST=checkito:8089
+      - APP_SPS_HOST=checkito:8189
       - APP_VPS_HOST=checkito:8089
       - APP_CAR_TRAWLER_BASE_URL=checkito:8089
       - APP_CAR_TRAWLER_SECURE_URL_ENABLED=false
@@ -131,6 +144,16 @@ services:
       - APP_COUPON_SERVICE_PORT=8089
       - APP_BRAVOS_API_DOMAIN_NAME=checkito
       - APP_BRAVOS_API_PORT=8089
+      - APP_PAYMENT_OPTION_SERVICE_HOST=checkito:8089
+      - APP_PAYMENT_OPTION_SERVICE_URL=http://checkito:8089/PaymentOptions/v2
+
+      # Proxy resources
+      #      - APP_http.proxyHost=docker.for.mac.localhost
+      #      - APP_http.proxyPort=8888
+      #      - APP_https.proxyHost=docker.for.mac.localhost
+      #      - APP_https.proxyPort=8888
+      #      - APP_proxyHost=docker.for.mac.localhost
+      #      - APP_proxyPort=8888
 
   checkito:
     image: registry.docker.hcom/hotels/checkito:latest
@@ -139,10 +162,10 @@ services:
       - "8089:8089"
       - "8189:8189"
 
-  configsvc:
-    image: registry.docker.hcom/hotels/cws:latest
-    container_name: cws
-    ports:
-      - "8280:8080"
-    environment:
-      - RUN_EMBEDDED_ETCD=true
+  #  configsvc:
+  #    image: registry.docker.hcom/hotels/cws:latest
+  #    container_name: cws
+  #    ports:
+  #      - "8280:8080"
+  #    environment:
+  #      - RUN_EMBEDDED_ETCD=true

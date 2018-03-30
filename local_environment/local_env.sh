@@ -67,7 +67,7 @@ function update_env_apps_images {
 
     docker pull registry.docker.hcom/hotels/styxpres:release >> ${SCRIPT_DIR}/startup.log 2>&1
     docker pull registry.docker.hcom/hotels/checkito:latest >> ${SCRIPT_DIR}/startup.log 2>&1
-    docker pull registry.docker.hcom/hotels/cws:latest >> ${SCRIPT_DIR}/startup.log 2>&1
+    #    docker pull registry.docker.hcom/hotels/cws:latest >> ${SCRIPT_DIR}/startup.log 2>&1
 }
 
 function setup_apps_versions {
@@ -116,7 +116,7 @@ function start {
     nohup docker-compose up --no-color >> ${SCRIPT_DIR}/startup.log & 2>&1
     cd $PREV_DIR
 
-    watch "Starting STYX ..." "grep \"Started styx server in\" ${SCRIPT_DIR}/startup.log" "grep -e \"styx.*ERROR\" ${SCRIPT_DIR}/startup.log"
+    watch "Starting STYX ..." "grep \"Started styx server in\" ${SCRIPT_DIR}/startup.log" "grep -e \"styx.*ERROR\" ${SCRIPT_DIR}/startup.log | grep -v \"locsClientLoader\""
     START_STYX_RETURN_CODE=$?
 
     if [ "$START_STYX_RETURN_CODE" -eq "0" ]
@@ -127,7 +127,7 @@ function start {
         stop;
     fi
 
-    watch "Starting BA ..." "grep \"bka.*Server startup\" ${SCRIPT_DIR}/startup.log" "grep -e \"bka.*ERROR\" ${SCRIPT_DIR}/startup.log"
+    watch "Starting BA ..." "grep \"bka.*Server startup\" ${SCRIPT_DIR}/startup.log" "grep -e \"bka.*ERROR\" ${SCRIPT_DIR}/startup.log | grep -v \"locsClientLoader\""
     START_BA_RETURN_CODE=$?
 
     if [ "$START_BA_RETURN_CODE" -eq "0" ]
@@ -149,16 +149,16 @@ function start {
         stop;
     fi
 
-    watch "Starting CWS ..." "grep \"cws.*Server startup in\" ${SCRIPT_DIR}/startup.log" "grep -e \"cws.*ERROR\" ${SCRIPT_DIR}/startup.log"
-    START_CWS_RETURN_CODE=$?
-
-    if [ "$START_CWS_RETURN_CODE" -eq "0" ]
-    then
-        echo -e "\n$COLOR_SUCCESS CWS started $COLOR_RESET"
-    else
-        echo -e "\n$COLOR_ERROR Error: CWS start error $COLOR_RESET"
-        stop;
-    fi
+    #    watch "Starting CWS ..." "grep \"cws.*Server startup in\" ${SCRIPT_DIR}/startup.log" "grep -e \"cws.*ERROR\" ${SCRIPT_DIR}/startup.log"
+    #    START_CWS_RETURN_CODE=$?
+    #
+    #    if [ "$START_CWS_RETURN_CODE" -eq "0" ]
+    #    then
+    #        echo -e "\n$COLOR_SUCCESS CWS started $COLOR_RESET"
+    #    else
+    #        echo -e "\n$COLOR_ERROR Error: CWS start error $COLOR_RESET"
+    #        stop;
+    #    fi
 
     echo -e "\n$COLOR_HEADER Local environment started $COLOR_RESET"
 }
