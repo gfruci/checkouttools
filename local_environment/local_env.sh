@@ -193,7 +193,7 @@ function status {
 	else
 		echo -e "\n$COLOR_ERROR NGNIX not running. $COLOR_RESET"
 	fi
-	STYX_PID=`docker ps -q -f name=styx`;
+	STYX_PID=`docker ps -q -f name=styxdev`;
 	if [ -n "$STYX_PID" ]
 	then
 		echo -e "\n$COLOR_SUCCESS STYX running. $COLOR_RESET"

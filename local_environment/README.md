@@ -239,6 +239,11 @@ All the local environment application logs are appended to `startup.log`, you ca
 
     tail -f start.log | grep bka
 
+Apps container names:
+* `bka`
+* `checkito`
+* `styxdev`
+* `nginx`
 
 ### BA DEBUG
 
