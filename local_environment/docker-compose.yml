@@ -155,6 +155,77 @@ services:
       #      - APP_proxyHost=docker.for.mac.localhost
       #      - APP_proxyPort=8888
 
+  bka_no_stub:
+    image: registry.docker.hcom/hotels/ba:${BA_VERSION}
+    container_name: bka
+    ports:
+      - "1901:1901"
+    volumes:
+      - mvt:/mvt
+    environment:
+      - APP_CONFIG_ENVIRONMENT=development
+      - APP_jvm.route=development
+      - APP_javax.net.ssl.trustStore=/hcom/servers/tomcat/certs/pvclient-karmalab.jks
+      - APP_javax.net.ssl.trustStorePassword=tiajya
+      - APP_javax.net.ssl.keyStore=/hcom/servers/tomcat/certs/pvclient-karmalab.jks
+      - APP_javax.net.ssl.keyStorePassword=tiajya
+      - APP_DIONYSUS_TEMPLATES_DOWNLOAD_PATH=/hcom/servers/tomcat/temp
+      - APP_METRICS_GRAPHITE_REPORTING_INTERVAL=-1
+      - APP_METRICS_BOOTSTRAPPER_METRIC_REGISTRATION_ENABLED=false
+      - APP_METRICS_BOOTSTRAPPER_HEALTH_CHECK_REGISTRATION_ENABLED=false
+      - APP_COOKIELESS_DOMAIN_STATIC_ASSETS=a.staging1-cdn-hotels.com
+      - APP_DB_RO_DRIVERCLASSNAME=com.inet.tds.TdsDriver
+      - APP_DB_RW_DRIVERCLASSNAME=com.inet.tds.TdsDriver
+      - APP_CURRENCY_EXCHANGE_RATE_PROPERTY_FILE_REQUIRED_AT_STARTUP=false
+      - APP_MVT_BUSINESS_CONFIGURATION_LOCATION=file:///mvt/
+      - APP_DIONYSUS_UIPACK_HOME=file:///dionysusuipack/
+      - APP_EMAIL_TEMPLATES_BASEPATH=file://${CATALINA_BASE}/appconfig/templates/
+      - APP_LIS_EAPID=0
+      - APP_BOOKING_SEND_CONFIRMATION_SMS=false
+      - APP_SMS_CONFIRMATION_ENABLED=false
+      - APP_spring.profiles.active=default,fakeauthentication
+      - APP_VAULT_ADDR=https://vault.lab.hcom
+      - APP_VAULT_USER_ID=staging1-ba-01
+      - APP_VAULT_TIMEOUT=60
+      - APP_TOMCAT_EXECUTOR_MAX_THREADS=50
+      - APP_TOMCAT_EXECUTOR_MIN_SPARE_THREADS=10
+      - APP_TOMCAT_EXECUTOR_MAX_IDLE_TIME=20000
+      - APP_TOMCAT_EXECUTOR_MAX_QUEUE_SIZE=30
+      - APP_DB_RO_URL="jdbc:inetdae7://HCOM_RO_staging.karmalab.net?database=HCOM_EMEA_PROD"
+      - APP_DB_RO_USERNAME=emea_appRO
+      - APP_DB_RO_PASSWORD=emea_appRO
+      - APP_DB_RW_URL="jdbc:inetdae7://HCOM_EMEA_PROD_staging.karmalab.net?database=HCOM_EMEA_PROD"
+      - APP_DB_RW_USERNAME=emea_app
+      - APP_DB_RW_PASSWORD=emea_app
+      - APP_DSC_DATASTAX_SSL_ENABLED=false
+      - APP_DSC_DATASTAX_KEYSPACE_NAME=hermes
+      - APP_LVS_CLIENT_BASE_URL=http://hcomcdslivevisitsservice.staging.hcom
+      - APP_DIONYSUS_TEMPLATE_PATH=http://dispatcherapp.staging1.hcom/templates/dionysus_ui_pack_templates-63.0.zip
+      - APP_LOYALTY_REST_CLIENT_CONNECT_TIMEOUT=60000
+      - APP_LOYALTY_REST_CLIENT_READ_TIMEOUT=60000
+      - APP_LOYALTY_ESTIMATION_SERVICE_CLIENT_READ_TIMEOUT=60000
+      - APP_LOYALTY_ESTIMATION_SERVICE_CLIENT_CONNECTION_TIMEOUT=60000
+      - APP_BPAS_ON_PAYMENT_OPTION_REQUEST_CIRCUIT_BREAKER_TIMEOUT_MS=60000
+
+      # Development overrides
+      - APP_UNIFIED_DATA_TOOLKIT_ENABLED=true
+      - APP_LOCALIZATION_MESSAGE_PARALLEL_INITIALIZATION_ENABLED=true
+      - APP_MVT_CONFIGURATION_PARALLEL_INITIALIZATION_ENABLED=true
+      - APP_CACHE_PRELOAD_ENABLED=false
+      - APP_PSID_SERVICE_ENABLED=false
+      - APP_WEBSITE_DOMAIN_DISCRIMINATOR=dev-
+      - APP_FENCED_VAP_ENABLED=false
+      - APP_UNBRANDED_VIP_VAP_ENABLED=false
+      - JAVA_JVM_ARGS=-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=1901
+
+      # Proxy resources
+      #      - APP_http.proxyHost=docker.for.mac.localhost
+      #      - APP_http.proxyPort=8888
+      #      - APP_https.proxyHost=docker.for.mac.localhost
+      #      - APP_https.proxyPort=8888
+      #      - APP_proxyHost=docker.for.mac.localhost
+      #      - APP_proxyPort=8888
+
   checkito:
     image: registry.docker.hcom/hotels/checkito:latest
     container_name: checkito

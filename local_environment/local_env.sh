@@ -19,6 +19,8 @@ SCRIPT_DIR=$(dirname ${LINK})
 # APPS DEFAULT VERSIONS #
 #########################
 
+BA_TYPE_NO_STUB=bka_no_stub
+BA_TYPE=bka
 BA_VERSION=
 
 #####################
@@ -77,6 +79,10 @@ function setup_apps_versions {
           BA_VERSION=$2
           shift
           ;;
+        -no-stub)
+          BA_TYPE=${BA_TYPE_NO_STUB}
+          shift
+          ;;
       esac
       shift
     done
@@ -112,9 +118,9 @@ function start {
 
     echo -e "\n$COLOR_HEADER Starting local environment ... $COLOR_RESET"
 
-    cd $SCRIPT_DIR
-    nohup docker-compose up --no-color >> ${SCRIPT_DIR}/startup.log & 2>&1
-    cd $PREV_DIR
+    cd ${SCRIPT_DIR}
+    nohup docker-compose up --no-color nginx styxdev mvt checkito ${BA_TYPE} >> ${SCRIPT_DIR}/startup.log & 2>&1
+    cd ${PREV_DIR}
 
     watch "Starting STYX ..." "grep \"Started styx server in\" ${SCRIPT_DIR}/startup.log" "grep -e \"styx.*ERROR\" ${SCRIPT_DIR}/startup.log | grep -v \"locsClientLoader\""
     START_STYX_RETURN_CODE=$?
@@ -166,9 +172,9 @@ function start {
 function stop {
     echo -e "\n$COLOR_HEADER Stopping local environment ... $COLOR_RESET"
 
-    cd $SCRIPT_DIR
+    cd ${SCRIPT_DIR}
     docker-compose rm -sf >> ${SCRIPT_DIR}/startup.log 2>&1
-    cd $PREV_DIR
+    cd ${PREV_DIR}
 
     echo "done"
 
@@ -220,6 +226,7 @@ function help {
     echo "Commands:"
     echo "start                               Start the local environment"
     echo "  -ba <ba-version>                  BA version. Required."
+    echo "  -no-stub                          Run the BA without checkito"
     echo "stop                                Stop the local environment"
     echo "status                              Print the local environment status"
     echo

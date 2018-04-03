@@ -23,7 +23,6 @@ TBW
 To facilitate the maintainance, there is a single (_bash_) script to set up the environment. 
 To run it on Windows, *Git BASH* can be used (https://gitforwindows.org/)
 
-
 ### Install Docker CE (Mac/Win)
 
 Download and install Docker CE **17.09.x**
@@ -76,8 +75,8 @@ Login to registry using your SEA credentials
     ```
     winpty docker login registry.docker.hcom
     ```
-
 ----
+
 *Note*: If you get the following error:
 
     Error response from daemon: login attempt to http://registry.docker.hcom/v2/ failed with status: 500 Internal Server Error
@@ -197,10 +196,6 @@ Move under the `local_env_root_folder`, give execution permissions to the `local
 #### Start
 
     ./local_env.sh start -ba <ba-version>
-
-**Custom BA version example**
-* `./local_env.sh start -ba 120.0.7090`
-* `./local_env.sh start -ba 120.0.feature_CHOP_2658_availabilty_price_check_feature_branch.4`   
     
 #### Stop
 
@@ -217,23 +212,51 @@ You can test the following BA use case:
 * BA feature-branch
 * BA built in local
 
-TBW 
+the only difference between the 3 use cases above is the version of the BA to be provided.
+
+**BA version example**
+
+* BA stable version:
+ 
+    `./local_env.sh start -ba 120.0.7090`
+
+* BA feature-branch: 
+
+`./local_env.sh start -ba 120.0.feature_CHOP_2658_availabilty_price_check_feature_branch.4`   
+
+* BA built in local: 
+
+`./local_env.sh start -ba dev.0`
 
 ### DUP Feature branch testing
 
-TBW
-
-### BA DEBUG
-
-TBW
-
-### Proxying
-
-TBW
+DUP feature branch testing in local can be performed in the same way as in stagin.
+You just need either to specify the DUP `feature-branch` parameter on the BF deeplink or set the DUP feature-branch cookie
 
 ### Logging
 
-TBW
+All the local environment application logs are appended to `startup.log`, you can filter application specific logs by using the `grep` command.
+
+    tail -f start.log | grep bka
+
+
+### BA DEBUG
+
+The fixed BA debugging port is `1901`
+You can change this in the `docker-compose.yml`, but if need to do it please make it configurable via the startup script.
+
+### Proxying
+
+Local proxy is not supported via the startup script yet.
+If you need to enable the local proxy you can modify the following configuration into the `docker-compose.yml` file. Again PR welcomed.
+
+    # Proxy resources
+    # - APP_http.proxyHost=docker.for.mac.localhost
+    # - APP_http.proxyPort=8888
+    # - APP_https.proxyHost=docker.for.mac.localhost
+    # - APP_https.proxyPort=8888
+    # - APP_proxyHost=docker.for.mac.localhost
+    # - APP_proxyPort=8888
 
 ## Troubleshooting common issues
 
