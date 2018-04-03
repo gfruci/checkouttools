@@ -18,9 +18,22 @@ TBW
 
 ## Setup
 
+### Windows pre-requirements
+
+To facilitate the maintainance, there is a single (_bash_) script to set up the environment. 
+To run it on Windows, *Git BASH* can be used (https://gitforwindows.org/)
+
+
 ### Install Docker CE (Mac/Win)
 
-Download and install Docker CE from https://www.docker.com/community-edition#/download
+Download and install Docker CE **17.09.x**
+
+* WIN: https://docs.docker.com/docker-for-windows/release-notes/#docker-community-edition-17091-ce-win42-2017-12-11  
+* MAC: https://docs.docker.com/docker-for-mac/release-notes/#docker-community-edition-17091-ce-mac42-2017-12-11 
+
+*[Windows]*: After the installation, share the drive on which the local environment folder will be checked out: `Docker -> Settings -> Shared Drives`
+
+**Important**: DO NOT UPGRADE. The hcom docker registry is not compatible with newer versions.
 
 **Note:** if your upgrading from Docker Toolbox, choose to copy the local docker machine (if you already have one)
 
@@ -53,6 +66,18 @@ Login to registry using your SEA credentials
 
     docker login registry.docker.hcom
 
+----
+*[WINDOWS]*: 
+    If you're using Git BASH and you get the following error:
+    ``` bash
+    Error: Cannot perform an interactive login from a non TTY device
+    ```
+    you need to use the following command to login:
+    ```
+    winpty docker login registry.docker.hcom
+    ```
+
+----
 *Note*: If you get the following error:
 
     Error response from daemon: login attempt to http://registry.docker.hcom/v2/ failed with status: 500 Internal Server Error
@@ -159,6 +184,15 @@ Move under the `local_env_root_folder`, give execution permissions to the `local
       -ba <ba-version>                  BA version to run. Required.
     stop                                Stop the local environment
     status                              Print the local environment status
+
+----
+*[WINDOWS]*: 
+    If you're using Git BASH and the above command is not working you may need to use _sh_ instead of _./_:
+    ```
+    sh local_env.sh <command> <options>
+    ```
+
+----
 
 #### Start
 
