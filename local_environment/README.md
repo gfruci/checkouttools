@@ -64,17 +64,15 @@ Add the insecure internal registries in `Docker -> Preferences -> Daemon -> Basi
 Login to registry using your SEA credentials
 
     docker login registry.docker.hcom
-
 ----
 *[WINDOWS]*: 
-    If you're using Git BASH and you get the following error:
-    ``` bash
+If you're using Git BASH and you get the following error: 
+
     Error: Cannot perform an interactive login from a non TTY device
-    ```
-    you need to use the following command to login:
-    ```
+
+you need to use the following command to login:
+
     winpty docker login registry.docker.hcom
-    ```
 ----
 
 *Note*: If you get the following error:
@@ -183,14 +181,13 @@ Move under the `local_env_root_folder`, give execution permissions to the `local
       -ba <ba-version>                  BA version to run. Required.
     stop                                Stop the local environment
     status                              Print the local environment status
-
 ----
-*[WINDOWS]*: 
-    If you're using Git BASH and the above command is not working you may need to use _sh_ instead of _./_:
-    ```
-    sh local_env.sh <command> <options>
-    ```
 
+*[WINDOWS]*:
+
+If you're using Git BASH and the above command is not working you may need to use _sh_ instead of _./_ :
+
+    sh local_env.sh <command> <options>
 ----
 
 #### Start
