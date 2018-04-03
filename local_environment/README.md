@@ -215,7 +215,7 @@ the only difference between the 3 use cases above is the version of the BA to be
 
 * BA stable version:
  
-    `./local_env.sh start -ba 120.0.7090`
+`./local_env.sh start -ba 120.0.7090`
 
 * BA feature-branch: 
 
