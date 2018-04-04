@@ -19,6 +19,8 @@ SCRIPT_DIR=$(dirname ${LINK})
 # APPS DEFAULT VERSIONS #
 #########################
 
+BA_TYPE_NO_STUB=bka_no_stub
+BA_TYPE=bka
 BA_VERSION=
 
 #####################
@@ -37,17 +39,19 @@ function watch {
   		then
   			return 0
   		else
-  			eval $3 > /dev/null
+  			ERROR=$(eval $3)
   			if [ "$?" -eq "0" ]
   			then
+  			    echo $ERROR
   				return 1
   			fi
   		fi
 
         timeEnd=`date +%s`
         timeTotal=$((timeEnd-timeStart))
-        if [ ${timeTotal} -gt 300 ]
+        if [ ${timeTotal} -gt 600 ]
   		then
+            echo "Error! The application took too much time to start."
   			return 1
         fi
 
@@ -65,7 +69,7 @@ function update_env_apps_images {
 
     docker pull registry.docker.hcom/hotels/styxpres:release >> ${SCRIPT_DIR}/startup.log 2>&1
     docker pull registry.docker.hcom/hotels/checkito:latest >> ${SCRIPT_DIR}/startup.log 2>&1
-    docker pull registry.docker.hcom/hotels/cws:latest >> ${SCRIPT_DIR}/startup.log 2>&1
+    #    docker pull registry.docker.hcom/hotels/cws:latest >> ${SCRIPT_DIR}/startup.log 2>&1
 }
 
 function setup_apps_versions {
@@ -73,6 +77,10 @@ function setup_apps_versions {
       case $1 in
         -ba)
           BA_VERSION=$2
+          shift
+          ;;
+        -no-stub)
+          BA_TYPE=${BA_TYPE_NO_STUB}
           shift
           ;;
       esac
@@ -110,11 +118,11 @@ function start {
 
     echo -e "\n$COLOR_HEADER Starting local environment ... $COLOR_RESET"
 
-    cd $SCRIPT_DIR
-    nohup docker-compose up --no-color >> ${SCRIPT_DIR}/startup.log & 2>&1
-    cd $PREV_DIR
+    cd ${SCRIPT_DIR}
+    nohup docker-compose up --no-color nginx styxdev mvt checkito ${BA_TYPE} >> ${SCRIPT_DIR}/startup.log & 2>&1
+    cd ${PREV_DIR}
 
-    watch "Starting STYX ..." "grep \"Started styx server in\" ${SCRIPT_DIR}/startup.log" "grep \"styx\" ${SCRIPT_DIR}/startup.log | grep -e \"ERROR\""
+    watch "Starting STYX ..." "grep \"Started styx server in\" ${SCRIPT_DIR}/startup.log" "grep -e \"styx.*ERROR\" ${SCRIPT_DIR}/startup.log | grep -v \"locsClientLoader\""
     START_STYX_RETURN_CODE=$?
 
     if [ "$START_STYX_RETURN_CODE" -eq "0" ]
@@ -122,10 +130,21 @@ function start {
         echo -e "\n$COLOR_SUCCESS STYX started $COLOR_RESET"
     else
         echo -e "\n$COLOR_ERROR Error: STYX start error $COLOR_RESET"
-        #stop;
+        stop;
     fi
 
-    watch "Starting CHECKITO ..." "grep \"Checkito listening for HTTP requests\" ${SCRIPT_DIR}/startup.log" "grep \"checkito\" ${SCRIPT_DIR}/startup.log | grep -e \"ERROR\""
+    watch "Starting BA ..." "grep \"bka.*Server startup\" ${SCRIPT_DIR}/startup.log" "grep -e \"bka.*ERROR\" ${SCRIPT_DIR}/startup.log | grep -v \"locsClientLoader\""
+    START_BA_RETURN_CODE=$?
+
+    if [ "$START_BA_RETURN_CODE" -eq "0" ]
+    then
+        echo -e "\n$COLOR_SUCCESS BA started $COLOR_RESET"
+    else
+        echo -e "\n$COLOR_ERROR Error: BA start error $COLOR_RESET"
+        stop;
+    fi
+
+    watch "Starting CHECKITO ..." "grep \"checkito.*Checkito listening for HTTP requests\" ${SCRIPT_DIR}/startup.log" "grep -e \"checkito.*ERROR\" ${SCRIPT_DIR}/startup.log"
     START_CHECKITO_RETURN_CODE=$?
 
     if [ "$START_CHECKITO_RETURN_CODE" -eq "0" ]
@@ -136,16 +155,16 @@ function start {
         stop;
     fi
 
-    watch "Starting CWS ..." "grep \"Server startup in\" ${SCRIPT_DIR}/startup.log" "grep \"cws\" ${SCRIPT_DIR}/startup.log | grep -e \"ERROR\""
-    START_CWS_RETURN_CODE=$?
-
-    if [ "$START_CWS_RETURN_CODE" -eq "0" ]
-    then
-        echo -e "\n$COLOR_SUCCESS CWS started $COLOR_RESET"
-    else
-        echo -e "\n$COLOR_ERROR Error: CWS start error $COLOR_RESET"
-        stop;
-    fi
+    #    watch "Starting CWS ..." "grep \"cws.*Server startup in\" ${SCRIPT_DIR}/startup.log" "grep -e \"cws.*ERROR\" ${SCRIPT_DIR}/startup.log"
+    #    START_CWS_RETURN_CODE=$?
+    #
+    #    if [ "$START_CWS_RETURN_CODE" -eq "0" ]
+    #    then
+    #        echo -e "\n$COLOR_SUCCESS CWS started $COLOR_RESET"
+    #    else
+    #        echo -e "\n$COLOR_ERROR Error: CWS start error $COLOR_RESET"
+    #        stop;
+    #    fi
 
     echo -e "\n$COLOR_HEADER Local environment started $COLOR_RESET"
 }
@@ -153,13 +172,15 @@ function start {
 function stop {
     echo -e "\n$COLOR_HEADER Stopping local environment ... $COLOR_RESET"
 
-    cd $SCRIPT_DIR
+    cd ${SCRIPT_DIR}
     docker-compose rm -sf >> ${SCRIPT_DIR}/startup.log 2>&1
-    cd $PREV_DIR
+    cd ${PREV_DIR}
 
     echo "done"
 
     status;
+
+    exit 0;
 }
 
 function status {
@@ -172,7 +193,7 @@ function status {
 	else
 		echo -e "\n$COLOR_ERROR NGNIX not running. $COLOR_RESET"
 	fi
-	STYX_PID=`docker ps -q -f name=styx`;
+	STYX_PID=`docker ps -q -f name=styxdev`;
 	if [ -n "$STYX_PID" ]
 	then
 		echo -e "\n$COLOR_SUCCESS STYX running. $COLOR_RESET"
@@ -187,7 +208,7 @@ function status {
 		echo -e "\n$COLOR_ERROR CHECKITO not running. $COLOR_RESET"
 	fi
 
-	BA_PID=`docker ps -q -f name=ba`;
+	BA_PID=`docker ps -q -f name=bka`;
 	if [ -n "$BA_PID" ]
 	then
 		echo -e "\n$COLOR_SUCCESS BookingApp running. $COLOR_RESET"
@@ -205,6 +226,7 @@ function help {
     echo "Commands:"
     echo "start                               Start the local environment"
     echo "  -ba <ba-version>                  BA version. Required."
+    echo "  -no-stub                          Run the BA without checkito"
     echo "stop                                Stop the local environment"
     echo "status                              Print the local environment status"
     echo

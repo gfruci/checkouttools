@@ -18,19 +18,44 @@ TBW
 
 ## Setup
 
+### Windows pre-requirements
+
+To facilitate the maintainance, there is a single (_bash_) script to set up the environment. 
+To run it on Windows, *Git BASH* can be used (https://gitforwindows.org/)
+
 ### Install Docker CE (Mac/Win)
 
-Download and install Docker CE from https://www.docker.com/community-edition#/download
+Download and install Docker CE **17.09.x**
 
-**Upgrading from Docker Toolbox**
+* WIN: https://docs.docker.com/docker-for-windows/release-notes/#docker-community-edition-17091-ce-win42-2017-12-11  
+* MAC: https://docs.docker.com/docker-for-mac/release-notes/#docker-community-edition-17091-ce-mac42-2017-12-11 
 
-If you already have an installation of Docker Toolbox and you want to upgrade you can read these:
+*[Windows]*: After the installation, share the drive on which the local environment folder will be checked out: `Docker -> Settings -> Shared Drives`
+
+**Important**: DO NOT UPGRADE. The hcom docker registry is not compatible with newer versions.
+
+**Note:** if your upgrading from Docker Toolbox, choose to copy the local docker machine (if you already have one)
+
+### Upgrading from Docker Toolbox
+
+If you already have an installation of Docker Toolbox and you want to upgrade you need to remove the Docker ENV variables:
+
+    unset DOCKER_TLS_VERIFY
+    unset DOCKER_CERT_PATH
+    unset DOCKER_MACHINE_NAME
+    unset DOCKER_HOST
+
+Close all your terminal windows
+
+For more details on how to upgrade from Docker Toolbox read these:
 * https://docs.docker.com/docker-for-mac/docker-toolbox/
 * https://wiki.hcom/display/HTS/Upgrading+to+Docker+for+Mac
 
 ### Mark internal registries as "Insecure"
 
-Add the internal registries in `Docker -> Preferences -> Daemon panel:`
+Add the insecure internal registries in `Docker -> Preferences -> Daemon -> Basic:`
+* registry.docker.hcom
+* registry.prod.hcom
 
 ![add insecure registries](assets/add_insecure_registries.png)
 
@@ -39,14 +64,32 @@ Add the internal registries in `Docker -> Preferences -> Daemon panel:`
 Login to registry using your SEA credentials
 
     docker login registry.docker.hcom
+----
+*[WINDOWS]*: 
+If you're using Git BASH and you get the following error: 
+
+    Error: Cannot perform an interactive login from a non TTY device
+
+you need to use the following command to login:
+
+    winpty docker login registry.docker.hcom
+----
 
 *Note*: If you get the following error:
 
     Error response from daemon: login attempt to http://registry.docker.hcom/v2/ failed with status: 500 Internal Server Error
 
-add the disable-legacy-registry flag set to false in `Docker -> Preferences -> Daemon
+add the disable-legacy-registry flag set to false in `Docker -> Preferences -> Daemon -> Advanced`
 
 ![disable legacy registry](assets/disable_legacy_registry.png)
+
+### Increase the docker resources
+
+In `Docker -> Preferences -> Advanced`
+* increase the docker memory to 4GB
+* Increase the number of CPU to 6
+
+![increase_docker_resources](assets/increase_docker_resources.png)
 
 ### hosts file
 
@@ -112,11 +155,23 @@ Please update your hosts file with the following.
 127.0.0.1 hotels.dev-multiplus.com ssl.dev-mulitplus.com
 127.0.0.1 hotels.dev-hotelurbano.com ssl.dev-hotelurbano.com
 127.0.0.1 hotels.dev-hcombest.com ssl.dev-hcombest.com
+
+#CHECKITO
+127.0.0.1 checkito.hcom checkito
 ```
+
+### Checkout the local environment
+
+Checkout the `local_environment` repo with `git`
+
+    $ cd <workspace_folder>
+    $ git clone http://<sea_username>@stash.hcom/scm/cop/checkouttools.git
 
 ## Usage
 
-Give execution permissions to the `local_env.sh` bash script and run it.
+### Start/Stop
+
+Move under the `local_env_root_folder`, give execution permissions to the `local_env.sh` bash script and run it.
 
     $ cd <local_env_root_folder>
     $ chmod a+x local_env.sh 
@@ -126,27 +181,89 @@ Give execution permissions to the `local_env.sh` bash script and run it.
       -ba <ba-version>                  BA version to run. Required.
     stop                                Stop the local environment
     status                              Print the local environment status
+----
 
-### Start
+*[WINDOWS]*:
+
+If you're using Git BASH and the above command is not working you may need to use _sh_ instead of _./_ :
+
+    sh local_env.sh <command> <options>
+----
+
+#### Start
 
     ./local_env.sh start -ba <ba-version>
-
-**Custom apps version example**
-* `./local_env.sh start -ba 120.0.7090`
-* `./local_env.sh start -ba 120.0.feature_CHOP_2658_availabilty_price_check_feature_branch.4`   
     
-### Stop
+#### Stop
 
     ./local_env.sh stop
 
-### Status
+#### Status
 
     ./local_env.sh status
 
+### BA testing
 
-## Trouble shooting common issues
+You can test the following BA use case:
+* BA stable version 
+* BA feature-branch
+* BA built in local
+
+the only difference between the 3 use cases above is the version of the BA to be provided.
+
+**BA version example**
+
+* BA stable version:
+ 
+`./local_env.sh start -ba 120.0.7090`
+
+* BA feature-branch: 
+
+`./local_env.sh start -ba 120.0.feature_CHOP_2658_availabilty_price_check_feature_branch.4`   
+
+* BA built in local: 
+
+`./local_env.sh start -ba dev.0`
+
+### DUP Feature branch testing
+
+DUP feature branch testing in local can be performed in the same way as in stagin.
+You just need either to specify the DUP `feature-branch` parameter on the BF deeplink or set the DUP feature-branch cookie
+
+### Logging
+
+All the local environment application logs are appended to `startup.log`, you can filter application specific logs by using the `grep` command.
+
+    tail -f start.log | grep bka
+
+Apps container names:
+* `bka`
+* `checkito`
+* `styxdev`
+* `nginx`
+
+### BA DEBUG
+
+The fixed BA debugging port is `1901`
+You can change this in the `docker-compose.yml`, but if need to do it please make it configurable via the startup script.
+
+### Proxying
+
+Local proxy is not supported via the startup script yet.
+If you need to enable the local proxy you can modify the following configuration into the `docker-compose.yml` file. Again PR welcomed.
+
+    # Proxy resources
+    # - APP_http.proxyHost=docker.for.mac.localhost
+    # - APP_http.proxyPort=8888
+    # - APP_https.proxyHost=docker.for.mac.localhost
+    # - APP_https.proxyPort=8888
+    # - APP_proxyHost=docker.for.mac.localhost
+    # - APP_proxyPort=8888
+
+## Troubleshooting common issues
 
 * No CSS/JS - This indicates you have not accepted the `a*-cdn-hotels.com` domain certificates. Please trust like you do on staging or milan.
+* Not seeing the header? You're not setting the MVT `4418.1`
 * Update the docker spotify plugin version to `0.4.13` if you have got the following error building your local image 
 
     ```org.apache.http.conn.HttpHostConnectException: Connect to localhost:2375 [localhost/127.0.0.1] failed: Connection refused```
@@ -172,4 +289,3 @@ Components involved:
 Styx DUP plugin only serves the html (rendering the soy files), the assets (JS, CSS) are served by the staging DispatcherApp (DA):
 * the DA reads the JS and CSS from File System DUP folders
 * there is a DUP folder for each branch
-
