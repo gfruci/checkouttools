@@ -6,7 +6,7 @@ It leverage the [local-app-server](http://stash.hcom/projects/STYX/repos/local-a
 
 ![local_env](assets/local_env_arch.png)
 
-**Note:** In order to enable styx html page rendering you need to set MVT variant 4418.1
+**Note:** In order to enable styx html page rendering you need to set MVT variant 4418.1.
 
 #### Supported features:
 
@@ -25,7 +25,7 @@ To run it on Windows, *Git BASH* can be used (https://gitforwindows.org/)
 
 ### Install Docker CE (Mac/Win)
 
-Download and install Docker CE **17.09.x**
+Download, install and launch Docker CE **17.09.x**
 
 * WIN: https://docs.docker.com/docker-for-windows/release-notes/#docker-community-edition-17091-ce-win42-2017-12-11  
 * MAC: https://docs.docker.com/docker-for-mac/release-notes/#docker-community-edition-17091-ce-mac42-2017-12-11 
@@ -64,6 +64,7 @@ Add the insecure internal registries in `Docker -> Preferences -> Daemon -> Basi
 Login to registry using your SEA credentials
 
     docker login registry.docker.hcom
+
 ----
 *[WINDOWS]*: 
 If you're using Git BASH and you get the following error: 
@@ -75,13 +76,15 @@ you need to use the following command to login:
     winpty docker login registry.docker.hcom
 ----
 
-*Note*: If you get the following error:
+### Disable legacy registry
 
-    Error response from daemon: login attempt to http://registry.docker.hcom/v2/ failed with status: 500 Internal Server Error
-
-add the disable-legacy-registry flag set to false in `Docker -> Preferences -> Daemon -> Advanced`
+add the `disable-legacy-registry` flag set to false in `Docker -> Preferences -> Daemon -> Advanced`
 
 ![disable legacy registry](assets/disable_legacy_registry.png)
+
+*Note*: If you forgot to add the `disable-legacy-registry flag you may get the following error:
+
+    Error response from daemon: login attempt to http://registry.docker.hcom/v2/ failed with status: 500 Internal Server Error
 
 ### Increase the docker resources
 
@@ -94,6 +97,8 @@ In `Docker -> Preferences -> Advanced`
 ### hosts file
 
 Please update your hosts file with the following.
+
+*Note:* If you already have the `*.dev-hotels.com` domains in your hosts file, you need to substitute them. 
 
 `hosts` file location:
 * MAC/UNIX: `/etc/hosts`
@@ -162,6 +167,8 @@ Please update your hosts file with the following.
 
 ### Checkout the local environment
 
+The `local_environment` 
+
 Checkout the `local_environment` repo with `git`
 
     $ cd <workspace_folder>
@@ -171,9 +178,9 @@ Checkout the `local_environment` repo with `git`
 
 ### Start/Stop
 
-Move under the `local_env_root_folder`, give execution permissions to the `local_env.sh` bash script and run it.
+Move under the `local_environment`, give execution permissions to the `local_env.sh` bash script and run it.
 
-    $ cd <local_env_root_folder>
+    $ cd <local_environment_root_folder>
     $ chmod a+x local_env.sh 
     $ ./local_env.sh <command> <options>
     Commands:
@@ -193,6 +200,8 @@ If you're using Git BASH and the above command is not working you may need to us
 #### Start
 
     ./local_env.sh start -ba <ba-version>
+
+*Note:* the first time you start the local environment the setup may take a few minutes
     
 #### Stop
 
@@ -225,16 +234,22 @@ the only difference between the 3 use cases above is the version of the BA to be
 
 `./local_env.sh start -ba dev.0`
 
+*Note:* in order to build the BA in local you need to use the profile `-Pbuild-local`.
+
+    $ cd <bookingapp_root_folder>
+    $ mvn clean install -Pbuild-local
+
 ### DUP Feature branch testing
 
-DUP feature branch testing in local can be performed in the same way as in stagin.
+DUP feature branch testing in local can be performed in the same way as in staging.
 You just need either to specify the DUP `feature-branch` parameter on the BF deeplink or set the DUP feature-branch cookie
 
 ### Logging
 
 All the local environment application logs are appended to `startup.log`, you can filter application specific logs by using the `grep` command.
 
-    tail -f start.log | grep bka
+    $ cd <local_environment_root_folder>
+    $ tail -f startup.log | grep bka
 
 Apps container names:
 * `bka`
@@ -245,12 +260,13 @@ Apps container names:
 ### BA DEBUG
 
 The fixed BA debugging port is `1901`
-You can change this in the `docker-compose.yml`, but if need to do it please make it configurable via the startup script.
+You can change this in the local_environment `<local_environment_root_folder>/docker-compose.yml`, but if need to do it please make it configurable via the startup script.
 
 ### Proxying
 
 Local proxy is not supported via the startup script yet.
-If you need to enable the local proxy you can modify the following configuration into the `docker-compose.yml` file. Again PR welcomed.
+If you need to enable the local proxy you can modify the following configuration into the local_environment `<local_environment_root_folder>/docker-compose.yml` file. Again PR welcomed.
+
 
     # Proxy resources
     # - APP_http.proxyHost=docker.for.mac.localhost
