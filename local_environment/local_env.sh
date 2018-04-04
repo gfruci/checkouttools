@@ -1,4 +1,4 @@
-#!/usr/bin/env bash -i
+#!/usr/bin/env bash
 
 COLOR_HEADER="\033[7;49;36m"
 COLOR_WATCH="\033[7;49;33m"
