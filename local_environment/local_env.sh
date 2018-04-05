@@ -15,12 +15,23 @@ then
 fi
 SCRIPT_DIR=$(dirname ${LINK})
 
+declare -A APPS_CONF=(\
+    ["styxdev,start_grep_cmd"]="grep \"Started styx server in\" ${SCRIPT_DIR}/startup.log"\
+    ["styxdev,stop_grep_cmd"]="grep -e \"styxdev.*ERROR\" ${SCRIPT_DIR}/startup.log | grep -v \"locsClientLoader\""\
+    ["checkito,start_grep_cmd"]="grep \"checkito.*Checkito listening for HTTP requests\" ${SCRIPT_DIR}/startup.log"\
+    ["checkito,stop_grep_cmd"]="grep -e \"checkito.*ERROR\" ${SCRIPT_DIR}/startup.log"\
+    ["ba,start_grep_cmd"]="grep \"ba.*Server startup\" ${SCRIPT_DIR}/startup.log"\
+    ["ba,stop_grep_cmd"]="grep -e \"ba.*ERROR\" ${SCRIPT_DIR}/startup.log | grep -v \"locsClientLoader\""\
+    ["ba_no_stub,start_grep_cmd"]="grep \"ba.*Server startup\" ${SCRIPT_DIR}/startup.log"\
+    ["ba_no_stub,stop_grep_cmd"]="grep -e \"ba.*ERROR\" ${SCRIPT_DIR}/startup.log | grep -v \"locsClientLoader\""\
+)
+
 #########################
 # APPS DEFAULT VERSIONS #
 #########################
 
-BA_TYPE_NO_STUB=bka_no_stub
-BA_TYPE=bka
+BA_TYPE_NO_STUB=ba_no_stub
+BA_TYPE=ba
 BA_VERSION=
 
 #####################
@@ -72,10 +83,10 @@ function update_env_apps_images {
     #    docker pull registry.docker.hcom/hotels/cws:latest >> ${SCRIPT_DIR}/startup.log 2>&1
 }
 
-function setup_apps_versions {
+function setup_ba_versions {
     while [[ $# > 0 ]]; do
       case $1 in
-        -ba)
+        -ba-version)
           BA_VERSION=$2
           shift
           ;;
@@ -88,7 +99,7 @@ function setup_apps_versions {
     done
 
     if [[ ! ${BA_VERSION} ]]; then
-        echo "Error! BA version NOT specified (missing -ba parameter)!"
+        echo "Error! BA version NOT specified (missing -ba-version parameter)!"
         help;
         exit 1
     fi
@@ -100,13 +111,48 @@ function setup_apps_versions {
 # START/STOP/STATUS FUNCTIONS #
 ###############################
 
+function start-app {
+    APP=$1
+
+    if [ "${APP}" == "ba" ]
+    then
+        setup_ba_versions $@
+        APP=${BA_TYPE}
+    fi
+
+    appdir="${APPS_CONF["${APP},start_grep_cmd"]}"
+
+    cd ${SCRIPT_DIR}
+    nohup docker-compose up --no-color ${APP} >> ${SCRIPT_DIR}/startup.log & 2>&1
+    cd ${PREV_DIR}
+
+    watch "Starting ${APP} ..." "${APPS_CONF["${APP},start_grep_cmd"]}" "${APPS_CONF["${APP},stop_grep_cmd"]}"
+    RETURN_CODE=$?
+
+    if [ "${RETURN_CODE}" -eq "0" ]
+    then
+        echo -e "\n$COLOR_SUCCESS ${APP} started $COLOR_RESET"
+    else
+        echo -e "\n$COLOR_ERROR Error: ${APP} start error $COLOR_RESET"
+    fi
+}
+
+function stop-app {
+    APP=$1
+
+    echo -e "\n$COLOR_HEADER Stopping ${APP} ... $COLOR_RESET"
+
+    cd ${SCRIPT_DIR}
+    docker-compose rm -sf ${APP} >> ${SCRIPT_DIR}/startup.log 2>&1
+    cd ${PREV_DIR}
+
+    echo "done"
+}
 
 function setup {
     echo "" > ${SCRIPT_DIR}/startup.log
 
     echo -e "\n$COLOR_HEADER Setting up local environment ... $COLOR_RESET"
-
-    setup_apps_versions $@;
 
     update_env_apps_images;
 
@@ -118,53 +164,10 @@ function start {
 
     echo -e "\n$COLOR_HEADER Starting local environment ... $COLOR_RESET"
 
-    cd ${SCRIPT_DIR}
-    nohup docker-compose up --no-color nginx styxdev mvt checkito ${BA_TYPE} >> ${SCRIPT_DIR}/startup.log & 2>&1
-    cd ${PREV_DIR}
-
-    watch "Starting STYX ..." "grep \"Started styx server in\" ${SCRIPT_DIR}/startup.log" "grep -e \"styx.*ERROR\" ${SCRIPT_DIR}/startup.log | grep -v \"locsClientLoader\""
-    START_STYX_RETURN_CODE=$?
-
-    if [ "$START_STYX_RETURN_CODE" -eq "0" ]
-    then
-        echo -e "\n$COLOR_SUCCESS STYX started $COLOR_RESET"
-    else
-        echo -e "\n$COLOR_ERROR Error: STYX start error $COLOR_RESET"
-        stop;
-    fi
-
-    watch "Starting BA ..." "grep \"bka.*Server startup\" ${SCRIPT_DIR}/startup.log" "grep -e \"bka.*ERROR\" ${SCRIPT_DIR}/startup.log | grep -v \"locsClientLoader\""
-    START_BA_RETURN_CODE=$?
-
-    if [ "$START_BA_RETURN_CODE" -eq "0" ]
-    then
-        echo -e "\n$COLOR_SUCCESS BA started $COLOR_RESET"
-    else
-        echo -e "\n$COLOR_ERROR Error: BA start error $COLOR_RESET"
-        stop;
-    fi
-
-    watch "Starting CHECKITO ..." "grep \"checkito.*Checkito listening for HTTP requests\" ${SCRIPT_DIR}/startup.log" "grep -e \"checkito.*ERROR\" ${SCRIPT_DIR}/startup.log"
-    START_CHECKITO_RETURN_CODE=$?
-
-    if [ "$START_CHECKITO_RETURN_CODE" -eq "0" ]
-    then
-        echo -e "\n$COLOR_SUCCESS CHECKITO started $COLOR_RESET"
-    else
-        echo -e "\n$COLOR_ERROR Error: CHECKITO start error $COLOR_RESET"
-        stop;
-    fi
-
-    #    watch "Starting CWS ..." "grep \"cws.*Server startup in\" ${SCRIPT_DIR}/startup.log" "grep -e \"cws.*ERROR\" ${SCRIPT_DIR}/startup.log"
-    #    START_CWS_RETURN_CODE=$?
-    #
-    #    if [ "$START_CWS_RETURN_CODE" -eq "0" ]
-    #    then
-    #        echo -e "\n$COLOR_SUCCESS CWS started $COLOR_RESET"
-    #    else
-    #        echo -e "\n$COLOR_ERROR Error: CWS start error $COLOR_RESET"
-    #        stop;
-    #    fi
+    start-app nginx $@
+    start-app styxdev $@
+    start-app checkito $@
+    start-app ba $@
 
     echo -e "\n$COLOR_HEADER Local environment started $COLOR_RESET"
 }
@@ -172,11 +175,10 @@ function start {
 function stop {
     echo -e "\n$COLOR_HEADER Stopping local environment ... $COLOR_RESET"
 
-    cd ${SCRIPT_DIR}
-    docker-compose rm -sf >> ${SCRIPT_DIR}/startup.log 2>&1
-    cd ${PREV_DIR}
-
-    echo "done"
+    stop-app nginx
+    stop-app styxdev
+    stop-app checkito
+    stop-app ba
 
     status;
 
@@ -189,31 +191,31 @@ function status {
 	NGNIX_PID=`docker ps -q -f name=nginx`;
 	if [ -n "$NGNIX_PID" ]
 	then
-		echo -e "\n$COLOR_SUCCESS NGNIX running. $COLOR_RESET"
+		echo -e "\n$COLOR_SUCCESS NGINX running. AppId: nginx $COLOR_RESET"
 	else
-		echo -e "\n$COLOR_ERROR NGNIX not running. $COLOR_RESET"
+		echo -e "\n$COLOR_ERROR NGINX not running. AppId: nginx $COLOR_RESET"
 	fi
 	STYX_PID=`docker ps -q -f name=styxdev`;
 	if [ -n "$STYX_PID" ]
 	then
-		echo -e "\n$COLOR_SUCCESS STYX running. $COLOR_RESET"
+		echo -e "\n$COLOR_SUCCESS STYX running. AppId: styx $COLOR_RESET"
 	else
-		echo -e "\n$COLOR_ERROR STYX not running. $COLOR_RESET"
+		echo -e "\n$COLOR_ERROR STYX not running. AppId: styx $COLOR_RESET"
 	fi
 	CHECKITO_PID=`docker ps -q -f name=checkito`;
 	if [ -n "$CHECKITO_PID" ]
 	then
-		echo -e "\n$COLOR_SUCCESS CHECKITO running. $COLOR_RESET"
+		echo -e "\n$COLOR_SUCCESS CHECKITO running. AppId: checkito $COLOR_RESET"
 	else
-		echo -e "\n$COLOR_ERROR CHECKITO not running. $COLOR_RESET"
+		echo -e "\n$COLOR_ERROR CHECKITO not running. AppId: checkito $COLOR_RESET"
 	fi
 
-	BA_PID=`docker ps -q -f name=bka`;
+	BA_PID=`docker ps -q -f name=ba`;
 	if [ -n "$BA_PID" ]
 	then
-		echo -e "\n$COLOR_SUCCESS BookingApp running. $COLOR_RESET"
+		echo -e "\n$COLOR_SUCCESS BookingApp running. AppId: ba $COLOR_RESET"
 	else
-		echo -e "\n$COLOR_ERROR BookingApp not running. $COLOR_RESET"
+		echo -e "\n$COLOR_ERROR BookingApp not running. AppId: ba $COLOR_RESET"
 	fi
 }
 
@@ -224,11 +226,11 @@ function status {
 function help {
     echo "Usage: $0 <command> <options>"
     echo "Commands:"
-    echo "start                               Start the local environment"
-    echo "  -ba <ba-version>                  BA version. Required."
-    echo "  -no-stub                          Run the BA without checkito"
-    echo "stop                                Stop the local environment"
-    echo "status                              Print the local environment status"
+    echo "start -ba-version <ba-version> [-no-stub]     Start the local environment, using the BA version: <ba-version>"
+    echo "stop                                          Stop the local environment"
+    echo "status                                        Print the local environment status"
+    echo "start-app <app_id>                            Start only the specified app"
+    echo "stop-app <app_id>                             Stop only the specified app"
     echo
     exit 0
 }
@@ -243,6 +245,12 @@ case "$1" in
 	status)
 	    shift
 		status $@;;
+	start-app)
+	    shift
+		start-app $@;;
+	stop-app)
+	    shift
+	    stop-app $@;;
 	*)
 	    help;;
 esac
