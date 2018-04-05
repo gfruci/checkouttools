@@ -265,7 +265,6 @@ You can change this in the local_environment `<local_environment_root_folder>/do
 Local proxy is not supported via the startup script yet.
 If you need to enable the local proxy you can modify the following configuration into the local_environment `<local_environment_root_folder>/docker-compose.yml` file. Again PR welcomed.
 
-
     # Proxy resources
     # - APP_http.proxyHost=docker.for.mac.localhost
     # - APP_http.proxyPort=8888
