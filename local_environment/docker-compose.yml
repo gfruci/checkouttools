@@ -49,9 +49,9 @@ services:
       - mvt:/mvt
     image: registry.docker.hcom/hotels/mvt:latest
 
-  bka:
+  ba:
     image: registry.docker.hcom/hotels/ba:${BA_VERSION}
-    container_name: bka
+    container_name: ba
     ports:
       - "1901:1901"
     volumes:
@@ -155,16 +155,16 @@ services:
       #      - APP_proxyHost=docker.for.mac.localhost
       #      - APP_proxyPort=8888
 
-  bka_no_stub:
+  ba_no_stub:
     image: registry.docker.hcom/hotels/ba:${BA_VERSION}
-    container_name: bka
+    container_name: ba
     ports:
       - "1901:1901"
     volumes:
       - mvt:/mvt
     environment:
-      - APP_CONFIG_ENVIRONMENT=development
-      - APP_jvm.route=development
+      - APP_CONFIG_ENVIRONMENT=hcom-devrom #development
+      - APP_jvm.route=hcom-devrom #development
       - APP_javax.net.ssl.trustStore=/hcom/servers/tomcat/certs/pvclient-karmalab.jks
       - APP_javax.net.ssl.trustStorePassword=tiajya
       - APP_javax.net.ssl.keyStore=/hcom/servers/tomcat/certs/pvclient-karmalab.jks
