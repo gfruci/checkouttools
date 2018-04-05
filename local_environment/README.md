@@ -34,20 +34,20 @@ Download and install Docker CE **17.09.x**
 
 **Important**: DO NOT UPGRADE. The hcom docker registry is not compatible with newer versions.
 
-**Note:** if your upgrading from Docker Toolbox, choose to copy the local docker machine (if you already have one)
+![do not upgrade](assets/do_not_upgrade.png)
 
-### Upgrading from Docker Toolbox
+**Note:** If your are migrating from Docker Toolbox you will be asked to import your existing docker machine.
+In case you have any docker image that you want to keep, select "Copy" - Otherwise "Skip"
+
+![copy docker machine](assets/copy_docker_machine.png)
+
+### Migrating from Docker Toolbox
 
 If you already have an installation of Docker Toolbox and you want to upgrade you need to remove the Docker ENV variables:
+1. Close all your terminal windows
+2. Remove any docker related environment variable that you have possibly set in any of your profile file (.bashrc, .profile, .bash_profile)
 
-    unset DOCKER_TLS_VERIFY
-    unset DOCKER_CERT_PATH
-    unset DOCKER_MACHINE_NAME
-    unset DOCKER_HOST
-
-Close all your terminal windows
-
-For more details on how to upgrade from Docker Toolbox read these:
+For more details on how to migrate from Docker Toolbox read these:
 * https://docs.docker.com/docker-for-mac/docker-toolbox/
 * https://wiki.hcom/display/HTS/Upgrading+to+Docker+for+Mac
 
@@ -58,6 +58,12 @@ Add the insecure internal registries in `Docker -> Preferences -> Daemon -> Basi
 * registry.prod.hcom
 
 ![add insecure registries](assets/add_insecure_registries.png)
+
+### Disable legacy registry
+
+add the disable-legacy-registry flag set to false in `Docker -> Preferences -> Daemon -> Advanced`
+
+![disable legacy registry](assets/disable_legacy_registry.png)
 
 ### Login to the registry
 
@@ -74,14 +80,6 @@ you need to use the following command to login:
 
     winpty docker login registry.docker.hcom
 ----
-
-*Note*: If you get the following error:
-
-    Error response from daemon: login attempt to http://registry.docker.hcom/v2/ failed with status: 500 Internal Server Error
-
-add the disable-legacy-registry flag set to false in `Docker -> Preferences -> Daemon -> Advanced`
-
-![disable legacy registry](assets/disable_legacy_registry.png)
 
 ### Increase the docker resources
 
@@ -162,7 +160,8 @@ Please update your hosts file with the following.
 
 ### Checkout the local environment
 
-Checkout the `local_environment` repo with `git`
+The local environment scripts and assets are in the git `checkouttools` repo.
+Clone the repo.
 
     $ cd <workspace_folder>
     $ git clone http://<sea_username>@stash.hcom/scm/cop/checkouttools.git
@@ -234,7 +233,7 @@ You just need either to specify the DUP `feature-branch` parameter on the BF dee
 
 All the local environment application logs are appended to `startup.log`, you can filter application specific logs by using the `grep` command.
 
-    tail -f start.log | grep bka
+    tail -f startup.log | grep bka
 
 Apps container names:
 * `bka`
@@ -275,6 +274,8 @@ TBW
 ## Contributing
 
 Contribution is always the key. If you find any issue or you want to make an improvement, please open a PR and ask your CKO friends to review it.
+
+If you feel something is missing or you want to suggest any improvement, please report it to this [confluence page](https://confluence/pages/viewpage.action?pageId=878693711) 
 
 ## Developers Notes
 
