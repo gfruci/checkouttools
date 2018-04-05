@@ -47,7 +47,7 @@ If you already have an installation of Docker Toolbox and you want to upgrade yo
 1. Close all your terminal windows
 2. Remove any docker related environment variable that you have possibly set in any of your profile file (.bashrc, .profile, .bash_profile)
 
-For more details on how to upgrade from Docker Toolbox read these:
+For more details on how to migrate from Docker Toolbox read these:
 * https://docs.docker.com/docker-for-mac/docker-toolbox/
 * https://wiki.hcom/display/HTS/Upgrading+to+Docker+for+Mac
 
@@ -274,6 +274,7 @@ TBW
 ## Contributing
 
 Contribution is always the key. If you find any issue or you want to make an improvement, please open a PR and ask your CKO friends to review it.
+
 If you feel something is missing or you want to suggest any improvement, please report it to this [confluence page](https://confluence/pages/viewpage.action?pageId=878693711) 
 
 ## Developers Notes
