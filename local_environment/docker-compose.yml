@@ -107,6 +107,7 @@ services:
       - APP_PSID_SERVICE_ENABLED=false
       - APP_WEBSITE_DOMAIN_DISCRIMINATOR=dev-
       - APP_FENCED_VAP_ENABLED=false
+      - APP_UNBRANDED_VIP_VAP_ENABLED=false
       - JAVA_JVM_ARGS=-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=1901
 
       # Checkito resources
@@ -219,6 +220,7 @@ services:
       - APP_PSID_SERVICE_ENABLED=false
       - APP_WEBSITE_DOMAIN_DISCRIMINATOR=dev-
       - APP_FENCED_VAP_ENABLED=false
+      - APP_UNBRANDED_VIP_VAP_ENABLED=false
       - JAVA_JVM_ARGS=-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=1901
 
       #remote jmx
