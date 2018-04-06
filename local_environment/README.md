@@ -25,7 +25,7 @@ To run it on Windows, *Git BASH* can be used (https://gitforwindows.org/)
 
 ### Install Docker CE (Mac/Win)
 
-Download and install Docker CE **17.09.x**
+Download, install and launch Docker CE **17.09.x**
 
 * WIN: https://docs.docker.com/docker-for-windows/release-notes/#docker-community-edition-17091-ce-win42-2017-12-11  
 * MAC: https://docs.docker.com/docker-for-mac/release-notes/#docker-community-edition-17091-ce-mac42-2017-12-11 
@@ -34,20 +34,20 @@ Download and install Docker CE **17.09.x**
 
 **Important**: DO NOT UPGRADE. The hcom docker registry is not compatible with newer versions.
 
-**Note:** if your upgrading from Docker Toolbox, choose to copy the local docker machine (if you already have one)
+![do not upgrade](assets/do_not_upgrade.png)
 
-### Upgrading from Docker Toolbox
+**Note:** If your are migrating from Docker Toolbox you will be asked to import your existing docker machine.
+In case you have any docker image that you want to keep, select "Copy" - Otherwise "Skip"
+
+![copy docker machine](assets/copy_docker_machine.png)
+
+### Migrating from Docker Toolbox
 
 If you already have an installation of Docker Toolbox and you want to upgrade you need to remove the Docker ENV variables:
+1. Close all your terminal windows
+2. Remove any docker related environment variable that you have possibly set in any of your profile file (.bashrc, .profile, .bash_profile)
 
-    unset DOCKER_TLS_VERIFY
-    unset DOCKER_CERT_PATH
-    unset DOCKER_MACHINE_NAME
-    unset DOCKER_HOST
-
-Close all your terminal windows
-
-For more details on how to upgrade from Docker Toolbox read these:
+For more details on how to migrate from Docker Toolbox read these:
 * https://docs.docker.com/docker-for-mac/docker-toolbox/
 * https://wiki.hcom/display/HTS/Upgrading+to+Docker+for+Mac
 
@@ -58,6 +58,16 @@ Add the insecure internal registries in `Docker -> Preferences -> Daemon -> Basi
 * registry.prod.hcom
 
 ![add insecure registries](assets/add_insecure_registries.png)
+
+### Disable legacy registry
+
+add the disable-legacy-registry flag set to false in `Docker -> Preferences -> Daemon -> Advanced`
+
+![disable legacy registry](assets/disable_legacy_registry.png)
+
+*Note*: If you forgot to add the `disable-legacy-registry flag you may get the following error:
+
+    Error response from daemon: login attempt to http://registry.docker.hcom/v2/ failed with status: 500 Internal Server Error
 
 ### Login to the registry
 
@@ -75,14 +85,6 @@ you need to use the following command to login:
     winpty docker login registry.docker.hcom
 ----
 
-*Note*: If you get the following error:
-
-    Error response from daemon: login attempt to http://registry.docker.hcom/v2/ failed with status: 500 Internal Server Error
-
-add the disable-legacy-registry flag set to false in `Docker -> Preferences -> Daemon -> Advanced`
-
-![disable legacy registry](assets/disable_legacy_registry.png)
-
 ### Increase the docker resources
 
 In `Docker -> Preferences -> Advanced`
@@ -94,6 +96,8 @@ In `Docker -> Preferences -> Advanced`
 ### hosts file
 
 Please update your hosts file with the following.
+
+*Note:* If you already have the `*.dev-hotels.com` domains in your hosts file, you need to substitute them. 
 
 `hosts` file location:
 * MAC/UNIX: `/etc/hosts`
@@ -162,7 +166,8 @@ Please update your hosts file with the following.
 
 ### Checkout the local environment
 
-Checkout the `local_environment` repo with `git`
+The local environment scripts and assets are in the git `checkouttools` repo.
+Clone the repo.
 
     $ cd <workspace_folder>
     $ git clone http://<sea_username>@stash.hcom/scm/cop/checkouttools.git
@@ -171,9 +176,9 @@ Checkout the `local_environment` repo with `git`
 
 ### Start/Stop
 
-Move under the `local_env_root_folder`, give execution permissions to the `local_env.sh` bash script and run it.
+Move under the `local_environment`, give execution permissions to the `local_env.sh` bash script and run it.
 
-    $ cd <local_env_root_folder>
+    $ cd <local_environment_root_folder>
     $ chmod a+x local_env.sh 
     $ ./local_env.sh <command> <options>
     Commands:
@@ -193,6 +198,8 @@ If you're using Git BASH and the above command is not working you may need to us
 #### Start
 
     ./local_env.sh start -ba <ba-version>
+
+*Note:* the first time you start the local environment the setup may take a few minutes
     
 #### Stop
 
@@ -225,16 +232,22 @@ the only difference between the 3 use cases above is the version of the BA to be
 
 `./local_env.sh start -ba dev.0`
 
+*Note:* in order to build the BA in local you need to use the profile `-Pbuild-local`.
+
+    $ cd <bookingapp_root_folder>
+    $ mvn clean install -Pbuild-local
+
 ### DUP Feature branch testing
 
-DUP feature branch testing in local can be performed in the same way as in stagin.
+DUP feature branch testing in local can be performed in the same way as in staging.
 You just need either to specify the DUP `feature-branch` parameter on the BF deeplink or set the DUP feature-branch cookie
 
 ### Logging
 
 All the local environment application logs are appended to `startup.log`, you can filter application specific logs by using the `grep` command.
 
-    tail -f start.log | grep bka
+    $ cd <local_environment_root_folder>
+    $ tail -f startup.log | grep bka
 
 Apps container names:
 * `bka`
@@ -245,12 +258,12 @@ Apps container names:
 ### BA DEBUG
 
 The fixed BA debugging port is `1901`
-You can change this in the `docker-compose.yml`, but if need to do it please make it configurable via the startup script.
+You can change this in the local_environment `<local_environment_root_folder>/docker-compose.yml`, but if need to do it please make it configurable via the startup script.
 
 ### Proxying
 
 Local proxy is not supported via the startup script yet.
-If you need to enable the local proxy you can modify the following configuration into the `docker-compose.yml` file. Again PR welcomed.
+If you need to enable the local proxy you can modify the following configuration into the local_environment `<local_environment_root_folder>/docker-compose.yml` file. Again PR welcomed.
 
     # Proxy resources
     # - APP_http.proxyHost=docker.for.mac.localhost
@@ -275,6 +288,8 @@ TBW
 ## Contributing
 
 Contribution is always the key. If you find any issue or you want to make an improvement, please open a PR and ask your CKO friends to review it.
+
+If you feel something is missing or you want to suggest any improvement, please report it to this [confluence page](https://confluence/pages/viewpage.action?pageId=878693711) 
 
 ## Developers Notes
 

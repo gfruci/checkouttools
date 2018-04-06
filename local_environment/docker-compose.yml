@@ -58,8 +58,8 @@ services:
     volumes:
       - mvt:/mvt
     environment:
-      - APP_CONFIG_ENVIRONMENT=development
-      - APP_jvm.route=development
+      - APP_CONFIG_ENVIRONMENT=hcom-devrom
+      - APP_jvm.route=hcom-devrom
       - APP_javax.net.ssl.trustStore=/hcom/servers/tomcat/certs/pvclient-karmalab.jks
       - APP_javax.net.ssl.trustStorePassword=tiajya
       - APP_javax.net.ssl.keyStore=/hcom/servers/tomcat/certs/pvclient-karmalab.jks
@@ -72,7 +72,7 @@ services:
       - APP_DB_RW_DRIVERCLASSNAME=com.inet.tds.TdsDriver
       - APP_CURRENCY_EXCHANGE_RATE_PROPERTY_FILE_REQUIRED_AT_STARTUP=false
       - APP_MVT_BUSINESS_CONFIGURATION_LOCATION=file:///mvt/
-      - APP_EMAIL_TEMPLATES_BASEPATH=file://${CATALINA_BASE}/appconfig/templates/
+      - APP_EMAIL_TEMPLATES_BASEPATH=file:./appconfig/templates/
       - APP_LIS_EAPID=0
       - APP_BOOKING_SEND_CONFIRMATION_SMS=false
       - APP_SMS_CONFIRMATION_ENABLED=false
@@ -171,8 +171,8 @@ services:
     volumes:
       - mvt:/mvt
     environment:
-      - APP_CONFIG_ENVIRONMENT=development
-      - APP_jvm.route=development
+      - APP_CONFIG_ENVIRONMENT=hcom-devrom
+      - APP_jvm.route=hcom-devrom
       - APP_javax.net.ssl.trustStore=/hcom/servers/tomcat/certs/pvclient-karmalab.jks
       - APP_javax.net.ssl.trustStorePassword=tiajya
       - APP_javax.net.ssl.keyStore=/hcom/servers/tomcat/certs/pvclient-karmalab.jks
@@ -185,7 +185,7 @@ services:
       - APP_DB_RW_DRIVERCLASSNAME=com.inet.tds.TdsDriver
       - APP_CURRENCY_EXCHANGE_RATE_PROPERTY_FILE_REQUIRED_AT_STARTUP=false
       - APP_MVT_BUSINESS_CONFIGURATION_LOCATION=file:///mvt/
-      - APP_EMAIL_TEMPLATES_BASEPATH=file://${CATALINA_BASE}/appconfig/templates/
+      - APP_EMAIL_TEMPLATES_BASEPATH=file:./appconfig/templates/
       - APP_LIS_EAPID=0
       - APP_BOOKING_SEND_CONFIRMATION_SMS=false
       - APP_SMS_CONFIRMATION_ENABLED=false
