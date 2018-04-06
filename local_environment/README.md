@@ -21,7 +21,10 @@ TBW
 ### Windows pre-requirements
 
 To facilitate the maintainance, there is a single (_bash_) script to set up the environment. 
-To run it on Windows, *Git BASH* can be used (https://gitforwindows.org/)
+
+To run it on Windows, *Git BASH* is strongly recommended. It can be downloaded form https://gitforwindows.org/. 
+
+During the installation few setup choice have to made. If you're not sure what to select, keep the default choice.  
 
 ### Install Docker CE (Mac/Win)
 
