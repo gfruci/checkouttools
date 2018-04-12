@@ -73,7 +73,7 @@ services:
       - APP_CURRENCY_EXCHANGE_RATE_PROPERTY_FILE_REQUIRED_AT_STARTUP=false
       - APP_MVT_BUSINESS_CONFIGURATION_LOCATION=file:///mvt/
       - APP_DIONYSUS_UIPACK_HOME=file:///dionysusuipack/
-      - APP_EMAIL_TEMPLATES_BASEPATH=file://${CATALINA_BASE}/appconfig/templates/
+      - APP_EMAIL_TEMPLATES_BASEPATH=file:./appconfig/templates/
       - APP_LIS_EAPID=0
       - APP_BOOKING_SEND_CONFIRMATION_SMS=false
       - APP_SMS_CONFIRMATION_ENABLED=false
@@ -102,15 +102,19 @@ services:
       - APP_BPAS_ON_PAYMENT_OPTION_REQUEST_CIRCUIT_BREAKER_TIMEOUT_MS=60000
 
       # Development overrides
+      - JAVA_JVM_ARGS=-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=1901
       - APP_UNIFIED_DATA_TOOLKIT_ENABLED=true
       - APP_LOCALIZATION_MESSAGE_PARALLEL_INITIALIZATION_ENABLED=true
       - APP_MVT_CONFIGURATION_PARALLEL_INITIALIZATION_ENABLED=true
       - APP_CACHE_PRELOAD_ENABLED=false
       - APP_PSID_SERVICE_ENABLED=false
       - APP_WEBSITE_DOMAIN_DISCRIMINATOR=dev-
+      #- APP_DSC_STUB_MODE_ENABLED=true
+
+      # Not supported on checkito yet
       - APP_FENCED_VAP_ENABLED=false
       - APP_UNBRANDED_VIP_VAP_ENABLED=false
-      - JAVA_JVM_ARGS=-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=1901
+      - APP_CANCELLATION_FLOW_SWITCH=OMS_CANCELLATION_FLOW
 
       # Checkito resources
       - APP_DOSSIER_SERVICES_SCHEME=http
@@ -163,8 +167,8 @@ services:
     volumes:
       - mvt:/mvt
     environment:
-      - APP_CONFIG_ENVIRONMENT=hcom-devrom #development
-      - APP_jvm.route=hcom-devrom #development
+      - APP_CONFIG_ENVIRONMENT=development
+      - APP_jvm.route=development
       - APP_javax.net.ssl.trustStore=/hcom/servers/tomcat/certs/pvclient-karmalab.jks
       - APP_javax.net.ssl.trustStorePassword=tiajya
       - APP_javax.net.ssl.keyStore=/hcom/servers/tomcat/certs/pvclient-karmalab.jks
@@ -179,7 +183,7 @@ services:
       - APP_CURRENCY_EXCHANGE_RATE_PROPERTY_FILE_REQUIRED_AT_STARTUP=false
       - APP_MVT_BUSINESS_CONFIGURATION_LOCATION=file:///mvt/
       - APP_DIONYSUS_UIPACK_HOME=file:///dionysusuipack/
-      - APP_EMAIL_TEMPLATES_BASEPATH=file://${CATALINA_BASE}/appconfig/templates/
+      - APP_EMAIL_TEMPLATES_BASEPATH=file:./appconfig/templates/
       - APP_LIS_EAPID=0
       - APP_BOOKING_SEND_CONFIRMATION_SMS=false
       - APP_SMS_CONFIRMATION_ENABLED=false

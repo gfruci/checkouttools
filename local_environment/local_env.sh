@@ -1,4 +1,4 @@
-#!/usr/bin/env bash -i
+#!/usr/bin/env bash -x
 
 COLOR_HEADER="\033[7;49;36m"
 COLOR_WATCH="\033[7;49;33m"
@@ -30,8 +30,6 @@ declare -A APPS_CONF=(\
 # APPS DEFAULT VERSIONS #
 #########################
 
-BA_TYPE_NO_STUB=ba_no_stub
-BA_TYPE=ba
 BA_VERSION=
 
 #####################
@@ -83,7 +81,13 @@ function update_env_apps_images {
     #    docker pull registry.docker.hcom/hotels/cws:latest >> ${SCRIPT_DIR}/startup.log 2>&1
 }
 
-function setup_ba_versions {
+###############################
+# START/STOP/STATUS FUNCTIONS #
+###############################
+
+function get_ba_type {
+    BA_TYPE=ba
+
     while [[ $# > 0 ]]; do
       case $1 in
         -ba-version)
@@ -91,7 +95,7 @@ function setup_ba_versions {
           shift
           ;;
         -no-stub)
-          BA_TYPE=${BA_TYPE_NO_STUB}
+          BA_TYPE=ba_no_stub
           shift
           ;;
       esac
@@ -105,25 +109,21 @@ function setup_ba_versions {
     fi
 
     export BA_VERSION=${BA_VERSION}
-}
 
-###############################
-# START/STOP/STATUS FUNCTIONS #
-###############################
+    return ${BA_TYPE}
+}
 
 function start-app {
     APP=$1
 
     if [ "${APP}" == "ba" ]
     then
-        setup_ba_versions $@
-        APP=${BA_TYPE}
+        APP=$(get_ba_type $@)
     fi
 
-    appdir="${APPS_CONF["${APP},start_grep_cmd"]}"
-
     cd ${SCRIPT_DIR}
-    nohup docker-compose up --no-color ${APP} >> ${SCRIPT_DIR}/startup.log & 2>&1
+    #nohup docker-compose up --no-color ${APP} >> ${SCRIPT_DIR}/startup.log & 2>&1
+    echo "starting ${APP}"
     cd ${PREV_DIR}
 
     watch "Starting ${APP} ..." "${APPS_CONF["${APP},start_grep_cmd"]}" "${APPS_CONF["${APP},stop_grep_cmd"]}"
@@ -164,10 +164,10 @@ function start {
 
     echo -e "\n$COLOR_HEADER Starting local environment ... $COLOR_RESET"
 
-    start-app nginx $@
-    start-app styxdev $@
-    start-app checkito $@
     start-app ba $@
+    start-app checkito $@
+    start-app styxdev $@
+    start-app nginx $@
 
     echo -e "\n$COLOR_HEADER Local environment started $COLOR_RESET"
 }
@@ -209,7 +209,6 @@ function status {
 	else
 		echo -e "\n$COLOR_ERROR CHECKITO not running. AppId: checkito $COLOR_RESET"
 	fi
-
 	BA_PID=`docker ps -q -f name=ba`;
 	if [ -n "$BA_PID" ]
 	then
@@ -229,8 +228,8 @@ function help {
     echo "start -ba-version <ba-version> [-no-stub]     Start the local environment, using the BA version: <ba-version>"
     echo "stop                                          Stop the local environment"
     echo "status                                        Print the local environment status"
-    echo "start-app <app_id>                            Start only the specified app"
-    echo "stop-app <app_id>                             Stop only the specified app"
+    echo "start-app <app_id>                            Start only the specified app (ba|checkito|styx|ngnix)"
+    echo "stop-app <app_id>                             Stop only the specified app (ba|checkito|styx|ngnix)"
     echo
     exit 0
 }
