@@ -60,8 +60,8 @@ services:
     environment:
       - APP_CONFIG_ENVIRONMENT=hcom-devrom
       - APP_jvm.route=hcom-devrom
-      - APP_javax.net.ssl.trustStore=/hcom/servers/tomcat/certs/pvclient-karmalab.jks
-      - APP_javax.net.ssl.trustStorePassword=tiajya
+      - APP_javax.net.ssl.trustStore=/hcom/share/java/default/jre/lib/security/cacerts_plus_internal
+      - APP_javax.net.ssl.trustStorePassword=changeit
       - APP_javax.net.ssl.keyStore=/hcom/servers/tomcat/certs/pvclient-karmalab.jks
       - APP_javax.net.ssl.keyStorePassword=tiajya
       - APP_METRICS_GRAPHITE_REPORTING_INTERVAL=-1
@@ -173,8 +173,8 @@ services:
     environment:
       - APP_CONFIG_ENVIRONMENT=hcom-devrom
       - APP_jvm.route=hcom-devrom
-      - APP_javax.net.ssl.trustStore=/hcom/servers/tomcat/certs/pvclient-karmalab.jks
-      - APP_javax.net.ssl.trustStorePassword=tiajya
+      - APP_javax.net.ssl.trustStore=/hcom/share/java/default/jre/lib/security/cacerts_plus_internal
+      - APP_javax.net.ssl.trustStorePassword=changeit
       - APP_javax.net.ssl.keyStore=/hcom/servers/tomcat/certs/pvclient-karmalab.jks
       - APP_javax.net.ssl.keyStorePassword=tiajya
       - APP_METRICS_GRAPHITE_REPORTING_INTERVAL=-1
