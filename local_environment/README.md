@@ -8,9 +8,9 @@ It leverage the [local-app-server](http://stash.hcom/projects/STYX/repos/local-a
 
 **Note:** In order to enable styx html page rendering you need to set MVT variant 4418.1
 
-#### Supported features:
+#### Stubbed hotels and supported features:
 
-Please refer to the checkito README for a full list of the supported features: http://stash.hcom/projects/COP/repos/checkito/browse
+Please refer to the checkito README for a full list of stubbed hotels and supported features: http://stash.hcom/projects/COP/repos/checkito/browse
 
 #### Limitations
 
@@ -22,7 +22,8 @@ TBW
 
 To facilitate the maintainance, there is a single (_bash_) script to set up the environment. 
 
-To run it on Windows, *Git BASH* is strongly recommended. It can be downloaded form https://gitforwindows.org/. 
+To run it on Windows, *Git BASH* is strongly recommended. It can be downloaded form https://gitforwindows.org/.
+If you're already using another BASH emulation tool you can use that one as well. 
 
 During the installation few setup choice have to made. If you're not sure what to select, keep the default choice.  
 
@@ -202,7 +203,9 @@ If you're using Git BASH and the above command is not working you may need to us
 
     ./local_env.sh start -ba <ba-version>
 
-*Note:* the first time you start the local environment the setup may take a few minutes
+In order to check that everything works you can open the following [stubbed hotel link](https://www.dev-hotels.com/booking/deep_link.html?pos=HCOM_US&locale=en_US&mvariant=1327.0%2C1943.1%2C1544.1%2C1400.1%2C985.1%2C1156.0%2C810.1%2C1881.1%2C316.1%2C1947.1%2C1539.1%2C839.2%2C1306.1%2C1735.1%2C4418.1&arrivalDate=09-12-2018&departureDate=10-12-2018&currency=USD&rooms%5B0%5D.numberOfAdults=2&rooms%5B0%5D.numberOfChildren=0&hotelId=434772&roomTypeCode=200310048&rateCode=201876673&businessModel=MERCHANT&ratePlanConfiguration=REGULAR&hotelContractCardinality=SINGLE)
+
+*Note:* the first time you start the local environment the setup may take a few minutes, since it needs to downloads various docker images.
     
 #### Stop
 
