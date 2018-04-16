@@ -188,12 +188,15 @@ Move under the `local_environment`, give execution permissions to the `local_env
 
     $ cd <local_environment_root_folder>
     $ chmod a+x local_env.sh 
-    $ ./local_env.sh <command> <options>
+    $ ./local_env.sh
+    Usage: /usr/local/bin/local_env <command> <options>
     Commands:
-    start                               Start the local environment
-      -ba <ba-version>                  BA version to run. Required.
-    stop                                Stop the local environment
-    status                              Print the local environment status
+    start -ba-version <ba-version> [-no-stub]     Start the local environment, using the BA version: <ba-version>
+    stop                                          Stop the local environment
+    status                                        Print the local environment status
+    start-app <app_id>                            Start only the specified app ( mvt ba checkito nginx styxpres )
+    stop-app <app_id>                             Stop only the specified app ( mvt ba checkito nginx styxpres )
+
 ----
 
 *[WINDOWS]*:
@@ -205,7 +208,7 @@ If you're using Git BASH and the above command is not working you may need to us
 
 #### Start
 
-    ./local_env.sh start -ba <ba-version>
+    ./local_env.sh start -ba-version <ba-version>
 
 In order to check that everything works you can open the following [stubbed hotel link](https://www.dev-hotels.com/booking/deep_link.html?pos=HCOM_US&locale=en_US&mvariant=1327.0%2C1943.1%2C1544.1%2C1400.1%2C985.1%2C1156.0%2C810.1%2C1881.1%2C316.1%2C1947.1%2C1539.1%2C839.2%2C1306.1%2C1735.1%2C4418.1&arrivalDate=09-12-2018&departureDate=10-12-2018&currency=USD&rooms%5B0%5D.numberOfAdults=2&rooms%5B0%5D.numberOfChildren=0&hotelId=434772&roomTypeCode=200310048&rateCode=201876673&businessModel=MERCHANT&ratePlanConfiguration=REGULAR&hotelContractCardinality=SINGLE)
 
@@ -218,6 +221,24 @@ In order to check that everything works you can open the following [stubbed hote
 #### Status
 
     ./local_env.sh status
+
+#### Start a single app
+
+    ./local_env.sh start-app <app> <options>
+
+*Examples*
+    
+* `./local_env.sh start-app ba -ba-version 123.0.7220`
+* `./local_env.sh start-app checkito`
+
+#### Stop a single app
+
+    ./local_env.sh stop-app <app>
+
+*Examples*
+    
+* `./local_env.sh stop-app ba`
+* `./local_env.sh start-app checkito`
 
 ### BA testing
 
@@ -232,15 +253,15 @@ the only difference between the 3 use cases above is the version of the BA to be
 
 * BA stable version:
  
-`./local_env.sh start -ba 120.0.7090`
+`./local_env.sh start -ba-version 120.0.7090`
 
 * BA feature-branch: 
 
-`./local_env.sh start -ba 120.0.feature_CHOP_2658_availabilty_price_check_feature_branch.4`   
+`./local_env.sh start -ba-version 120.0.feature_CHOP_2658_availabilty_price_check_feature_branch.4`   
 
 * BA built in local: 
 
-`./local_env.sh start -ba dev.0`
+`./local_env.sh start -ba-version dev.0`
 
 *Note:* in order to build the BA in local you need to use the profile `-Pbuild-local`.
 
