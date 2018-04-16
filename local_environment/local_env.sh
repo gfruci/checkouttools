@@ -78,7 +78,7 @@ function watch {
 }
 
 function update_env_apps_images {
-#    docker pull registry.docker.hcom/hotels/mvt:latest > /dev/null 2>&1
+    docker pull registry.docker.hcom/hotels/mvt:latest > /dev/null 2>&1
 
     if [ "$?" -eq "1" ]; then
       echo -e "\n$COLOR_HEADER Login to Docker $COLOR_RESET"
@@ -175,6 +175,9 @@ function setup {
     echo "" > ${SCRIPT_DIR}/logs/startup.log
 
     echo -e "\n$COLOR_HEADER Setting up local environment ... $COLOR_RESET"
+
+    git fetch >> ${SCRIPT_DIR}/logs/startup.log 2>&1
+    git status | grep "origin/master"
 
     update_env_apps_images;
 
