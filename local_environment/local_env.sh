@@ -15,22 +15,31 @@ then
 fi
 SCRIPT_DIR=$(dirname ${LINK})
 
-declare -A APPS_CONF=(\
-    ["styxdev,start_grep_cmd"]="grep \"Started styx server in\" ${SCRIPT_DIR}/startup.log"\
-    ["styxdev,stop_grep_cmd"]="grep -e \"styxdev.*ERROR\" ${SCRIPT_DIR}/startup.log | grep -v \"locsClientLoader\""\
-    ["checkito,start_grep_cmd"]="grep \"checkito.*Checkito listening for HTTP requests\" ${SCRIPT_DIR}/startup.log"\
-    ["checkito,stop_grep_cmd"]="grep -e \"checkito.*ERROR\" ${SCRIPT_DIR}/startup.log"\
-    ["ba,start_grep_cmd"]="grep \"ba.*Server startup\" ${SCRIPT_DIR}/startup.log"\
-    ["ba,stop_grep_cmd"]="grep -e \"ba.*ERROR\" ${SCRIPT_DIR}/startup.log | grep -v \"locsClientLoader\""\
-    ["ba_no_stub,start_grep_cmd"]="grep \"ba.*Server startup\" ${SCRIPT_DIR}/startup.log"\
-    ["ba_no_stub,stop_grep_cmd"]="grep -e \"ba.*ERROR\" ${SCRIPT_DIR}/startup.log | grep -v \"locsClientLoader\""\
-)
+cd ${SCRIPT_DIR}
+mkdir -p logs
+cd ${PREV_DIR}
 
 #########################
-# APPS DEFAULT VERSIONS #
+# CONFIGS #
 #########################
 
+START_MODE=
 BA_VERSION=
+BA_TYPE=
+
+APPS=( "mvt" "ba" "checkito" "nginx" "styxpres" )
+
+declare -A APPS_CONF=(\
+    ["mvt,update_cmd"]="docker pull registry.docker.hcom/hotels/mvt:latest >> ${SCRIPT_DIR}/logs/startup.log 2>&1"\
+    ["styxpres,start_status_cmd"]="grep \"Started styx server in\" ${SCRIPT_DIR}/logs/styxpres.log"\
+    ["styxpres,stop_status_cmd"]="grep -e \"styxpres.*ERROR\" ${SCRIPT_DIR}/logs/styxpres.log | grep -v \"locsClientLoader\""\
+    ["styxpres,update_cmd"]="docker pull registry.docker.hcom/hotels/styxpres:release >> ${SCRIPT_DIR}/logs/startup.log 2>&1"\
+    ["checkito,start_status_cmd"]="grep \"checkito.*Checkito listening for HTTP requests\" ${SCRIPT_DIR}/logs/checkito.log"\
+    ["checkito,stop_status_cmd"]="grep -e \"checkito.*ERROR\" ${SCRIPT_DIR}/logs/checkito.log"\
+    ["checkito,update_cmd"]="docker pull registry.docker.hcom/hotels/checkito:latest >> ${SCRIPT_DIR}/logs/startup.log 2>&1"\
+    ["ba,start_status_cmd"]="grep \"ba.*Server startup\" ${SCRIPT_DIR}/logs/ba.log"\
+    ["ba,stop_status_cmd"]="grep -e \"ba.*ERROR\" ${SCRIPT_DIR}/logs/ba.log | grep -v \"locsClientLoader\""\
+)
 
 #####################
 # UTILITY FUNCTIONS #
@@ -64,30 +73,35 @@ function watch {
   			return 1
         fi
 
-  		sleep 2
+  		sleep 5
 	done
 }
 
 function update_env_apps_images {
-    docker pull registry.docker.hcom/hotels/checkito:latest > /dev/null 2>&1
+#    docker pull registry.docker.hcom/hotels/mvt:latest > /dev/null 2>&1
 
     if [ "$?" -eq "1" ]; then
       echo -e "\n$COLOR_HEADER Login to Docker $COLOR_RESET"
       docker login registry.docker.hcom
     fi
 
-    docker pull registry.docker.hcom/hotels/styxpres:release >> ${SCRIPT_DIR}/startup.log 2>&1
-    docker pull registry.docker.hcom/hotels/checkito:latest >> ${SCRIPT_DIR}/startup.log 2>&1
-    #    docker pull registry.docker.hcom/hotels/cws:latest >> ${SCRIPT_DIR}/startup.log 2>&1
+
+    for APP in "${APPS[@]}"
+    do
+        UDPATE_CMD=${APPS_CONF["${APP},update_cmd"]}
+        if [ -n "${UDPATE_CMD}" ]
+        then
+            echo "Updating ${APP} ..."
+            $(eval ${UDPATE_CMD})
+        fi
+    done
 }
 
 ###############################
 # START/STOP/STATUS FUNCTIONS #
 ###############################
 
-function get_ba_type {
-    BA_TYPE=ba
-
+function setup_ba_version {
     while [[ $# > 0 ]]; do
       case $1 in
         -ba-version)
@@ -95,7 +109,7 @@ function get_ba_type {
           shift
           ;;
         -no-stub)
-          BA_TYPE=ba_no_stub
+          BA_TYPE=_no_stub
           shift
           ;;
       esac
@@ -109,24 +123,25 @@ function get_ba_type {
     fi
 
     export BA_VERSION=${BA_VERSION}
-
-    return ${BA_TYPE}
 }
 
 function start-app {
     APP=$1
+    APP_TYPE=""
+
+    echo "" > ${SCRIPT_DIR}/logs/${APP}.log
 
     if [ "${APP}" == "ba" ]
     then
-        APP=$(get_ba_type $@)
+        setup_ba_version $@
+        APP_TYPE=${BA_TYPE}
     fi
 
     cd ${SCRIPT_DIR}
-    #nohup docker-compose up --no-color ${APP} >> ${SCRIPT_DIR}/startup.log & 2>&1
-    echo "starting ${APP}"
+    nohup docker-compose up --no-color ${APP}${APP_TYPE} >> ${SCRIPT_DIR}/logs/${APP}.log & 2>&1
     cd ${PREV_DIR}
 
-    watch "Starting ${APP} ..." "${APPS_CONF["${APP},start_grep_cmd"]}" "${APPS_CONF["${APP},stop_grep_cmd"]}"
+    watch "Starting ${APP} ..." "${APPS_CONF["${APP},start_status_cmd"]}" "${APPS_CONF["${APP},stop_status_cmd"]}"
     RETURN_CODE=$?
 
     if [ "${RETURN_CODE}" -eq "0" ]
@@ -134,6 +149,13 @@ function start-app {
         echo -e "\n$COLOR_SUCCESS ${APP} started $COLOR_RESET"
     else
         echo -e "\n$COLOR_ERROR Error: ${APP} start error $COLOR_RESET"
+        if [ "${START_MODE}" == "start-all" ]
+        then
+            stop
+        else
+            stop-app $APP
+        fi
+        exit 1
     fi
 }
 
@@ -143,14 +165,14 @@ function stop-app {
     echo -e "\n$COLOR_HEADER Stopping ${APP} ... $COLOR_RESET"
 
     cd ${SCRIPT_DIR}
-    docker-compose rm -sf ${APP} >> ${SCRIPT_DIR}/startup.log 2>&1
+    docker rm -f ${APP} >> ${SCRIPT_DIR}/logs/${APP}.log 2>&1
     cd ${PREV_DIR}
 
     echo "done"
 }
 
 function setup {
-    echo "" > ${SCRIPT_DIR}/startup.log
+    echo "" > ${SCRIPT_DIR}/logs/startup.log
 
     echo -e "\n$COLOR_HEADER Setting up local environment ... $COLOR_RESET"
 
@@ -160,14 +182,16 @@ function setup {
 }
 
 function start {
+    START_MODE="start-all"
+
     setup $@;
 
     echo -e "\n$COLOR_HEADER Starting local environment ... $COLOR_RESET"
 
-    start-app ba $@
-    start-app checkito $@
-    start-app styxdev $@
-    start-app nginx $@
+    for APP in "${APPS[@]}"
+    do
+        start-app ${APP} $@
+    done
 
     echo -e "\n$COLOR_HEADER Local environment started $COLOR_RESET"
 }
@@ -175,10 +199,10 @@ function start {
 function stop {
     echo -e "\n$COLOR_HEADER Stopping local environment ... $COLOR_RESET"
 
-    stop-app nginx
-    stop-app styxdev
-    stop-app checkito
-    stop-app ba
+    for APP in "${APPS[@]}"
+    do
+        stop-app ${APP}
+    done
 
     status;
 
@@ -188,34 +212,16 @@ function stop {
 function status {
     echo -e "\n$COLOR_HEADER Status $COLOR_RESET"
 
-	NGNIX_PID=`docker ps -q -f name=nginx`;
-	if [ -n "$NGNIX_PID" ]
-	then
-		echo -e "\n$COLOR_SUCCESS NGINX running. AppId: nginx $COLOR_RESET"
-	else
-		echo -e "\n$COLOR_ERROR NGINX not running. AppId: nginx $COLOR_RESET"
-	fi
-	STYX_PID=`docker ps -q -f name=styxdev`;
-	if [ -n "$STYX_PID" ]
-	then
-		echo -e "\n$COLOR_SUCCESS STYX running. AppId: styx $COLOR_RESET"
-	else
-		echo -e "\n$COLOR_ERROR STYX not running. AppId: styx $COLOR_RESET"
-	fi
-	CHECKITO_PID=`docker ps -q -f name=checkito`;
-	if [ -n "$CHECKITO_PID" ]
-	then
-		echo -e "\n$COLOR_SUCCESS CHECKITO running. AppId: checkito $COLOR_RESET"
-	else
-		echo -e "\n$COLOR_ERROR CHECKITO not running. AppId: checkito $COLOR_RESET"
-	fi
-	BA_PID=`docker ps -q -f name=ba`;
-	if [ -n "$BA_PID" ]
-	then
-		echo -e "\n$COLOR_SUCCESS BookingApp running. AppId: ba $COLOR_RESET"
-	else
-		echo -e "\n$COLOR_ERROR BookingApp not running. AppId: ba $COLOR_RESET"
-	fi
+    for APP in "${APPS[@]}"
+    do
+    	PID=`docker ps -q -f name=${APP}`;
+        if [ -n "$PID" ]
+        then
+            echo -e "\n$COLOR_SUCCESS ${APP} running. $(eval ${APPS_CONF["${APP},status_cmd"]}) $COLOR_RESET"
+        else
+            echo -e "\n$COLOR_ERROR ${APP} not running. $COLOR_RESET"
+        fi
+    done
 }
 
 ########
@@ -228,8 +234,8 @@ function help {
     echo "start -ba-version <ba-version> [-no-stub]     Start the local environment, using the BA version: <ba-version>"
     echo "stop                                          Stop the local environment"
     echo "status                                        Print the local environment status"
-    echo "start-app <app_id>                            Start only the specified app (ba|checkito|styx|ngnix)"
-    echo "stop-app <app_id>                             Stop only the specified app (ba|checkito|styx|ngnix)"
+    echo "start-app <app_id>                            Start only the specified app ($(for APP in "${APPS[@]}"; do echo -n " ${APP}"; done) )"
+    echo "stop-app <app_id>                             Stop only the specified app ($(for APP in "${APPS[@]}"; do echo -n " ${APP}"; done) )"
     echo
     exit 0
 }

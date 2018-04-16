@@ -4,9 +4,9 @@ volumes:
 
 services:
 
-  styxdev:
+  styxpres:
     image: registry.docker.hcom/hotels/styxpres:release
-    container_name: styxdev
+    container_name: styxpres
     ports:
       - "9000:9000"
     environment:
@@ -45,9 +45,10 @@ services:
       - ./certs/:/certs/
 
   mvt:
+    image: registry.docker.hcom/hotels/mvt:latest
+    container_name: mvt
     volumes:
       - mvt:/mvt
-    image: registry.docker.hcom/hotels/mvt:latest
 
   ba:
     image: registry.docker.hcom/hotels/ba:${BA_VERSION}
@@ -57,7 +58,7 @@ services:
     volumes:
       - mvt:/mvt
     environment:
-      - APP_CONFIG_ENVIRONMENT=development
+      - APP_CONFIG_ENVIRONMENT=hcom-devrom #development
       - APP_jvm.route=development
       - APP_javax.net.ssl.trustStore=/hcom/servers/tomcat/certs/pvclient-karmalab.jks
       - APP_javax.net.ssl.trustStorePassword=tiajya
@@ -167,7 +168,7 @@ services:
     volumes:
       - mvt:/mvt
     environment:
-      - APP_CONFIG_ENVIRONMENT=development
+      - APP_CONFIG_ENVIRONMENT=hcom-devrom #development
       - APP_jvm.route=development
       - APP_javax.net.ssl.trustStore=/hcom/servers/tomcat/certs/pvclient-karmalab.jks
       - APP_javax.net.ssl.trustStorePassword=tiajya
@@ -212,15 +213,19 @@ services:
       - APP_BPAS_ON_PAYMENT_OPTION_REQUEST_CIRCUIT_BREAKER_TIMEOUT_MS=60000
 
       # Development overrides
+      - JAVA_JVM_ARGS=-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=1901
       - APP_UNIFIED_DATA_TOOLKIT_ENABLED=true
       - APP_LOCALIZATION_MESSAGE_PARALLEL_INITIALIZATION_ENABLED=true
       - APP_MVT_CONFIGURATION_PARALLEL_INITIALIZATION_ENABLED=true
       - APP_CACHE_PRELOAD_ENABLED=false
       - APP_PSID_SERVICE_ENABLED=false
       - APP_WEBSITE_DOMAIN_DISCRIMINATOR=dev-
+      #- APP_DSC_STUB_MODE_ENABLED=true
+
+      # Not supported on checkito yet
       - APP_FENCED_VAP_ENABLED=false
       - APP_UNBRANDED_VIP_VAP_ENABLED=false
-      - JAVA_JVM_ARGS=-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=1901
+      - APP_CANCELLATION_FLOW_SWITCH=OMS_CANCELLATION_FLOW
 
       # Proxy resources
       #      - APP_http.proxyHost=docker.for.mac.localhost
