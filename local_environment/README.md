@@ -8,9 +8,9 @@ It leverage the [local-app-server](http://stash.hcom/projects/STYX/repos/local-a
 
 **Note:** In order to enable styx html page rendering you need to set MVT variant 4418.1
 
-#### Supported features:
+#### Stubbed hotels and supported features:
 
-Please refer to the checkito README for a full list of the supported features: http://stash.hcom/projects/COP/repos/checkito/browse
+Please refer to the checkito README for a full list of stubbed hotels and supported features: http://stash.hcom/projects/COP/repos/checkito/browse
 
 #### Limitations
 
@@ -22,7 +22,8 @@ TBW
 
 To facilitate the maintainance, there is a single (_bash_) script to set up the environment. 
 
-To run it on Windows, *Git BASH* is strongly recommended. It can be downloaded form https://gitforwindows.org/. 
+To run it on Windows, *Git BASH* is strongly recommended. It can be downloaded form https://gitforwindows.org/.
+If you're already using another BASH emulation tool you can use that one as well. 
 
 During the installation few setup choice have to made. If you're not sure what to select, keep the default choice.  
 
@@ -33,8 +34,6 @@ Download, install and launch Docker CE **17.09.x**
 * WIN: https://docs.docker.com/docker-for-windows/release-notes/#docker-community-edition-17091-ce-win42-2017-12-11  
 * MAC: https://docs.docker.com/docker-for-mac/release-notes/#docker-community-edition-17091-ce-mac42-2017-12-11 
 
-*[Windows]*: After the installation, share the drive on which the local environment folder will be checked out: `Docker -> Settings -> Shared Drives`
-
 **Important**: DO NOT UPGRADE. The hcom docker registry is not compatible with newer versions.
 
 ![do not upgrade](assets/do_not_upgrade.png)
@@ -43,6 +42,14 @@ Download, install and launch Docker CE **17.09.x**
 In case you have any docker image that you want to keep, select "Copy" - Otherwise "Skip"
 
 ![copy docker machine](assets/copy_docker_machine.png)
+
+#### WIN specific setup
+
+* Share the drive on which the local environment folder will be checked out: `Docker -> Settings -> Shared Drives`
+* Add `C:\Program Files\Docker\Docker\Docker for Windows.exe` to PATH env variables (both system and profile):
+
+![do not WIN_docker_exe_to_env_variables](assets/WIN_docker_exe_to_env_variables.png)
+
 
 ### Migrating from Docker Toolbox
 
@@ -183,12 +190,15 @@ Move under the `local_environment`, give execution permissions to the `local_env
 
     $ cd <local_environment_root_folder>
     $ chmod a+x local_env.sh 
-    $ ./local_env.sh <command> <options>
+    $ ./local_env.sh
+    Usage: /usr/local/bin/local_env <command> <options>
     Commands:
-    start                               Start the local environment
-      -ba <ba-version>                  BA version to run. Required.
-    stop                                Stop the local environment
-    status                              Print the local environment status
+    start -ba-version <ba-version> [-no-stub]     Start the local environment, using the BA version: <ba-version>
+    stop                                          Stop the local environment
+    status                                        Print the local environment status
+    start-app <app_id>                            Start only the specified app ( mvt ba checkito nginx styxpres )
+    stop-app <app_id>                             Stop only the specified app ( mvt ba checkito nginx styxpres )
+
 ----
 
 *[WINDOWS]*:
@@ -200,9 +210,11 @@ If you're using Git BASH and the above command is not working you may need to us
 
 #### Start
 
-    ./local_env.sh start -ba <ba-version>
+    ./local_env.sh start -ba-version <ba-version>
 
-*Note:* the first time you start the local environment the setup may take a few minutes
+In order to check that everything works you can open the following [stubbed hotel link](https://www.dev-hotels.com/booking/deep_link.html?pos=HCOM_US&locale=en_US&mvariant=1327.0%2C1943.1%2C1544.1%2C1400.1%2C985.1%2C1156.0%2C810.1%2C1881.1%2C316.1%2C1947.1%2C1539.1%2C839.2%2C1306.1%2C1735.1%2C4418.1&arrivalDate=09-12-2018&departureDate=10-12-2018&currency=USD&rooms%5B0%5D.numberOfAdults=2&rooms%5B0%5D.numberOfChildren=0&hotelId=434772&roomTypeCode=200310048&rateCode=201876673&businessModel=MERCHANT&ratePlanConfiguration=REGULAR&hotelContractCardinality=SINGLE)
+
+*Note:* the first time you start the local environment the setup may take a few minutes, since it needs to downloads various docker images.
     
 #### Stop
 
@@ -211,6 +223,24 @@ If you're using Git BASH and the above command is not working you may need to us
 #### Status
 
     ./local_env.sh status
+
+#### Start a single app
+
+    ./local_env.sh start-app <app> <options>
+
+*Examples*
+    
+* `./local_env.sh start-app ba -ba-version 123.0.7220`
+* `./local_env.sh start-app checkito`
+
+#### Stop a single app
+
+    ./local_env.sh stop-app <app>
+
+*Examples*
+    
+* `./local_env.sh stop-app ba`
+* `./local_env.sh start-app checkito`
 
 ### BA testing
 
@@ -225,15 +255,15 @@ the only difference between the 3 use cases above is the version of the BA to be
 
 * BA stable version:
  
-`./local_env.sh start -ba 120.0.7090`
+`./local_env.sh start -ba-version 120.0.7090`
 
 * BA feature-branch: 
 
-`./local_env.sh start -ba 120.0.feature_CHOP_2658_availabilty_price_check_feature_branch.4`   
+`./local_env.sh start -ba-version 120.0.feature_CHOP_2658_availabilty_price_check_feature_branch.4`   
 
 * BA built in local: 
 
-`./local_env.sh start -ba dev.0`
+`./local_env.sh start -ba-version dev.0`
 
 *Note:* in order to build the BA in local you need to use the profile `-Pbuild-local`.
 
@@ -247,16 +277,10 @@ You just need either to specify the DUP `feature-branch` parameter on the BF dee
 
 ### Logging
 
-All the local environment application logs are appended to `startup.log`, you can filter application specific logs by using the `grep` command.
+All the local environment application logs are appended under the folder `logs`.
 
-    $ cd <local_environment_root_folder>
-    $ tail -f startup.log | grep bka
-
-Apps container names:
-* `bka`
-* `checkito`
-* `styxdev`
-* `nginx`
+    $ cd <local_environment_root_folder>/logs
+    $ tail -f <app>.log
 
 ### BA DEBUG
 
@@ -279,10 +303,20 @@ If you need to enable the local proxy you can modify the following configuration
 ## Troubleshooting common issues
 
 * No CSS/JS - This indicates you have not accepted the `a*-cdn-hotels.com` domain certificates. Please trust like you do on staging or milan.
+
 * Not seeing the header? You're not setting the MVT `4418.1`
+
 * Update the docker spotify plugin version to `0.4.13` if you have got the following error building your local image 
 
     ```org.apache.http.conn.HttpHostConnectException: Connect to localhost:2375 [localhost/127.0.0.1] failed: Connection refused```
+
+* If you're having login error while downloading nginx
+
+    ```Get https://registry-1.docker.io/v2/library/nginx/manifests/mainline-alpine: unauthorized: incorrect username or password```
+    
+  you may have messed up your docker login and you just need to logout
+  
+    ```docker logout```
 
 ## FAQ
 
