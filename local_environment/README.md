@@ -38,16 +38,18 @@ Download, install and launch Docker CE **17.09.x**
 
 ![do not upgrade](assets/do_not_upgrade.png)
 
-*[Windows]*: After the installation, share the drive on which the local environment folder will be checked out: `Docker -> Settings -> Shared Drives`
-*[Windows]*: Add `C:\Program Files\Docker\Docker\Docker for Windows.exe` to PATH env variables (both system and profile):
-
-![do not WIN_docker_exe_to_env_variables](assets/WIN_docker_exe_to_env_variables.png)
-
-
 **Note:** If your are migrating from Docker Toolbox you will be asked to import your existing docker machine.
 In case you have any docker image that you want to keep, select "Copy" - Otherwise "Skip"
 
 ![copy docker machine](assets/copy_docker_machine.png)
+
+#### WIN specific setup
+
+* Share the drive on which the local environment folder will be checked out: `Docker -> Settings -> Shared Drives`
+* Add `C:\Program Files\Docker\Docker\Docker for Windows.exe` to PATH env variables (both system and profile):
+
+![do not WIN_docker_exe_to_env_variables](assets/WIN_docker_exe_to_env_variables.png)
+
 
 ### Migrating from Docker Toolbox
 
@@ -315,12 +317,6 @@ If you need to enable the local proxy you can modify the following configuration
   you may have messed up your docker login and you just need to logout
   
     ```docker logout```
-
-* If you're having connection refused while building the local BA ```mvn clean install -rf :bookingapp-release -Pbuild-local```, you need to expose the docker daemon without TLS.
-
-    ```[ERROR] Failed to execute goal com.spotify:docker-maven-plugin:0.4.13:build (build-docker-image) on project bookingapp-release: Exception caught: java.util.concurrent.ExecutionException: com.spotify.docker.client.shaded.javax.ws.rs.ProcessingException: org.apache.http.conn.HttpHostConnectException: Connect to localhost:2375 [localhost/127.0.0.1, localhost/0:0:0:0:0:0:0:1] failed: Connection refused: connect```
-    
-    ![WIN_docker_expose_daemon_without_TLS](assets/WIN_docker_expose_daemon_without_TLS.png)
 
 ## FAQ
 
