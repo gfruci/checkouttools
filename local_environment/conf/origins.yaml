@@ -15,4 +15,4 @@
     trustAllCerts:       true
     sslProvider:         OPENSSL     # Also supports JDK
   origins:
-  - { id: "bka", host: "bka:8443" }
+  - { id: "ba", host: "ba:8443" }
