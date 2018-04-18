@@ -1,5 +1,8 @@
 package main.kotlin
 
+import PropertyRegexFactory
+import kotlinx.coroutines.experimental.async
+import kotlinx.coroutines.experimental.runBlocking
 import java.time.Instant
 
 fun main(args: Array<String>) {
@@ -14,10 +17,13 @@ fun main(args: Array<String>) {
     println("================= Unused properties ================")
 
     val allProperties = PropertyCollector.getPropertiesOf(defaultPropertyFile)
-    val usedProperties = PropertyUsageService.getUsedProperties(allProperties, allFiles, Config.REGEX_TEMPLATE)
 
-    allProperties.minus(usedProperties).forEach {
-        println(it)
+    runBlocking {
+        val propertyRegexMap = PropertyRegexFactory.createRegex(allProperties, Config.REGEX_TEMPLATE)
+        val deferredUsedProperties = async{ PropertyUsageService.getUsedProperties(propertyRegexMap, allFiles) }
+        val deferredUsedPropertiesCodeSearch = async { PropertyUsageService.getUsedPropertiesByCodeSearch(propertyRegexMap) }
+
+        allProperties.minus(deferredUsedProperties.await()).minus(deferredUsedPropertiesCodeSearch.await()).forEach { println(it) }
     }
 
     println("Elapsed time: " + Instant.now().toEpochMilli().minus(start))
