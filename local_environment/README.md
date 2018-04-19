@@ -65,7 +65,6 @@ For more details on how to migrate from Docker Toolbox read these:
 
 Add the insecure internal registries in `Docker -> Preferences -> Daemon -> Basic:`
 * registry.docker.hcom
-* registry.prod.hcom
 
 ![add insecure registries](assets/add_insecure_registries.png)
 
@@ -263,7 +262,7 @@ the only difference between the 3 use cases above is the version of the BA to be
 
 * BA built in local: 
 
-`./local_env.sh start -ba-version dev.0`
+`./local_env.sh start -ba-version latest`
 
 *Note:* in order to build the BA in local you need to use the profile `-Pbuild-local`.
 
