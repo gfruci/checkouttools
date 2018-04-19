@@ -18,3 +18,23 @@
     sslProvider:         OPENSSL     # Also supports JDK
   origins:
   - { id: "ba", host: "ba:8443" }
+
+- id: "bpe"
+  path: "/bpe/"
+  rewrites:
+    - urlPattern: "/bpe/(.*)"
+      replacement: "$1"
+  healthCheck:
+    uri: "/health"
+  connectionPool:
+    maxConnectionsPerHost: 40
+    maxPendingConnectionsPerHost: 20
+    socketTimeoutMillis: 120000
+    connectTimeoutMillis: 8000
+  responseTimeoutMillis: 300000
+  tlsSettings:
+    trustAllCerts:       true
+    sslProvider:         OPENSSL     # Also supports JDK
+  origins:
+  - { id: "staging-bpe-01", host: "chelapphot127.karmalab.net:39421" }
+  - { id: "staging-bpe-02", host: "chelapphot040.karmalab.net:39422" }
