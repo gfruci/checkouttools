@@ -25,6 +25,11 @@ To facilitate the maintainance, there is a single (_bash_) script to set up the 
 To run it on Windows, *Git BASH* is strongly recommended. It can be downloaded form https://gitforwindows.org/.
 If you're already using another BASH emulation tool you can use that one as well.
 
+When running bash scripts on Docker, make sure the line endings of the scripts
+are Unix-style single LF, otherwise you can get "no such file" errors. It is recommended to checkout git repositories with
+the ***git config core.autocrlf input*** option.
+See the **Troubleshooting common issues** section for more info.
+
 During the installation few setup choice have to made. If you're not sure what to select, keep the default choice.
 
 ### Install Docker CE (Mac/Win)
@@ -320,6 +325,19 @@ If you need to enable the local proxy you can modify the following configuration
   you may have messed up your docker login and you just need to logout
 
     ```docker logout```
+
+* Locally built BA does not start with "no such file or directory" error on Windows?
+  ```
+  ba | standard_init_linux.go:185: exec user process caused "no such file or directory"
+  ba exited with code 1
+  ```
+  This error usually means you are trying to run a sh/bash script with Windows-style endings
+  in Docker, most likely **init_with_vault.sh** in BA. Set this file's line endings from CRLF to LF.
+
+  It is also recommended to configure your git to checkout files as-is, without line-ending conversion:
+  ```sh
+  $ git config core.autocrlf input
+  ```
 
 ## FAQ
 
