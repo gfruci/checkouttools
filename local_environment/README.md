@@ -25,17 +25,18 @@ To facilitate the maintainance, there is a single (_bash_) script to set up the 
 To run it on Windows, *Git BASH* is strongly recommended. It can be downloaded form https://gitforwindows.org/.
 If you're already using another BASH emulation tool you can use that one as well.
 
+When running bash scripts on Docker, make sure the line endings of the scripts
+are Unix-style single LF, otherwise you can get "no such file" errors. It is recommended to checkout git repositories with
+the ***git config core.autocrlf input*** option.
+See the **Troubleshooting common issues** section for more info.
+
 During the installation few setup choice have to made. If you're not sure what to select, keep the default choice.
 
 ### Install Docker CE (Mac/Win)
 
 Download, install and launch Docker CE **17.09.x**
 
-<<<<<<< HEAD
-* WIN: https://docs.docker.com/docker-for-windows/release-notes/#docker-community-edition-17091-ce-win42-2017-12-11  
-=======
 * WIN: https://docs.docker.com/docker-for-windows/release-notes/#docker-community-edition-17091-ce-win42-2017-12-11
->>>>>>> origin/master
 * MAC: https://docs.docker.com/docker-for-mac/release-notes/#docker-community-edition-17091-ce-mac42-2017-12-11
 
 **Important**: DO NOT UPGRADE. The hcom docker registry is not compatible with newer versions.
