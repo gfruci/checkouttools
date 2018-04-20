@@ -14,7 +14,7 @@ internal object Config {
     private const val CONFIG_SOURCE : String = "configSource"
     private const val PROJECT_ROOT : String = "projectRoot"
     private const val CREDENTIAL : String = "credential"
-    internal const val REGEX_TEMPLATE : String = "(\\\"Property\\\"|is\\(\\\"Property\\\"\\)|is\\(Property\\)|\\\$\\{Property\\})";
+    internal const val REGEX_TEMPLATE : String = "(\\\"Property\\\"|is\\(\\\"Property\\\"\\)|is\\(Property\\)|\\\$\\{Property\\:{0,1}[0-9]*\\}|configuration.is.Property)";
     internal const val DEFAULT_PROPERTY_FILE = "env_rules_default.properties"
 
     internal var confSrc: String

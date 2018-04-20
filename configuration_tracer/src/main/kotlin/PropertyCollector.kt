@@ -4,7 +4,7 @@ import java.io.File
 
 object PropertyCollector {
 
-    private val PROPERTY_KEY_REGEX = Regex("[A-Z_]+=")
+    private val PROPERTY_KEY_REGEX = Regex("^[A-Z_]+=")
 
     /**
      * Returns all properties from the given property file.
