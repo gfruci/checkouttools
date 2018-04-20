@@ -25,13 +25,17 @@ To facilitate the maintainance, there is a single (_bash_) script to set up the 
 To run it on Windows, *Git BASH* is strongly recommended. It can be downloaded form https://gitforwindows.org/.
 If you're already using another BASH emulation tool you can use that one as well.
 
-During the installation few setup choice have to made. If you're not sure what to select, keep the default choice.  
+During the installation few setup choice have to made. If you're not sure what to select, keep the default choice.
 
 ### Install Docker CE (Mac/Win)
 
 Download, install and launch Docker CE **17.09.x**
 
+<<<<<<< HEAD
 * WIN: https://docs.docker.com/docker-for-windows/release-notes/#docker-community-edition-17091-ce-win42-2017-12-11  
+=======
+* WIN: https://docs.docker.com/docker-for-windows/release-notes/#docker-community-edition-17091-ce-win42-2017-12-11
+>>>>>>> origin/master
 * MAC: https://docs.docker.com/docker-for-mac/release-notes/#docker-community-edition-17091-ce-mac42-2017-12-11
 
 **Important**: DO NOT UPGRADE. The hcom docker registry is not compatible with newer versions.
@@ -49,6 +53,10 @@ In case you have any docker image that you want to keep, select "Copy" - Otherwi
 * Add `C:\Program Files\Docker\Docker\Docker for Windows.exe` to PATH env variables (both system and profile):
 
 ![do not WIN_docker_exe_to_env_variables](assets/WIN_docker_exe_to_env_variables.png)
+
+* Make sure you're exposing the daemon on localhost without TLS
+
+![expose daemon without TLS](assets/WIN_docker_expose_daemon_without_TLS.png)
 
 
 ### Migrating from Docker Toolbox
@@ -258,7 +266,7 @@ the only difference between the 3 use cases above is the version of the BA to be
 
 * BA feature-branch:
 
-`./local_env.sh start -ba-version 120.0.feature_CHOP_2658_availabilty_price_check_feature_branch.4`   
+`./local_env.sh start -ba-version 120.0.feature_CHOP_2658_availabilty_price_check_feature_branch.4`
 
 * BA built in local:
 
@@ -314,7 +322,7 @@ If you need to enable the local proxy you can modify the following configuration
     ```Get https://registry-1.docker.io/v2/library/nginx/manifests/mainline-alpine: unauthorized: incorrect username or password```
 
   you may have messed up your docker login and you just need to logout
-  
+
     ```docker logout```
 
 * Locally built BA does not start with "no such file or directory" error on Windows?
