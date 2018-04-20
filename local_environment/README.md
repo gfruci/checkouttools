@@ -50,6 +50,10 @@ In case you have any docker image that you want to keep, select "Copy" - Otherwi
 
 ![do not WIN_docker_exe_to_env_variables](assets/WIN_docker_exe_to_env_variables.png)
 
+* Make sure you're exposing the daemon on localhost without TLS
+
+![expose daemon without TLS](WIN_docker_expose_daemon_without_TLS.png)
+
 
 ### Migrating from Docker Toolbox
 
