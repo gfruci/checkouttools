@@ -20,19 +20,19 @@ TBW
 
 ### Windows pre-requirements
 
-To facilitate the maintainance, there is a single (_bash_) script to set up the environment. 
+To facilitate the maintainance, there is a single (_bash_) script to set up the environment.
 
 To run it on Windows, *Git BASH* is strongly recommended. It can be downloaded form https://gitforwindows.org/.
-If you're already using another BASH emulation tool you can use that one as well. 
+If you're already using another BASH emulation tool you can use that one as well.
 
-During the installation few setup choice have to made. If you're not sure what to select, keep the default choice.  
+During the installation few setup choice have to made. If you're not sure what to select, keep the default choice.
 
 ### Install Docker CE (Mac/Win)
 
 Download, install and launch Docker CE **17.09.x**
 
-* WIN: https://docs.docker.com/docker-for-windows/release-notes/#docker-community-edition-17091-ce-win42-2017-12-11  
-* MAC: https://docs.docker.com/docker-for-mac/release-notes/#docker-community-edition-17091-ce-mac42-2017-12-11 
+* WIN: https://docs.docker.com/docker-for-windows/release-notes/#docker-community-edition-17091-ce-win42-2017-12-11
+* MAC: https://docs.docker.com/docker-for-mac/release-notes/#docker-community-edition-17091-ce-mac42-2017-12-11
 
 **Important**: DO NOT UPGRADE. The hcom docker registry is not compatible with newer versions.
 
@@ -52,7 +52,7 @@ In case you have any docker image that you want to keep, select "Copy" - Otherwi
 
 * Make sure you're exposing the daemon on localhost without TLS
 
-![expose daemon without TLS](WIN_docker_expose_daemon_without_TLS.png)
+![expose daemon without TLS](assets/WIN_docker_expose_daemon_without_TLS.png)
 
 
 ### Migrating from Docker Toolbox
@@ -88,8 +88,8 @@ Login to registry using your SEA credentials
 
     docker login registry.docker.hcom
 ----
-*[WINDOWS]*: 
-If you're using Git BASH and you get the following error: 
+*[WINDOWS]*:
+If you're using Git BASH and you get the following error:
 
     Error: Cannot perform an interactive login from a non TTY device
 
@@ -110,7 +110,7 @@ In `Docker -> Preferences -> Advanced`
 
 Please update your hosts file with the following.
 
-*Note:* If you already have the `*.dev-hotels.com` domains in your hosts file, you need to substitute them. 
+*Note:* If you already have the `*.dev-hotels.com` domains in your hosts file, you need to substitute them.
 
 `hosts` file location:
 * MAC/UNIX: `/etc/hosts`
@@ -192,7 +192,7 @@ Clone the repo.
 Move under the `local_environment`, give execution permissions to the `local_env.sh` bash script and run it.
 
     $ cd <local_environment_root_folder>
-    $ chmod a+x local_env.sh 
+    $ chmod a+x local_env.sh
     $ ./local_env.sh
     Usage: /usr/local/bin/local_env <command> <options>
     Commands:
@@ -218,7 +218,7 @@ If you're using Git BASH and the above command is not working you may need to us
 In order to check that everything works you can open the following [stubbed hotel link](https://www.dev-hotels.com/booking/deep_link.html?pos=HCOM_US&locale=en_US&mvariant=1327.0%2C1943.1%2C1544.1%2C1400.1%2C985.1%2C1156.0%2C810.1%2C1881.1%2C316.1%2C1947.1%2C1539.1%2C839.2%2C1306.1%2C1735.1%2C4418.1&arrivalDate=09-12-2018&departureDate=10-12-2018&currency=USD&rooms%5B0%5D.numberOfAdults=2&rooms%5B0%5D.numberOfChildren=0&hotelId=434772&roomTypeCode=200310048&rateCode=201876673&businessModel=MERCHANT&ratePlanConfiguration=REGULAR&hotelContractCardinality=SINGLE)
 
 *Note:* the first time you start the local environment the setup may take a few minutes, since it needs to downloads various docker images.
-    
+
 #### Stop
 
     ./local_env.sh stop
@@ -232,7 +232,7 @@ In order to check that everything works you can open the following [stubbed hote
     ./local_env.sh start-app <app> <options>
 
 *Examples*
-    
+
 * `./local_env.sh start-app ba -ba-version 123.0.7220`
 * `./local_env.sh start-app checkito`
 
@@ -241,14 +241,14 @@ In order to check that everything works you can open the following [stubbed hote
     ./local_env.sh stop-app <app>
 
 *Examples*
-    
+
 * `./local_env.sh stop-app ba`
 * `./local_env.sh start-app checkito`
 
 ### BA testing
 
 You can test the following BA use case:
-* BA stable version 
+* BA stable version
 * BA feature-branch
 * BA built in local
 
@@ -257,14 +257,14 @@ the only difference between the 3 use cases above is the version of the BA to be
 **BA version example**
 
 * BA stable version:
- 
+
 `./local_env.sh start -ba-version 120.0.7090`
 
-* BA feature-branch: 
+* BA feature-branch:
 
-`./local_env.sh start -ba-version 120.0.feature_CHOP_2658_availabilty_price_check_feature_branch.4`   
+`./local_env.sh start -ba-version 120.0.feature_CHOP_2658_availabilty_price_check_feature_branch.4`
 
-* BA built in local: 
+* BA built in local:
 
 `./local_env.sh start -ba-version latest`
 
@@ -309,16 +309,16 @@ If you need to enable the local proxy you can modify the following configuration
 
 * Not seeing the header? You're not setting the MVT `4418.1`
 
-* Update the docker spotify plugin version to `0.4.13` if you have got the following error building your local image 
+* Update the docker spotify plugin version to `0.4.13` if you have got the following error building your local image
 
     ```org.apache.http.conn.HttpHostConnectException: Connect to localhost:2375 [localhost/127.0.0.1] failed: Connection refused```
 
 * If you're having login error while downloading nginx
 
     ```Get https://registry-1.docker.io/v2/library/nginx/manifests/mainline-alpine: unauthorized: incorrect username or password```
-    
+
   you may have messed up your docker login and you just need to logout
-  
+
     ```docker logout```
 
 ## FAQ
@@ -329,7 +329,7 @@ TBW
 
 Contribution is always the key. If you find any issue or you want to make an improvement, please open a PR and ask your CKO friends to review it.
 
-If you feel something is missing or you want to suggest any improvement, please report it to this [confluence page](https://confluence/pages/viewpage.action?pageId=878693711) 
+If you feel something is missing or you want to suggest any improvement, please report it to this [confluence page](https://confluence/pages/viewpage.action?pageId=878693711)
 
 ## Developers Notes
 
