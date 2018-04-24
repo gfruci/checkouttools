@@ -106,7 +106,7 @@ you need to use the following command to login:
 ### Increase the docker resources
 
 In `Docker -> Preferences -> Advanced`
-* increase the docker memory to 4GB
+* increase the docker memory to at least 4GB
 * Increase the number of CPU to 6
 
 ![increase_docker_resources](assets/increase_docker_resources.png)
