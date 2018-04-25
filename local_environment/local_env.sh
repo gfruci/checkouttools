@@ -27,7 +27,7 @@ START_MODE=
 BA_VERSION=
 BA_TYPE=
 
-APPS=( "mvt" "ba" "checkito" "nginx" "styxpres" )
+APPS=( "mvt" "checkito" "nginx" "styxpres" )
 
 declare -A APPS_CONF=(\
     ["mvt,update_cmd"]="docker pull registry.docker.hcom/hotels/mvt:latest >> ${SCRIPT_DIR}/logs/startup.log 2>&1"\

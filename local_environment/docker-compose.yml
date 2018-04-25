@@ -240,6 +240,7 @@ services:
     image: registry.docker.hcom/hotels/checkito:latest
     container_name: checkito
     ports:
+      - "1902:1901" # expose checkito debug port but it's the debug port for BA too
       - "8089:8089"
       - "8189:8189"
 

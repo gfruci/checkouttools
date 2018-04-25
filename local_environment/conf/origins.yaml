@@ -17,7 +17,7 @@
     trustAllCerts:       true
     sslProvider:         OPENSSL     # Also supports JDK
   origins:
-  - { id: "ba", host: "ba:8443" }
+  - { id: "ba", host: "docker.for.win.localhost:30443" }
 
 - id: "bpe"
   path: "/bpe/"
