@@ -51,6 +51,9 @@ In case you have any docker image that you want to keep, select "Copy" - Otherwi
 #### WIN specific setup
 
 * Share the drive on which the local environment folder will be checked out: `Docker -> Settings -> Shared Drives`
+
+![shared drives](assets/shared_drives.png)
+
 * Add `C:\Program Files\Docker\Docker\Docker for Windows.exe` to PATH env variables (both system and profile):
 
 ![do not WIN_docker_exe_to_env_variables](assets/WIN_docker_exe_to_env_variables.png)
