@@ -149,6 +149,7 @@ services:
       - APP_BRAVOS_API_PORT=8089
       - APP_PAYMENT_OPTION_SERVICE_HOST=checkito:8089
       - APP_PAYMENT_OPTION_SERVICE_URL=http://checkito:8089/PaymentOptions/v2
+      - APP_bpins.baseUrl=https://checkito:8189
 
       #remote jmx
       - APP_com.sun.management.jmxremote=true
