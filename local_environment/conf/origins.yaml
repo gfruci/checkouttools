@@ -38,6 +38,25 @@
   origins:
   - { id: "bma", host: "docker.for.win.localhost:50443" }
 
+- id: "bca"
+  path: "/bca/"
+  rewrites:
+    - urlPattern: "/bca/(.*)"
+      replacement: "$1"
+  healthCheck:
+    uri: "/version.txt"
+  connectionPool:
+    maxConnectionsPerHost: 40
+    maxPendingConnectionsPerHost: 20
+    socketTimeoutMillis: 120000
+    connectTimeoutMillis: 8000
+  responseTimeoutMillis: 300000
+  tlsSettings:
+    trustAllCerts:       true
+    sslProvider:         OPENSSL     # Also supports JDK
+  origins:
+  - { id: "bca", host: "docker.for.win.localhost:39443" }
+
 - id: "bpe"
   path: "/bpe/"
   rewrites:
