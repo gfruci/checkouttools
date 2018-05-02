@@ -34,7 +34,7 @@ object PropertyUsageService {
             deferredResponsesMap.put(it.key, async {
                 get(
                         url = "http://codesearch.hcom/api/v1/search",
-                        params = mapOf("repos" to "*", "q" to "${it.value}", "files" to "(java|xml|jsp|jspf)", "ctx" to "0"),
+                        params = mapOf("repos" to "*", "q" to "${it.value}", "files" to "(java|xml|jsp|jspf|ftl)", "ctx" to "0"),
                         headers = mapOf("Accept" to "application/json;charset=UTF-8", "Content-Type" to "application/json;charset=UTF-8", "Authorization" to "Basic ${Config.credential}")
                 )
             })
@@ -43,5 +43,5 @@ object PropertyUsageService {
     }
 
     private suspend fun isPropertyUsed(entry: MutableMap.MutableEntry<String, Deferred<Response>>): Boolean =
-            entry.value.await().statusCode == 200 && entry.value.await().jsonObject.get("Results").toString() != "{}"
+            entry.value.await().statusCode != 200 || entry.value.await().jsonObject.get("Results").toString() != "{}"
 }
