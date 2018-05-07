@@ -1,3 +1,5 @@
+package main.kotlin
+
 import kotlinx.coroutines.experimental.Deferred
 import kotlinx.coroutines.experimental.async
 
