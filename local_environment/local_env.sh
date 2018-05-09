@@ -27,7 +27,7 @@ START_MODE=
 BA_VERSION=
 BA_TYPE=
 
-APPS=( "mvt" "checkito" "nginx" "styxpres" )
+APPS=( "mvt" "ba" "checkito" "nginx" "styxpres" )
 
 declare -A APPS_CONF=(\
     ["mvt,update_cmd"]="docker pull registry.docker.hcom/hotels/mvt:latest >> ${SCRIPT_DIR}/logs/startup.log 2>&1"\
@@ -116,12 +116,6 @@ function setup_ba_version {
       shift
     done
 
-    if [[ ! ${BA_VERSION} ]]; then
-        echo "Error! BA version NOT specified (missing -ba-version parameter)!"
-        help;
-        exit 1
-    fi
-
     export BA_VERSION=${BA_VERSION}
 }
 
@@ -135,6 +129,17 @@ function start-app {
     then
         setup_ba_version $@
         APP_TYPE=${BA_TYPE}
+        if [ "${BA_VERSION}" == "" ]
+        then
+            if [ "${START_MODE}" == "start-all" ]
+            then
+                return 1;
+            else
+                echo "Error! BA version NOT specified (missing -ba-version parameter)!"
+                help;
+                exit 1
+            fi
+        fi
     fi
 
     cd ${SCRIPT_DIR}
@@ -142,9 +147,9 @@ function start-app {
     cd ${PREV_DIR}
 
     watch "Starting ${APP} ..." "${APPS_CONF["${APP},start_status_cmd"]}" "${APPS_CONF["${APP},stop_status_cmd"]}"
-    RETURN_CODE=$?
+    WATCH_RETURN_CODE=$?
 
-    if [ "${RETURN_CODE}" -eq "0" ]
+    if [ "${WATCH_RETURN_CODE}" -eq "0" ]
     then
         echo -e "\n$COLOR_SUCCESS ${APP} started $COLOR_RESET"
     else
@@ -179,7 +184,7 @@ function setup {
     git fetch >> ${SCRIPT_DIR}/logs/startup.log 2>&1
     git status | grep "origin/master"
 
-    update_env_apps_images;
+    #update_env_apps_images;
 
     echo "done"
 }
@@ -234,6 +239,7 @@ function status {
 function help {
     echo "Usage: $0 <command> <options>"
     echo "Commands:"
+    echo "start                                         Start the local environment, with no front-end apps (BA)"
     echo "start -ba-version <ba-version> [-no-stub]     Start the local environment, using the BA version: <ba-version>"
     echo "stop                                          Stop the local environment"
     echo "status                                        Print the local environment status"
