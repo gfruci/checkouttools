@@ -1,6 +1,5 @@
 package main.kotlin
 
-import PropertyRegexFactory
 import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.runBlocking
 import java.time.Instant
@@ -11,7 +10,7 @@ fun main(args: Array<String>) {
     val propertyFiles = FileCollector.getAllFiles(Config.confSrc, "properties")
     val allFiles: MutableList<String> = ArrayList<String>()
     allFiles.addAll(propertyFiles)
-    allFiles.addAll(FileCollector.getAllFiles(Config.projRoot, "jsp", "jspf", "xml", "java"))
+    allFiles.addAll(FileCollector.getAllFiles(Config.projRoot, "jsp", "jspf", "xml", "java", "ftl"))
     val defaultPropertyFile = propertyFiles.filter { it.endsWith(Config.DEFAULT_PROPERTY_FILE) }[0]
 
     println("================= Unused properties ================")

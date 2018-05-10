@@ -5,8 +5,6 @@
   rewrites:
     - urlPattern: "/ba/(.*)"
       replacement: "$1"
-  healthCheck:
-    uri: "/version.txt"
   connectionPool:
     maxConnectionsPerHost: 40
     maxPendingConnectionsPerHost: 20
