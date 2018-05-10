@@ -127,7 +127,6 @@ function start-app {
 
     if [ "${APP}" == "ba" ]
     then
-        setup_ba_version $@
         APP_TYPE=${BA_TYPE}
         if [ "${BA_VERSION}" == "" ]
         then
@@ -248,6 +247,8 @@ function help {
     echo
     exit 0
 }
+
+setup_ba_version $@
 
 case "$1" in
 	start)
