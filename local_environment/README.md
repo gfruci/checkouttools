@@ -253,6 +253,13 @@ In order to check that everything works you can open the following [stubbed hote
 * `./local_env.sh stop-app ba`
 * `./local_env.sh start-app checkito`
 
+### Checkito
+
+Checkito is running with default settings:
+
+* http: 8089
+* https: 8189
+
 ### BA testing
 
 You can test the following BA use case:
@@ -297,6 +304,20 @@ All the local environment application logs are appended under the folder `logs`.
 
 The fixed BA debugging port is `1901`
 You can change this in the local_environment `<local_environment_root_folder>/docker-compose.yml`, but if need to do it please make it configurable via the startup script.
+
+### BMA DEBUG
+
+The fixed BMA debugging port is `2001`
+You can change this in the local_environment `<local_environment_root_folder>/docker-compose.yml`, but if need to do it please make it configurable via the startup script.
+
+### BCA DEBUG (plan)
+
+The fixed BCA debugging port is `2101`
+You can change this in the local_environment `<local_environment_root_folder>/docker-compose.yml`, but if need to do it please make it configurable via the startup script.
+
+### Checkito DEBUG
+
+The fixed BA debugging port is `2201`
 
 ### Proxying
 
