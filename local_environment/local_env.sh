@@ -26,8 +26,7 @@ cd ${PREV_DIR}
 START_MODE=
 BA_VERSION=
 BMA_VERSION=
-BA_TYPE=
-BMA_TYPE=
+STUB_STATUS=
 
 APPS=( "mvt" "ba" "bma" "checkito" "nginx" "styxpres" )
 
@@ -113,17 +112,13 @@ function setup_app_versions {
           export BA_VERSION=${BA_VERSION}
           shift
           ;;
-        -no-ba-stub)
-          BA_TYPE=_no_stub
+        -no-stub)
+          STUB_STATUS=_no_stub
           shift
           ;;
         -bma-version)
           BMA_VERSION=$2
           export BMA_VERSION=${BMA_VERSION}
-          shift
-          ;;
-        -no-bma-stub)
-          BMA_TYPE=_no_stub
           shift
           ;;
       esac
@@ -141,7 +136,7 @@ function start-app {
 
     if [ "${APP}" == "ba" ]
     then
-        APP_TYPE=${BA_TYPE}
+        APP_TYPE=${STUB_STATUS}
         if [ "${BA_VERSION}" == "" ]
         then
             if [ "${START_MODE}" == "start-all" ]
@@ -157,7 +152,7 @@ function start-app {
 
     if [ "${APP}" == "bma" ]
     then
-        APP_TYPE=${BMA_TYPE}
+        APP_TYPE=${STUB_STATUS}
         if [ "${BMA_VERSION}" == "" ]
         then
             if [ "${START_MODE}" == "start-all" ]
