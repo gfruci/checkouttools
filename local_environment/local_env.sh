@@ -213,7 +213,7 @@ function setup {
     git fetch >> ${SCRIPT_DIR}/logs/startup.log 2>&1
     git status | grep "origin/master"
 
-    #update_env_apps_images;
+    update_env_apps_images;
 
     echo "done"
 }
