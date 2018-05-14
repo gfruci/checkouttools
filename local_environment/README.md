@@ -205,6 +205,7 @@ Move under the `local_environment`, give execution permissions to the `local_env
     Usage: /usr/local/bin/local_env <command> <options>
     Commands:
     start -ba-version <ba-version> [-no-stub]     Start the local environment, using the BA version: <ba-version>
+    start -bma-version <bma-version> [-no-stub]   Start the local environment, using the BA version: <ba-version>
     stop                                          Stop the local environment
     status                                        Print the local environment status
     start-app <app_id>                            Start only the specified app ( mvt ba checkito nginx styxpres )
