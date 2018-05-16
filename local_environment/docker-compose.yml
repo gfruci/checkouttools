@@ -355,7 +355,7 @@ services:
 
   bma_no_stub:
     image: registry.docker.hcom/hotels/bma:${BMA_VERSION}
-    container_name: ba
+    container_name: bma
     ports:
       - "1901:1901"
       - "38007:38007"
