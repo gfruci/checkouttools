@@ -357,7 +357,7 @@ services:
     image: registry.docker.hcom/hotels/bma:${BMA_VERSION}
     container_name: bma
     ports:
-      - "1901:1901"
+      - "2001:1901"
       - "38007:38007"
     volumes:
       - mvt:/mvt
