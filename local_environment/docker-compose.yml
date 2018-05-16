@@ -278,7 +278,7 @@ services:
       - APP_LIS_EAPID=0
       - APP_BOOKING_SEND_CONFIRMATION_SMS=false
       - APP_SMS_CONFIRMATION_ENABLED=false
-      - APP_spring.profiles.active=default,fakeauthentication
+      - APP_spring.profiles.active=default
       - APP_VAULT_ADDR=https://vault.lab.hcom
       - APP_VAULT_USER_ID=staging1-bma-01
       - APP_VAULT_TIMEOUT=60
@@ -380,7 +380,7 @@ services:
       - APP_LIS_EAPID=0
       - APP_BOOKING_SEND_CONFIRMATION_SMS=false
       - APP_SMS_CONFIRMATION_ENABLED=false
-      - APP_spring.profiles.active=default,fakeauthentication
+      - APP_spring.profiles.active=default
       - APP_VAULT_ADDR=https://vault.lab.hcom
       - APP_VAULT_USER_ID=staging1-ba-01
       - APP_VAULT_TIMEOUT=60
