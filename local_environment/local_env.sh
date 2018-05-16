@@ -265,7 +265,7 @@ function help {
     echo "Commands:"
     echo "start                                             Start the local environment, with no front-end apps (BA)"
     echo "start -ba-version <ba-version> [-no-ba-stub]      Start the local environment, using the BA version: <ba-version>"
-    echo "start -bma-version <bma-version> [-no-bma-stub]   Start the local environment, using the BA version: <ba-version>"
+    echo "start -bma-version <bma-version> [-no-bma-stub]   Start the local environment, using the BMA version: <bma-version>"
     echo "stop                                              Stop the local environment"
     echo "status                                            Print the local environment status"
     echo "start-app <app_id>                                Start only the specified app ($(for APP in "${APPS[@]}"; do echo -n " ${APP}"; done) )"
