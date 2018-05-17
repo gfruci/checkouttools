@@ -26,6 +26,7 @@ cd ${PREV_DIR}
 START_MODE=
 BA_VERSION=
 BA_TYPE=
+SKIP_UPDATE=
 
 APPS=( "mvt" "ba" "checkito" "nginx" "styxpres" )
 
@@ -179,7 +180,18 @@ function setup {
     git fetch >> ${SCRIPT_DIR}/logs/startup.log 2>&1
     git status | grep "origin/master"
 
-    update_env_apps_images;
+	NO_UPDATE=0
+	for var in "$@"
+	do
+	  if [ ${var} = "-skip-update" ]
+	  then
+	    NO_UPDATE=1
+	  fi
+	done
+	if [ ${NO_UPDATE} -lt 1 ]
+	then
+	  update_env_apps_images;
+	fi
 
     echo "done"
 }
@@ -234,11 +246,11 @@ function status {
 function help {
     echo "Usage: $0 <command> <options>"
     echo "Commands:"
-    echo "start -ba-version <ba-version> [-no-stub]     Start the local environment, using the BA version: <ba-version>"
-    echo "stop                                          Stop the local environment"
-    echo "status                                        Print the local environment status"
-    echo "start-app <app_id>                            Start only the specified app ($(for APP in "${APPS[@]}"; do echo -n " ${APP}"; done) )"
-    echo "stop-app <app_id>                             Stop only the specified app ($(for APP in "${APPS[@]}"; do echo -n " ${APP}"; done) )"
+    echo "start -ba-version <ba-version> [-no-stub] [-skip-update]     Start the local environment, using the BA version: <ba-version>"
+    echo "stop                                                         Stop the local environment"
+    echo "status                                                       Print the local environment status"
+    echo "start-app <app_id>                                           Start only the specified app ($(for APP in "${APPS[@]}"; do echo -n " ${APP}"; done) )"
+    echo "stop-app <app_id>                                            Stop only the specified app ($(for APP in "${APPS[@]}"; do echo -n " ${APP}"; done) )"
     echo
     exit 0
 }
