@@ -316,10 +316,14 @@ All the local environment application logs are appended under the folder `logs`.
 The fixed BA debugging port is `1901`
 You can change this in the local_environment `<local_environment_root_folder>/docker-compose.yml`, but if need to do it please make it configurable via the startup script.
 
+The remote JMX port is exposed on `38007`
+
 ### BMA DEBUG
 
 The fixed BMA debugging port is `2001`
 You can change this in the local_environment `<local_environment_root_folder>/docker-compose.yml`, but if need to do it please make it configurable via the startup script.
+
+The remote JMX port is exposed on `39007`
 
 ### BCA DEBUG (plan)
 
