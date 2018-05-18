@@ -26,7 +26,6 @@ cd ${PREV_DIR}
 START_MODE=
 BA_VERSION=
 BA_TYPE=
-SKIP_UPDATE=
 
 APPS=( "mvt" "ba" "checkito" "nginx" "styxpres" )
 
