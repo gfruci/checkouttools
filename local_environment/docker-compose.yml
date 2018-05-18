@@ -158,7 +158,7 @@ services:
       - APP_com.sun.management.jmxremote.ssl=false
       - APP_com.sun.management.jmxremote.local.only=false
       - APP_java.rmi.server.hostname=127.0.0.1
-      - APP_com.sun.management.jmxremote.rmi.port=38007      
+      - APP_com.sun.management.jmxremote.rmi.port=38007
 
       # Proxy resources
       #      - APP_http.proxyHost=docker.for.mac.localhost
@@ -255,6 +255,7 @@ services:
     container_name: bma
     ports:
       - "2001:1901"
+      - "39007:38007"
     volumes:
       - mvt:/mvt
     environment:
@@ -353,12 +354,21 @@ services:
       - APP_PAYMENT_OPTION_SERVICE_URL=http://checkito:8089/PaymentOptions/v2
       - APP_bpins.baseUrl=https://checkito:8189
 
+      #remote jmx
+      - APP_com.sun.management.jmxremote=true
+      - APP_com.sun.management.jmxremote.port=38007
+      - APP_com.sun.management.jmxremote.authenticate=false
+      - APP_com.sun.management.jmxremote.ssl=false
+      - APP_com.sun.management.jmxremote.local.only=false
+      - APP_java.rmi.server.hostname=127.0.0.1
+      - APP_com.sun.management.jmxremote.rmi.port=38007
+
   bma_no_stub:
     image: registry.docker.hcom/hotels/bma:${BMA_VERSION}
     container_name: bma
     ports:
       - "2001:1901"
-      - "38007:38007"
+      - "39007:38007"
     volumes:
       - mvt:/mvt
     environment:
