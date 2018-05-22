@@ -378,6 +378,15 @@ If you need to enable the local proxy you can modify the following configuration
   $ git config core.autocrlf input
   ```
 
+* If you got ```2 matches found based on name: network localenvironment_default is ambiguous``` during startup
+  
+  This error means that you have two **localenvironment_default**.
+  
+  You can check it with the ```docker network ls``` command.
+  
+  You can solve this error by removing one of the localenvironment_default network from the list.  
+  To do this yous should use the ```docker network rm <networkid>``` command. 
+
 ## FAQ
 
 TBW
