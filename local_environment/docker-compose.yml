@@ -159,7 +159,7 @@ services:
       - APP_com.sun.management.jmxremote.ssl=false
       - APP_com.sun.management.jmxremote.local.only=false
       - APP_java.rmi.server.hostname=127.0.0.1
-      - APP_com.sun.management.jmxremote.rmi.port=38007      
+      - APP_com.sun.management.jmxremote.rmi.port=38007
 
       # Proxy resources
       #      - APP_http.proxyHost=docker.for.mac.localhost
@@ -251,10 +251,206 @@ services:
       #      - APP_proxyHost=docker.for.mac.localhost
       #      - APP_proxyPort=8888
 
+  bma:
+    image: registry.docker.hcom/hotels/bma:${BMA_VERSION}
+    container_name: bma
+    ports:
+      - "2001:1901"
+      - "39007:38007"
+    volumes:
+      - mvt:/mvt
+    environment:
+      - APP_CONFIG_ENVIRONMENT=hcom-devrom
+      - APP_jvm.route=hcom-devrom
+      - APP_javax.net.ssl.trustStore=/hcom/share/java/default/jre/lib/security/cacerts_plus_internal
+      - APP_javax.net.ssl.trustStorePassword=changeit
+      - APP_javax.net.ssl.keyStore=/hcom/servers/tomcat/certs/pvclient-karmalab.jks
+      - APP_javax.net.ssl.keyStorePassword=tiajya
+      - APP_DIONYSUS_TEMPLATES_DOWNLOAD_PATH=/hcom/servers/tomcat/temp
+      - APP_METRICS_GRAPHITE_REPORTING_INTERVAL=-1
+      - APP_METRICS_BOOTSTRAPPER_METRIC_REGISTRATION_ENABLED=false
+      - APP_METRICS_BOOTSTRAPPER_HEALTH_CHECK_REGISTRATION_ENABLED=false
+      - APP_COOKIELESS_DOMAIN_STATIC_ASSETS=a.staging1-cdn-hotels.com
+      - APP_DB_RO_DRIVERCLASSNAME=com.inet.tds.TdsDriver
+      - APP_DB_RW_DRIVERCLASSNAME=com.inet.tds.TdsDriver
+      - APP_CURRENCY_EXCHANGE_RATE_PROPERTY_FILE_REQUIRED_AT_STARTUP=false
+      - APP_MVT_BUSINESS_CONFIGURATION_LOCATION=file:///mvt/
+      - APP_DIONYSUS_UIPACK_HOME=file:///dionysusuipack/
+      - APP_EMAIL_TEMPLATES_BASEPATH=file:./appconfig/templates/
+      - APP_LIS_EAPID=0
+      - APP_BOOKING_SEND_CONFIRMATION_SMS=false
+      - APP_SMS_CONFIRMATION_ENABLED=false
+      - APP_spring.profiles.active=default
+      - APP_VAULT_ADDR=https://vault.lab.hcom
+      - APP_VAULT_USER_ID=staging1-bma-01
+      - APP_VAULT_TIMEOUT=60
+      - APP_TOMCAT_EXECUTOR_MAX_THREADS=50
+      - APP_TOMCAT_EXECUTOR_MIN_SPARE_THREADS=10
+      - APP_TOMCAT_EXECUTOR_MAX_IDLE_TIME=20000
+      - APP_TOMCAT_EXECUTOR_MAX_QUEUE_SIZE=30
+      - APP_DB_RO_URL="jdbc:inetdae7://HCOM_RO_staging.karmalab.net?database=HCOM_EMEA_PROD"
+      - APP_DB_RO_USERNAME=emea_appRO
+      - APP_DB_RO_PASSWORD=emea_appRO
+      - APP_DB_RW_URL="jdbc:inetdae7://HCOM_EMEA_PROD_staging.karmalab.net?database=HCOM_EMEA_PROD"
+      - APP_DB_RW_USERNAME=emea_app
+      - APP_DB_RW_PASSWORD=emea_app
+      - APP_DSC_DATASTAX_SSL_ENABLED=false
+      - APP_DSC_DATASTAX_KEYSPACE_NAME=hermes
+      - APP_LVS_CLIENT_BASE_URL=http://hcomcdslivevisitsservice.staging.hcom
+      - APP_DIONYSUS_TEMPLATE_PATH=http://dispatcherapp.staging1.hcom/templates/dionysus_ui_pack_templates-63.0.zip
+      - APP_LOYALTY_REST_CLIENT_CONNECT_TIMEOUT=60000
+      - APP_LOYALTY_REST_CLIENT_READ_TIMEOUT=60000
+      - APP_LOYALTY_ESTIMATION_SERVICE_CLIENT_READ_TIMEOUT=60000
+      - APP_LOYALTY_ESTIMATION_SERVICE_CLIENT_CONNECTION_TIMEOUT=60000
+      - APP_BPAS_ON_PAYMENT_OPTION_REQUEST_CIRCUIT_BREAKER_TIMEOUT_MS=60000
+
+      # Development overrides
+      - JAVA_JVM_ARGS=-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=1901
+      - APP_UNIFIED_DATA_TOOLKIT_ENABLED=true
+      - APP_LOCALIZATION_MESSAGE_PARALLEL_INITIALIZATION_ENABLED=true
+      - APP_MVT_CONFIGURATION_PARALLEL_INITIALIZATION_ENABLED=true
+      - APP_CACHE_PRELOAD_ENABLED=false
+      - APP_PSID_SERVICE_ENABLED=false
+      - APP_WEBSITE_DOMAIN_DISCRIMINATOR=dev-
+      #- APP_DSC_STUB_MODE_ENABLED=true
+
+      # Not supported on checkito yet
+      - APP_FENCED_VAP_ENABLED=false
+      - APP_UNBRANDED_VIP_VAP_ENABLED=false
+      - APP_CANCELLATION_FLOW_SWITCH=OMS_CANCELLATION_FLOW
+
+      # Checkito resources
+      - APP_DOSSIER_SERVICES_SCHEME=http
+      - APP_DOSSIER_SERVICES_HOST=checkito
+      - APP_DOSSIER_SERVICES_PORT=8089
+      - APP_DOSSIER_BASE_URL=http://checkito:8089/dossier
+      - APP_EMAIL_SERVER_HOSTNAME=checkito
+      - APP_EMAIL_SERVER_PORT=25
+      - APP_LIS_DASUPPORT_BOOKING_XML_API_HOST=checkito
+      - APP_LIS_DASUPPORT_BOOKING_XML_API_PLAIN_URL=http://checkito:8089/
+      - APP_LIS_DASUPPORT_BOOKING_XML_API_PORT=8089
+      - APP_LIS_DASUPPORT_XML_API_HOST=checkito
+      - APP_LIS_DASUPPORT_XML_API_PLAIN_URL=http://checkito:8089/
+      - APP_LIS_DASUPPORT_XML_API_PORT=8089
+      - APP_PAYMENT_VAULT_SERVICE_HOST=checkito:8189
+      - APP_PAYMENT_VAULT_SERVICE_ACCESS_PROTOCOL=https
+      - APP_PROPERTY_CATALOGUE_SERVICE_BASE_URL=http://checkito:8089/property_catalogue_svc
+      - APP_LOYALTY_SERVICE_HOST=checkito:8089
+      - APP_STORED_VALUE_GATEWAY_ACCESS_PROTOCOL=https
+      - APP_STORED_VALUE_GATEWAY_HOST=checkito:8189
+      - APP_ORDER_SERVICE_URL=http://checkito:8089/OrderService?wsdl
+      - APP_customer.data.store.svc=http://checkito:8089/customer_data_store_svc/v1_0
+      - APP_CRYPTO_SERVICE_URL=http://checkito:8089/cryptosvc/cryptosvc.asmx
+      - APP_CUSTOMER_AUTH_APP_BASE_URL=http://checkito:8089
+      - APP_SPS_HOST=checkito:8189
+      - APP_VPS_HOST=checkito:8089
+      - APP_CAR_TRAWLER_BASE_URL=checkito:8089
+      - APP_CAR_TRAWLER_SECURE_URL_ENABLED=false
+      - APP_BPAS_HOST=checkito:8089
+      - APP_COUPON_SERVICE_HOST=checkito
+      - APP_COUPON_SERVICE_PORT=8089
+      - APP_BRAVOS_API_DOMAIN_NAME=checkito
+      - APP_BRAVOS_API_PORT=8089
+      - APP_PAYMENT_OPTION_SERVICE_HOST=checkito:8089
+      - APP_PAYMENT_OPTION_SERVICE_URL=http://checkito:8089/PaymentOptions/v2
+      - APP_bpins.baseUrl=https://checkito:8189
+
+      #remote jmx
+      - APP_com.sun.management.jmxremote=true
+      - APP_com.sun.management.jmxremote.port=38007
+      - APP_com.sun.management.jmxremote.authenticate=false
+      - APP_com.sun.management.jmxremote.ssl=false
+      - APP_com.sun.management.jmxremote.local.only=false
+      - APP_java.rmi.server.hostname=127.0.0.1
+      - APP_com.sun.management.jmxremote.rmi.port=38007
+
+  bma_no_stub:
+    image: registry.docker.hcom/hotels/bma:${BMA_VERSION}
+    container_name: bma
+    ports:
+      - "2001:1901"
+      - "39007:38007"
+    volumes:
+      - mvt:/mvt
+    environment:
+      - APP_CONFIG_ENVIRONMENT=hcom-devrom
+      - APP_jvm.route=hcom-devrom
+      - APP_javax.net.ssl.trustStore=/hcom/share/java/default/jre/lib/security/cacerts_plus_internal
+      - APP_javax.net.ssl.trustStorePassword=changeit
+      - APP_javax.net.ssl.keyStore=/hcom/servers/tomcat/certs/pvclient-karmalab.jks
+      - APP_javax.net.ssl.keyStorePassword=tiajya
+      - APP_METRICS_GRAPHITE_REPORTING_INTERVAL=-1
+      - APP_METRICS_BOOTSTRAPPER_METRIC_REGISTRATION_ENABLED=false
+      - APP_METRICS_BOOTSTRAPPER_HEALTH_CHECK_REGISTRATION_ENABLED=false
+      - APP_COOKIELESS_DOMAIN_STATIC_ASSETS=a.staging1-cdn-hotels.com
+      - APP_DB_RO_DRIVERCLASSNAME=com.inet.tds.TdsDriver
+      - APP_DB_RW_DRIVERCLASSNAME=com.inet.tds.TdsDriver
+      - APP_CURRENCY_EXCHANGE_RATE_PROPERTY_FILE_REQUIRED_AT_STARTUP=false
+      - APP_MVT_BUSINESS_CONFIGURATION_LOCATION=file:///mvt/
+      - APP_EMAIL_TEMPLATES_BASEPATH=file:./appconfig/templates/
+      - APP_LIS_EAPID=0
+      - APP_BOOKING_SEND_CONFIRMATION_SMS=false
+      - APP_SMS_CONFIRMATION_ENABLED=false
+      - APP_spring.profiles.active=default
+      - APP_VAULT_ADDR=https://vault.lab.hcom
+      - APP_VAULT_USER_ID=staging1-bma-01
+      - APP_VAULT_TIMEOUT=60
+      - APP_TOMCAT_EXECUTOR_MAX_THREADS=50
+      - APP_TOMCAT_EXECUTOR_MIN_SPARE_THREADS=10
+      - APP_TOMCAT_EXECUTOR_MAX_IDLE_TIME=20000
+      - APP_TOMCAT_EXECUTOR_MAX_QUEUE_SIZE=30
+      - APP_DB_RO_URL="jdbc:inetdae7://HCOM_RO_staging.karmalab.net?database=HCOM_EMEA_PROD"
+      - APP_DB_RO_USERNAME=emea_appRO
+      - APP_DB_RO_PASSWORD=emea_appRO
+      - APP_DB_RW_URL="jdbc:inetdae7://HCOM_EMEA_PROD_staging.karmalab.net?database=HCOM_EMEA_PROD"
+      - APP_DB_RW_USERNAME=emea_app
+      - APP_DB_RW_PASSWORD=emea_app
+      - APP_DSC_DATASTAX_SSL_ENABLED=false
+      - APP_DSC_DATASTAX_KEYSPACE_NAME=hermes
+      - APP_LVS_CLIENT_BASE_URL=http://hcomcdslivevisitsservice.staging.hcom
+      - APP_LOYALTY_REST_CLIENT_CONNECT_TIMEOUT=60000
+      - APP_LOYALTY_REST_CLIENT_READ_TIMEOUT=60000
+      - APP_LOYALTY_ESTIMATION_SERVICE_CLIENT_READ_TIMEOUT=60000
+      - APP_LOYALTY_ESTIMATION_SERVICE_CLIENT_CONNECTION_TIMEOUT=60000
+      - APP_BPAS_ON_PAYMENT_OPTION_REQUEST_CIRCUIT_BREAKER_TIMEOUT_MS=60000
+
+      # Development overrides
+      - JAVA_JVM_ARGS=-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=1901
+      - APP_UNIFIED_DATA_TOOLKIT_ENABLED=true
+      - APP_LOCALIZATION_MESSAGE_PARALLEL_INITIALIZATION_ENABLED=true
+      - APP_MVT_CONFIGURATION_PARALLEL_INITIALIZATION_ENABLED=true
+      - APP_CACHE_PRELOAD_ENABLED=false
+      - APP_PSID_SERVICE_ENABLED=false
+      - APP_WEBSITE_DOMAIN_DISCRIMINATOR=dev-
+      #- APP_DSC_STUB_MODE_ENABLED=true
+
+      # Not supported on checkito yet
+      - APP_FENCED_VAP_ENABLED=false
+      - APP_UNBRANDED_VIP_VAP_ENABLED=false
+      - APP_CANCELLATION_FLOW_SWITCH=OMS_CANCELLATION_FLOW
+
+      #remote jmx
+      - APP_com.sun.management.jmxremote=true
+      - APP_com.sun.management.jmxremote.port=38007
+      - APP_com.sun.management.jmxremote.authenticate=false
+      - APP_com.sun.management.jmxremote.ssl=false
+      - APP_com.sun.management.jmxremote.local.only=false
+      - APP_java.rmi.server.hostname=127.0.0.1
+      - APP_com.sun.management.jmxremote.rmi.port=38007
+
+      # Proxy resources
+      #      - APP_http.proxyHost=docker.for.mac.localhost
+      #      - APP_http.proxyPort=8888
+      #      - APP_https.proxyHost=docker.for.mac.localhost
+      #      - APP_https.proxyPort=8888
+      #      - APP_proxyHost=docker.for.mac.localhost
+      #      - APP_proxyPort=8888
+
   checkito:
     image: registry.docker.hcom/hotels/checkito:latest
     container_name: checkito
     ports:
+      - "2201:1901" # expose checkito debug port but it's the debug port for BA too
       - "8089:8089"
       - "8189:8189"
 

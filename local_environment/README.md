@@ -205,6 +205,7 @@ Move under the `local_environment`, give execution permissions to the `local_env
     Usage: /usr/local/bin/local_env <command> <options>
     Commands:
     start -ba-version <ba-version> [-no-stub] [-skip-update]     Start the local environment, using the BA version: <ba-version>
+    start -bma-version <bma-version> [-no-stub]                  Start the local environment, using the BMA version: <bma-version>
     stop                                                         Stop the local environment
     status                                                       Print the local environment status
     start-app <app_id>                                           Start only the specified app ( mvt ba checkito nginx styxpres )
@@ -221,7 +222,17 @@ If you're using Git BASH and the above command is not working you may need to us
 
 #### Start
 
-    ./local_env.sh start -ba-version <ba-version>
+The environment can be started with some options.
+
+##### Start the environment without Front End Apps 
+
+    ./local_env.sh start
+
+##### Start the environment with Front End Apps 
+
+    ./local_env.sh start -ba-version <ba-version> -bma-version <bma-version>
+    
+If you need only 1 of the apps just skip the other.
 
 In order to check that everything works you can open the following [stubbed hotel link](https://www.dev-hotels.com/booking/deep_link.html?pos=HCOM_US&locale=en_US&mvariant=1327.0%2C1943.1%2C1544.1%2C1400.1%2C985.1%2C1156.0%2C810.1%2C1881.1%2C316.1%2C1947.1%2C1539.1%2C839.2%2C1306.1%2C1735.1%2C4418.1&arrivalDate=09-12-2018&departureDate=10-12-2018&currency=USD&rooms%5B0%5D.numberOfAdults=2&rooms%5B0%5D.numberOfChildren=0&hotelId=434772&roomTypeCode=200310048&rateCode=201876673&businessModel=MERCHANT&ratePlanConfiguration=REGULAR&hotelContractCardinality=SINGLE)
 
@@ -252,6 +263,13 @@ In order to check that everything works you can open the following [stubbed hote
 
 * `./local_env.sh stop-app ba`
 * `./local_env.sh start-app checkito`
+
+### Checkito
+
+Checkito is running with default settings:
+
+* http: 8089
+* https: 8189
 
 ### BA testing
 
@@ -298,6 +316,24 @@ All the local environment application logs are appended under the folder `logs`.
 The fixed BA debugging port is `1901`
 You can change this in the local_environment `<local_environment_root_folder>/docker-compose.yml`, but if need to do it please make it configurable via the startup script.
 
+The remote JMX port is exposed on `38007`
+
+### BMA DEBUG
+
+The fixed BMA debugging port is `2001`
+You can change this in the local_environment `<local_environment_root_folder>/docker-compose.yml`, but if need to do it please make it configurable via the startup script.
+
+The remote JMX port is exposed on `39007`
+
+### BCA DEBUG (plan)
+
+The fixed BCA debugging port is `2101`
+You can change this in the local_environment `<local_environment_root_folder>/docker-compose.yml`, but if need to do it please make it configurable via the startup script.
+
+### Checkito DEBUG
+
+The fixed BA debugging port is `2201`
+
 ### Proxying
 
 Local proxy is not supported via the startup script yet.
@@ -341,6 +377,15 @@ If you need to enable the local proxy you can modify the following configuration
   ```sh
   $ git config core.autocrlf input
   ```
+
+* If you got ```2 matches found based on name: network localenvironment_default is ambiguous``` during startup
+  
+  This error means that you have two **localenvironment_default**.
+  
+  You can check it with the ```docker network ls``` command.
+  
+  You can solve this error by removing one of the localenvironment_default network from the list.  
+  To do this yous should use the ```docker network rm <networkid>``` command. 
 
 ## FAQ
 

@@ -25,9 +25,10 @@ cd ${PREV_DIR}
 
 START_MODE=
 BA_VERSION=
-BA_TYPE=
+BMA_VERSION=
+STUB_STATUS=
 
-APPS=( "mvt" "ba" "checkito" "nginx" "styxpres" )
+APPS=( "mvt" "ba" "bma" "checkito" "nginx" "styxpres" )
 
 declare -A APPS_CONF=(\
     ["mvt,update_cmd"]="docker pull registry.docker.hcom/hotels/mvt:latest >> ${SCRIPT_DIR}/logs/startup.log 2>&1"\
@@ -39,6 +40,8 @@ declare -A APPS_CONF=(\
     ["checkito,update_cmd"]="docker pull registry.docker.hcom/hotels/checkito:latest >> ${SCRIPT_DIR}/logs/startup.log 2>&1"\
     ["ba,start_status_cmd"]="grep \"ba.*Server startup\" ${SCRIPT_DIR}/logs/ba.log"\
     ["ba,stop_status_cmd"]="grep -e \"ba.*ERROR\" ${SCRIPT_DIR}/logs/ba.log | grep -v \"locsClientLoader\""\
+    ["bma,start_status_cmd"]="grep \"bma.*Server startup\" ${SCRIPT_DIR}/logs/bma.log"\
+    ["bma,stop_status_cmd"]="grep -e \"bma.*ERROR\" ${SCRIPT_DIR}/logs/bma.log | grep -v \"locsClientLoader\""\
 )
 
 #####################
@@ -101,28 +104,28 @@ function update_env_apps_images {
 # START/STOP/STATUS FUNCTIONS #
 ###############################
 
-function setup_ba_version {
+function setup_app_versions {
     while [[ $# > 0 ]]; do
       case $1 in
         -ba-version)
           BA_VERSION=$2
+          export BA_VERSION=${BA_VERSION}
           shift
           ;;
         -no-stub)
-          BA_TYPE=_no_stub
+          STUB_STATUS=_no_stub
+          shift
+          ;;
+        -bma-version)
+          BMA_VERSION=$2
+          export BMA_VERSION=${BMA_VERSION}
           shift
           ;;
       esac
       shift
     done
 
-    if [[ ! ${BA_VERSION} ]]; then
-        echo "Error! BA version NOT specified (missing -ba-version parameter)!"
-        help;
-        exit 1
-    fi
 
-    export BA_VERSION=${BA_VERSION}
 }
 
 function start-app {
@@ -133,8 +136,34 @@ function start-app {
 
     if [ "${APP}" == "ba" ]
     then
-        setup_ba_version $@
-        APP_TYPE=${BA_TYPE}
+        APP_TYPE=${STUB_STATUS}
+        if [ "${BA_VERSION}" == "" ]
+        then
+            if [ "${START_MODE}" == "start-all" ]
+            then
+                return 1;
+            else
+                echo "Error! BA version NOT specified (missing -ba-version parameter)!"
+                help;
+                exit 1
+            fi
+        fi
+    fi
+
+    if [ "${APP}" == "bma" ]
+    then
+        APP_TYPE=${STUB_STATUS}
+        if [ "${BMA_VERSION}" == "" ]
+        then
+            if [ "${START_MODE}" == "start-all" ]
+            then
+                return 1;
+            else
+                echo "Error! BMA version NOT specified (missing -bma-version parameter)!"
+                help;
+                exit 1
+            fi
+        fi
     fi
 
     cd ${SCRIPT_DIR}
@@ -142,9 +171,9 @@ function start-app {
     cd ${PREV_DIR}
 
     watch "Starting ${APP} ..." "${APPS_CONF["${APP},start_status_cmd"]}" "${APPS_CONF["${APP},stop_status_cmd"]}"
-    RETURN_CODE=$?
+    WATCH_RETURN_CODE=$?
 
-    if [ "${RETURN_CODE}" -eq "0" ]
+    if [ "${WATCH_RETURN_CODE}" -eq "0" ]
     then
         echo -e "\n$COLOR_SUCCESS ${APP} started $COLOR_RESET"
     else
@@ -245,7 +274,9 @@ function status {
 function help {
     echo "Usage: $0 <command> <options>"
     echo "Commands:"
+    echo "start                                                        Start the local environment, with no front-end apps (BA)"
     echo "start -ba-version <ba-version> [-no-stub] [-skip-update]     Start the local environment, using the BA version: <ba-version>"
+    echo "start -bma-version <bma-version> [-no-bma-stub]              Start the local environment, using the BMA version: <bma-version>"
     echo "stop                                                         Stop the local environment"
     echo "status                                                       Print the local environment status"
     echo "start-app <app_id>                                           Start only the specified app ($(for APP in "${APPS[@]}"; do echo -n " ${APP}"; done) )"
@@ -253,6 +284,8 @@ function help {
     echo
     exit 0
 }
+
+setup_app_versions $@
 
 case "$1" in
 	start)
