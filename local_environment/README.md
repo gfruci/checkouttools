@@ -398,12 +398,16 @@ If you need to enable the local proxy you can modify the following configuration
     ...
     ```
     
-    delete all containers and images and run the environment again
+    Delete all containers and images and run the environment again. If the issue persists, see the section on resetting Windows credentials.
     
     ```
     docker rm $(docker ps -a -q)
     docker rmi $(docker images -q)
     ```
+    
+ * **Windows Credentials**: if you have recently changed your login password you will need to reconfigure the shared drive.
+    
+    Docker -> Settings -> Shared drives -> click "Reset credentials...", tick the checkbox next to the "C" drive again, click Apply, then docker prompts you for the new password.
     
 ## FAQ
 
