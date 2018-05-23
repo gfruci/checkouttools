@@ -204,8 +204,9 @@ Move under the `local_environment`, give execution permissions to the `local_env
     $ ./local_env.sh
     Usage: /usr/local/bin/local_env <command> <options>
     Commands:
+    start [-skip-update]                                         Start the local environment, with no front-end apps
     start -ba-version <ba-version> [-no-stub] [-skip-update]     Start the local environment, using the BA version: <ba-version>
-    start -bma-version <bma-version> [-no-stub]                  Start the local environment, using the BMA version: <bma-version>
+    start -bma-version <bma-version> [-no-stub]  [-skip-update]  Start the local environment, using the BMA version: <bma-version>
     stop                                                         Stop the local environment
     status                                                       Print the local environment status
     start-app <app_id>                                           Start only the specified app ( mvt ba checkito nginx styxpres )
@@ -366,17 +367,18 @@ If you need to enable the local proxy you can modify the following configuration
     ```docker logout```
 
 * Locally built BA does not start with "no such file or directory" error on Windows?
-  ```
-  ba | standard_init_linux.go:185: exec user process caused "no such file or directory"
-  ba exited with code 1
-  ```
+    
+    ```
+    ba | standard_init_linux.go:185: exec user process caused "no such file or directory"
+    ba exited with code 1
+    ```
   This error usually means you are trying to run a sh/bash script with Windows-style endings
   in Docker, most likely **init_with_vault.sh** in BA. Set this file's line endings from CRLF to LF.
 
   It is also recommended to configure your git to checkout files as-is, without line-ending conversion:
-  ```sh
-  $ git config core.autocrlf input
-  ```
+    ```sh
+    $ git config core.autocrlf input
+    ```
 
 * If you got ```2 matches found based on name: network localenvironment_default is ambiguous``` during startup
   
@@ -387,6 +389,22 @@ If you need to enable the local proxy you can modify the following configuration
   You can solve this error by removing one of the localenvironment_default network from the list.  
   To do this yous should use the ```docker network rm <networkid>``` command. 
 
+* If styxpres does not start and the styxpres.log contains the following error:
+    ```
+    styxpres/origins.yaml does not exist, waiting for one for 60sec
+    styxpres/origins.yaml does not exist, waiting for one for 59sec
+    styxpres/origins.yaml does not exist, waiting for one for 58sec
+    styxpres/origins.yaml does not exist, waiting for one for 57sec
+    ...
+    ```
+    
+    delete all containers and images and run the environment again
+    
+    ```
+    docker rm $(docker ps -a -q)
+    docker rmi $(docker images -q)
+    ```
+    
 ## FAQ
 
 TBW
