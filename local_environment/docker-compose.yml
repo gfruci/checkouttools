@@ -5,7 +5,7 @@ volumes:
 services:
 
   styxpres:
-    image: registry.docker.hcom/hotels/styxpres:release
+    image: 181651482125.dkr.ecr.us-west-2.amazonaws.com/hotels/styxpres:release
     container_name: styxpres
     ports:
       - "9000:9000"
@@ -45,13 +45,13 @@ services:
       - ./certs/:/certs/
 
   mvt:
-    image: registry.docker.hcom/hotels/mvt:latest
+    image: 181651482125.dkr.ecr.us-west-2.amazonaws.com/hotels/mvt:latest
     container_name: mvt
     volumes:
       - mvt:/mvt
 
   ba:
-    image: registry.docker.hcom/hotels/ba:${BA_VERSION}
+    image: 181651482125.dkr.ecr.us-west-2.amazonaws.com/hotels/ba:${BA_VERSION}
     container_name: ba
     ports:
       - "1901:1901"
@@ -170,7 +170,7 @@ services:
       #      - APP_proxyPort=8888
 
   ba_no_stub:
-    image: registry.docker.hcom/hotels/ba:${BA_VERSION}
+    image: 181651482125.dkr.ecr.us-west-2.amazonaws.com/hotels/ba:${BA_VERSION}
     container_name: ba
     ports:
       - "1901:1901"
@@ -252,7 +252,7 @@ services:
       #      - APP_proxyPort=8888
 
   bma:
-    image: registry.docker.hcom/hotels/bma:${BMA_VERSION}
+    image: 181651482125.dkr.ecr.us-west-2.amazonaws.com/hotels/bma:${BMA_VERSION}
     container_name: bma
     ports:
       - "2001:1901"
@@ -366,7 +366,7 @@ services:
       - APP_com.sun.management.jmxremote.rmi.port=38007
 
   bma_no_stub:
-    image: registry.docker.hcom/hotels/bma:${BMA_VERSION}
+    image: 181651482125.dkr.ecr.us-west-2.amazonaws.com/hotels/bma:${BMA_VERSION}
     container_name: bma
     ports:
       - "2001:1901"
@@ -448,7 +448,7 @@ services:
       #      - APP_proxyPort=8888
 
   checkito:
-    image: registry.docker.hcom/hotels/checkito:latest
+    image: 181651482125.dkr.ecr.us-west-2.amazonaws.com/hotels/checkito:latest
     container_name: checkito
     ports:
       - "2201:1901" # expose checkito debug port but it's the debug port for BA too
@@ -456,7 +456,7 @@ services:
       - "8189:8189"
 
   #  configsvc:
-  #    image: registry.docker.hcom/hotels/cws:latest
+  #    image: 181651482125.dkr.ecr.us-west-2.amazonaws.com/hotels/cws:latest
   #    container_name: cws
   #    ports:
   #      - "8280:8080"
