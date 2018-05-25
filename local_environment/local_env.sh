@@ -89,8 +89,8 @@ function update_env_apps_images {
         echo -e "\n$COLOR_HEADER Login to Docker $COLOR_RESET"
         docker_login
       else
-        echo -e "\ndocker_login command not found. Please check https://confluence/display/HCOMCheckout/Payments+-+AWS+ECR+Docker+Login"
-        echo -e "OR login to docker manually!"
+        echo -e "\nOps, docker_login command not found, please login to docker manually!"
+        echo -e "For more info on docker_login command check https://confluence/display/HCOMCheckout/Payments+-+AWS+ECR+Docker+Login"
         exit 1
       fi
     fi
