@@ -31,13 +31,13 @@ STUB_STATUS=
 APPS=( "mvt" "ba" "bma" "checkito" "nginx" "styxpres" )
 
 declare -A APPS_CONF=(\
-    ["mvt,update_cmd"]="docker pull registry.docker.hcom/hotels/mvt:latest >> ${SCRIPT_DIR}/logs/startup.log 2>&1"\
+    ["mvt,update_cmd"]="docker pull 181651482125.dkr.ecr.us-west-2.amazonaws.com/hotels/mvt:latest >> ${SCRIPT_DIR}/logs/startup.log 2>&1"\
     ["styxpres,start_status_cmd"]="grep \"Started styx server in\" ${SCRIPT_DIR}/logs/styxpres.log"\
     ["styxpres,stop_status_cmd"]="grep -e \"styxpres.*ERROR\" ${SCRIPT_DIR}/logs/styxpres.log | grep -v \"locsClientLoader\""\
-    ["styxpres,update_cmd"]="docker pull registry.docker.hcom/hotels/styxpres:release >> ${SCRIPT_DIR}/logs/startup.log 2>&1"\
+    ["styxpres,update_cmd"]="docker pull 181651482125.dkr.ecr.us-west-2.amazonaws.com/hotels/styxpres:release >> ${SCRIPT_DIR}/logs/startup.log 2>&1"\
     ["checkito,start_status_cmd"]="grep \"checkito.*Checkito listening for HTTP requests\" ${SCRIPT_DIR}/logs/checkito.log"\
     ["checkito,stop_status_cmd"]="grep -e \"checkito.*ERROR\" ${SCRIPT_DIR}/logs/checkito.log"\
-    ["checkito,update_cmd"]="docker pull registry.docker.hcom/hotels/checkito:latest >> ${SCRIPT_DIR}/logs/startup.log 2>&1"\
+    ["checkito,update_cmd"]="docker pull 181651482125.dkr.ecr.us-west-2.amazonaws.com/hotels/checkito:latest >> ${SCRIPT_DIR}/logs/startup.log 2>&1"\
     ["ba,start_status_cmd"]="grep \"ba.*Server startup\" ${SCRIPT_DIR}/logs/ba.log"\
     ["ba,stop_status_cmd"]="grep -e \"ba.*ERROR\" ${SCRIPT_DIR}/logs/ba.log | grep -v \"locsClientLoader\""\
     ["bma,start_status_cmd"]="grep \"bma.*Server startup\" ${SCRIPT_DIR}/logs/bma.log"\
@@ -81,11 +81,18 @@ function watch {
 }
 
 function update_env_apps_images {
-    docker pull registry.docker.hcom/hotels/mvt:latest > /dev/null 2>&1
+    docker pull 181651482125.dkr.ecr.us-west-2.amazonaws.com/hotels/mvt:latest > /dev/null 2>&1
 
     if [ "$?" -eq "1" ]; then
-      echo -e "\n$COLOR_HEADER Login to Docker $COLOR_RESET"
-      docker login registry.docker.hcom
+      command -v docker_login > /dev/null 2>&1
+      if [ "$?" -eq "0" ]; then
+        echo -e "\n$COLOR_HEADER Login to Docker $COLOR_RESET"
+        docker_login
+      else
+        echo -e "\ndocker_login command not found. Please check https://confluence/display/HCOMCheckout/Payments+-+AWS+ECR+Docker+Login"
+        echo -e "OR login to docker manually!"
+        exit 1
+      fi
     fi
 
 
