@@ -28,7 +28,7 @@ BA_VERSION=
 BMA_VERSION=
 STUB_STATUS=
 
-APPS=( "mvt" "ba" "bma" "checkito" "nginx" "styxpres" )
+APPS=( "mvt" "ba" "bma" "checkito" "styxpres" "nginx")
 
 declare -A APPS_CONF=(\
     ["mvt,update_cmd"]="docker pull 181651482125.dkr.ecr.us-west-2.amazonaws.com/hotels/mvt:latest >> ${SCRIPT_DIR}/logs/startup.log 2>&1"\
