@@ -30,6 +30,8 @@ services:
       - APPLICATION_NAME=styxpres
       - SECRETS_PATH=secret/app/styxpres/staging
       - FETCH_CREDENTIALS=1
+      - VAULT_ROLE_ID=8c120b81-dca6-28a8-c1de-208792e1500a
+      - VAULT_SECRET_ID=a140e913-26ef-9b2c-59be-a62ffc070592
     volumes:
       - ./conf/:/styxconf
       - ./appcert/:/appcert
