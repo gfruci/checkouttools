@@ -73,28 +73,13 @@ For more details on how to migrate from Docker Toolbox read these:
 * https://docs.docker.com/docker-for-mac/docker-toolbox/
 * https://wiki.hcom/display/HTS/Upgrading+to+Docker+for+Mac
 
-### Mark internal registries as "Insecure"
-
-Add the insecure internal registries in `Docker -> Preferences -> Daemon -> Basic:`
-* registry.docker.hcom
-
-![add insecure registries](assets/add_insecure_registries.png)
-
-### Disable legacy registry
-
-add the disable-legacy-registry flag set to false in `Docker -> Preferences -> Daemon -> Advanced`
-
-![disable legacy registry](assets/disable_legacy_registry.png)
-
-*Note*: If you forgot to add the `disable-legacy-registry flag you may get the following error:
-
-    Error response from daemon: login attempt to http://registry.docker.hcom/v2/ failed with status: 500 Internal Server Error
-
 ### Login to the registry
+
+Setup you docker login script by following the guide at: https://confluence/display/HCOMCheckout/Payments+-+AWS+ECR+Docker+Login
 
 Login to registry using your SEA credentials
 
-    docker login registry.docker.hcom
+    docker_login
 ----
 *[WINDOWS]*:
 If you're using Git BASH and you get the following error:
@@ -103,7 +88,7 @@ If you're using Git BASH and you get the following error:
 
 you need to use the following command to login:
 
-    winpty docker login registry.docker.hcom
+    winpty docker_login
 ----
 
 ### Increase the docker resources
