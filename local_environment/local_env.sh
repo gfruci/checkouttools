@@ -23,6 +23,7 @@ cd ${PREV_DIR}
 # CONFIGS #
 #########################
 
+PROXY_CONFIG="-Dhttp.proxyHost=docker.for.mac.localhost -Dhttp.proxyPort=8888 -Dhttps.proxyHost=docker.for.mac.localhost -DproxyHost=docker.for.mac.localhost -DproxyPort=8888"
 START_MODE=
 BA_VERSION=
 BMA_VERSION=
@@ -95,7 +96,6 @@ function update_env_apps_images {
       fi
     fi
 
-
     for APP in "${APPS[@]}"
     do
         UDPATE_CMD=${APPS_CONF["${APP},update_cmd"]}
@@ -131,8 +131,6 @@ function setup_app_versions {
       esac
       shift
     done
-
-
 }
 
 function start-app {
@@ -226,6 +224,19 @@ function setup {
 	if [ ${NO_UPDATE} -lt 1 ]
 	then
 	  update_env_apps_images;
+	fi
+
+	PROXY_ENABLED=0
+	for var in "$@"
+	do
+	  if [ ${var} = "-proxy" ]
+	  then
+	    PROXY_ENABLED=1
+	  fi
+	done
+	if [ ${PROXY_ENABLED} -lt 1 ]
+	then
+        export PROXY_CONFIG=${PROXY_CONFIG}
 	fi
 
     echo "done"
