@@ -98,7 +98,6 @@ function update_env_apps_images {
       fi
     fi
 
-
     for APP in "${APPS[@]}"
     do
         UDPATE_CMD=${APPS_CONF["${APP},update_cmd"]}
@@ -134,8 +133,6 @@ function setup_app_versions {
       esac
       shift
     done
-
-
 }
 
 function start-app {
