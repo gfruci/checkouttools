@@ -23,6 +23,7 @@ cd ${PREV_DIR}
 # CONFIGS #
 #########################
 
+PROXY_CONFIG="-Dhttp.proxyHost=docker.for.mac.localhost -Dhttp.proxyPort=8888 -Dhttps.proxyHost=docker.for.mac.localhost -Dhttps.proxyPort=8888 -DproxyHost=docker.for.mac.localhost -DproxyPort=8888"
 START_MODE=
 BA_VERSION=
 BMA_VERSION=
@@ -38,6 +39,8 @@ declare -A APPS_CONF=(\
     ["checkito,start_status_cmd"]="grep \"checkito.*Checkito listening for HTTP requests\" ${SCRIPT_DIR}/logs/checkito.log"\
     ["checkito,stop_status_cmd"]="grep -e \"checkito.*ERROR\" ${SCRIPT_DIR}/logs/checkito.log"\
     ["checkito,update_cmd"]="docker pull 181651482125.dkr.ecr.us-west-2.amazonaws.com/hotels/checkito:latest >> ${SCRIPT_DIR}/logs/startup.log 2>&1"\
+    ["nginx,start_status_cmd"]="grep -e \"nginx.*done\" ${SCRIPT_DIR}/logs/nginx.log"\
+    ["nginx,stop_status_cmd"]="grep -e \"nginx.*error\" ${SCRIPT_DIR}/logs/nginx.log"\
     ["ba,start_status_cmd"]="grep \"ba.*Server startup\" ${SCRIPT_DIR}/logs/ba.log"\
     ["ba,stop_status_cmd"]="grep -e \"ba.*ERROR\" ${SCRIPT_DIR}/logs/ba.log | grep -v \"locsClientLoader\""\
     ["bma,start_status_cmd"]="grep \"bma.*Server startup\" ${SCRIPT_DIR}/logs/bma.log"\
@@ -215,6 +218,7 @@ function setup {
     git fetch >> ${SCRIPT_DIR}/logs/startup.log 2>&1
     git status | grep "origin/master"
 
+    # skip update
 	NO_UPDATE=0
 	for var in "$@"
 	do
@@ -227,6 +231,16 @@ function setup {
 	then
 	  update_env_apps_images;
 	fi
+
+    # proxy
+	for var in "$@"
+	do
+	  if [ ${var} = "-proxy" ]
+	  then
+	    export PROXY_CONFIG=${PROXY_CONFIG}
+	    break;
+	  fi
+	done
 
     echo "done"
 }
@@ -281,14 +295,18 @@ function status {
 function help {
     echo "Usage: $0 <command> <options>"
     echo "Commands:"
-    echo "start [-skip-update]                                         Start the local environment, with no front-end apps (BA)"
-    echo "start -ba-version <ba-version> [-no-stub] [-skip-update]     Start the local environment, using the BA version: <ba-version>"
-    echo "start -bma-version <bma-version> [-no-stub] [-skip-update]   Start the local environment, using the BMA version: <bma-version>"
-    echo "stop                                                         Stop the local environment"
-    echo "status                                                       Print the local environment status"
-    echo "start-app <app_id>                                           Start only the specified app ($(for APP in "${APPS[@]}"; do echo -n " ${APP}"; done) )"
-    echo "stop-app <app_id>                                            Stop only the specified app ($(for APP in "${APPS[@]}"; do echo -n " ${APP}"; done) )"
+    echo "start [-skip-update] [-proxy]                                         Start the local environment, with no front-end apps (BA)"
+    echo "start -ba-version <ba-version> [-no-stub] [-skip-update] [-proxy]     Start the local environment, using the BA version: <ba-version>"
+    echo "start -bma-version <bma-version> [-no-stub] [-skip-update] [-proxy]   Start the local environment, using the BMA version: <bma-version>"
+    echo "stop                                                                  Stop the local environment"
+    echo "status                                                                Print the local environment status"
+    echo "start-app <app_id>                                                    Start only the specified app ($(for APP in "${APPS[@]}"; do echo -n " ${APP}"; done) )"
+    echo "stop-app <app_id>                                                     Stop only the specified app ($(for APP in "${APPS[@]}"; do echo -n " ${APP}"; done) )"
     echo
+    echo "Options:"
+    echo "-no-stub                                                              Start the local environment with using checkito as mocking server"
+    echo "-skip-update                                                          Skip the update of checkito and styxpres. Warning: doing so you may have an outdated environment"
+    echo "-proxy                                                                Set the local environment proxy host to docker.for.mac.localhost:8888"
     exit 0
 }
 

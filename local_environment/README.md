@@ -34,14 +34,10 @@ During the installation few setup choice have to made. If you're not sure what t
 
 ### Install Docker CE (Mac/Win)
 
-Download, install and launch Docker CE **17.09.x**
+Download, install and launch Docker CE
 
-* WIN: https://docs.docker.com/docker-for-windows/release-notes/#docker-community-edition-17091-ce-win42-2017-12-11
-* MAC: https://docs.docker.com/docker-for-mac/release-notes/#docker-community-edition-17091-ce-mac42-2017-12-11
-
-**Important**: DO NOT UPGRADE. The hcom docker registry is not compatible with newer versions.
-
-![do not upgrade](assets/do_not_upgrade.png)
+* WIN: https://store.docker.com/editions/community/docker-ce-desktop-windows
+* MAC: https://store.docker.com/editions/community/docker-ce-desktop-mac
 
 **Note:** If your are migrating from Docker Toolbox you will be asked to import your existing docker machine.
 In case you have any docker image that you want to keep, select "Copy" - Otherwise "Skip"
@@ -189,13 +185,18 @@ Move under the `local_environment`, give execution permissions to the `local_env
     $ ./local_env.sh
     Usage: /usr/local/bin/local_env <command> <options>
     Commands:
-    start [-skip-update]                                         Start the local environment, with no front-end apps
-    start -ba-version <ba-version> [-no-stub] [-skip-update]     Start the local environment, using the BA version: <ba-version>
-    start -bma-version <bma-version> [-no-stub]  [-skip-update]  Start the local environment, using the BMA version: <bma-version>
-    stop                                                         Stop the local environment
-    status                                                       Print the local environment status
-    start-app <app_id>                                           Start only the specified app ( mvt ba checkito nginx styxpres )
-    stop-app <app_id>                                            Stop only the specified app ( mvt ba checkito nginx styxpres )
+    start [-skip-update] [-proxy]                                         Start the local environment, with no front-end apps (BA)
+    start -ba-version <ba-version> [-no-stub] [-skip-update] [-proxy]     Start the local environment, using the BA version: <ba-version>
+    start -bma-version <bma-version> [-no-stub] [-skip-update] [-proxy]   Start the local environment, using the BMA version: <bma-version>
+    stop                                                                  Stop the local environment
+    status                                                                Print the local environment status
+    start-app <app_id>                                                    Start only the specified app ( mvt ba bma checkito styxpres nginx )
+    stop-app <app_id>                                                     Stop only the specified app ( mvt ba bma checkito styxpres nginx )
+    
+    Options:
+    -no-stub                                                              Start the local environment with using checkito as mocking server
+    -skip-update                                                          Skip the update of checkito and styxpres. Warning: doing so you may have an outdated environment
+    -proxy                                                                Set the local environment proxy host to docker.for.mac.localhost:8888
 
 ----
 
@@ -322,16 +323,20 @@ The fixed BA debugging port is `2201`
 
 ### Proxying
 
-Local proxy is not supported via the startup script yet.
-If you need to enable the local proxy you can modify the following configuration into the local_environment `<local_environment_root_folder>/docker-compose.yml` file. Again PR welcomed.
+Enabling the local proxy via the startup script is only supported in MAC with a fixed proxy host value: `docker.for.mac.localhost:8888`.
+Just specify the option `-proxy` while starting the environment.
+
+    $local_env start-app ba -ba-version latest -proxy
+
+If you need to enable the local proxy in WIN or if you want to modify the proxy host address, you can add the following configuration into the local_environment `<local_environment_root_folder>/docker-compose.yml` file.
 
     # Proxy resources
-    # - APP_http.proxyHost=docker.for.mac.localhost
-    # - APP_http.proxyPort=8888
-    # - APP_https.proxyHost=docker.for.mac.localhost
-    # - APP_https.proxyPort=8888
-    # - APP_proxyHost=docker.for.mac.localhost
-    # - APP_proxyPort=8888
+    - APP_http.proxyHost=docker.for.mac.localhost
+    - APP_http.proxyPort=8888
+    - APP_https.proxyHost=docker.for.mac.localhost
+    - APP_https.proxyPort=8888
+    - APP_proxyHost=docker.for.mac.localhost
+    - APP_proxyPort=8888
 
 ## Troubleshooting common issues
 
