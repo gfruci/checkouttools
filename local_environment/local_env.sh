@@ -24,6 +24,7 @@ cd ${PREV_DIR}
 #########################
 
 PROXY_CONFIG="-Dhttp.proxyHost=docker.for.mac.localhost -Dhttp.proxyPort=8888 -Dhttps.proxyHost=docker.for.mac.localhost -Dhttps.proxyPort=8888 -DproxyHost=docker.for.mac.localhost -DproxyPort=8888"
+SKIP_UPDATE=0
 START_MODE=
 BA_VERSION=
 BMA_VERSION=
@@ -113,28 +114,6 @@ function update_env_apps_images {
 # START/STOP/STATUS FUNCTIONS #
 ###############################
 
-function setup_app_versions {
-    while [[ $# > 0 ]]; do
-      case $1 in
-        -ba-version)
-          BA_VERSION=$2
-          export BA_VERSION=${BA_VERSION}
-          shift
-          ;;
-        -no-stub)
-          STUB_STATUS=_no_stub
-          shift
-          ;;
-        -bma-version)
-          BMA_VERSION=$2
-          export BMA_VERSION=${BMA_VERSION}
-          shift
-          ;;
-      esac
-      shift
-    done
-}
-
 function start-app {
     APP=$1
     APP_TYPE=""
@@ -215,29 +194,10 @@ function setup {
     git fetch >> ${SCRIPT_DIR}/logs/startup.log 2>&1
     git status | grep "origin/master"
 
-    # skip update
-	NO_UPDATE=0
-	for var in "$@"
-	do
-	  if [ ${var} = "-skip-update" ]
-	  then
-	    NO_UPDATE=1
-	  fi
-	done
-	if [ ${NO_UPDATE} -lt 1 ]
+	if [ ${SKIP_UPDATE} -lt 1 ]
 	then
 	  update_env_apps_images;
 	fi
-
-    # proxy
-	for var in "$@"
-	do
-	  if [ ${var} = "-proxy" ]
-	  then
-	    export PROXY_CONFIG=${PROXY_CONFIG}
-	    break;
-	  fi
-	done
 
     echo "done"
 }
@@ -307,7 +267,39 @@ function help {
     exit 0
 }
 
-setup_app_versions $@
+########
+# INIT #
+########
+
+function init {
+    while [[ $# > 0 ]]; do
+      case $1 in
+        -ba-version)
+          BA_VERSION=$2
+          export BA_VERSION=${BA_VERSION}
+          shift
+          ;;
+        -no-stub)
+          STUB_STATUS=_no_stub
+          shift
+          ;;
+        -bma-version)
+          BMA_VERSION=$2
+          export BMA_VERSION=${BMA_VERSION}
+          shift
+          ;;
+        -proxy)
+          export PROXY_CONFIG=${PROXY_CONFIG}
+          ;;
+        -skip-update)
+          SKIP_UPDATE=1
+          ;;
+      esac
+      shift
+    done
+}
+
+init $@
 
 case "$1" in
 	start)
