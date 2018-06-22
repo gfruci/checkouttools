@@ -45,7 +45,7 @@ function parse_maven_settings(){
 }
 
 function parse_default_properties(){
-  awk '$1' ${1}/${ACC_TEST_DIR_NAME}/src/at/resources/conf/acceptance_test_{${ENV},additional_context_fragments}_system.properties \
+  awk '$1' ${1}/${ACC_TEST_DIR_NAME}/src/test/resources/conf/acceptance_test_{${ENV},additional_context_fragments}_system.properties \
   | grep -v '#' | awk '{printf("-D%s\n", $0)}'
 }
 
