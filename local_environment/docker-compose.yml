@@ -382,6 +382,7 @@ services:
       - APP_javax.net.ssl.trustStorePassword=changeit
       - APP_javax.net.ssl.keyStore=/hcom/servers/tomcat/certs/pvclient-karmalab.jks
       - APP_javax.net.ssl.keyStorePassword=tiajya
+      - APP_DIONYSUS_TEMPLATES_DOWNLOAD_PATH=/hcom/servers/tomcat/temp
       - APP_METRICS_GRAPHITE_REPORTING_INTERVAL=-1
       - APP_METRICS_BOOTSTRAPPER_METRIC_REGISTRATION_ENABLED=false
       - APP_METRICS_BOOTSTRAPPER_HEALTH_CHECK_REGISTRATION_ENABLED=false

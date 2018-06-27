@@ -390,10 +390,12 @@ If you need to enable the local proxy you can modify the following configuration
     docker rmi $(docker images -q)
     ```
     
- * **Windows Credentials**: if you have recently changed your login password you will need to reconfigure the shared drive.
+* **Windows Credentials**: if you have recently changed your login password you will need to reconfigure the shared drive.
     
     Docker -> Settings -> Shared drives -> click "Reset credentials...", tick the checkbox next to the "C" drive again, click Apply, then docker prompts you for the new password.
-    
+
+* BMA startup fails when downloading `http://dispatcherapp.staging1.hcom/templates/dionysus_ui_pack_templates-63.0.zip`?  Try increasing Docker's memory to at least 5GB.
+
 ## FAQ
 
 TBW
