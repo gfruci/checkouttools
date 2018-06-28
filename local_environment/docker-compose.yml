@@ -221,7 +221,7 @@ services:
       - APP_CACHE_PRELOAD_ENABLED=false
       - APP_PSID_SERVICE_ENABLED=false
       - APP_WEBSITE_DOMAIN_DISCRIMINATOR=dev-
-      #- APP_DSC_STUB_MODE_ENABLED=true
+      - APP_DSC_STUB_MODE_ENABLED=true
 
       # Not supported on checkito yet
       - APP_FENCED_VAP_ENABLED=false

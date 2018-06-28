@@ -281,7 +281,6 @@ function init {
           ;;
         -no-stub)
           STUB_STATUS=_no_stub
-          shift
           ;;
         -bma-version)
           BMA_VERSION=$2
