@@ -23,6 +23,8 @@ cd ${PREV_DIR}
 # CONFIGS #
 #########################
 
+PROXY_CONFIG="-Dhttp.proxyHost=docker.for.mac.localhost -Dhttp.proxyPort=8888 -Dhttps.proxyHost=docker.for.mac.localhost -Dhttps.proxyPort=8888 -DproxyHost=docker.for.mac.localhost -DproxyPort=8888"
+SKIP_UPDATE=0
 START_MODE=
 BA_VERSION=
 BMA_VERSION=
@@ -38,6 +40,8 @@ declare -A APPS_CONF=(\
     ["checkito,start_status_cmd"]="grep \"checkito.*Checkito listening for HTTP requests\" ${SCRIPT_DIR}/logs/checkito.log"\
     ["checkito,stop_status_cmd"]="grep -e \"checkito.*ERROR\" ${SCRIPT_DIR}/logs/checkito.log"\
     ["checkito,update_cmd"]="docker pull 181651482125.dkr.ecr.us-west-2.amazonaws.com/hotels/checkito:latest >> ${SCRIPT_DIR}/logs/startup.log 2>&1"\
+    ["nginx,start_status_cmd"]="grep -e \"nginx.*done\" ${SCRIPT_DIR}/logs/nginx.log"\
+    ["nginx,stop_status_cmd"]="grep -e \"nginx.*error\" ${SCRIPT_DIR}/logs/nginx.log"\
     ["ba,start_status_cmd"]="grep \"ba.*Server startup\" ${SCRIPT_DIR}/logs/ba.log"\
     ["ba,stop_status_cmd"]="grep -e \"ba.*ERROR\" ${SCRIPT_DIR}/logs/ba.log | grep -v \"locsClientLoader\""\
     ["bma,start_status_cmd"]="grep \"bma.*Server startup\" ${SCRIPT_DIR}/logs/bma.log"\
@@ -95,7 +99,6 @@ function update_env_apps_images {
       fi
     fi
 
-
     for APP in "${APPS[@]}"
     do
         UDPATE_CMD=${APPS_CONF["${APP},update_cmd"]}
@@ -110,30 +113,6 @@ function update_env_apps_images {
 ###############################
 # START/STOP/STATUS FUNCTIONS #
 ###############################
-
-function setup_app_versions {
-    while [[ $# > 0 ]]; do
-      case $1 in
-        -ba-version)
-          BA_VERSION=$2
-          export BA_VERSION=${BA_VERSION}
-          shift
-          ;;
-        -no-stub)
-          STUB_STATUS=_no_stub
-          shift
-          ;;
-        -bma-version)
-          BMA_VERSION=$2
-          export BMA_VERSION=${BMA_VERSION}
-          shift
-          ;;
-      esac
-      shift
-    done
-
-
-}
 
 function start-app {
     APP=$1
@@ -215,15 +194,7 @@ function setup {
     git fetch >> ${SCRIPT_DIR}/logs/startup.log 2>&1
     git status | grep "origin/master"
 
-	NO_UPDATE=0
-	for var in "$@"
-	do
-	  if [ ${var} = "-skip-update" ]
-	  then
-	    NO_UPDATE=1
-	  fi
-	done
-	if [ ${NO_UPDATE} -lt 1 ]
+	if [ ${SKIP_UPDATE} -lt 1 ]
 	then
 	  update_env_apps_images;
 	fi
@@ -281,18 +252,53 @@ function status {
 function help {
     echo "Usage: $0 <command> <options>"
     echo "Commands:"
-    echo "start [-skip-update]                                         Start the local environment, with no front-end apps (BA)"
-    echo "start -ba-version <ba-version> [-no-stub] [-skip-update]     Start the local environment, using the BA version: <ba-version>"
-    echo "start -bma-version <bma-version> [-no-stub] [-skip-update]   Start the local environment, using the BMA version: <bma-version>"
-    echo "stop                                                         Stop the local environment"
-    echo "status                                                       Print the local environment status"
-    echo "start-app <app_id>                                           Start only the specified app ($(for APP in "${APPS[@]}"; do echo -n " ${APP}"; done) )"
-    echo "stop-app <app_id>                                            Stop only the specified app ($(for APP in "${APPS[@]}"; do echo -n " ${APP}"; done) )"
+    echo "start [-skip-update] [-proxy]                                         Start the local environment, with no front-end apps (BA)"
+    echo "start -ba-version <ba-version> [-no-stub] [-skip-update] [-proxy]     Start the local environment, using the BA version: <ba-version>"
+    echo "start -bma-version <bma-version> [-no-stub] [-skip-update] [-proxy]   Start the local environment, using the BMA version: <bma-version>"
+    echo "stop                                                                  Stop the local environment"
+    echo "status                                                                Print the local environment status"
+    echo "start-app <app_id>                                                    Start only the specified app ($(for APP in "${APPS[@]}"; do echo -n " ${APP}"; done) )"
+    echo "stop-app <app_id>                                                     Stop only the specified app ($(for APP in "${APPS[@]}"; do echo -n " ${APP}"; done) )"
     echo
+    echo "Options:"
+    echo "-no-stub                                                              Start the local environment with using checkito as mocking server"
+    echo "-skip-update                                                          Skip the update of checkito and styxpres. Warning: doing so you may have an outdated environment"
+    echo "-proxy                                                                Set the local environment proxy host to docker.for.mac.localhost:8888"
     exit 0
 }
 
-setup_app_versions $@
+########
+# INIT #
+########
+
+function init {
+    while [[ $# > 0 ]]; do
+      case $1 in
+        -ba-version)
+          BA_VERSION=$2
+          export BA_VERSION=${BA_VERSION}
+          shift
+          ;;
+        -no-stub)
+          STUB_STATUS=_no_stub
+          ;;
+        -bma-version)
+          BMA_VERSION=$2
+          export BMA_VERSION=${BMA_VERSION}
+          shift
+          ;;
+        -proxy)
+          export PROXY_CONFIG=${PROXY_CONFIG}
+          ;;
+        -skip-update)
+          SKIP_UPDATE=1
+          ;;
+      esac
+      shift
+    done
+}
+
+init $@
 
 case "$1" in
 	start)

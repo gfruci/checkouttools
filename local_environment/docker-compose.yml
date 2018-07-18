@@ -61,8 +61,8 @@ services:
     volumes:
       - mvt:/mvt
     environment:
-      - APP_CONFIG_ENVIRONMENT=hcom-devrom
-      - APP_jvm.route=hcom-devrom
+      - APP_CONFIG_ENVIRONMENT=development
+      - APP_jvm.route=development
       - APP_javax.net.ssl.trustStore=/hcom/share/java/default/jre/lib/security/cacerts_plus_internal
       - APP_javax.net.ssl.trustStorePassword=changeit
       - APP_METRICS_GRAPHITE_REPORTING_INTERVAL=-1
@@ -101,14 +101,14 @@ services:
       - APP_BPAS_ON_PAYMENT_OPTION_REQUEST_CIRCUIT_BREAKER_TIMEOUT_MS=60000
 
       # Development overrides
-      - JAVA_JVM_ARGS=-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=1901
+      - JAVA_JVM_ARGS=-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=1901 ${PROXY_CONFIG}
       - APP_UNIFIED_DATA_TOOLKIT_ENABLED=true
       - APP_LOCALIZATION_MESSAGE_PARALLEL_INITIALIZATION_ENABLED=true
       - APP_MVT_CONFIGURATION_PARALLEL_INITIALIZATION_ENABLED=true
       - APP_CACHE_PRELOAD_ENABLED=false
       - APP_PSID_SERVICE_ENABLED=false
       - APP_WEBSITE_DOMAIN_DISCRIMINATOR=dev-
-      #- APP_DSC_STUB_MODE_ENABLED=true
+      - APP_DSC_STUB_MODE_ENABLED=true
 
       # Not supported on checkito yet
       - APP_FENCED_VAP_ENABLED=false
@@ -161,14 +161,6 @@ services:
       - APP_java.rmi.server.hostname=127.0.0.1
       - APP_com.sun.management.jmxremote.rmi.port=38007
 
-      # Proxy resources
-      #      - APP_http.proxyHost=docker.for.mac.localhost
-      #      - APP_http.proxyPort=8888
-      #      - APP_https.proxyHost=docker.for.mac.localhost
-      #      - APP_https.proxyPort=8888
-      #      - APP_proxyHost=docker.for.mac.localhost
-      #      - APP_proxyPort=8888
-
   ba_no_stub:
     image: 181651482125.dkr.ecr.us-west-2.amazonaws.com/hotels/ba:${BA_VERSION}
     container_name: ba
@@ -178,8 +170,8 @@ services:
     volumes:
       - mvt:/mvt
     environment:
-      - APP_CONFIG_ENVIRONMENT=hcom-devrom
-      - APP_jvm.route=hcom-devrom
+      - APP_CONFIG_ENVIRONMENT=development
+      - APP_jvm.route=development
       - APP_javax.net.ssl.trustStore=/hcom/share/java/default/jre/lib/security/cacerts_plus_internal
       - APP_javax.net.ssl.trustStorePassword=changeit
       - APP_METRICS_GRAPHITE_REPORTING_INTERVAL=-1
@@ -218,14 +210,14 @@ services:
       - APP_BPAS_ON_PAYMENT_OPTION_REQUEST_CIRCUIT_BREAKER_TIMEOUT_MS=60000
 
       # Development overrides
-      - JAVA_JVM_ARGS=-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=1901
+      - JAVA_JVM_ARGS=-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=1901 ${PROXY_CONFIG}
       - APP_UNIFIED_DATA_TOOLKIT_ENABLED=true
       - APP_LOCALIZATION_MESSAGE_PARALLEL_INITIALIZATION_ENABLED=true
       - APP_MVT_CONFIGURATION_PARALLEL_INITIALIZATION_ENABLED=true
       - APP_CACHE_PRELOAD_ENABLED=false
       - APP_PSID_SERVICE_ENABLED=false
       - APP_WEBSITE_DOMAIN_DISCRIMINATOR=dev-
-      #- APP_DSC_STUB_MODE_ENABLED=true
+      - APP_DSC_STUB_MODE_ENABLED=true
 
       # Not supported on checkito yet
       - APP_FENCED_VAP_ENABLED=false
@@ -241,14 +233,6 @@ services:
       - APP_java.rmi.server.hostname=127.0.0.1
       - APP_com.sun.management.jmxremote.rmi.port=38007
 
-      # Proxy resources
-      #      - APP_http.proxyHost=docker.for.mac.localhost
-      #      - APP_http.proxyPort=8888
-      #      - APP_https.proxyHost=docker.for.mac.localhost
-      #      - APP_https.proxyPort=8888
-      #      - APP_proxyHost=docker.for.mac.localhost
-      #      - APP_proxyPort=8888
-
   bma:
     image: 181651482125.dkr.ecr.us-west-2.amazonaws.com/hotels/bma:${BMA_VERSION}
     container_name: bma
@@ -258,8 +242,8 @@ services:
     volumes:
       - mvt:/mvt
     environment:
-      - APP_CONFIG_ENVIRONMENT=hcom-devrom
-      - APP_jvm.route=hcom-devrom
+      - APP_CONFIG_ENVIRONMENT=development
+      - APP_jvm.route=development
       - APP_javax.net.ssl.trustStore=/hcom/share/java/default/jre/lib/security/cacerts_plus_internal
       - APP_javax.net.ssl.trustStorePassword=changeit
       - APP_javax.net.ssl.keyStore=/hcom/servers/tomcat/certs/pvclient-karmalab.jks
@@ -372,8 +356,8 @@ services:
     volumes:
       - mvt:/mvt
     environment:
-      - APP_CONFIG_ENVIRONMENT=hcom-devrom
-      - APP_jvm.route=hcom-devrom
+      - APP_CONFIG_ENVIRONMENT=development
+      - APP_jvm.route=development
       - APP_javax.net.ssl.trustStore=/hcom/share/java/default/jre/lib/security/cacerts_plus_internal
       - APP_javax.net.ssl.trustStorePassword=changeit
       - APP_javax.net.ssl.keyStore=/hcom/servers/tomcat/certs/pvclient-karmalab.jks
@@ -438,19 +422,11 @@ services:
       - APP_java.rmi.server.hostname=127.0.0.1
       - APP_com.sun.management.jmxremote.rmi.port=38007
 
-      # Proxy resources
-      #      - APP_http.proxyHost=docker.for.mac.localhost
-      #      - APP_http.proxyPort=8888
-      #      - APP_https.proxyHost=docker.for.mac.localhost
-      #      - APP_https.proxyPort=8888
-      #      - APP_proxyHost=docker.for.mac.localhost
-      #      - APP_proxyPort=8888
-
   checkito:
     image: 181651482125.dkr.ecr.us-west-2.amazonaws.com/hotels/checkito:latest
     container_name: checkito
     ports:
-      - "2201:1901" # expose checkito debug port but it's the debug port for BA too
+      - "2201:1901"
       - "8089:8089"
       - "8189:8189"
 
