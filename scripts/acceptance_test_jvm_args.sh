@@ -14,7 +14,7 @@ function print_help(){
   echo "${0} [-v] [-c] [-h] [-e env] <bookingapp directory>"
   echo "-v  verbose"
   echo "-c  copy result to clipboard (Windows bash only, it uses /dev/clipboard)"
-  echo "-e  acceptance tests env (e.g dev_rom). Default is dev."
+  echo "-e  acceptance tests env (e.g dev_rom). Default is dev_rom."
   echo "-h  print this help"
 }
 
