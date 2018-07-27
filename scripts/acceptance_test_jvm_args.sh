@@ -6,7 +6,7 @@ DEBUG="false"
 BA_HOME=""
 ACC_TEST_DIR_NAME="bookingapp-acceptance-test"
 COPY_TO_CLIPBOARD="false"
-ENV=dev
+ENV=dev_rom
 
 
 function print_help(){
