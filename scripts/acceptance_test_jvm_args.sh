@@ -6,7 +6,7 @@ DEBUG="false"
 BA_HOME=""
 ACC_TEST_DIR_NAME="bookingapp-acceptance-test"
 COPY_TO_CLIPBOARD="false"
-ENV=dev
+ENV=dev_rom
 
 
 function print_help(){
@@ -14,7 +14,7 @@ function print_help(){
   echo "${0} [-v] [-c] [-h] [-e env] <bookingapp directory>"
   echo "-v  verbose"
   echo "-c  copy result to clipboard (Windows bash only, it uses /dev/clipboard)"
-  echo "-e  acceptance tests env (e.g dev_rom). Default is dev."
+  echo "-e  acceptance tests env (e.g dev_rom). Default is dev_rom."
   echo "-h  print this help"
 }
 
