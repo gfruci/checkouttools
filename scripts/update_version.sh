@@ -79,7 +79,7 @@ function commit_and_push_changes(){
 	git status
     exit 0
   fi
-  echo "git push"
+  git push
 }
 
 function get_back_changes_from_stash(){
