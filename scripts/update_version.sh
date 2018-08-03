@@ -2,12 +2,13 @@
 
 BASEDIR=""
 DESIRED_VERSION=""
-PUSH=false
+PUSH="false"
 
 function print_help(){
   echo "Usage:"
   echo "${0} [-h] [-p] [-v version] <app directory>"
   echo "Update version for maven projects."
+  echo "Default behavior is increasing the major version and committing the changes without pushing it to master."
   echo "-v  set specific version, default is increasing the major version"
   echo "-p  push changes to master"
   echo "-h  print this help"
@@ -64,7 +65,7 @@ function update_version(){
   else
 	# Increase the major version
 	((NEW_VERSION=VERSION+1))
-	NEW_VERSION_STRING=$NEW_VERSION.0-SNAPSHOT
+	NEW_VERSION_STRING=${NEW_VERSION}.0-SNAPSHOT
   fi
   
   # Update the version with maven
