@@ -426,7 +426,7 @@ services:
     image: 181651482125.dkr.ecr.us-west-2.amazonaws.com/hotels/bca:${BCA_VERSION}
     container_name: bca
     ports:
-      - "3001:2101"
+      - "2101:1901"
       - "40007:38007"
     volumes:
       - mvt:/mvt
@@ -541,7 +541,7 @@ services:
     image: 181651482125.dkr.ecr.us-west-2.amazonaws.com/hotels/bca:${BCA_VERSION}
     container_name: bca
     ports:
-      - "3001:2101"
+      - "2101:1901"
       - "40007:38007"
     volumes:
       - mvt:/mvt
