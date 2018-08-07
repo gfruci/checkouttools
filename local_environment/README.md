@@ -251,6 +251,16 @@ In order to check that everything works you can open the following [stubbed hote
 * `./local_env.sh stop-app ba`
 * `./local_env.sh start-app checkito`
 
+#### Start multiple app at the same time
+    
+    ./local_env.sh start-app <app1> <app2> <app3> <options>
+
+*Examples*
+
+* `./local_env.sh start-app ba -ba-version 123.0.7220 bma -bma-version 184.0.7220 -bca-version 140.0.7220 -no-stub -proxy`
+
+**Keep in mind to increase the docker memory to at least 6GB**
+
 ### Checkito
 
 Checkito is running with default settings:
