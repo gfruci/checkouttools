@@ -221,10 +221,11 @@ The environment can be started with some options.
     
 If you need only 1 of the apps just skip the other.
 
+*Note:* if you're running all 3 frontend apps you need to increase the memory to at least 6GB. See paragraph: Increase the docker resources.
+
 In order to check that everything works you can open the following [stubbed hotel link](https://www.dev-hotels.com/booking/deep_link.html?pos=HCOM_US&locale=en_US&mvariant=1327.0%2C1943.1%2C1544.1%2C1400.1%2C985.1%2C1156.0%2C810.1%2C1881.1%2C316.1%2C1947.1%2C1539.1%2C839.2%2C1306.1%2C1735.1%2C4418.1&arrivalDate=09-12-2018&departureDate=10-12-2018&currency=USD&rooms%5B0%5D.numberOfAdults=2&rooms%5B0%5D.numberOfChildren=0&hotelId=434772&roomTypeCode=200310048&rateCode=201876673&businessModel=MERCHANT&ratePlanConfiguration=REGULAR&hotelContractCardinality=SINGLE)
 
 *Note:* the first time you start the local environment the setup may take a few minutes, since it needs to downloads various docker images.
-
 #### Stop
 
     ./local_env.sh stop
@@ -253,7 +254,7 @@ In order to check that everything works you can open the following [stubbed hote
 
 #### Start multiple app at the same time
     
-    ./local_env.sh start-app <app1> <app2> <app3> <options>
+    ./local_env.sh start -ba-version <ba-version> -bma-version <bma-version> -bca-version <bca-version> <options>
 
 *Examples*
 
