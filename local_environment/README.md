@@ -424,3 +424,6 @@ Components involved:
 Styx DUP plugin only serves the html (rendering the soy files), the assets (JS, CSS) are served by the staging DispatcherApp (DA):
 * the DA reads the JS and CSS from File System DUP folders
 * there is a DUP folder for each branch
+
+Use `docker stats` command to display stats for all of your running containers.
+This command will show you the resources that each container is using(e.g. CPU & memory usage).

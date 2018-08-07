@@ -155,21 +155,21 @@ function start-app {
         fi
     fi
 
-        if [ "${APP}" == "bca" ]
+    if [ "${APP}" == "bca" ]
+    then
+        APP_TYPE=${STUB_STATUS}
+        if [ "${BCA_VERSION}" == "" ]
         then
-            APP_TYPE=${STUB_STATUS}
-            if [ "${BCA_VERSION}" == "" ]
+            if [ "${START_MODE}" == "start-all" ]
             then
-                if [ "${START_MODE}" == "start-all" ]
-                then
-                    return 1;
-                else
-                    echo "Error! BCA version NOT specified (missing -bca-version parameter)!"
-                    help;
-                    exit 1
-                fi
+                return 1;
+            else
+                echo "Error! BCA version NOT specified (missing -bca-version parameter)!"
+                help;
+                exit 1
             fi
         fi
+    fi
 
     cd ${SCRIPT_DIR}
     nohup docker-compose up --no-color ${APP}${APP_TYPE} >> ${SCRIPT_DIR}/logs/${APP}.log & 2>&1
