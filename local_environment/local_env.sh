@@ -24,7 +24,6 @@ cd ${PREV_DIR}
 #########################
 
 PROXY_CONFIG="-Dhttp.proxyHost=docker.for.mac.localhost -Dhttp.proxyPort=8888 -Dhttps.proxyHost=docker.for.mac.localhost -Dhttps.proxyPort=8888 -DproxyHost=docker.for.mac.localhost -DproxyPort=8888"
-SKIP_UPDATE=0
 START_MODE=
 BA_VERSION=
 BMA_VERSION=
@@ -87,7 +86,7 @@ function watch {
 	done
 }
 
-function update_env_apps_images {
+function update {
     docker pull 181651482125.dkr.ecr.us-west-2.amazonaws.com/hotels/mvt:latest > /dev/null 2>&1
 
     if [ "$?" -eq "1" ]; then
@@ -102,6 +101,13 @@ function update_env_apps_images {
       fi
     fi
 
+    echo -e "\n$COLOR_HEADER Updating local environment ... $COLOR_RESET"
+
+    echo "Updating scripts ..."
+    cd ${SCRIPT_DIR}
+    git pull
+    cd ${PREV_DIR}
+
     for APP in "${APPS[@]}"
     do
         UDPATE_CMD=${APPS_CONF["${APP},update_cmd"]}
@@ -111,6 +117,8 @@ function update_env_apps_images {
             $(eval ${UDPATE_CMD})
         fi
     done
+
+    echo "done"
 }
 
 ###############################
@@ -205,26 +213,23 @@ function stop-app {
     echo "done"
 }
 
-function setup {
+function check_update {
     echo "" > ${SCRIPT_DIR}/logs/startup.log
 
-    echo -e "\n$COLOR_HEADER Setting up local environment ... $COLOR_RESET"
+    echo -e "\n$COLOR_HEADER Checking updates for local environment ... $COLOR_RESET"
 
+    cd ${SCRIPT_DIR}
     git fetch >> ${SCRIPT_DIR}/logs/startup.log 2>&1
     git status | grep "origin/master"
+    cd ${PREV_DIR}
 
-	if [ ${SKIP_UPDATE} -lt 1 ]
-	then
-	  update_env_apps_images;
-	fi
-
-    echo "done"
+    echo "Info: Run the 'update' command to update the local environment"
 }
 
 function start {
     START_MODE="start-all"
 
-    setup $@;
+    check_update $@;
 
     echo -e "\n$COLOR_HEADER Starting local environment ... $COLOR_RESET"
 
@@ -271,18 +276,18 @@ function status {
 function help {
     echo "Usage: $0 <command> <options>"
     echo "Commands:"
-    echo "start [-skip-update] [-proxy]                                         Start the local environment, with no front-end apps (BA)"
-    echo "start -ba-version <ba-version> [-no-stub] [-skip-update] [-proxy]     Start the local environment, using the BA version: <ba-version>"
-    echo "start -bma-version <bma-version> [-no-stub] [-skip-update] [-proxy]   Start the local environment, using the BMA version: <bma-version>"
-    echo "start -bca-version <bca-version> [-no-stub] [-skip-update] [-proxy]   Start the local environment, using the BMA version: <bma-version>"
+    echo "start [-proxy]                                                        Start the local environment, with no front-end apps (BA)"
+    echo "start -ba-version <ba-version> [-no-stub] [-proxy]                    Start the local environment, using the BA version: <ba-version>"
+    echo "start -bma-version <bma-version> [-no-stub] [-proxy]                  Start the local environment, using the BMA version: <bma-version>"
+    echo "start -bca-version <bca-version> [-no-stub] [-proxy]                  Start the local environment, using the BMA version: <bma-version>"
     echo "stop                                                                  Stop the local environment"
     echo "status                                                                Print the local environment status"
     echo "start-app <app_id>                                                    Start only the specified app ($(for APP in "${APPS[@]}"; do echo -n " ${APP}"; done) )"
     echo "stop-app <app_id>                                                     Stop only the specified app ($(for APP in "${APPS[@]}"; do echo -n " ${APP}"; done) )"
+    echo "update                                                                Update local environment scripts, along with styxpres, chekito and mvt docker images"
     echo
     echo "Options:"
     echo "-no-stub                                                              Start the local environment with using checkito as mocking server"
-    echo "-skip-update                                                          Skip the update of checkito and styxpres. Warning: doing so you may have an outdated environment"
     echo "-proxy                                                                Set the local environment proxy host to docker.for.mac.localhost:8888"
     exit 0
 }
@@ -315,9 +320,6 @@ function init {
         -proxy)
           export PROXY_CONFIG=${PROXY_CONFIG}
           ;;
-        -skip-update)
-          SKIP_UPDATE=1
-          ;;
       esac
       shift
     done
@@ -341,6 +343,8 @@ case "$1" in
 	stop-app)
 	    shift
 	    stop-app $@;;
+	update)
+	    update $@;;
 	*)
 	    help;;
 esac
