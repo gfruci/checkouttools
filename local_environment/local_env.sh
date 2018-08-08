@@ -28,9 +28,10 @@ SKIP_UPDATE=0
 START_MODE=
 BA_VERSION=
 BMA_VERSION=
+BCA_VERSION=
 STUB_STATUS=
 
-APPS=( "mvt" "ba" "bma" "checkito" "styxpres" "nginx")
+APPS=( "mvt" "ba" "bma" "bca" "checkito" "styxpres" "nginx")
 
 declare -A APPS_CONF=(\
     ["mvt,update_cmd"]="docker pull 181651482125.dkr.ecr.us-west-2.amazonaws.com/hotels/mvt:latest >> ${SCRIPT_DIR}/logs/startup.log 2>&1"\
@@ -46,6 +47,8 @@ declare -A APPS_CONF=(\
     ["ba,stop_status_cmd"]="grep -e \"ba.*ERROR\" ${SCRIPT_DIR}/logs/ba.log | grep -v \"locsClientLoader\""\
     ["bma,start_status_cmd"]="grep \"bma.*Server startup\" ${SCRIPT_DIR}/logs/bma.log"\
     ["bma,stop_status_cmd"]="grep -e \"bma.*ERROR\" ${SCRIPT_DIR}/logs/bma.log | grep -v \"locsClientLoader\""\
+    ["bca,start_status_cmd"]="grep \"bca.*Server startup\" ${SCRIPT_DIR}/logs/bca.log"\
+    ["bca,stop_status_cmd"]="grep -e \"bca.*ERROR\" ${SCRIPT_DIR}/logs/bca.log | grep -v \"locsClientLoader\|ConfigurationReloadSupport\""\
 )
 
 #####################
@@ -146,6 +149,22 @@ function start-app {
                 return 1;
             else
                 echo "Error! BMA version NOT specified (missing -bma-version parameter)!"
+                help;
+                exit 1
+            fi
+        fi
+    fi
+
+    if [ "${APP}" == "bca" ]
+    then
+        APP_TYPE=${STUB_STATUS}
+        if [ "${BCA_VERSION}" == "" ]
+        then
+            if [ "${START_MODE}" == "start-all" ]
+            then
+                return 1;
+            else
+                echo "Error! BCA version NOT specified (missing -bca-version parameter)!"
                 help;
                 exit 1
             fi
@@ -255,6 +274,7 @@ function help {
     echo "start [-skip-update] [-proxy]                                         Start the local environment, with no front-end apps (BA)"
     echo "start -ba-version <ba-version> [-no-stub] [-skip-update] [-proxy]     Start the local environment, using the BA version: <ba-version>"
     echo "start -bma-version <bma-version> [-no-stub] [-skip-update] [-proxy]   Start the local environment, using the BMA version: <bma-version>"
+    echo "start -bca-version <bca-version> [-no-stub] [-skip-update] [-proxy]   Start the local environment, using the BMA version: <bma-version>"
     echo "stop                                                                  Stop the local environment"
     echo "status                                                                Print the local environment status"
     echo "start-app <app_id>                                                    Start only the specified app ($(for APP in "${APPS[@]}"; do echo -n " ${APP}"; done) )"
@@ -285,6 +305,11 @@ function init {
         -bma-version)
           BMA_VERSION=$2
           export BMA_VERSION=${BMA_VERSION}
+          shift
+          ;;
+         -bca-version)
+          BCA_VERSION=$2
+          export BCA_VERSION=${BCA_VERSION}
           shift
           ;;
         -proxy)

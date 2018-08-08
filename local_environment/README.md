@@ -217,13 +217,13 @@ The environment can be started with some options.
 
 ##### Start the environment with Front End Apps 
 
-    ./local_env.sh start -ba-version <ba-version> -bma-version <bma-version>
-    
-If you need only 1 of the apps just skip the other.
+    ./local_env.sh start -ba-version <ba-version> -bma-version <bma-version> -bca-version <bca-version>
 
+If you need only 1 of the apps just skip the other.
 In order to check that everything works you can open the following [stubbed hotel link](https://www.dev-hotels.com/booking/deep_link.html?pos=HCOM_US&locale=en_US&mvariant=1327.0%2C1943.1%2C1544.1%2C1400.1%2C985.1%2C1156.0%2C810.1%2C1881.1%2C316.1%2C1947.1%2C1539.1%2C839.2%2C1306.1%2C1735.1%2C4418.1&arrivalDate=09-12-2018&departureDate=10-12-2018&currency=USD&rooms%5B0%5D.numberOfAdults=2&rooms%5B0%5D.numberOfChildren=0&hotelId=434772&roomTypeCode=200310048&rateCode=201876673&businessModel=MERCHANT&ratePlanConfiguration=REGULAR&hotelContractCardinality=SINGLE)
 
 *Note:* the first time you start the local environment the setup may take a few minutes, since it needs to downloads various docker images.
+*Note:* if you're running all 3 frontend apps you need to increase the memory to at least 6GB. See paragraph: Increase the docker resources.
 
 #### Stop
 
@@ -250,6 +250,16 @@ In order to check that everything works you can open the following [stubbed hote
 
 * `./local_env.sh stop-app ba`
 * `./local_env.sh start-app checkito`
+
+#### Start multiple app at the same time
+    
+    ./local_env.sh start -ba-version <ba-version> -bma-version <bma-version> -bca-version <bca-version> <options>
+
+*Examples*
+
+* `./local_env.sh start-app ba -ba-version 123.0.7220 bma -bma-version 184.0.7220 -bca-version 140.0.7220 -no-stub -proxy`
+
+**Keep in mind to increase the docker memory to at least 6GB**
 
 ### Checkito
 
@@ -424,3 +434,6 @@ Components involved:
 Styx DUP plugin only serves the html (rendering the soy files), the assets (JS, CSS) are served by the staging DispatcherApp (DA):
 * the DA reads the JS and CSS from File System DUP folders
 * there is a DUP folder for each branch
+
+Use `docker stats` command to display stats for all of your running containers.
+This command will show you the resources that each container is using(e.g. CPU & memory usage).
