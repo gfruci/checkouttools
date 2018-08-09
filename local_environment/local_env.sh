@@ -108,6 +108,12 @@ function update {
     git pull
     cd ${PREV_DIR}
 
+    APP=$1
+
+    if [ "${APP}" != "" ]; then
+        APPS=( "${APP}" )
+    fi
+
     for APP in "${APPS[@]}"
     do
         UDPATE_CMD=${APPS_CONF["${APP},update_cmd"]}
@@ -284,7 +290,8 @@ function help {
     echo "status                                                                Print the local environment status"
     echo "start-app <app_id>                                                    Start only the specified app ($(for APP in "${APPS[@]}"; do echo -n " ${APP}"; done) )"
     echo "stop-app <app_id>                                                     Stop only the specified app ($(for APP in "${APPS[@]}"; do echo -n " ${APP}"; done) )"
-    echo "update                                                                Update local environment scripts, along with styxpres, chekito and mvt docker images"
+    echo "update [<app_id>]                                                     Update local environment scripts, along with the specified app ($(for APP in "${APPS[@]}"; do echo -n " ${APP}"; done) )."
+    echo "                                                                      By default updates styxpres, chekito and mvt docker images"
     echo
     echo "Options:"
     echo "-no-stub                                                              Start the local environment with using checkito as mocking server"
@@ -344,6 +351,7 @@ case "$1" in
 	    shift
 	    stop-app $@;;
 	update)
+	    shift
 	    update $@;;
 	*)
 	    help;;

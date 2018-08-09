@@ -183,19 +183,21 @@ Move under the `local_environment`, give execution permissions to the `local_env
     $ cd <local_environment_root_folder>
     $ chmod a+x local_env.sh
     $ ./local_env.sh
-    Usage: /usr/local/bin/local_env <command> <options>
+    Usage: local_env.sh <command> <options>
     Commands:
-    start [-skip-update] [-proxy]                                         Start the local environment, with no front-end apps (BA)
-    start -ba-version <ba-version> [-no-stub] [-skip-update] [-proxy]     Start the local environment, using the BA version: <ba-version>
-    start -bma-version <bma-version> [-no-stub] [-skip-update] [-proxy]   Start the local environment, using the BMA version: <bma-version>
+    start [-proxy]                                                        Start the local environment, with no front-end apps (BA)
+    start -ba-version <ba-version> [-no-stub] [-proxy]                    Start the local environment, using the BA version: <ba-version>
+    start -bma-version <bma-version> [-no-stub] [-proxy]                  Start the local environment, using the BMA version: <bma-version>
+    start -bca-version <bca-version> [-no-stub] [-proxy]                  Start the local environment, using the BMA version: <bma-version>
     stop                                                                  Stop the local environment
     status                                                                Print the local environment status
-    start-app <app_id>                                                    Start only the specified app ( mvt ba bma checkito styxpres nginx )
-    stop-app <app_id>                                                     Stop only the specified app ( mvt ba bma checkito styxpres nginx )
+    start-app <app_id>                                                    Start only the specified app ( mvt ba bma bca checkito styxpres nginx )
+    stop-app <app_id>                                                     Stop only the specified app ( mvt ba bma bca checkito styxpres nginx )
+    update [<app_id>]                                                     Update local environment scripts, along with the specified app ( mvt ba bma bca checkito styxpres nginx ).
+                                                                          By default updates styxpres, chekito and mvt docker images
     
     Options:
     -no-stub                                                              Start the local environment with using checkito as mocking server
-    -skip-update                                                          Skip the update of checkito and styxpres. Warning: doing so you may have an outdated environment
     -proxy                                                                Set the local environment proxy host to docker.for.mac.localhost:8888
 
 ----
@@ -251,15 +253,16 @@ In order to check that everything works you can open the following [stubbed hote
 * `./local_env.sh stop-app ba`
 * `./local_env.sh start-app checkito`
 
-#### Start multiple app at the same time
+#### Update
+
+Update local environment scripts, along with the specified `<app_id>`. By default updates styxpres, chekito and mvt docker images.
     
-    ./local_env.sh start -ba-version <ba-version> -bma-version <bma-version> -bca-version <bca-version> <options>
+    ./local_env.sh update [<app_id>]
 
 *Examples*
 
-* `./local_env.sh start-app ba -ba-version 123.0.7220 bma -bma-version 184.0.7220 -bca-version 140.0.7220 -no-stub -proxy`
-
-**Keep in mind to increase the docker memory to at least 6GB**
+* `./local_env.sh update`
+* `./local_env.sh update checkito`
 
 ### Checkito
 
