@@ -290,7 +290,7 @@ function help {
     echo "status                                                                Print the local environment status"
     echo "start-app <app_id>                                                    Start only the specified app ($(for APP in "${APPS[@]}"; do echo -n " ${APP}"; done) )"
     echo "stop-app <app_id>                                                     Stop only the specified app ($(for APP in "${APPS[@]}"; do echo -n " ${APP}"; done) )"
-    echo "update [<app_id>]                                                     Update local environment scripts, along with the specified app ($(for APP in "${APPS[@]}"; do echo -n " ${APP}"; done) )."
+    echo "update [<app_id>]                                                     Update local environment scripts, along with the specified app ( styxpres chekito mvt )."
     echo "                                                                      By default updates styxpres, chekito and mvt docker images"
     echo
     echo "Options:"
