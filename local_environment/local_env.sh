@@ -86,7 +86,7 @@ function watch {
 	done
 }
 
-function update {
+function login {
     docker pull 181651482125.dkr.ecr.us-west-2.amazonaws.com/hotels/mvt:latest > /dev/null 2>&1
 
     if [ "$?" -eq "1" ]; then
@@ -100,6 +100,10 @@ function update {
         exit 1
       fi
     fi
+}
+
+function update {
+    login;
 
     echo -e "\n$COLOR_HEADER Updating local environment ... $COLOR_RESET"
 
@@ -220,9 +224,7 @@ function stop-app {
 }
 
 function check_update {
-    echo "" > ${SCRIPT_DIR}/logs/startup.log
-
-    echo -e "\n$COLOR_HEADER Checking updates for local environment ... $COLOR_RESET"
+    echo -e "\n$COLOR_HEADER Checking updates for local environment scripts ... $COLOR_RESET"
 
     cd ${SCRIPT_DIR}
     git fetch >> ${SCRIPT_DIR}/logs/startup.log 2>&1
@@ -233,9 +235,12 @@ function check_update {
 }
 
 function start {
+    check_update;
+    login;
+
     START_MODE="start-all"
 
-    check_update $@;
+    echo "" > ${SCRIPT_DIR}/logs/startup.log
 
     echo -e "\n$COLOR_HEADER Starting local environment ... $COLOR_RESET"
 
@@ -282,20 +287,20 @@ function status {
 function help {
     echo "Usage: $0 <command> <options>"
     echo "Commands:"
-    echo "start [-proxy]                                                        Start the local environment, with no front-end apps (BA)"
-    echo "start -ba-version <ba-version> [-no-stub] [-proxy]                    Start the local environment, using the BA version: <ba-version>"
-    echo "start -bma-version <bma-version> [-no-stub] [-proxy]                  Start the local environment, using the BMA version: <bma-version>"
-    echo "start -bca-version <bca-version> [-no-stub] [-proxy]                  Start the local environment, using the BMA version: <bma-version>"
-    echo "stop                                                                  Stop the local environment"
-    echo "status                                                                Print the local environment status"
-    echo "start-app <app_id>                                                    Start only the specified app ($(for APP in "${APPS[@]}"; do echo -n " ${APP}"; done) )"
-    echo "stop-app <app_id>                                                     Stop only the specified app ($(for APP in "${APPS[@]}"; do echo -n " ${APP}"; done) )"
-    echo "update [<app_id>]                                                     Update local environment scripts, along with the specified app ( styxpres chekito mvt )."
-    echo "                                                                      By default updates styxpres, chekito and mvt docker images"
+    echo "start [-proxy]                                        Start the local environment, with no front-end apps (BA)"
+    echo "start -ba-version <ba-version> [-no-stub] [-proxy]    Start the local environment, using the BA version: <ba-version>"
+    echo "start -bma-version <bma-version> [-no-stub] [-proxy]  Start the local environment, using the BMA version: <bma-version>"
+    echo "start -bca-version <bca-version> [-no-stub] [-proxy]  Start the local environment, using the BMA version: <bma-version>"
+    echo "stop                                                  Stop the local environment"
+    echo "status                                                Print the local environment status"
+    echo "start-app <app_id>                                    Start only the specified app ($(for APP in "${APPS[@]}"; do echo -n " ${APP}"; done) )"
+    echo "stop-app <app_id>                                     Stop only the specified app ($(for APP in "${APPS[@]}"; do echo -n " ${APP}"; done) )"
+    echo "update [<app_id>]                                     Update local environment scripts, along with the specified app ( styxpres chekito mvt )."
+    echo "                                                      By default updates styxpres, chekito and mvt docker images"
     echo
     echo "Options:"
-    echo "-no-stub                                                              Start the local environment with using checkito as mocking server"
-    echo "-proxy                                                                Set the local environment proxy host to docker.for.mac.localhost:8888"
+    echo "-no-stub                                              Start the local environment with using checkito as mocking server"
+    echo "-proxy                                                Set the local environment proxy host to docker.for.mac.localhost:8888"
     exit 0
 }
 
