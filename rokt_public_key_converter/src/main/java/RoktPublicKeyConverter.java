@@ -10,13 +10,9 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
 
-public class RoktPublicKeyGenerator {
-    private static final String APP_DIR = System.getProperty("user.dir") + "/rokt_public_key_generator/" ;
+public class RoktPublicKeyConverter {
+    private static final String APP_DIR = System.getProperty("user.dir") + "/rokt_public_key_converter/" ;
 
-    private static final String STAGING_FILE_NAME = "RoktPublicKeyStaging";
-    private static final String PRODUCTION_FILE_NAME = "RoktPublicKeyProduction";
-
-    private static final String JSON_EXTENSION = ".json";
     private static final String PEM_EXTENSION = ".pem";
 
     private static final String MODULUS = "Modulus";
@@ -26,22 +22,14 @@ public class RoktPublicKeyGenerator {
     private static final String END_PUBLIC_KEY = "\n-----END PUBLIC KEY-----\n";
 
     public static void main(String[] args) throws Exception {
-        String timestamp = args[0];
+        String inputJsonFileName = args[0];
+        String outputPemFileName = inputJsonFileName + PEM_EXTENSION;
 
-        String inputStagingJsonFileName = STAGING_FILE_NAME + timestamp + JSON_EXTENSION;
-        String outputStagingPemFileName = STAGING_FILE_NAME + timestamp + PEM_EXTENSION;
-
-        String inputProductionJsonFileName = PRODUCTION_FILE_NAME + timestamp + JSON_EXTENSION;
-        String outputProductionPemFileName = PRODUCTION_FILE_NAME + timestamp + PEM_EXTENSION;
-
-        PublicKey stagingKey = generatePublicKeyFromInputFile(inputStagingJsonFileName);
-        writeKeyToOutputFile(stagingKey, outputStagingPemFileName);
-
-        PublicKey productionKey = generatePublicKeyFromInputFile(inputProductionJsonFileName);
-        writeKeyToOutputFile(productionKey, outputProductionPemFileName);
+        PublicKey publicKey = generateKeyFromInputFile(inputJsonFileName);
+        writeKeyToOutputFile(publicKey, outputPemFileName);
     }
 
-    private static PublicKey generatePublicKeyFromInputFile(String jsonFileName) throws Exception {
+    private static PublicKey generateKeyFromInputFile(String jsonFileName) throws Exception {
         JSONParser jsonParser = new JSONParser();
         JSONObject jsonObject = (JSONObject) jsonParser.parse(new FileReader(APP_DIR + jsonFileName ));
         String modulusBase64 = (String) jsonObject.get(MODULUS);
@@ -57,14 +45,13 @@ public class RoktPublicKeyGenerator {
 
         KeyFactory keyFactory = KeyFactory.getInstance(ALGORITHM);
         return keyFactory.generatePublic(keySpec);
-
     }
 
-    private static void writeKeyToOutputFile(PublicKey publicKey, String keyFileName) throws Exception {
+    private static void writeKeyToOutputFile(PublicKey publicKey, String pemFileName) throws Exception {
         String keyString = Base64.getMimeEncoder().encodeToString(publicKey.getEncoded());
         String keyFileContent = BEGIN_PUBLIC_KEY + keyString + END_PUBLIC_KEY;
-        try (PrintWriter out = new PrintWriter(APP_DIR + keyFileName)) {
-            out.println(keyFileContent);
+        try (PrintWriter printWriter = new PrintWriter(APP_DIR + pemFileName)) {
+            printWriter.println(keyFileContent);
         }
     }
 

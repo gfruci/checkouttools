@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>checkouttools</groupId>
-    <artifactId>rokt_public_key_generator</artifactId>
+    <artifactId>rokt_public_key_converter</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <dependencies>
