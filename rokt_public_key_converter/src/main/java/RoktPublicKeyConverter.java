@@ -11,7 +11,6 @@ import org.json.simple.parser.JSONParser;
 
 
 public class RoktPublicKeyConverter {
-    private static final String APP_DIR = System.getProperty("user.dir") + "/rokt_public_key_converter/" ;
 
     private static final String PEM_EXTENSION = ".pem";
 
@@ -19,7 +18,7 @@ public class RoktPublicKeyConverter {
     private static final String EXPONENT = "Exponent";
     private static final String ALGORITHM = "RSA";
     private static final String BEGIN_PUBLIC_KEY = "-----BEGIN PUBLIC KEY-----\n";
-    private static final String END_PUBLIC_KEY = "\n-----END PUBLIC KEY-----\n";
+    private static final String END_PUBLIC_KEY = "\n-----END PUBLIC KEY-----";
 
     public static void main(String[] args) throws Exception {
         String inputJsonFileName = args[0];
@@ -31,7 +30,7 @@ public class RoktPublicKeyConverter {
 
     private static PublicKey generateKeyFromInputFile(String jsonFileName) throws Exception {
         JSONParser jsonParser = new JSONParser();
-        JSONObject jsonObject = (JSONObject) jsonParser.parse(new FileReader(APP_DIR + jsonFileName ));
+        JSONObject jsonObject = (JSONObject) jsonParser.parse(new FileReader(jsonFileName ));
         String modulusBase64 = (String) jsonObject.get(MODULUS);
         String exponentBase64 = (String) jsonObject.get(EXPONENT);
 
@@ -50,7 +49,7 @@ public class RoktPublicKeyConverter {
     private static void writeKeyToOutputFile(PublicKey publicKey, String pemFileName) throws Exception {
         String keyString = Base64.getMimeEncoder().encodeToString(publicKey.getEncoded());
         String keyFileContent = BEGIN_PUBLIC_KEY + keyString + END_PUBLIC_KEY;
-        try (PrintWriter printWriter = new PrintWriter(APP_DIR + pemFileName)) {
+        try (PrintWriter printWriter = new PrintWriter(pemFileName)) {
             printWriter.println(keyFileContent);
         }
     }

@@ -18,11 +18,10 @@ Owner: CKO/CCAT, slack: #hcom-cko-ccat-sup
     * https://stash.hcom/projects/COP/repos/bookingmanagementapp/browse/bookingmanagementapp-web/src/main/resources/conf/environment/env_rules_production.properties for production environment
 
 ### Build and run
-  - Place the input JSON files into the module root directory: https://stash.hcom/projects/COP/repos/checkouttools/browse/rokt_public_key_converter
-    (i.e. where the ```pom.xml``` and ```README.md``` files are located)
-  - Run the application in your preferred way (IDE, command line etc.) with an input filename supplied as a program argument. The application should be run
+  - Run the application in your preferred way (IDE, command line etc.) with the full path to the input JSON file supplied as a program argument 
+    (e.g. ```c:\Users\Your_UserName\prod.pubkey```). The application should be run
     two times, once for the staging and once for the production key!
-  - The output PEM files will be created in the module root directory, named simply ```$INPUT_FILE_NAME + .pem``` (e.g. if the name of the input JSON file name was
+  - The output PEM file will be created in the same directory where the input JSON file is located, named simply ```$INPUT_FILE_NAME + .pem``` (e.g. if the name of the input JSON file name was
     ```prod.pubkey```, then the output PEM file name will be ```prod.pubkey.pem```
   - Rename the output PEM files manually into the naming format expected by BMA. The currently used name formats are ```RoktPublicKeyStagingYYYYMM.pem```
     and ```RoktPublicKeyProductionYYYYMM.pem```, where ```YYYYMM``` stands for actual year and month, e.g. ```RoktPublicKeyStaging201809.pem``` and
