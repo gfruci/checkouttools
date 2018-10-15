@@ -422,20 +422,25 @@ If you need to enable the local proxy in WIN or if you want to modify the proxy 
 You have to start your application using a starter script from the IDE setting the following properties:
 
 In the Parameters tab:
+
     `Command line: initialize tomcat7:run`
     `Profiles: fast start-devrom`
 
 In the Runner tab:
 The following setting is optional just if you want to use the proxy
+
 `VM Options: -Dhttp.proxyHost=localhost -Dhttp.proxyPort=8888 -Dhttps.proxyHost=localhost -Dhttps.proxyPort=8888`
 
 Add as properties:
+
 `WEBSITE_DOMAIN_DISCRIMINATOR: staging-1` or `dev-`
+
 if you want use the cookie set in a particular domain
 
 Note: In this case all the env variables in the docker-compose are not used. The app start with the devrom profile and uses the development properties
 
 In the local_environment you have to change the origins.yaml to point to your local machine and not the docker machine:
+
     `origins:`
     `# commented - { id: "ba.docker",    host: "ba:8443" }`
     `  - { id: "local-ba-mac", host: "docker.for.mac.localhost:30443" }`
