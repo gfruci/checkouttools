@@ -423,8 +423,8 @@ You have to start your application using a starter script from the IDE setting t
 
 In the Parameters tab:
 
-    `Command line: initialize tomcat7:run`
-    `Profiles: fast start-devrom`
+    Command line: initialize tomcat7:run
+    Profiles: fast start-devrom
 
 In the Runner tab:
 The following setting is optional just if you want to use the proxy
@@ -441,9 +441,9 @@ Note: In this case all the env variables in the docker-compose are not used. The
 
 In the local_environment you have to change the origins.yaml to point to your local machine and not the docker machine:
 
-    `origins:`
-    `# commented - { id: "ba.docker",    host: "ba:8443" }`
-    `  - { id: "local-ba-mac", host: "docker.for.mac.localhost:30443" }`
+    origins:
+    # commented - { id: "ba.docker",    host: "ba:8443" }
+      - { id: "local-ba-mac", host: "docker.for.mac.localhost:30443" }
 
 ## Contributing
 
