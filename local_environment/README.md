@@ -339,7 +339,7 @@ The fixed BA debugging port is `2201`
 Enabling the local proxy via the startup script is only supported in MAC with a fixed proxy host value: `docker.for.mac.localhost:8888`.
 Just specify the option `-proxy` while starting the environment.
 
-    $local_env start-app ba -ba-version latest -proxy
+    $./local_env.sh start-app ba -ba-version latest -proxy
 
 If you need to enable the local proxy in WIN or if you want to modify the proxy host address, you can add the following configuration into the local_environment `<local_environment_root_folder>/docker-compose.yml` file.
 
