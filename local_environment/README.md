@@ -383,9 +383,9 @@ If you need to enable the local proxy in WIN or if you want to modify the proxy 
     $ git config core.autocrlf input
     ```
 
-* If you got ```2 matches found based on name: network localenvironment_default is ambiguous``` during startup
+* If you got ```2 matches found based on name: network local_environment_default is ambiguous``` during startup
   
-  This error means that you have two **localenvironment_default**.
+  This error means that you have two **local_environment_default**.
   
   You can check it with the ```docker network ls``` command.
   
