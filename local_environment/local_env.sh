@@ -34,7 +34,7 @@ APPS=( "mvt" "ba" "bma" "bca" "checkito" "styxpres" "nginx")
 
 declare -A APPS_CONF=(\
     ["mvt,update_cmd"]="docker pull 181651482125.dkr.ecr.us-west-2.amazonaws.com/hotels/mvt:latest >> ${SCRIPT_DIR}/logs/startup.log 2>&1"\
-    ["styxpres,start_status_cmd"]="grep \"Started styx server in\" ${SCRIPT_DIR}/logs/styxpres.log"\
+    ["styxpres,start_status_cmd"]="grep -i \"Started styx server in\" ${SCRIPT_DIR}/logs/styxpres.log"\
     ["styxpres,stop_status_cmd"]="grep -e \"styxpres.*ERROR\" ${SCRIPT_DIR}/logs/styxpres.log | grep -v \"locsClientLoader\""\
     ["styxpres,update_cmd"]="docker pull 181651482125.dkr.ecr.us-west-2.amazonaws.com/hotels/styxpres:release >> ${SCRIPT_DIR}/logs/startup.log 2>&1"\
     ["checkito,start_status_cmd"]="grep \"checkito.*Checkito listening for HTTP requests\" ${SCRIPT_DIR}/logs/checkito.log"\
