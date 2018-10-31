@@ -80,7 +80,7 @@
   - { id: "staging-bpe-01", host: "chelapphot127.karmalab.net:39421" }
   - { id: "staging-bpe-02", host: "chelapphot040.karmalab.net:39422" }
   
-  id: "thanos"
+- id: "thanos"
   path: "/thanos/"
   rewrites:
     - urlPattern: "/thanos/(.*)"
