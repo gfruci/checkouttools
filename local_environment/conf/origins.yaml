@@ -84,9 +84,9 @@
   path: "/thanos/"
   rewrites:
     - urlPattern: "/thanos/(.*)"
-      replacement: "$1"
+      replacement: "/v1/change-date"
   healthCheck:
-    uri: "/health"
+    uri: "actuator/health"
   connectionPool:
     maxConnectionsPerHost: 40
     maxPendingConnectionsPerHost: 20
@@ -97,5 +97,5 @@
     trustAllCerts:       true
     sslProvider:         OPENSSL     # Also supports JDK
   origins:
-  - { id: "staging-thanos-01", host: "chhlapphot667.karmalab.net:52701" }
-  - { id: "staging-thanos-02", host: "chelapphot211.karmalab.net:52702" }
+  - { id: "staging-thanos-01", host: "chhlapphot667.karmalab.net:52721" }
+  - { id: "staging-thanos-02", host: "chelapphot211.karmalab.net:52722" }
