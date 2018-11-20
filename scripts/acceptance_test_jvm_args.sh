@@ -51,7 +51,7 @@ function parse_default_properties(){
 
 function parse_pom_xml(){
   cat ${1}/${ACC_TEST_DIR_NAME}/pom.xml \
-  | egrep "<(COOKIELESS_DOMAIN_ENABLED|LOCALISATION_DEV_LANGUAGE_TO_LOAD|UI_DEVELOPMENT_MODE_ENABLED)>" \
+  | egrep "<(COOKIELESS_DOMAIN_ENABLED|LOCALISATION_DEV_LANGUAGE_TO_LOAD|UI_DEVELOPMENT_MODE_ENABLED|java.locale.providers)>" \
   | awk -F'[<>]' '{printf("-D%s=%s\n",$2,$3)}'
 }
 
