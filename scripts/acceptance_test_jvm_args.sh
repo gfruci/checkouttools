@@ -7,15 +7,17 @@ BA_HOME=""
 ACC_TEST_DIR_NAME="bookingapp-acceptance-test"
 COPY_TO_CLIPBOARD="false"
 ENV=dev_rom
+JAVA_11="false"
 
 
 function print_help(){
   echo "Usage:"
-  echo "${0} [-v] [-c] [-h] [-e env] <bookingapp directory>"
-  echo "-v  verbose"
-  echo "-c  copy result to clipboard (Windows bash only, it uses /dev/clipboard)"
-  echo "-e  acceptance tests env (e.g dev_rom). Default is dev_rom."
-  echo "-h  print this help"
+  echo "${0} [-v] [-c] [-h] [-e env] [-j11] <bookingapp directory>"
+  echo "-v   verbose"
+  echo "-c   copy result to clipboard (Windows bash only, it uses /dev/clipboard)"
+  echo "-e   acceptance tests env (e.g dev_rom). Default is dev_rom."
+  echo "-j11 use Java 11 specific args"
+  echo "-h   print this help"
 }
 
 function debug_log(){
@@ -50,8 +52,13 @@ function parse_default_properties(){
 }
 
 function parse_pom_xml(){
+  if [[ "${JAVA_11}" == "true" ]]; then
+    JAVA_11_SPECIFIC_PATTERN='|java.locale.providers'
+  else
+    JAVA_11_SPECIFIC_PATTERN=''
+  fi
   cat ${1}/${ACC_TEST_DIR_NAME}/pom.xml \
-  | egrep "<(COOKIELESS_DOMAIN_ENABLED|LOCALISATION_DEV_LANGUAGE_TO_LOAD|UI_DEVELOPMENT_MODE_ENABLED|java.locale.providers)>" \
+  | egrep "<(COOKIELESS_DOMAIN_ENABLED|LOCALISATION_DEV_LANGUAGE_TO_LOAD|UI_DEVELOPMENT_MODE_ENABLED${JAVA_11_SPECIFIC_PATTERN})" \
   | awk -F'[<>]' '{printf("-D%s=%s\n",$2,$3)}'
 }
 
@@ -60,6 +67,7 @@ function process_args(){
     case "${1}" in
     -v) DEBUG="true" ;;
     -c) COPY_TO_CLIPBOARD="true" ;;
+    -j11) JAVA_11="true" ;;
     -h) print_help && exit 0 ;;
     -e) shift
         ENV=${1} ;;
