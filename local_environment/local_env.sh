@@ -304,7 +304,7 @@ function help {
     echo "Options:"
     echo "-no-stub                                                  Start the local environment with using checkito as mocking server"
     echo "-proxy                                                    Set the local environment proxy host to docker.for.mac.localhost:8888"
-    echo "-j11"                                                     Sets Java 11 related options
+    echo "-j11                                                      Sets Java 11 related options"
     exit 0
 }
 
