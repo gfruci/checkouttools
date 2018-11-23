@@ -44,7 +44,7 @@ declare -A APPS_CONF=(\
     ["nginx,start_status_cmd"]="grep -e \"nginx.*done\" ${SCRIPT_DIR}/logs/nginx.log"\
     ["nginx,stop_status_cmd"]="grep -e \"nginx.*error\" ${SCRIPT_DIR}/logs/nginx.log"\
     ["ba,start_status_cmd"]="grep \"ba.*Server startup\" ${SCRIPT_DIR}/logs/ba.log"\
-    ["ba,stop_status_cmd"]="grep -e \"ba.*ERROR\" ${SCRIPT_DIR}/logs/ba.log | grep -v \"locsClientLoader\""\
+    ["ba,stop_status_cmd"]="grep -e \"ba.*ERROR \" ${SCRIPT_DIR}/logs/ba.log | grep -v \"locsClientLoader\""\
     ["bma,start_status_cmd"]="grep \"bma.*Server startup\" ${SCRIPT_DIR}/logs/bma.log"\
     ["bma,stop_status_cmd"]="grep -e \"bma.*ERROR\" ${SCRIPT_DIR}/logs/bma.log | grep -v \"locsClientLoader\""\
     ["bca,start_status_cmd"]="grep \"bca.*Server startup\" ${SCRIPT_DIR}/logs/bca.log"\
@@ -200,8 +200,10 @@ function start-app {
     if [ "${WATCH_RETURN_CODE}" -eq "0" ]
     then
         echo -e "\n$COLOR_SUCCESS ${APP} started $COLOR_RESET"
+        terminal-notifier -title "LESS" -message "✅ ${APP} started" -sound 'default' -sender "com.apple.launchpad.launcher"
     else
         echo -e "\n$COLOR_ERROR Error: ${APP} start error $COLOR_RESET"
+        terminal-notifier -title "LESS" -message "📛 ${APP} start error" -sound 'default' -sender "com.apple.launchpad.launcher"
         if [ "${START_MODE}" == "start-all" ]
         then
             stop
