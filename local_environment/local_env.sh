@@ -139,7 +139,7 @@ function update {
 
 function start-app {
 
-    MSYS_NO_PATHCONV=1 export TRUSTSTORE_PATH=${TRUSTSTORE_PATH}
+    export TRUSTSTORE_PATH=${TRUSTSTORE_PATH}
     APP=$1
     APP_TYPE=""
 
