@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+export MSYS_NO_PATHCONV=1
 COLOR_HEADER="\033[7;49;36m"
 COLOR_WATCH="\033[7;49;33m"
 COLOR_SUCCESS="\033[7;49;32m"
@@ -29,7 +30,7 @@ BA_VERSION=
 BMA_VERSION=
 BCA_VERSION=
 STUB_STATUS=
-TRUSTSTORE_PATH=/hcom/share/java/default/jre/lib/security/cacerts_plus_internal
+TRUSTSTORE_PATH="/hcom/share/java/default/jre/lib/security/cacerts_plus_internal"
 
 APPS=( "mvt" "ba" "bma" "bca" "checkito" "styxpres" "nginx")
 
@@ -137,6 +138,8 @@ function update {
 ###############################
 
 function start-app {
+
+    MSYS_NO_PATHCONV=1 export TRUSTSTORE_PATH=${TRUSTSTORE_PATH}
     APP=$1
     APP_TYPE=""
 
@@ -337,7 +340,7 @@ function init {
           export PROXY_CONFIG=${PROXY_CONFIG}
           ;;
         -j11)
-          TRUSTSTORE_PATH=/hcom/share/java/default/lib/security/cacerts_plus_internal
+          TRUSTSTORE_PATH="/hcom/share/java/default/lib/security/cacerts_plus_internal"
           ;;
       esac
       shift
