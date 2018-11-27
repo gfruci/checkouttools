@@ -31,6 +31,7 @@ BMA_VERSION=
 BCA_VERSION=
 STUB_STATUS=
 TRUSTSTORE_PATH="/hcom/share/java/default/jre/lib/security/cacerts_plus_internal"
+DEBUG_OPTS="-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=1901"
 
 APPS=( "mvt" "ba" "bma" "bca" "checkito" "styxpres" "nginx")
 
@@ -139,6 +140,7 @@ function update {
 
 function start-app {
 
+    export DEBUG_OPTS=${DEBUG_OPTS}
     export TRUSTSTORE_PATH=${TRUSTSTORE_PATH}
     APP=$1
     APP_TYPE=""
@@ -340,6 +342,7 @@ function init {
           export PROXY_CONFIG=${PROXY_CONFIG}
           ;;
         -j11)
+          DEBUG_OPTS="-Xdebug -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:1901"
           TRUSTSTORE_PATH="/hcom/share/java/default/lib/security/cacerts_plus_internal"
           ;;
       esac
