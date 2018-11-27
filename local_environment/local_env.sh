@@ -139,7 +139,7 @@ function update {
 
 function start-app {
 
-    MSYS_NO_PATHCONV=1 export TRUSTSTORE_PATH=${TRUSTSTORE_PATH}
+    export TRUSTSTORE_PATH=${TRUSTSTORE_PATH}
     APP=$1
     APP_TYPE=""
 
@@ -203,10 +203,10 @@ function start-app {
     if [ "${WATCH_RETURN_CODE}" -eq "0" ]
     then
         echo -e "\n$COLOR_SUCCESS ${APP} started $COLOR_RESET"
-        terminal-notifier -title "LESS" -message "✅ ${APP} started" -sound 'default' -sender "com.apple.launchpad.launcher"
+        type terminal-notifier &>/dev/null && terminal-notifier -title "LESS" -message "✅ ${APP} started" -sound 'default' -sender "com.apple.launchpad.launcher"
     else
         echo -e "\n$COLOR_ERROR Error: ${APP} start error $COLOR_RESET"
-        terminal-notifier -title "LESS" -message "📛 ${APP} start error" -sound 'default' -sender "com.apple.launchpad.launcher"
+        type terminal-notifier &>/dev/null && terminal-notifier -title "LESS" -message "📛 ${APP} start error" -sound 'default' -sender "com.apple.launchpad.launcher"
         if [ "${START_MODE}" == "start-all" ]
         then
             stop
