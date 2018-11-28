@@ -142,10 +142,8 @@ services:
       - APP_VPS_HOST=checkito:8089
       - APP_CAR_TRAWLER_BASE_URL=checkito:8089
       - APP_CAR_TRAWLER_SECURE_URL_ENABLED=false
-      - APP_BPAS_HOST=checkito:8089
-      # this will be after HPAY-5364
-      #- APP_BPAS_HOST=checkito
-      #- APP_BPAS_PORT=8089
+      - APP_BPAS_HOST=checkito
+      - APP_BPAS_PORT=8089
       - APP_COUPON_SERVICE_HOST=checkito
       - APP_COUPON_SERVICE_PORT=8089
       - APP_BRAVOS_API_DOMAIN_NAME=checkito
