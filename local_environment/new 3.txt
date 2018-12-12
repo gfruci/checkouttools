@@ -1,0 +1,7 @@
+{
+	"type": "AvailabilityDetailResponseException",
+	"message": "AvailabilityDetailResponseException [10001=Room is not available.]",
+	"properties": {
+		"10001": "Room is not available."
+	}
+}

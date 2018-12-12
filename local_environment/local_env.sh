@@ -24,7 +24,7 @@ cd ${PREV_DIR}
 # CONFIGS #
 #########################
 
-PROXY_CONFIG="-Dhttp.proxyHost=docker.for.mac.localhost -Dhttp.proxyPort=8888 -Dhttps.proxyHost=docker.for.mac.localhost -Dhttps.proxyPort=8888 -DproxyHost=docker.for.mac.localhost -DproxyPort=8888"
+PROXY_CONFIG="-Dhttp.proxyHost=docker.for.win.localhost -Dhttp.proxyPort=8888 -Dhttps.proxyHost=docker.for.win.localhost -Dhttps.proxyPort=8888 -DproxyHost=docker.for.win.localhost -DproxyPort=8888"
 START_MODE=
 BA_VERSION=
 BMA_VERSION=
