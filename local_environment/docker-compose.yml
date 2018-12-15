@@ -113,7 +113,6 @@ services:
       # Not supported on checkito yet
       - APP_FENCED_VAP_ENABLED=false
       - APP_UNBRANDED_VIP_VAP_ENABLED=false
-      - APP_CANCELLATION_FLOW_SWITCH=OMS_CANCELLATION_FLOW
 
       # Checkito resources
       - APP_DOSSIER_SERVICES_SCHEME=http
@@ -225,7 +224,6 @@ services:
       # Not supported on checkito yet
       - APP_FENCED_VAP_ENABLED=false
       - APP_UNBRANDED_VIP_VAP_ENABLED=false
-      - APP_CANCELLATION_FLOW_SWITCH=OMS_CANCELLATION_FLOW
 
       #remote jmx
       - APP_com.sun.management.jmxremote=true
@@ -302,7 +300,6 @@ services:
       # Not supported on checkito yet
       - APP_FENCED_VAP_ENABLED=false
       - APP_UNBRANDED_VIP_VAP_ENABLED=false
-      - APP_CANCELLATION_FLOW_SWITCH=OMS_CANCELLATION_FLOW
 
       # Checkito resources
       - APP_DOSSIER_SERVICES_SCHEME=http
@@ -417,7 +414,6 @@ services:
       # Not supported on checkito yet
       - APP_FENCED_VAP_ENABLED=false
       - APP_UNBRANDED_VIP_VAP_ENABLED=false
-      - APP_CANCELLATION_FLOW_SWITCH=OMS_CANCELLATION_FLOW
 
       #remote jmx
       - APP_com.sun.management.jmxremote=true
@@ -495,7 +491,6 @@ services:
       # Not supported on checkito yet
       - APP_FENCED_VAP_ENABLED=false
       - APP_UNBRANDED_VIP_VAP_ENABLED=false
-      - APP_CANCELLATION_FLOW_SWITCH=OMS_CANCELLATION_FLOW
 
       # Checkito resources
       - APP_DOSSIER_SERVICES_SCHEME=http
@@ -611,7 +606,6 @@ services:
       # Not supported on checkito yet
       - APP_FENCED_VAP_ENABLED=false
       - APP_UNBRANDED_VIP_VAP_ENABLED=false
-      - APP_CANCELLATION_FLOW_SWITCH=OMS_CANCELLATION_FLOW
 
       #remote jmx
       - APP_com.sun.management.jmxremote=true
