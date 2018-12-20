@@ -197,7 +197,7 @@ Move under the `local_environment`, give execution permissions to the `local_env
                                                            By default updates styxpres, chekito and mvt docker images
     
     Options:
-    -no-stub                                               Start the local environment with using checkito as mocking server
+    -no-stub                                               Start the local environment without using checkito as mocking server (by default is using Checkito)
     -proxy                                                 Set the local environment proxy host to docker.for.mac.localhost:8888
 
 ----
@@ -433,17 +433,95 @@ The following setting is optional just if you want to use the proxy
 
 Add as properties:
 
-`WEBSITE_DOMAIN_DISCRIMINATOR: staging-1` or `dev-`
+`WEBSITE_DOMAIN_DISCRIMINATOR: staging-1` or `dev-` if you want use the cookie set in a particular domain
 
-if you want use the cookie set in a particular domain
+`MVT_BUSINESS_CONFIGURATION_HOME` pointing to your mvtconfigurationpack local folder
 
-Note: In this case all the env variables in the docker-compose are not used. The app start with the devrom profile and uses the development properties
+Get the mvtconfigurationpack by cloning ssh://git@stash.hcom:7999/hweb/mvtconfigurationpack.git
 
-In the local_environment you have to change the origins.yaml to point to your local machine and not the docker machine:
+As example: MVT_BUSINESS_CONFIGURATION_HOME=/Users/jhon/git/HWEB/mvtconfigurationpack
 
-    origins:
-    # commented - { id: "ba.docker",    host: "ba:8443" }
-      - { id: "local-ba-mac", host: "docker.for.mac.localhost:30443" }
+Note: In this case all the env variables in the docker-compose are not used.
+The app start with the start-devrom profile and uses the development properties.
+The start-devrom profile in the BookingApp project setup some tomcat properties.
+The properties are read from the build/dev/tomcat/devrom_server_configuration.properties
+
+In the local_environment you have to change the origins.yaml for the ba.
+To point to your local machine and not the docker machine:
+
+    - id: "book"
+      path: "/ba/"
+      rewrites:
+      ...
+      origins:
+      # commented - { id: "ba.docker",    host: "ba:8443" }
+        - { id: "local-ba-mac", host: "docker.for.mac.localhost:30443" }
+
+**Question:** How to compile the BookingApp locally?
+
+**Answer:**
+
+Update your settings.xml maven file with the following one:
+
+```
+<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd">
+   <localRepository>${user.home}/.m2/repository</localRepository>
+   <servers>
+        <server>
+            <username>readonly</username>
+            <password>\{DESede\}CFUTXBvK0gmItVG/gst/7g==</password>
+            <id>central</id>
+        </server>
+        <server>
+            <username>readonly</username>
+            <password>\{DESede\}CFUTXBvK0gmItVG/gst/7g==</password>
+            <id>snapshots</id>
+        </server>
+   </servers>
+   <profiles>
+        <profile>
+            <id>artifactory</id>
+            <repositories>
+                <repository>
+                    <id>central</id>
+                    <name>libs-release</name>
+                    <url>http://bin.hotels.com/artifactory/libs-release</url>
+                </repository>
+                <!--repository>
+                    <id>snapshots</id>
+                    <name>libs-snapshot</name>
+                    <url>http://bin.hotels.com/artifactory/libs-snapshot</url>
+                    <releases>
+                        <enabled>false</enabled>
+                    </releases>
+                </repository-->
+            </repositories>
+            <pluginRepositories>
+                <pluginRepository>
+                    <id>central</id>
+                    <name>plugins-release</name>
+                    <url>http://bin.hotels.com/artifactory/plugins-release</url>
+                </pluginRepository>
+                <pluginRepository>
+                    <id>snapshots</id>
+                    <name>plugins-snapshot</name>
+                    <url>http://bin.hotels.com/artifactory/plugins-snapshot</url>
+                    <releases>
+                        <enabled>true</enabled>
+                    </releases>
+                </pluginRepository>
+            </pluginRepositories>
+        </profile>
+    </profiles>
+    <activeProfiles>
+        <activeProfile>artifactory</activeProfile>
+    </activeProfiles>
+</settings>
+```
+
+Run:
+mvn clean install
+mvn clean install -Pfast (to skip checkstyle and all the tests)
 
 ## Contributing
 
