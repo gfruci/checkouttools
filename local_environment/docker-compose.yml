@@ -246,6 +246,7 @@ services:
       - mvt:/mvt
     environment:
       - APP_CONFIG_ENVIRONMENT=development
+      - APP_CONFIG_LOCATION=file:/hcom/servers/tomcat/appconfig
       - APP_jvm.route=development
       - APP_javax.net.ssl.trustStore=/hcom/share/java/default/jre/lib/security/cacerts_plus_internal
       - APP_javax.net.ssl.trustStorePassword=changeit
@@ -363,6 +364,7 @@ services:
       - mvt:/mvt
     environment:
       - APP_CONFIG_ENVIRONMENT=development
+      - APP_CONFIG_LOCATION=file:/hcom/servers/tomcat/appconfig
       - APP_jvm.route=development
       - APP_javax.net.ssl.trustStore=/hcom/share/java/default/jre/lib/security/cacerts_plus_internal
       - APP_javax.net.ssl.trustStorePassword=changeit
