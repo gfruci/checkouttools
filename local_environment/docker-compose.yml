@@ -282,7 +282,7 @@ services:
       - APP_DSC_DATASTAX_SSL_ENABLED=false
       - APP_DSC_DATASTAX_KEYSPACE_NAME=hermes
       - APP_LVS_CLIENT_BASE_URL=http://hcomcdslivevisitsservice.staging.hcom
-      - APP_DIONYSUS_TEMPLATE_PATH=http://dispatcherapp.staging1.hcom/templates/dionysus_ui_pack_templates-63.0.zip
+      - APP_DIONYSUS_TEMPLATE_PATH=http://dispatcherapp.staging.hcom/templates/dionysus_ui_pack_templates-63.0.zip
       - APP_LOYALTY_REST_CLIENT_CONNECT_TIMEOUT=60000
       - APP_LOYALTY_REST_CLIENT_READ_TIMEOUT=60000
       - APP_LOYALTY_ESTIMATION_SERVICE_CLIENT_READ_TIMEOUT=60000
@@ -474,7 +474,7 @@ services:
       - APP_DSC_DATASTAX_SSL_ENABLED=false
       - APP_DSC_DATASTAX_KEYSPACE_NAME=hermes
       - APP_LVS_CLIENT_BASE_URL=http://hcomcdslivevisitsservice.staging.hcom
-      - APP_DIONYSUS_TEMPLATE_PATH=http://dispatcherapp.staging1.hcom/templates/dionysus_ui_pack_templates-63.0.zip
+      - APP_DIONYSUS_TEMPLATE_PATH=http://dispatcherapp.staging.hcom/templates/dionysus_ui_pack_templates-63.0.zip
       - APP_LOYALTY_REST_CLIENT_CONNECT_TIMEOUT=60000
       - APP_LOYALTY_REST_CLIENT_READ_TIMEOUT=60000
       - APP_LOYALTY_ESTIMATION_SERVICE_CLIENT_READ_TIMEOUT=60000

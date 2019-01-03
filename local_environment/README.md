@@ -412,7 +412,7 @@ If you need to enable the local proxy in WIN or if you want to modify the proxy 
     
     Docker -> Settings -> Shared drives -> click "Reset credentials...", tick the checkbox next to the "C" drive again, click Apply, then docker prompts you for the new password.
 
-* BMA startup fails when downloading `http://dispatcherapp.staging1.hcom/templates/dionysus_ui_pack_templates-63.0.zip`?  Try increasing Docker's memory to at least 5GB.
+* BMA startup fails when downloading `http://dispatcherapp.staging.hcom/templates/dionysus_ui_pack_templates-63.0.zip`?  Try increasing Docker's memory to at least 5GB.
 
 ## FAQ
 
