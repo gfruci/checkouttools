@@ -30,8 +30,8 @@ BA_VERSION=
 BMA_VERSION=
 BCA_VERSION=
 STUB_STATUS=
-TRUSTSTORE_PATH="/hcom/share/java/default/jre/lib/security/cacerts_plus_internal"
-DEBUG_OPTS="-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=1901"
+TRUSTSTORE_PATH="/hcom/share/java/default/lib/security/cacerts_plus_internal"
+DEBUG_OPTS="-Xdebug -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:1901"
 
 APPS=( "mvt" "ba" "bma" "bca" "checkito" "styxpres" "nginx")
 
@@ -296,7 +296,7 @@ function help {
     echo "Usage: $0 <command> <options>"
     echo "Commands:"
     echo "start [-proxy]                                            Start the local environment, with no front-end apps (BA)"
-    echo "start -ba-version <ba-version> [-no-stub] [-proxy] [-j11] Start the local environment, using the BA version: <ba-version>"
+    echo "start -ba-version <ba-version> [-no-stub] [-proxy] [-j8] Start the local environment, using the BA version: <ba-version>"
     echo "start -bma-version <bma-version> [-no-stub] [-proxy]      Start the local environment, using the BMA version: <bma-version>"
     echo "start -bca-version <bca-version> [-no-stub] [-proxy]      Start the local environment, using the BMA version: <bma-version>"
     echo "stop                                                      Stop the local environment"
@@ -309,7 +309,7 @@ function help {
     echo "Options:"
     echo "-no-stub                                                  Start the local environment without using checkito as mocking server (by default is using Checkito)"
     echo "-proxy                                                    Set the local environment proxy host to docker.for.mac.localhost:8888"
-    echo "-j11                                                      Sets Java 11 related options"
+    echo "-j8                                                       Sets Java 8 related options"
     exit 0
 }
 
@@ -341,9 +341,9 @@ function init {
         -proxy)
           export PROXY_CONFIG=${PROXY_CONFIG}
           ;;
-        -j11)
-          DEBUG_OPTS="-Xdebug -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:1901"
-          TRUSTSTORE_PATH="/hcom/share/java/default/lib/security/cacerts_plus_internal"
+        -j8)
+          DEBUG_OPTS="-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=1901"
+          TRUSTSTORE_PATH="/hcom/share/java/default/jre/lib/security/cacerts_plus_internal"
           ;;
       esac
       shift
