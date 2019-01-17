@@ -37,7 +37,7 @@ declare -A APPS_CONF=(\
     ["styxpres,start_status_cmd"]="grep \"Started styx server in\" ${SCRIPT_DIR}/logs/styxpres.log"\
     ["styxpres,stop_status_cmd"]="grep -e \"styxpres.*ERROR\" ${SCRIPT_DIR}/logs/styxpres.log | grep -v \"locsClientLoader\""\
     ["styxpres,update_cmd"]="docker pull 181651482125.dkr.ecr.us-west-2.amazonaws.com/hotels/styxpres:release >> ${SCRIPT_DIR}/logs/startup.log 2>&1"\
-    ["checkito,start_status_cmd"]="grep \"checkito.*Checkito listening for HTTP requests\" ${SCRIPT_DIR}/logs/checkito.log"\
+    ["checkito,start_status_cmd"]="grep \"checkito.*Checkito listening for HTTPS requests\" ${SCRIPT_DIR}/logs/checkito.log"\
     ["checkito,stop_status_cmd"]="grep -e \"checkito.*ERROR\" ${SCRIPT_DIR}/logs/checkito.log"\
     ["checkito,update_cmd"]="docker pull 181651482125.dkr.ecr.us-west-2.amazonaws.com/hotels/checkito:latest >> ${SCRIPT_DIR}/logs/startup.log 2>&1"\
     ["nginx,start_status_cmd"]="grep -e \"nginx.*done\" ${SCRIPT_DIR}/logs/nginx.log"\
@@ -301,6 +301,7 @@ function help {
     echo "Options:"
     echo "-no-stub                                              Start the local environment with using checkito as mocking server"
     echo "-proxy                                                Set the local environment proxy host to docker.for.mac.localhost:8888"
+    echo "-suit                                                 Configures which suit will be used with checkito"
     exit 0
 }
 
@@ -331,6 +332,11 @@ function init {
           ;;
         -proxy)
           export PROXY_CONFIG=${PROXY_CONFIG}
+          ;;
+        -suit)
+          SUIT=$2
+          export SUIT=${SUIT}
+          shift
           ;;
       esac
       shift
