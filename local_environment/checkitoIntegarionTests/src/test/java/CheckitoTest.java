@@ -14,6 +14,13 @@ import java.net.URLEncoder;
 import java.util.List;
 import java.util.Map;
 
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
+
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
@@ -85,6 +92,8 @@ public class CheckitoTest {
     }
 
     private String loadPageFromUrl(String url, RequestMethod requestMethod, Map<String, String> parameters) {
+        acceptSelfSignedHTTPSCertificate();
+
         try {
             String urlWithRequestParameters = url;
             if (requestMethod == RequestMethod.GET) {
@@ -118,6 +127,36 @@ public class CheckitoTest {
             return content.toString();
         } catch (IOException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    private void acceptSelfSignedHTTPSCertificate() {
+        TrustManager[] trustAllCerts = new TrustManager[]{
+            new X509TrustManager() {
+                public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+                    return null;
+                }
+                public void checkClientTrusted(
+                    java.security.cert.X509Certificate[] certs, String authType) {
+                }
+                public void checkServerTrusted(
+                    java.security.cert.X509Certificate[] certs, String authType) {
+                }
+            }
+        };
+
+        // Install the all-trusting trust manager
+        try {
+            SSLContext sc = SSLContext.getInstance("SSL");
+            sc.init(null, trustAllCerts, new java.security.SecureRandom());
+            HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
+            HttpsURLConnection.setDefaultHostnameVerifier(new HostnameVerifier() {
+                @Override
+                public boolean verify(String arg0, SSLSession arg1) {
+                    return true;
+                }
+            });
+        } catch (Exception e) {
         }
     }
 
