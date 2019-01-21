@@ -1,0 +1,164 @@
+import static org.testng.TestNGAntTask.Mode.testng;
+
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
+import java.net.URL;
+import java.net.URLEncoder;
+import java.util.List;
+import java.util.Map;
+
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.DataProvider;
+import org.testng.annotations.Test;
+
+import com.google.gson.Gson;
+import com.jayway.jsonpath.Configuration;
+import com.jayway.jsonpath.DocumentContext;
+import com.jayway.jsonpath.JsonPath;
+import com.jayway.jsonpath.Option;
+
+/**
+ * @author Zsolt_Saskovy
+ */
+public class CheckitoTest {
+    private static final String LINE_SEPARATOR = System.getProperty("line.separator");
+    private static final String JSON_TEST_DATA_FILE_NAME = "tests.json";
+    private TestData testData;
+
+    @BeforeClass
+    private void setUp() {
+        testData = loadTestData();
+    }
+
+    private TestData loadTestData() {
+        String jsonTestData = loadResourceContent(JSON_TEST_DATA_FILE_NAME);
+
+        return new Gson().fromJson(jsonTestData, TestData.class);
+    }
+
+    private String loadResourceContent(final String resourceName) {
+        try {
+            InputStream in = getClass().getClassLoader().getResourceAsStream(resourceName);
+            BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+            StringBuilder stringBuilder = new StringBuilder();
+            String line;
+
+            while ((line = reader.readLine()) != null) {
+                stringBuilder.append(line).append(LINE_SEPARATOR);
+            }
+
+            return stringBuilder.toString();
+        } catch (IOException ex) {
+            throw new RuntimeException("Failed to load file:" + resourceName, ex);
+        }
+    }
+
+    @Test(dataProvider = "dataProvider")
+    public void CheckitoDataDrivenIntegrationTests(List<Command> preconditions, List<Command> steps, List<Assert> asserts) {
+        handlePreconditions(preconditions);
+        DocumentContext page = parseJson(handleStepsAndLoadPage(steps));
+        checkPage(page, asserts);
+
+    }
+
+    @DataProvider
+    private Object[][] dataProvider() {
+        return testData.getTests().stream()
+            .map(x -> new Object[]{x.getPreconditions(), x.getSteps(), x.getAsserts()})
+            .toArray(Object[][]::new);
+    }
+
+    private String handleStepsAndLoadPage(List<Command> steps) {
+        Command pageOpen = steps.stream()
+            .filter(command -> Operation.OPEN_URL.equals(command.getOperation()))
+            .findFirst()
+            .orElseThrow(() -> new RuntimeException("At least one OPEN_URL command should be within the steps"));
+
+        return loadPageFromUrl(pageOpen.getUrl(), pageOpen.getRequestMethod(), pageOpen.getParameters());
+    }
+
+    private String loadPageFromUrl(String url, RequestMethod requestMethod, Map<String, String> parameters) {
+        try {
+            String urlWithRequestParameters = url;
+            if (requestMethod == RequestMethod.GET) {
+                urlWithRequestParameters += "?" + getParamsString(parameters);
+            }
+
+            HttpURLConnection connection = (HttpURLConnection) new URL(urlWithRequestParameters).openConnection();
+            connection.setRequestMethod(requestMethod.toString());
+            connection.setInstanceFollowRedirects(true);
+
+            if (requestMethod == RequestMethod.POST) {
+                connection.setDoOutput(true);
+                DataOutputStream dataOutputStream = new DataOutputStream(connection.getOutputStream());
+                dataOutputStream.writeBytes(getParamsString(parameters));
+                dataOutputStream.flush();
+                dataOutputStream.close();
+            }
+
+            int responseCode = connection.getResponseCode();
+            StringBuilder content = new StringBuilder();
+            String inputLine;
+
+            BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+
+            while ((inputLine = in.readLine()) != null) {
+                content.append(inputLine);
+            }
+
+            in.close();
+            connection.disconnect();
+            return content.toString();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private String getParamsString(Map<String, String> params) {
+        StringBuilder result = new StringBuilder();
+
+        params.forEach((key, value) -> {
+            if (result.length() > 0) {
+                result.append("&");
+            }
+
+            try {
+                result.append(URLEncoder.encode(key, "UTF-8"));
+                result.append("=");
+                result.append(URLEncoder.encode(value, "UTF-8"));
+            } catch (UnsupportedEncodingException e) {
+                throw new RuntimeException(e);
+            }
+        });
+
+        return result.toString();
+    }
+
+    private DocumentContext parseJson(String content) {
+        return JsonPath
+            .using(
+            Configuration
+                .defaultConfiguration()
+                .addOptions(Option.SUPPRESS_EXCEPTIONS)
+                .addOptions(Option.DEFAULT_PATH_LEAF_TO_NULL))
+            .parse(content);
+    }
+
+    private void handlePreconditions(List<Command> preconditions) {
+
+    }
+
+    private void checkPage(DocumentContext page, List<Assert> asserts) {
+        asserts.forEach(a -> {
+            Object actualValue = page.read(a.getJsonPath());
+            org.testng.Assert.assertEquals(actualValue, a.getExpectedValue(), a.getMessage());
+        });
+    }
+}
