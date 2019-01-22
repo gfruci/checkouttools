@@ -103,16 +103,16 @@ enum Operation {
 }
 
 class Assert {
-    private String jsonPath;
+    private String xPath;
     private String expectedValue;
     private String message;
 
-    public String getJsonPath() {
-        return jsonPath;
+    public String getxPath() {
+        return xPath;
     }
 
-    public void setJsonPath(String jsonPath) {
-        this.jsonPath = jsonPath;
+    public void setxPath(String xPath) {
+        this.xPath = xPath;
     }
 
     public String getExpectedValue() {

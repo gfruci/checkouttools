@@ -1,5 +1,3 @@
-import static org.testng.TestNGAntTask.Mode.testng;
-
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -7,8 +5,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.List;
@@ -21,15 +17,15 @@ import javax.net.ssl.SSLSession;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
+import org.htmlcleaner.CleanerProperties;
+import org.htmlcleaner.HtmlCleaner;
+import org.htmlcleaner.TagNode;
+import org.htmlcleaner.XPatherException;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import com.google.gson.Gson;
-import com.jayway.jsonpath.Configuration;
-import com.jayway.jsonpath.DocumentContext;
-import com.jayway.jsonpath.JsonPath;
-import com.jayway.jsonpath.Option;
 
 /**
  * @author Zsolt_Saskovy
@@ -70,8 +66,21 @@ public class CheckitoTest {
     @Test(dataProvider = "dataProvider")
     public void CheckitoDataDrivenIntegrationTests(List<Command> preconditions, List<Command> steps, List<Assert> asserts) {
         handlePreconditions(preconditions);
-        DocumentContext page = parseJson(handleStepsAndLoadPage(steps));
-        checkPage(page, asserts);
+        String pageContent = handleStepsAndLoadPage(steps);
+
+
+        HtmlCleaner cleaner = new HtmlCleaner();
+
+        // take default cleaner properties
+        CleanerProperties props = cleaner.getProperties();
+
+        // Clean HTML taken from simple string, file, URL, input stream,
+        // input source or reader. Result is root node of created
+        // tree-like structure. Single cleaner instance may be safely used
+        // multiple times.
+        TagNode htmlRootNode = cleaner.clean(pageContent);
+
+        checkPage(htmlRootNode, asserts);
 
     }
 
@@ -180,23 +189,25 @@ public class CheckitoTest {
         return result.toString();
     }
 
-    private DocumentContext parseJson(String content) {
-        return JsonPath
-            .using(
-            Configuration
-                .defaultConfiguration()
-                .addOptions(Option.SUPPRESS_EXCEPTIONS)
-                .addOptions(Option.DEFAULT_PATH_LEAF_TO_NULL))
-            .parse(content);
-    }
-
     private void handlePreconditions(List<Command> preconditions) {
 
     }
 
-    private void checkPage(DocumentContext page, List<Assert> asserts) {
+    private void checkPage(TagNode page, List<Assert> asserts) {
         asserts.forEach(a -> {
-            Object actualValue = page.read(a.getJsonPath());
+            Object[] xPathResult = null;
+            String actualValue = "";
+            try {
+                xPathResult = page.evaluateXPath(a.getxPath());
+                if (xPathResult.length > 1) {
+                    throw new RuntimeException(String.format("Xpath '%s' returns multiple nodes. This is not yet supported.", a.getxPath()));
+                }
+
+                actualValue = ((TagNode)xPathResult[0]).getText().toString();
+
+            } catch (XPatherException e) {
+                throw new RuntimeException(e);
+            }
             org.testng.Assert.assertEquals(actualValue, a.getExpectedValue(), a.getMessage());
         });
     }

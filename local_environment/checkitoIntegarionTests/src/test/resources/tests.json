@@ -28,9 +28,9 @@
       ],
       "asserts": [
         {
-          "jsonPath": "",
-          "expectedValue": "",
-          "message": ""
+          "xPath": "//div[@id='headline']/h1",
+          "expectedValue": "Staybridge Suites Midvale",
+          "message": "Hotel name does not match"
         }
       ]
     }
