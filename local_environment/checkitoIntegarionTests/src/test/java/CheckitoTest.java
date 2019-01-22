@@ -68,20 +68,9 @@ public class CheckitoTest {
         handlePreconditions(preconditions);
         String pageContent = handleStepsAndLoadPage(steps);
 
-
         HtmlCleaner cleaner = new HtmlCleaner();
-
-        // take default cleaner properties
-        CleanerProperties props = cleaner.getProperties();
-
-        // Clean HTML taken from simple string, file, URL, input stream,
-        // input source or reader. Result is root node of created
-        // tree-like structure. Single cleaner instance may be safely used
-        // multiple times.
         TagNode htmlRootNode = cleaner.clean(pageContent);
-
         checkPage(htmlRootNode, asserts);
-
     }
 
     @DataProvider
