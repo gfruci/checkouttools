@@ -29,6 +29,7 @@ BA_VERSION=
 BMA_VERSION=
 BCA_VERSION=
 STUB_STATUS=
+SUIT="default"
 
 APPS=( "mvt" "ba" "bma" "bca" "checkito" "styxpres" "nginx")
 
@@ -187,6 +188,11 @@ function start-app {
                 exit 1
             fi
         fi
+    fi
+
+    if [ "${APP}" == "checkito" ]
+    then
+      export SUIT=${SUIT}
     fi
 
     cd ${SCRIPT_DIR}
