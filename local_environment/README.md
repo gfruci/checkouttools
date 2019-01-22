@@ -197,7 +197,7 @@ Move under the `local_environment`, give execution permissions to the `local_env
                                                            By default updates styxpres, chekito and mvt docker images
     
     Options:
-    -no-stub                                               Start the local environment with using checkito as mocking server
+    -no-stub                                               Start the local environment without using checkito as mocking server (by default is using Checkito)
     -proxy                                                 Set the local environment proxy host to docker.for.mac.localhost:8888
 
 ----
@@ -339,7 +339,7 @@ The fixed BA debugging port is `2201`
 Enabling the local proxy via the startup script is only supported in MAC with a fixed proxy host value: `docker.for.mac.localhost:8888`.
 Just specify the option `-proxy` while starting the environment.
 
-    $local_env start-app ba -ba-version latest -proxy
+    $./local_env.sh start-app ba -ba-version latest -proxy
 
 If you need to enable the local proxy in WIN or if you want to modify the proxy host address, you can add the following configuration into the local_environment `<local_environment_root_folder>/docker-compose.yml` file.
 
@@ -383,9 +383,9 @@ If you need to enable the local proxy in WIN or if you want to modify the proxy 
     $ git config core.autocrlf input
     ```
 
-* If you got ```2 matches found based on name: network localenvironment_default is ambiguous``` during startup
+* If you got ```2 matches found based on name: network local_environment_default is ambiguous``` during startup
   
-  This error means that you have two **localenvironment_default**.
+  This error means that you have two **local_environment_default**.
   
   You can check it with the ```docker network ls``` command.
   
@@ -412,11 +412,116 @@ If you need to enable the local proxy in WIN or if you want to modify the proxy 
     
     Docker -> Settings -> Shared drives -> click "Reset credentials...", tick the checkbox next to the "C" drive again, click Apply, then docker prompts you for the new password.
 
-* BMA startup fails when downloading `http://dispatcherapp.staging1.hcom/templates/dionysus_ui_pack_templates-63.0.zip`?  Try increasing Docker's memory to at least 5GB.
+* BMA startup fails when downloading `http://dispatcherapp.staging.hcom/templates/dionysus_ui_pack_templates-63.0.zip`?  Try increasing Docker's memory to at least 5GB.
 
 ## FAQ
 
-TBW
+**Question:** How can I ran my not docker application using my IDE with local-environment?
+
+**Answer:**
+You have to start your application using a starter script from the IDE setting the following properties:
+
+In the Parameters tab:
+
+    Command line: initialize tomcat7:run
+    Profiles: fast start-devrom
+
+In the Runner tab:
+The following setting is optional just if you want to use the proxy
+
+`VM Options: -Dhttp.proxyHost=localhost -Dhttp.proxyPort=8888 -Dhttps.proxyHost=localhost -Dhttps.proxyPort=8888`
+
+Add as properties:
+
+`WEBSITE_DOMAIN_DISCRIMINATOR: staging-1` or `dev-` if you want use the cookie set in a particular domain
+
+`MVT_BUSINESS_CONFIGURATION_HOME` pointing to your mvtconfigurationpack local folder
+
+Get the mvtconfigurationpack by cloning ssh://git@stash.hcom:7999/hweb/mvtconfigurationpack.git
+
+As example: MVT_BUSINESS_CONFIGURATION_HOME=/Users/jhon/git/HWEB/mvtconfigurationpack
+
+Note: In this case all the env variables in the docker-compose are not used.
+The app start with the start-devrom profile and uses the development properties.
+The start-devrom profile in the BookingApp project setup some tomcat properties.
+The properties are read from the build/dev/tomcat/devrom_server_configuration.properties
+
+In the local_environment you have to change the origins.yaml for the ba.
+To point to your local machine and not the docker machine:
+
+    - id: "book"
+      path: "/ba/"
+      rewrites:
+      ...
+      origins:
+      # commented - { id: "ba.docker",    host: "ba:8443" }
+        - { id: "local-ba-mac", host: "docker.for.mac.localhost:30443" }
+
+**Question:** How to compile the BookingApp locally?
+
+**Answer:**
+
+Update your settings.xml maven file with the following one:
+
+```
+<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd">
+   <localRepository>${user.home}/.m2/repository</localRepository>
+   <servers>
+        <server>
+            <username>readonly</username>
+            <password>\{DESede\}CFUTXBvK0gmItVG/gst/7g==</password>
+            <id>central</id>
+        </server>
+        <server>
+            <username>readonly</username>
+            <password>\{DESede\}CFUTXBvK0gmItVG/gst/7g==</password>
+            <id>snapshots</id>
+        </server>
+   </servers>
+   <profiles>
+        <profile>
+            <id>artifactory</id>
+            <repositories>
+                <repository>
+                    <id>central</id>
+                    <name>libs-release</name>
+                    <url>http://bin.hotels.com/artifactory/libs-release</url>
+                </repository>
+                <!--repository>
+                    <id>snapshots</id>
+                    <name>libs-snapshot</name>
+                    <url>http://bin.hotels.com/artifactory/libs-snapshot</url>
+                    <releases>
+                        <enabled>false</enabled>
+                    </releases>
+                </repository-->
+            </repositories>
+            <pluginRepositories>
+                <pluginRepository>
+                    <id>central</id>
+                    <name>plugins-release</name>
+                    <url>http://bin.hotels.com/artifactory/plugins-release</url>
+                </pluginRepository>
+                <pluginRepository>
+                    <id>snapshots</id>
+                    <name>plugins-snapshot</name>
+                    <url>http://bin.hotels.com/artifactory/plugins-snapshot</url>
+                    <releases>
+                        <enabled>true</enabled>
+                    </releases>
+                </pluginRepository>
+            </pluginRepositories>
+        </profile>
+    </profiles>
+    <activeProfiles>
+        <activeProfile>artifactory</activeProfile>
+    </activeProfiles>
+</settings>
+```
+
+Run:
+mvn clean install
+mvn clean install -Pfast (to skip checkstyle and all the tests)
 
 ## Contributing
 

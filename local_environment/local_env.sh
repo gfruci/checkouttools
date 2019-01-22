@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+export MSYS_NO_PATHCONV=1
 COLOR_HEADER="\033[7;49;36m"
 COLOR_WATCH="\033[7;49;33m"
 COLOR_SUCCESS="\033[7;49;32m"
@@ -30,12 +31,14 @@ BMA_VERSION=
 BCA_VERSION=
 STUB_STATUS=
 SUIT="default"
+TRUSTSTORE_PATH="/hcom/share/java/default/lib/security/cacerts_plus_internal"
+DEBUG_OPTS="-Xdebug -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:1901"
 
 APPS=( "mvt" "ba" "bma" "bca" "checkito" "styxpres" "nginx")
 
 declare -A APPS_CONF=(\
     ["mvt,update_cmd"]="docker pull 181651482125.dkr.ecr.us-west-2.amazonaws.com/hotels/mvt:latest >> ${SCRIPT_DIR}/logs/startup.log 2>&1"\
-    ["styxpres,start_status_cmd"]="grep \"Started styx server in\" ${SCRIPT_DIR}/logs/styxpres.log"\
+    ["styxpres,start_status_cmd"]="grep -i \"Started styx server in\" ${SCRIPT_DIR}/logs/styxpres.log"\
     ["styxpres,stop_status_cmd"]="grep -e \"styxpres.*ERROR\" ${SCRIPT_DIR}/logs/styxpres.log | grep -v \"locsClientLoader\""\
     ["styxpres,update_cmd"]="docker pull 181651482125.dkr.ecr.us-west-2.amazonaws.com/hotels/styxpres:release >> ${SCRIPT_DIR}/logs/startup.log 2>&1"\
     ["checkito,start_status_cmd"]="grep \"checkito.*Checkito listening for HTTPS requests\" ${SCRIPT_DIR}/logs/checkito.log"\
@@ -44,7 +47,7 @@ declare -A APPS_CONF=(\
     ["nginx,start_status_cmd"]="grep -e \"nginx.*done\" ${SCRIPT_DIR}/logs/nginx.log"\
     ["nginx,stop_status_cmd"]="grep -e \"nginx.*error\" ${SCRIPT_DIR}/logs/nginx.log"\
     ["ba,start_status_cmd"]="grep \"ba.*Server startup\" ${SCRIPT_DIR}/logs/ba.log"\
-    ["ba,stop_status_cmd"]="grep -e \"ba.*ERROR\" ${SCRIPT_DIR}/logs/ba.log | grep -v \"locsClientLoader\""\
+    ["ba,stop_status_cmd"]="grep -e \"ba.*ERROR \" ${SCRIPT_DIR}/logs/ba.log | grep -v \"locsClientLoader\""\
     ["bma,start_status_cmd"]="grep \"bma.*Server startup\" ${SCRIPT_DIR}/logs/bma.log"\
     ["bma,stop_status_cmd"]="grep -e \"bma.*ERROR\" ${SCRIPT_DIR}/logs/bma.log | grep -v \"locsClientLoader\""\
     ["bca,start_status_cmd"]="grep \"bca.*Server startup\" ${SCRIPT_DIR}/logs/bca.log"\
@@ -137,6 +140,9 @@ function update {
 ###############################
 
 function start-app {
+
+    export DEBUG_OPTS=${DEBUG_OPTS}
+    export TRUSTSTORE_PATH=${TRUSTSTORE_PATH}
     APP=$1
     APP_TYPE=""
 
@@ -205,8 +211,10 @@ function start-app {
     if [ "${WATCH_RETURN_CODE}" -eq "0" ]
     then
         echo -e "\n$COLOR_SUCCESS ${APP} started $COLOR_RESET"
+        type terminal-notifier &>/dev/null && terminal-notifier -title "LESS" -message "✅ ${APP} started" -sound 'default' -sender "com.apple.launchpad.launcher"
     else
         echo -e "\n$COLOR_ERROR Error: ${APP} start error $COLOR_RESET"
+        type terminal-notifier &>/dev/null && terminal-notifier -title "LESS" -message "📛 ${APP} start error" -sound 'default' -sender "com.apple.launchpad.launcher"
         if [ "${START_MODE}" == "start-all" ]
         then
             stop
@@ -293,21 +301,22 @@ function status {
 function help {
     echo "Usage: $0 <command> <options>"
     echo "Commands:"
-    echo "start [-proxy]                                        Start the local environment, with no front-end apps (BA)"
-    echo "start -ba-version <ba-version> [-no-stub] [-proxy]    Start the local environment, using the BA version: <ba-version>"
-    echo "start -bma-version <bma-version> [-no-stub] [-proxy]  Start the local environment, using the BMA version: <bma-version>"
-    echo "start -bca-version <bca-version> [-no-stub] [-proxy]  Start the local environment, using the BMA version: <bma-version>"
-    echo "stop                                                  Stop the local environment"
-    echo "status                                                Print the local environment status"
-    echo "start-app <app_id>                                    Start only the specified app ($(for APP in "${APPS[@]}"; do echo -n " ${APP}"; done) )"
-    echo "stop-app <app_id>                                     Stop only the specified app ($(for APP in "${APPS[@]}"; do echo -n " ${APP}"; done) )"
-    echo "update [<app_id>]                                     Update local environment scripts, along with the specified app ( styxpres chekito mvt )."
-    echo "                                                      By default updates styxpres, chekito and mvt docker images"
+    echo "start [-proxy]                                            Start the local environment, with no front-end apps (BA)"
+    echo "start -ba-version <ba-version> [-no-stub] [-proxy] [-j8] Start the local environment, using the BA version: <ba-version>"
+    echo "start -bma-version <bma-version> [-no-stub] [-proxy]      Start the local environment, using the BMA version: <bma-version>"
+    echo "start -bca-version <bca-version> [-no-stub] [-proxy]      Start the local environment, using the BMA version: <bma-version>"
+    echo "stop                                                      Stop the local environment"
+    echo "status                                                    Print the local environment status"
+    echo "start-app <app_id>                                        Start only the specified app ($(for APP in "${APPS[@]}"; do echo -n " ${APP}"; done) )"
+    echo "stop-app <app_id>                                         Stop only the specified app ($(for APP in "${APPS[@]}"; do echo -n " ${APP}"; done) )"
+    echo "update [<app_id>]                                         Update local environment scripts, along with the specified app ( styxpres chekito mvt )."
+    echo "                                                          By default updates styxpres, chekito and mvt docker images"
     echo
     echo "Options:"
-    echo "-no-stub                                              Start the local environment with using checkito as mocking server"
-    echo "-proxy                                                Set the local environment proxy host to docker.for.mac.localhost:8888"
-    echo "-suit                                                 Configures which suit will be used with checkito"
+    echo "-no-stub                                                  Start the local environment without using checkito as mocking server (by default is using Checkito)"
+    echo "-proxy                                                    Set the local environment proxy host to docker.for.mac.localhost:8888"
+    echo "-j8                                                       Sets Java 8 related options"
+    echo "-suit                                                     Configures which suit will be used with checkito"
     exit 0
 }
 
@@ -343,6 +352,10 @@ function init {
           SUIT=$2
           export SUIT=${SUIT}
           shift
+          ;;
+        -j8)
+          DEBUG_OPTS="-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=1901"
+          TRUSTSTORE_PATH="/hcom/share/java/default/jre/lib/security/cacerts_plus_internal"
           ;;
       esac
       shift

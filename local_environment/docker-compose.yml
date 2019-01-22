@@ -32,6 +32,7 @@ services:
       - FETCH_CREDENTIALS=1
       - VAULT_ROLE_ID=8c120b81-dca6-28a8-c1de-208792e1500a
       - VAULT_SECRET_ID=a140e913-26ef-9b2c-59be-a62ffc070592
+      - JVM_OTHER_OPTS=-Dplugins.all.dionysus.config.i18nServiceConfig.clientConfigSettings.maxRetries=0
     volumes:
       - ./conf/:/styxconf
       - ./appcert/:/appcert
@@ -63,7 +64,7 @@ services:
     environment:
       - APP_CONFIG_ENVIRONMENT=development
       - APP_jvm.route=development
-      - APP_javax.net.ssl.trustStore=/hcom/share/java/default/jre/lib/security/cacerts_plus_internal
+      - APP_javax.net.ssl.trustStore=${TRUSTSTORE_PATH}
       - APP_javax.net.ssl.trustStorePassword=changeit
       - APP_METRICS_GRAPHITE_REPORTING_INTERVAL=-1
       - APP_METRICS_BOOTSTRAPPER_METRIC_REGISTRATION_ENABLED=false
@@ -101,7 +102,7 @@ services:
       - APP_BPAS_ON_PAYMENT_OPTION_REQUEST_CIRCUIT_BREAKER_TIMEOUT_MS=60000
 
       # Development overrides
-      - JAVA_JVM_ARGS=-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=1901 ${PROXY_CONFIG}
+      - JAVA_JVM_ARGS=${DEBUG_OPTS} ${PROXY_CONFIG}
       - APP_UNIFIED_DATA_TOOLKIT_ENABLED=true
       - APP_LOCALIZATION_MESSAGE_PARALLEL_INITIALIZATION_ENABLED=true
       - APP_MVT_CONFIGURATION_PARALLEL_INITIALIZATION_ENABLED=true
@@ -113,7 +114,6 @@ services:
       # Not supported on checkito yet
       - APP_FENCED_VAP_ENABLED=false
       - APP_UNBRANDED_VIP_VAP_ENABLED=false
-      - APP_CANCELLATION_FLOW_SWITCH=OMS_CANCELLATION_FLOW
 
       # Checkito resources
       - APP_DOSSIER_SERVICES_SCHEME=http
@@ -142,7 +142,8 @@ services:
       - APP_VPS_HOST=checkito:8089
       - APP_CAR_TRAWLER_BASE_URL=checkito:8089
       - APP_CAR_TRAWLER_SECURE_URL_ENABLED=false
-      - APP_BPAS_HOST=checkito:8089
+      - APP_BPAS_HOST=checkito
+      - APP_BPAS_PORT=8089
       - APP_COUPON_SERVICE_HOST=checkito
       - APP_COUPON_SERVICE_PORT=8089
       - APP_BRAVOS_API_DOMAIN_NAME=checkito
@@ -172,7 +173,7 @@ services:
     environment:
       - APP_CONFIG_ENVIRONMENT=development
       - APP_jvm.route=development
-      - APP_javax.net.ssl.trustStore=/hcom/share/java/default/jre/lib/security/cacerts_plus_internal
+      - APP_javax.net.ssl.trustStore=${TRUSTSTORE_PATH}
       - APP_javax.net.ssl.trustStorePassword=changeit
       - APP_METRICS_GRAPHITE_REPORTING_INTERVAL=-1
       - APP_METRICS_BOOTSTRAPPER_METRIC_REGISTRATION_ENABLED=false
@@ -210,7 +211,7 @@ services:
       - APP_BPAS_ON_PAYMENT_OPTION_REQUEST_CIRCUIT_BREAKER_TIMEOUT_MS=60000
 
       # Development overrides
-      - JAVA_JVM_ARGS=-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=1901 ${PROXY_CONFIG}
+      - JAVA_JVM_ARGS=${DEBUG_OPTS} ${PROXY_CONFIG}
       - APP_UNIFIED_DATA_TOOLKIT_ENABLED=true
       - APP_LOCALIZATION_MESSAGE_PARALLEL_INITIALIZATION_ENABLED=true
       - APP_MVT_CONFIGURATION_PARALLEL_INITIALIZATION_ENABLED=true
@@ -222,7 +223,6 @@ services:
       # Not supported on checkito yet
       - APP_FENCED_VAP_ENABLED=false
       - APP_UNBRANDED_VIP_VAP_ENABLED=false
-      - APP_CANCELLATION_FLOW_SWITCH=OMS_CANCELLATION_FLOW
 
       #remote jmx
       - APP_com.sun.management.jmxremote=true
@@ -243,6 +243,7 @@ services:
       - mvt:/mvt
     environment:
       - APP_CONFIG_ENVIRONMENT=development
+      - APP_CONFIG_LOCATION=file:/hcom/servers/tomcat/appconfig
       - APP_jvm.route=development
       - APP_javax.net.ssl.trustStore=/hcom/share/java/default/jre/lib/security/cacerts_plus_internal
       - APP_javax.net.ssl.trustStorePassword=changeit
@@ -279,7 +280,7 @@ services:
       - APP_DSC_DATASTAX_SSL_ENABLED=false
       - APP_DSC_DATASTAX_KEYSPACE_NAME=hermes
       - APP_LVS_CLIENT_BASE_URL=http://hcomcdslivevisitsservice.staging.hcom
-      - APP_DIONYSUS_TEMPLATE_PATH=http://dispatcherapp.staging1.hcom/templates/dionysus_ui_pack_templates-63.0.zip
+      - APP_DIONYSUS_TEMPLATE_PATH=http://dispatcherapp.staging.hcom/templates/dionysus_ui_pack_templates-63.0.zip
       - APP_LOYALTY_REST_CLIENT_CONNECT_TIMEOUT=60000
       - APP_LOYALTY_REST_CLIENT_READ_TIMEOUT=60000
       - APP_LOYALTY_ESTIMATION_SERVICE_CLIENT_READ_TIMEOUT=60000
@@ -299,7 +300,6 @@ services:
       # Not supported on checkito yet
       - APP_FENCED_VAP_ENABLED=false
       - APP_UNBRANDED_VIP_VAP_ENABLED=false
-      - APP_CANCELLATION_FLOW_SWITCH=OMS_CANCELLATION_FLOW
 
       # Checkito resources
       - APP_DOSSIER_SERVICES_SCHEME=http
@@ -328,7 +328,6 @@ services:
       - APP_VPS_HOST=checkito:8089
       - APP_CAR_TRAWLER_BASE_URL=checkito:8089
       - APP_CAR_TRAWLER_SECURE_URL_ENABLED=false
-      - APP_BPAS_HOST=checkito:8089
       - APP_COUPON_SERVICE_HOST=checkito
       - APP_COUPON_SERVICE_PORT=8089
       - APP_BRAVOS_API_DOMAIN_NAME=checkito
@@ -357,6 +356,7 @@ services:
       - mvt:/mvt
     environment:
       - APP_CONFIG_ENVIRONMENT=development
+      - APP_CONFIG_LOCATION=file:/hcom/servers/tomcat/appconfig
       - APP_jvm.route=development
       - APP_javax.net.ssl.trustStore=/hcom/share/java/default/jre/lib/security/cacerts_plus_internal
       - APP_javax.net.ssl.trustStorePassword=changeit
@@ -411,7 +411,6 @@ services:
       # Not supported on checkito yet
       - APP_FENCED_VAP_ENABLED=false
       - APP_UNBRANDED_VIP_VAP_ENABLED=false
-      - APP_CANCELLATION_FLOW_SWITCH=OMS_CANCELLATION_FLOW
 
       #remote jmx
       - APP_com.sun.management.jmxremote=true
@@ -468,7 +467,7 @@ services:
       - APP_DSC_DATASTAX_SSL_ENABLED=false
       - APP_DSC_DATASTAX_KEYSPACE_NAME=hermes
       - APP_LVS_CLIENT_BASE_URL=http://hcomcdslivevisitsservice.staging.hcom
-      - APP_DIONYSUS_TEMPLATE_PATH=http://dispatcherapp.staging1.hcom/templates/dionysus_ui_pack_templates-63.0.zip
+      - APP_DIONYSUS_TEMPLATE_PATH=http://dispatcherapp.staging.hcom/templates/dionysus_ui_pack_templates-63.0.zip
       - APP_LOYALTY_REST_CLIENT_CONNECT_TIMEOUT=60000
       - APP_LOYALTY_REST_CLIENT_READ_TIMEOUT=60000
       - APP_LOYALTY_ESTIMATION_SERVICE_CLIENT_READ_TIMEOUT=60000
@@ -489,7 +488,6 @@ services:
       # Not supported on checkito yet
       - APP_FENCED_VAP_ENABLED=false
       - APP_UNBRANDED_VIP_VAP_ENABLED=false
-      - APP_CANCELLATION_FLOW_SWITCH=OMS_CANCELLATION_FLOW
 
       # Checkito resources
       - APP_DOSSIER_SERVICES_SCHEME=http
@@ -518,7 +516,6 @@ services:
       - APP_VPS_HOST=checkito:8089
       - APP_CAR_TRAWLER_BASE_URL=checkito:8089
       - APP_CAR_TRAWLER_SECURE_URL_ENABLED=false
-      - APP_BPAS_HOST=checkito:8089
       - APP_COUPON_SERVICE_HOST=checkito
       - APP_COUPON_SERVICE_PORT=8089
       - APP_BRAVOS_API_DOMAIN_NAME=checkito
@@ -602,7 +599,6 @@ services:
       # Not supported on checkito yet
       - APP_FENCED_VAP_ENABLED=false
       - APP_UNBRANDED_VIP_VAP_ENABLED=false
-      - APP_CANCELLATION_FLOW_SWITCH=OMS_CANCELLATION_FLOW
 
       #remote jmx
       - APP_com.sun.management.jmxremote=true

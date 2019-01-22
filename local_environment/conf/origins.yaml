@@ -79,3 +79,23 @@
   origins:
   - { id: "staging-bpe-01", host: "chelapphot127.karmalab.net:39421" }
   - { id: "staging-bpe-02", host: "chelapphot040.karmalab.net:39422" }
+  
+- id: "thanos"
+  path: "/thanos/"
+  rewrites:
+    - urlPattern: "/thanos/(.*)"
+      replacement: "/v1/change-date"
+  healthCheck:
+    uri: "actuator/health"
+  connectionPool:
+    maxConnectionsPerHost: 40
+    maxPendingConnectionsPerHost: 20
+    socketTimeoutMillis: 120000
+    connectTimeoutMillis: 8000
+  responseTimeoutMillis: 300000
+  tlsSettings:
+    trustAllCerts:       true
+    sslProvider:         OPENSSL     # Also supports JDK
+  origins:
+  - { id: "staging-thanos-01", host: "chhlapphot667.karmalab.net:52721" }
+  - { id: "staging-thanos-02", host: "chelapphot211.karmalab.net:52722" }
