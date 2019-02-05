@@ -179,7 +179,7 @@ Clone the repo.
 ### Start/Stop
 
 Move under the `local_environment`, give execution permissions to the `local_env.sh` bash script and run it.
-NOTE: the `local_env.sh` needs BASH version 4.x in order to work correctly.
+NOTE: the `local_env.sh` needs BASH version 4.x (or more) in order to work correctly.
 
     $ cd <local_environment_root_folder>
     $ chmod a+x local_env.sh
