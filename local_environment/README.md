@@ -6,8 +6,6 @@ It leverage the [local-app-server](http://stash.hcom/projects/STYX/repos/local-a
 
 ![local_env](assets/local_env_arch.png)
 
-**Note:** In order to enable styx html page rendering you need to set MVT variant 4418.1
-
 #### Stubbed hotels and supported features:
 
 Please refer to the checkito README for a full list of stubbed hotels and supported features: http://stash.hcom/projects/COP/repos/checkito/browse
