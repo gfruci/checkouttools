@@ -61,6 +61,8 @@ services:
       - "38007:38007"
     volumes:
       - mvt:/mvt
+      - ~/.aws/:/home/hcom/.aws
+
     environment:
       - APP_CONFIG_ENVIRONMENT=development
       - APP_jvm.route=development
@@ -170,6 +172,8 @@ services:
       - "38007:38007"
     volumes:
       - mvt:/mvt
+      - ~/.aws/:/home/hcom/.aws
+
     environment:
       - APP_CONFIG_ENVIRONMENT=development
       - APP_jvm.route=development
