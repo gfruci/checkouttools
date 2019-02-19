@@ -23,7 +23,6 @@ services:
       - JVM_DIRECT_MEMORY=-XX:MaxDirectMemorySize=512m
       - JVM_OTHER_MEM=-XX:CompressedClassSpaceSize=20m -XX:InitialCodeCacheSize=50m -XX:ReservedCodeCacheSize=50m
       - JVM_HEAP_DUMP=-XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/var/tmp
-      - JVM_FLIGHT_RECORDER=-XX:+UnlockCommercialFeatures -XX:+FlightRecorder
       - JAVA_OPTS= -Dfile.encoding=UTF-8
       - VAULT_ADDR=https://vault.lab.hcom
       - INSTANCE_NAME=staging1-styxpres-01
@@ -36,6 +35,7 @@ services:
     volumes:
       - ./conf/:/styxconf
       - ./appcert/:/appcert
+      - ./logs/styxpres/:/hcom/servers/styx/logs/
 
   nginx:
     image: nginx:mainline-alpine
@@ -60,6 +60,7 @@ services:
       - "1901:1901"
       - "38007:38007"
     volumes:
+      - ./logs/ba/:/hcom/servers/tomcat/logs/
       - mvt:/mvt
       - ~/.aws/:/home/hcom/.aws
 
@@ -171,6 +172,7 @@ services:
       - "1901:1901"
       - "38007:38007"
     volumes:
+      - ./logs/ba/:/hcom/servers/tomcat/logs/
       - mvt:/mvt
       - ~/.aws/:/home/hcom/.aws
 
@@ -244,6 +246,7 @@ services:
       - "2001:1901"
       - "39007:38007"
     volumes:
+      - ./logs/bma/:/hcom/servers/tomcat/logs/
       - mvt:/mvt
     environment:
       - APP_CONFIG_ENVIRONMENT=development
@@ -355,6 +358,7 @@ services:
       - "2001:1901"
       - "39007:38007"
     volumes:
+      - ./logs/bma/:/hcom/servers/tomcat/logs/
       - mvt:/mvt
     environment:
       - APP_CONFIG_ENVIRONMENT=development
@@ -428,6 +432,7 @@ services:
       - "2101:1901"
       - "40007:38007"
     volumes:
+      - ./logs/bca/:/hcom/servers/tomcat/logs/
       - mvt:/mvt
     environment:
       - APP_CONFIG_ENVIRONMENT=hcom-devrom
@@ -541,6 +546,7 @@ services:
       - "2101:1901"
       - "40007:38007"
     volumes:
+      - ./logs/bca/:/hcom/servers/tomcat/logs/
       - mvt:/mvt
     environment:
       - APP_CONFIG_ENVIRONMENT=hcom-devrom
