@@ -23,7 +23,6 @@ services:
       - JVM_DIRECT_MEMORY=-XX:MaxDirectMemorySize=512m
       - JVM_OTHER_MEM=-XX:CompressedClassSpaceSize=20m -XX:InitialCodeCacheSize=50m -XX:ReservedCodeCacheSize=50m
       - JVM_HEAP_DUMP=-XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/var/tmp
-      - JVM_FLIGHT_RECORDER=-XX:+UnlockCommercialFeatures -XX:+FlightRecorder
       - JAVA_OPTS= -Dfile.encoding=UTF-8
       - VAULT_ADDR=https://vault.lab.hcom
       - INSTANCE_NAME=staging1-styxpres-01
@@ -36,6 +35,7 @@ services:
     volumes:
       - ./conf/:/styxconf
       - ./appcert/:/appcert
+      - ./logs/styxpres/:/hcom/servers/styx/logs/
 
   nginx:
     image: nginx:mainline-alpine
@@ -60,7 +60,10 @@ services:
       - "1901:1901"
       - "38007:38007"
     volumes:
+      - ./logs/ba/:/hcom/servers/tomcat/logs/
       - mvt:/mvt
+      - ~/.aws/:/home/hcom/.aws
+
     environment:
       - APP_CONFIG_ENVIRONMENT=development
       - APP_jvm.route=development
@@ -169,7 +172,10 @@ services:
       - "1901:1901"
       - "38007:38007"
     volumes:
+      - ./logs/ba/:/hcom/servers/tomcat/logs/
       - mvt:/mvt
+      - ~/.aws/:/home/hcom/.aws
+
     environment:
       - APP_CONFIG_ENVIRONMENT=development
       - APP_jvm.route=development
@@ -240,15 +246,14 @@ services:
       - "2001:1901"
       - "39007:38007"
     volumes:
+      - ./logs/bma/:/hcom/servers/tomcat/logs/
       - mvt:/mvt
     environment:
       - APP_CONFIG_ENVIRONMENT=development
       - APP_CONFIG_LOCATION=file:/hcom/servers/tomcat/appconfig
       - APP_jvm.route=development
-      - APP_javax.net.ssl.trustStore=/hcom/share/java/default/jre/lib/security/cacerts_plus_internal
+      - APP_javax.net.ssl.trustStore=${TRUSTSTORE_PATH}
       - APP_javax.net.ssl.trustStorePassword=changeit
-      - APP_javax.net.ssl.keyStore=/hcom/servers/tomcat/certs/pvclient-karmalab.jks
-      - APP_javax.net.ssl.keyStorePassword=tiajya
       - APP_DIONYSUS_TEMPLATES_DOWNLOAD_PATH=/hcom/servers/tomcat/temp
       - APP_METRICS_GRAPHITE_REPORTING_INTERVAL=-1
       - APP_METRICS_BOOTSTRAPPER_METRIC_REGISTRATION_ENABLED=false
@@ -288,7 +293,7 @@ services:
       - APP_BPAS_ON_PAYMENT_OPTION_REQUEST_CIRCUIT_BREAKER_TIMEOUT_MS=60000
 
       # Development overrides
-      - JAVA_JVM_ARGS=-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=1901 ${PROXY_CONFIG}
+      - JAVA_JVM_ARGS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:1901 ${PROXY_CONFIG}
       - APP_UNIFIED_DATA_TOOLKIT_ENABLED=true
       - APP_LOCALIZATION_MESSAGE_PARALLEL_INITIALIZATION_ENABLED=true
       - APP_MVT_CONFIGURATION_PARALLEL_INITIALIZATION_ENABLED=true
@@ -353,15 +358,14 @@ services:
       - "2001:1901"
       - "39007:38007"
     volumes:
+      - ./logs/bma/:/hcom/servers/tomcat/logs/
       - mvt:/mvt
     environment:
       - APP_CONFIG_ENVIRONMENT=development
       - APP_CONFIG_LOCATION=file:/hcom/servers/tomcat/appconfig
       - APP_jvm.route=development
-      - APP_javax.net.ssl.trustStore=/hcom/share/java/default/jre/lib/security/cacerts_plus_internal
+      - APP_javax.net.ssl.trustStore=${TRUSTSTORE_PATH}
       - APP_javax.net.ssl.trustStorePassword=changeit
-      - APP_javax.net.ssl.keyStore=/hcom/servers/tomcat/certs/pvclient-karmalab.jks
-      - APP_javax.net.ssl.keyStorePassword=tiajya
       - APP_DIONYSUS_TEMPLATES_DOWNLOAD_PATH=/hcom/servers/tomcat/temp
       - APP_METRICS_GRAPHITE_REPORTING_INTERVAL=-1
       - APP_METRICS_BOOTSTRAPPER_METRIC_REGISTRATION_ENABLED=false
@@ -399,7 +403,7 @@ services:
       - APP_BPAS_ON_PAYMENT_OPTION_REQUEST_CIRCUIT_BREAKER_TIMEOUT_MS=60000
 
       # Development overrides
-      - JAVA_JVM_ARGS=-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=1901 ${PROXY_CONFIG}
+      - JAVA_JVM_ARGS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:1901 ${PROXY_CONFIG}
       - APP_UNIFIED_DATA_TOOLKIT_ENABLED=true
       - APP_LOCALIZATION_MESSAGE_PARALLEL_INITIALIZATION_ENABLED=true
       - APP_MVT_CONFIGURATION_PARALLEL_INITIALIZATION_ENABLED=true
@@ -428,14 +432,14 @@ services:
       - "2101:1901"
       - "40007:38007"
     volumes:
+      - ./logs/bca/:/hcom/servers/tomcat/logs/
       - mvt:/mvt
     environment:
-      - APP_CONFIG_ENVIRONMENT=hcom-devrom
+      - APP_CONFIG_ENVIRONMENT=development
+      - APP_CONFIG_LOCATION=file:/hcom/servers/tomcat/appconfig
       - APP_jvm.route=development
-      - APP_javax.net.ssl.trustStore=/hcom/share/java/default/jre/lib/security/cacerts_plus_internal
+      - APP_javax.net.ssl.trustStore=${TRUSTSTORE_PATH}
       - APP_javax.net.ssl.trustStorePassword=changeit
-      - APP_javax.net.ssl.keyStore=/hcom/servers/tomcat/certs/pvclient-karmalab.jks
-      - APP_javax.net.ssl.keyStorePassword=tiajya
       - APP_DIONYSUS_TEMPLATES_DOWNLOAD_PATH=/hcom/servers/tomcat/temp
       - APP_METRICS_GRAPHITE_REPORTING_INTERVAL=-1
       - APP_METRICS_BOOTSTRAPPER_METRIC_REGISTRATION_ENABLED=false
@@ -476,7 +480,7 @@ services:
       - APP_PROPERTY_CATALOGUE_SERVICE_BASE_URL=http://hcom-pcs-stg.staging-hotels.com/property_catalogue_svc
 
       # Development overrides
-      - JAVA_JVM_ARGS=-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=1901 ${PROXY_CONFIG}
+      - JAVA_JVM_ARGS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:1901 ${PROXY_CONFIG}
       - APP_UNIFIED_DATA_TOOLKIT_ENABLED=true
       - APP_LOCALIZATION_MESSAGE_PARALLEL_INITIALIZATION_ENABLED=true
       - APP_MVT_CONFIGURATION_PARALLEL_INITIALIZATION_ENABLED=true
@@ -541,14 +545,14 @@ services:
       - "2101:1901"
       - "40007:38007"
     volumes:
+      - ./logs/bca/:/hcom/servers/tomcat/logs/
       - mvt:/mvt
     environment:
-      - APP_CONFIG_ENVIRONMENT=hcom-devrom
+      - APP_CONFIG_ENVIRONMENT=development
+      - APP_CONFIG_LOCATION=file:/hcom/servers/tomcat/appconfig
       - APP_jvm.route=development
-      - APP_javax.net.ssl.trustStore=/hcom/share/java/default/jre/lib/security/cacerts_plus_internal
+      - APP_javax.net.ssl.trustStore=${TRUSTSTORE_PATH}
       - APP_javax.net.ssl.trustStorePassword=changeit
-      - APP_javax.net.ssl.keyStore=/hcom/servers/tomcat/certs/pvclient-karmalab.jks
-      - APP_javax.net.ssl.keyStorePassword=tiajya
       - APP_DIONYSUS_TEMPLATES_DOWNLOAD_PATH=/hcom/servers/tomcat/temp
       - APP_METRICS_GRAPHITE_REPORTING_INTERVAL=-1
       - APP_METRICS_BOOTSTRAPPER_METRIC_REGISTRATION_ENABLED=false
@@ -587,7 +591,7 @@ services:
       - APP_PROPERTY_CATALOGUE_SERVICE_BASE_URL=http://hcom-pcs-stg.staging-hotels.com/property_catalogue_svc
 
       # Development overrides
-      - JAVA_JVM_ARGS=-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=1901 ${PROXY_CONFIG}
+      - JAVA_JVM_ARGS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:1901 ${PROXY_CONFIG}
       - APP_UNIFIED_DATA_TOOLKIT_ENABLED=true
       - APP_LOCALIZATION_MESSAGE_PARALLEL_INITIALIZATION_ENABLED=true
       - APP_MVT_CONFIGURATION_PARALLEL_INITIALIZATION_ENABLED=true
