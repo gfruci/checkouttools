@@ -393,7 +393,6 @@ services:
       - APP_DB_RW_URL="jdbc:inetdae7://HCOM_EMEA_PROD_staging.karmalab.net?database=HCOM_EMEA_PROD"
       - APP_DB_RW_USERNAME=emea_app
       - APP_DB_RW_PASSWORD=emea_app
-      - APP_DSC_DATASTAX_SSL_ENABLED=false
       - APP_DSC_DATASTAX_KEYSPACE_NAME=hermes
       - APP_LVS_CLIENT_BASE_URL=http://hcomcdslivevisitsservice.staging.hcom
       - APP_LOYALTY_REST_CLIENT_CONNECT_TIMEOUT=60000
@@ -410,7 +409,6 @@ services:
       - APP_CACHE_PRELOAD_ENABLED=false
       - APP_PSID_SERVICE_ENABLED=false
       - APP_WEBSITE_DOMAIN_DISCRIMINATOR=dev-
-      #- APP_DSC_STUB_MODE_ENABLED=true
 
       # Not supported on checkito yet
       - APP_FENCED_VAP_ENABLED=false
