@@ -79,13 +79,13 @@ public class Main {
         sheet.setColumnView(0, 40);
         sheet.addCell(headerLabel);
 
-        WritableCellFormat cellFormat = new WritableCellFormat();
-        cellFormat.setWrap(true);
 
         int column = 0;
         int row = 1;
         for(Output output : outputs){
 
+            WritableCellFormat cellFormat = new WritableCellFormat();
+            cellFormat.setWrap(true);
             setCellColourCode(cellFormat, output);
 
             Label keyName = new Label(column, row, output.keyName, cellFormat);
@@ -102,9 +102,6 @@ public class Main {
                 sheet.addCell(missingUnhotellingKey);
 
             }
-
-            Boolean missingUnhotellingKey = new Boolean(column, row, output.missingUnhotellingKey, format);
-            sheet.addCell(missingUnhotellingKey);
 
             column++;
 
