@@ -3,19 +3,28 @@
  */
 public class Output {
     String keyName;
-    String missingUnhotellingKey;
+    Boolean missingUnhotellingKey;
     String differentUnhotellingText;
-    boolean noPropertyKey;
-    boolean unhotellingNotTranslated;
+    Boolean noPropertyKey;
+    Boolean unhotellingNotTranslated;
     String originalContentEN_GB;
     String unhotellingContentEN_GB;
     String unhotellingPropertyContent;
+    ColorCodes colorCode;
 
-    public String getMissingUnhotellingKey() {
+    public ColorCodes getColorCode() {
+        return colorCode;
+    }
+
+    public void setColorCode(ColorCodes colorCode) {
+        this.colorCode = colorCode;
+    }
+
+    public Boolean isMissingUnhotellingKey() {
         return missingUnhotellingKey;
     }
 
-    public void setMissingUnhotellingKey(String missingUnhotellingKey) {
+    public void setMissingUnhotellingKey(Boolean missingUnhotellingKey) {
         this.missingUnhotellingKey = missingUnhotellingKey;
     }
 
@@ -27,19 +36,19 @@ public class Output {
         this.differentUnhotellingText = differentUnhotellingText;
     }
 
-    public boolean isNoPropertyKey() {
+    public Boolean isNoPropertyKey() {
         return noPropertyKey;
     }
 
-    public void setNoPropertyKey(boolean noPropertyKey) {
+    public void setNoPropertyKey(Boolean noPropertyKey) {
         this.noPropertyKey = noPropertyKey;
     }
 
-    public boolean isUnhotellingNotTranslated() {
+    public Boolean isUnhotellingNotTranslated() {
         return unhotellingNotTranslated;
     }
 
-    public void setUnhotellingNotTranslated(boolean unhotellingNotTranslated) {
+    public void setUnhotellingNotTranslated(Boolean unhotellingNotTranslated) {
         this.unhotellingNotTranslated = unhotellingNotTranslated;
     }
 
@@ -75,5 +84,11 @@ public class Output {
         this.keyName = keyName;
     }
 
-
+    @Override
+    public String toString() {
+        return "Output{" + "keyName='" + keyName + '\'' + ", missingUnhotellingKey=" + missingUnhotellingKey + ", differentUnhotellingText='"
+            + differentUnhotellingText + '\'' + ", noPropertyKey=" + noPropertyKey + ", unhotellingNotTranslated=" + unhotellingNotTranslated
+            + ", originalContentEN_GB='" + originalContentEN_GB + '\'' + ", unhotellingContentEN_GB='" + unhotellingContentEN_GB + '\''
+            + ", unhotellingPropertyContent='" + unhotellingPropertyContent + '\'' + ", colorCode=" + colorCode + '}';
+    }
 }

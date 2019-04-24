@@ -15,13 +15,11 @@ public class Main {
         }catch (Exception e){
             e.printStackTrace();
         }
-
     }
 
     public static void saveToExcel(List<Output> outputs){
-
         for(Output output : outputs){
-
+               System.out.println(output.toString());
         }
     }
 }
