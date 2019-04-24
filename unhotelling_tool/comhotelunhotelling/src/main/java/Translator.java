@@ -83,7 +83,7 @@ public class Translator {
             outputList.add(newOutput);
         }
 
-        System.out.println(outputList.size());
+//        System.out.println(outputList.size());
 
         return outputList;
     }
