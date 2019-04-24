@@ -95,9 +95,11 @@ public class Main {
             sheet.addCell(keyName);
             System.out.println(column);
 
-            Boolean missingUnhotellingKey = new Boolean(++column, row, output.missingUnhotellingKey, cellFormat);
-            sheet.addCell(missingUnhotellingKey);
-            System.out.println(column);
+            if(output.isNoPropertyKey()!=null) {
+                Boolean missingUnhotellingKey = new Boolean(++column, row, output.missingUnhotellingKey, cellFormat);
+                sheet.addCell(missingUnhotellingKey);
+                System.out.println(column);
+            }
 
             Label differentUnhotellingText = new Label(++column, row, output.differentUnhotellingText, cellFormat);
             sheet.addCell(differentUnhotellingText);
