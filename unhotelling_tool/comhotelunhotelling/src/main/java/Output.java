@@ -10,6 +10,7 @@ public class Output {
     String originalContentEN_GB;
     String unhotellingContentEN_GB;
     String unhotellingPropertyContent;
+
     ColorCodes colorCode;
 
     public ColorCodes getColorCode() {
