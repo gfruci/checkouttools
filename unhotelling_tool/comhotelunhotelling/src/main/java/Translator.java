@@ -8,9 +8,11 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import org.apache.commons.lang3.StringUtils;
-import com.google.gson.Gson;
 
+import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Logger;
+
+import com.google.gson.Gson;
 
 /**
  *
@@ -20,6 +22,7 @@ public class Translator {
     static String baseLomsURLString = "http://localisationmessagesvc.milan.hcom/messages/";
     static String ENG_LANGUAGE_KEY = "en_GB";
     static String FR_LANGUAGE_KEY = "fr_FR";
+    final static Logger logger = Logger.getLogger(Translator.class);
 
     public List<Output> urlCall() throws MalformedURLException, IOException {
 
@@ -27,9 +30,10 @@ public class Translator {
 
         List<Output> outputList = new ArrayList<Output>();
         List<String> readedKeys = keyReader();
-
+        int i = 1;
         for (String key : readedKeys) {
-
+            logger.info("processing: " + i++ + " out of " + readedKeys.size());
+            logger.info("key : " + key);
             URL concatenatedOriginalURL = new URL(baseLomsURL + key);
 
             Output newOutput = new Output();
@@ -44,7 +48,7 @@ public class Translator {
                 } else {
                     continue;
                 }
-            }else{
+            } else {
                 continue;
             }
 
@@ -59,7 +63,7 @@ public class Translator {
         return outputList;
     }
 
-    public boolean hotelRoomMatches(String originalEnGbValue){
+    public boolean hotelRoomMatches(String originalEnGbValue) {
         return originalEnGbValue.matches("(.*)hotel(.*)") || originalEnGbValue.matches("(.*)room(.*)");
     }
 
@@ -68,17 +72,17 @@ public class Translator {
 
         List<String> readedKeys = new ArrayList<String>();
         BufferedReader br = new BufferedReader(new FileReader("sample.txt"));
-        try{
+        try {
             String strLine;
-            while ((strLine = br.readLine()) != null)   {
-                System.out.println(strLine);
-                String[] valuesInQuotes = StringUtils.substringsBetween(strLine , "\"", "\"");
+            while ((strLine = br.readLine()) != null) {
+                logger.info(strLine);
+                String[] valuesInQuotes = StringUtils.substringsBetween(strLine, "\"", "\"");
                 readedKeys.add(valuesInQuotes[0]);
             }
             br.close();
-        }catch (Exception e){
+        } catch (Exception e) {
 
-        }finally{
+        } finally {
             br.close();
         }
         return readedKeys;
@@ -104,7 +108,7 @@ public class Translator {
         return hashMapResponse;
     }
 
-    private void setUnhotellingKey (Output newOutput, URL concatenatedOriginalURL, String originalEnGbValue) throws IOException {
+    private void setUnhotellingKey(Output newOutput, URL concatenatedOriginalURL, String originalEnGbValue) throws IOException {
 
         URL unhotellingURL = new URL(concatenatedOriginalURL + ".unhotelling");
         HashMap<String, String> unhotellingResponseMap = hashMapResponse(unhotellingURL);
@@ -128,9 +132,9 @@ public class Translator {
         }
     }
 
-    private void setUnhotellingPropertyKey (Output newOutput, URL concatenatedURL) throws IOException {
+    private void setUnhotellingPropertyKey(Output newOutput, URL concatenatedURL) throws IOException {
 
-        URL unhotellingPropertyKeyURL = new URL(concatenatedURL +".unhotelling" + ".property");
+        URL unhotellingPropertyKeyURL = new URL(concatenatedURL + ".unhotelling" + ".property");
         HashMap<String, String> unhotellingPropertyResponseMap = hashMapResponse(unhotellingPropertyKeyURL);
         String unhotellingPropertyEnGbValue = unhotellingPropertyResponseMap.get(ENG_LANGUAGE_KEY);
 
@@ -143,20 +147,20 @@ public class Translator {
 
     private void setColorCode(Output output) {
         //RED
-        if(output.isMissingUnhotellingKey()!=null && output.isMissingUnhotellingKey() == true){
+        if (output.isMissingUnhotellingKey() != null && output.isMissingUnhotellingKey() == true) {
             output.setColorCode(ColorCodes.RED);
+            return;
+        }
+
+        //BROWN
+        if ((output.isNoPropertyKey() != null || output.isUnhotellingNotTranslated() != null) && output.isMissingUnhotellingKey() == null) {
+            output.setColorCode(ColorCodes.BROWN);
             return;
         }
 
         //GREEN
         if (output.isNoPropertyKey() == null && output.isUnhotellingNotTranslated() == null && output.isMissingUnhotellingKey() == null) {
             output.setColorCode(ColorCodes.GREEN);
-        return;
-        }
-
-        //BROWN
-        if ((output.isNoPropertyKey() != null || output.isUnhotellingNotTranslated() != null) && output.isMissingUnhotellingKey() == null) {
-            output.setColorCode(ColorCodes.BROWN);
             return;
         }
     }
