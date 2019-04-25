@@ -1,17 +1,17 @@
 /**
- * @author Nandor_Sebestyen
+ *
  */
 public class Output {
-    String keyName;
-    Boolean missingUnhotellingKey;
-    Boolean differentUnhotellingText;
-    Boolean noPropertyKey;
-    Boolean unhotellingNotTranslated;
-    String originalContentEN_GB;
-    String unhotellingContentEN_GB;
-    String unhotellingPropertyContent;
 
-    ColorCodes colorCode;
+    private String keyName;
+    private Boolean missingUnhotellingKey;
+    private Boolean differentUnhotellingText;
+    private Boolean noPropertyKey;
+    private Boolean unhotellingNotTranslated;
+    private String originalContentEN_GB;
+    private String unhotellingContentEN_GB;
+    private String unhotellingPropertyContent;
+    private ColorCodes colorCode;
 
     public ColorCodes getColorCode() {
         return colorCode;
@@ -69,7 +69,7 @@ public class Output {
         this.unhotellingContentEN_GB = unhotellingContentEN_GB;
     }
 
-    public String getUnhotellingPropertyContetnt() {
+    public String getUnhotellingPropertyContent() {
         return unhotellingPropertyContent;
     }
 
@@ -83,13 +83,5 @@ public class Output {
 
     public void setKeyName(String keyName) {
         this.keyName = keyName;
-    }
-
-    @Override
-    public String toString() {
-        return "Output{" + "keyName='" + keyName + '\'' + ", missingUnhotellingKey=" + missingUnhotellingKey + ", differentUnhotellingText='"
-            + differentUnhotellingText + '\'' + ", noPropertyKey=" + noPropertyKey + ", unhotellingNotTranslated=" + unhotellingNotTranslated
-            + ", originalContentEN_GB='" + originalContentEN_GB + '\'' + ", unhotellingContentEN_GB='" + unhotellingContentEN_GB + '\''
-            + ", unhotellingPropertyContent='" + unhotellingPropertyContent + '\'' + ", colorCode=" + colorCode + '}';
     }
 }

@@ -13,7 +13,7 @@ import com.google.gson.Gson;
 
 
 /**
- * @author Nandor_Sebestyen
+ *
  */
 public class Translator {
 
@@ -31,15 +31,15 @@ public class Translator {
         for (String key : readedKeys) {
 
             URL concatenatedOriginalURL = new URL(baseLomsURL + key);
-            HashMap<String, String> originalResponseMap = hashMapRespons(concatenatedOriginalURL);
 
             Output newOutput = new Output();
             newOutput.setKeyName(key);
+
+            HashMap<String, String> originalResponseMap = hashMapResponse(concatenatedOriginalURL);
             String originalEnGbValue = originalResponseMap.get(ENG_LANGUAGE_KEY);
 
-            //setOriginalValues
             if (originalEnGbValue != null) {
-                if (originalEnGbValue.matches("(.*)hotel(.*)") || originalEnGbValue.matches("(.*)room(.*)")) {
+                if (hotelRoomMatches(originalEnGbValue)) {
                     newOutput.setOriginalContentEN_GB(originalEnGbValue);
                 } else {
                     continue;
@@ -48,50 +48,22 @@ public class Translator {
                 continue;
             }
 
-            //setUnhotellingValues inputUnhotellingText
-            URL unhotellingURL = new URL(concatenatedOriginalURL + ".unhotelling");
+            setUnhotellingKey(newOutput, concatenatedOriginalURL, originalEnGbValue);
 
-            HashMap<String, String> unhotellingResponseMap = hashMapRespons(unhotellingURL);
-            String unhotellingEnGbValue = unhotellingResponseMap.get(ENG_LANGUAGE_KEY);
-            String unhotellingFRValue = unhotellingResponseMap.get(FR_LANGUAGE_KEY);
-
-
-            if (unhotellingEnGbValue == null) {
-                newOutput.setMissingUnhotellingKey(true);
-            } else {
-                if (!unhotellingEnGbValue.equals(originalEnGbValue)) {
-                    newOutput.setUnhotellingNotTranslated(true);
-                }
-
-                newOutput.setUnhotellingContentEN_GB(unhotellingEnGbValue);
-
-                if (unhotellingFRValue != null) {
-                    if (unhotellingEnGbValue.equals(unhotellingFRValue)) {
-                        newOutput.setUnhotellingNotTranslated(true);
-                    }
-                }
-            }
-
-            //setUnhotellingPropertyKey
-            URL unhotellingPropertyKeyURL = new URL(unhotellingURL + ".property");
-            HashMap<String, String> unhotellingPropertyResponseMap = hashMapRespons(unhotellingPropertyKeyURL);
-            String unhotellingPropertyEnGbValue = unhotellingPropertyResponseMap.get(ENG_LANGUAGE_KEY);
-
-            if (unhotellingPropertyEnGbValue == null) {
-                newOutput.setNoPropertyKey(true);
-            } else {
-                newOutput.setUnhotellingPropertyContetnt(unhotellingPropertyEnGbValue);
-            }
+            setUnhotellingPropertyKey(newOutput, concatenatedOriginalURL);
 
             setColorCode(newOutput);
             outputList.add(newOutput);
         }
 
-
         return outputList;
     }
 
-    //File reader will be here
+    public boolean hotelRoomMatches(String originalEnGbValue){
+        return originalEnGbValue.matches("(.*)hotel(.*)") || originalEnGbValue.matches("(.*)room(.*)");
+    }
+
+    //File reader
     public List<String> keyReader() throws IOException {
 
         List<String> readedKeys = new ArrayList<String>();
@@ -112,7 +84,7 @@ public class Translator {
         return readedKeys;
     }
 
-    public HashMap<String, String> hashMapRespons(URL url) throws IOException {
+    public HashMap<String, String> hashMapResponse(URL url) throws IOException {
 
         HttpURLConnection originalConnection = (HttpURLConnection) url.openConnection();
         originalConnection.setRequestMethod("GET");
@@ -132,10 +104,45 @@ public class Translator {
         return hashMapResponse;
     }
 
+    private void setUnhotellingKey (Output newOutput, URL concatenatedOriginalURL, String originalEnGbValue) throws IOException {
+
+        URL unhotellingURL = new URL(concatenatedOriginalURL + ".unhotelling");
+        HashMap<String, String> unhotellingResponseMap = hashMapResponse(unhotellingURL);
+        String unhotellingEnGbValue = unhotellingResponseMap.get(ENG_LANGUAGE_KEY);
+        String unhotellingFRValue = unhotellingResponseMap.get(FR_LANGUAGE_KEY);
+
+        if (unhotellingEnGbValue == null) {
+            newOutput.setMissingUnhotellingKey(true);
+        } else {
+            if (!unhotellingEnGbValue.equals(originalEnGbValue)) {
+                newOutput.setDifferentUnhotellingText(true);
+            }
+
+            newOutput.setUnhotellingContentEN_GB(unhotellingEnGbValue);
+
+            if (unhotellingFRValue != null) {
+                if (unhotellingEnGbValue.equals(unhotellingFRValue)) {
+                    newOutput.setUnhotellingNotTranslated(true);
+                }
+            }
+        }
+    }
+
+    private void setUnhotellingPropertyKey (Output newOutput, URL concatenatedURL) throws IOException {
+
+        URL unhotellingPropertyKeyURL = new URL(concatenatedURL +".unhotelling" + ".property");
+        HashMap<String, String> unhotellingPropertyResponseMap = hashMapResponse(unhotellingPropertyKeyURL);
+        String unhotellingPropertyEnGbValue = unhotellingPropertyResponseMap.get(ENG_LANGUAGE_KEY);
+
+        if (unhotellingPropertyEnGbValue == null) {
+            newOutput.setNoPropertyKey(true);
+        } else {
+            newOutput.setUnhotellingPropertyContetnt(unhotellingPropertyEnGbValue);
+        }
+    }
+
     private void setColorCode(Output output) {
-
         //RED
-
         if(output.isMissingUnhotellingKey()!=null && output.isMissingUnhotellingKey() == true){
             output.setColorCode(ColorCodes.RED);
             return;
@@ -152,8 +159,5 @@ public class Translator {
             output.setColorCode(ColorCodes.BROWN);
             return;
         }
-
-
-
     }
 }
