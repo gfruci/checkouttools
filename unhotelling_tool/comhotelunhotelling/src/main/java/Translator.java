@@ -76,8 +76,10 @@ public class Translator {
             String strLine;
             while ((strLine = br.readLine()) != null) {
                 logger.info(strLine);
+
                 String[] valuesInQuotes = StringUtils.substringsBetween(strLine, "\"", "\"");
-                readedKeys.add(valuesInQuotes[0]);
+
+                if (valuesInQuotes != null) readedKeys.add(valuesInQuotes[0]);
             }
             br.close();
         } catch (Exception e) {

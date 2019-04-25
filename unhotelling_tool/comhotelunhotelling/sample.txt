@@ -1,4 +1,5 @@
- "booking.financial_column.charges.mandatory_fees.detailed_tooltip.cleaning_fee.unhotelling",
+ [
+    "booking.financial_column.charges.mandatory_fees.detailed_tooltip.cleaning_fee.unhotelling",
     "booking.bookingForm.mandatoryFee.hotelCollected.hover.singleFee.crossCurrency.mandatoryFee.unhotelling",
     "fastbooking.submit.label.book.alipay.text",
     "fastbooking.paymenttype.label.points.united",
@@ -185,3 +186,4 @@
     "booking.bookingForm.mandatoryFee.hotelCollected.hover.multiFee.singleCurrency.mandatoryFee",
     "fastbooking.validation.norwegian.formData.frequentFlyerDetailsForm.frequentFlyerCode",
     "hotel.cancellation_policy_alternate_v2.before.price_penalty"
+]

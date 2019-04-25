@@ -9,10 +9,18 @@ import java.io.IOException;
 
 import java.util.List;
 
+import org.apache.maven.plugin.AbstractMojo;
+import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.plugins.annotations.Mojo;
+
 /**
+ * This goal will run the main
  *
+ * @goal translate
  */
-public class Main {
+@Mojo( name = "translate")
+public class Main extends AbstractMojo {
 
     public static void main(String[] args) {
 
@@ -26,4 +34,8 @@ public class Main {
         }
     }
 
+    @Override
+    public void execute() throws MojoExecutionException, MojoFailureException {
+       this.main(null);
+    }
 }
