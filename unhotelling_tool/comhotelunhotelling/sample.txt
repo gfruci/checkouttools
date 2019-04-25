@@ -1,4 +1,3 @@
-[
 "confirmation.mail.greeting.prepay.with_installment",
 "confirmation.crossSell.bookAgain.text",
 "booking.bookingForm.mandatoryFee.hotelCollected.hover.singleFee.crossCurrency.mandatoryFee",
@@ -49,4 +48,3 @@
 "hotel.cancellation_policy_alternate.nopenalty",
 "booking.summary.total_room_price",
 "bookingPage.bookingSummary.financialDetails.drr.member_only_deal.title"
-]

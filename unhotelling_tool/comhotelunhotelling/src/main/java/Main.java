@@ -1,4 +1,3 @@
-
 import jxl.Workbook;
 import jxl.format.Colour;
 import jxl.write.*;
@@ -8,23 +7,22 @@ import jxl.write.Boolean;
 import java.io.File;
 import java.io.IOException;
 
-
 import java.util.List;
-
 
 /**
  * @author Nandor_Sebestyen
  */
 public class Main {
 
-    public static void main(String[] args){
+    public static void main(String[] args) {
 
-        Translator t =  new Translator();
+        Translator t = new Translator();
 
         try {
             List<Output> outputs = t.urlCall();
+            System.out.println(outputs.size());
             saveToExcel(outputs);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -41,8 +39,7 @@ public class Main {
 
         //Create header
         WritableCellFormat headerFormat = new WritableCellFormat();
-        WritableFont font
-            = new WritableFont(WritableFont.ARIAL, 16, WritableFont.BOLD);
+        WritableFont font = new WritableFont(WritableFont.ARIAL, 16, WritableFont.BOLD);
         headerFormat.setFont(font);
         headerFormat.setBackground(Colour.LIGHT_BLUE);
         headerFormat.setWrap(true);
@@ -82,7 +79,7 @@ public class Main {
 
         int column = 0;
         int row = 1;
-        for(Output output : outputs){
+        for (Output output : outputs) {
 
             WritableCellFormat cellFormat = new WritableCellFormat();
             cellFormat.setWrap(true);
@@ -97,29 +94,30 @@ public class Main {
             format.setWrap(true);
 
             format.setBackground(Colour.WHITE);
-            if(output.isNoPropertyKey()!=null) {
-                Boolean missingUnhotellingKey = new Boolean(++column, row, output.missingUnhotellingKey, format);
+            if (output.isMissingUnhotellingKey() != null) {
+                Boolean missingUnhotellingKey = new Boolean(column, row, output.isMissingUnhotellingKey(), format);
                 sheet.addCell(missingUnhotellingKey);
-
             }
 
             column++;
 
 
-            Label differentUnhotellingText = new Label(column, row, output.differentUnhotellingText, format);
-            sheet.addCell(differentUnhotellingText);
+            if (output.isDifferentUnhotellingText() != null) {
+                Boolean differentUnhotellingText = new Boolean(column, row, output.isDifferentUnhotellingText(), format);
+                sheet.addCell(differentUnhotellingText);
+            }
 
             column++;
 
-            if(output.isNoPropertyKey()!=null) {
+            if (output.isNoPropertyKey() != null) {
                 Boolean noPropertyKey = new Boolean(column, row, output.noPropertyKey, format);
                 sheet.addCell(noPropertyKey);
             }
 
             column++;
 
-            if(output.isUnhotellingNotTranslated()!=null) {
-                Boolean unhotellingNotTranslated = new Boolean(column, row, output.unhotellingNotTranslated, format);
+            if (output.isUnhotellingNotTranslated() != null) {
+                Boolean unhotellingNotTranslated = new Boolean(column, row, output.isUnhotellingNotTranslated(), format);
                 sheet.addCell(unhotellingNotTranslated);
             }
 
@@ -141,20 +139,18 @@ public class Main {
 
             column = 0;
             row++;
-
         }
 
         workbook.write();
         workbook.close();
-
     }
 
     private static void setCellColourCode(WritableCellFormat cellFormat, Output output) throws WriteException {
-        if( output.getColorCode() == ColorCodes.GREEN){
+        if (output.getColorCode() == ColorCodes.GREEN) {
             cellFormat.setBackground(Colour.GREEN);
-        }else if( output.getColorCode() == ColorCodes.BROWN){
+        } else if (output.getColorCode() == ColorCodes.BROWN) {
             cellFormat.setBackground(Colour.BROWN);
-        }else if( output.getColorCode() == ColorCodes.RED){
+        } else if (output.getColorCode() == ColorCodes.RED) {
             cellFormat.setBackground(Colour.RED);
         }
     }

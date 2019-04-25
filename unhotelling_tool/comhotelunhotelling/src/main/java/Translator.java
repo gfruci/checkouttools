@@ -44,6 +44,8 @@ public class Translator {
                 } else {
                     continue;
                 }
+            }else{
+                continue;
             }
 
             //setUnhotellingValues inputUnhotellingText
@@ -58,7 +60,7 @@ public class Translator {
                 newOutput.setMissingUnhotellingKey(true);
             } else {
                 if (!unhotellingEnGbValue.equals(originalEnGbValue)) {
-                    newOutput.setMissingUnhotellingKey(true);
+                    newOutput.setUnhotellingNotTranslated(true);
                 }
 
                 newOutput.setUnhotellingContentEN_GB(unhotellingEnGbValue);
@@ -76,7 +78,7 @@ public class Translator {
             String unhotellingPropertyEnGbValue = unhotellingPropertyResponseMap.get(ENG_LANGUAGE_KEY);
 
             if (unhotellingPropertyEnGbValue == null) {
-                newOutput.setMissingUnhotellingKey(true);
+                newOutput.setNoPropertyKey(true);
             } else {
                 newOutput.setUnhotellingPropertyContetnt(unhotellingPropertyEnGbValue);
             }
@@ -97,12 +99,13 @@ public class Translator {
         try{
             String strLine;
             while ((strLine = br.readLine()) != null)   {
+                System.out.println(strLine);
                 String[] valuesInQuotes = StringUtils.substringsBetween(strLine , "\"", "\"");
                 readedKeys.add(valuesInQuotes[0]);
             }
             br.close();
         }catch (Exception e){
-            System.err.println("Error: " + e.getMessage());
+
         }finally{
             br.close();
         }
@@ -113,8 +116,6 @@ public class Translator {
 
         HttpURLConnection originalConnection = (HttpURLConnection) url.openConnection();
         originalConnection.setRequestMethod("GET");
-
-        // int status = con.getResponseCode();
 
         BufferedReader inputOriginal = new BufferedReader(new InputStreamReader(originalConnection.getInputStream()));
         String inputLine;
@@ -132,6 +133,14 @@ public class Translator {
     }
 
     private void setColorCode(Output output) {
+
+        //RED
+
+        if(output.isMissingUnhotellingKey()!=null && output.isMissingUnhotellingKey() == true){
+            output.setColorCode(ColorCodes.RED);
+            return;
+        }
+
         //GREEN
         if (output.isNoPropertyKey() == null && output.isUnhotellingNotTranslated() == null && output.isMissingUnhotellingKey() == null) {
             output.setColorCode(ColorCodes.GREEN);
@@ -144,11 +153,7 @@ public class Translator {
             return;
         }
 
-        //RED
-        if(output.isMissingUnhotellingKey() == true){
-            output.setColorCode(ColorCodes.RED);
-            return;
-        }
+
 
     }
 }

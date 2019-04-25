@@ -4,7 +4,7 @@
 public class Output {
     String keyName;
     Boolean missingUnhotellingKey;
-    String differentUnhotellingText;
+    Boolean differentUnhotellingText;
     Boolean noPropertyKey;
     Boolean unhotellingNotTranslated;
     String originalContentEN_GB;
@@ -29,11 +29,11 @@ public class Output {
         this.missingUnhotellingKey = missingUnhotellingKey;
     }
 
-    public String getDifferentUnhotellingText() {
+    public Boolean isDifferentUnhotellingText() {
         return differentUnhotellingText;
     }
 
-    public void setDifferentUnhotellingText(String differentUnhotellingText) {
+    public void setDifferentUnhotellingText(Boolean differentUnhotellingText) {
         this.differentUnhotellingText = differentUnhotellingText;
     }
 
