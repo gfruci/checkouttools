@@ -1,12 +1,3 @@
-import jxl.Workbook;
-import jxl.format.Colour;
-import jxl.write.*;
-
-import jxl.write.Boolean;
-
-import java.io.File;
-import java.io.IOException;
-
 import java.util.List;
 
 import org.apache.maven.plugin.AbstractMojo;
@@ -19,7 +10,7 @@ import org.apache.maven.plugins.annotations.Mojo;
  *
  * @goal translate
  */
-@Mojo( name = "translate")
+@Mojo(name = "translate")
 public class Main extends AbstractMojo {
 
     public static void main(String[] args) {
@@ -36,6 +27,6 @@ public class Main extends AbstractMojo {
 
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
-       this.main(null);
+        this.main(null);
     }
 }
