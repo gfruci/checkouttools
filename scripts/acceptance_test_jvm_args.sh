@@ -79,7 +79,7 @@ function process_args(){
 }
 
 function main(){
-  local settings_from_maven settings_from_properties settings_from_pom_xml
+  local settings_from_maven settings_from_properties settings_from_pom_xml user_timezone
   
   ACC_TEST_DIR_NAME="$(basename ${BA_HOME})-acceptance-test"
   
@@ -96,15 +96,19 @@ function main(){
 
   echo -n "3. From project pom xml file..."
   settings_from_pom_xml=`parse_pom_xml ${BA_HOME}`
+
+  echo -n "4. Adding user timezone..."
+  user_timezone="-Duser.timezone=`date +"%Z"`"
+
   echo " done"
   debug_log "${settings_from_pom_xml}"
 
   if [[ "${COPY_TO_CLIPBOARD}" == "true" ]]; then
-    echo -e "${settings_from_maven//\\/\\\\}\n${settings_from_properties//\\/\\\\}\n${settings_from_pom_xml//\\/\\\\}" > /dev/clipboard
+    echo -e "${settings_from_maven//\\/\\\\}\n${settings_from_properties//\\/\\\\}\n${settings_from_pom_xml//\\/\\\\}\n${user_timezone//\\/\\\\}" > /dev/clipboard
     echo "Result copied to the clipboard"
   else
     echo -e "\nJVM args:\n"
-    echo -e "${settings_from_maven//\\/\\\\}\n${settings_from_properties//\\/\\\\}\n${settings_from_pom_xml//\\/\\\\}"
+    echo -e "${settings_from_maven//\\/\\\\}\n${settings_from_properties//\\/\\\\}\n${settings_from_pom_xml//\\/\\\\}\n${user_timezone//\\/\\\\}"
   fi
 }
 
