@@ -19,11 +19,6 @@
       <version>1.0.9</version>
     </dependency>
     <dependency>
-      <groupId>com.hotels.booking</groupId>
-      <artifactId>checkito-checkout</artifactId>
-      <version>1.0.0-SNAPSHOT</version>
-    </dependency>
-    <dependency>
       <groupId>log4j</groupId>
       <artifactId>log4j</artifactId>
       <version>1.2.17</version>
@@ -38,6 +33,11 @@
       <artifactId>maven-plugin-annotations</artifactId>
       <version>3.4</version>
     </dependency>
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-lang3</artifactId>
+      <version>3.8.1</version>
+    </dependency>
   </dependencies>
   <build>
     <plugins>
@@ -45,15 +45,8 @@
         <artifactId>maven-compiler-plugin</artifactId>
         <version>2.0.2</version>
         <configuration>
-          <source>1.6</source>
-          <target>1.6</target>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>exec-maven-plugin</artifactId>
-        <configuration>
-          <mainClass>Main</mainClass>
+          <source>1.11</source>
+          <target>1.11</target>
         </configuration>
       </plugin>
       <plugin>
@@ -61,22 +54,6 @@
         <artifactId>maven-plugin-plugin</artifactId>
         <version>3.4</version>
       </plugin>
-
-      <plugin>
-        <groupId>com.hotel.unhotelling</groupId>
-        <artifactId>com.hotel.unhotelling</artifactId>
-        <version>1.0-SNAPSHOT</version>
-        <executions>
-          <execution>
-            <phase>compile</phase>
-            <goals>
-              <goal>translate</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-
-
     </plugins>
   </build>
 </project>
