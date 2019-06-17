@@ -5,7 +5,7 @@ volumes:
 services:
 
   styxpres:
-    image: 181651482125.dkr.ecr.us-west-2.amazonaws.com/hotels/styxpres:release
+    image: 181651482125.dkr.ecr.us-west-2.amazonaws.com/hotels/styxpres:0.2.913
     container_name: styxpres
     ports:
       - "9000:9000"
@@ -248,6 +248,7 @@ services:
     volumes:
       - ./logs/bma/:/hcom/servers/tomcat/logs/
       - mvt:/mvt
+      - ./globalconf/:/hcom/globalconf/
     environment:
       - APP_CONFIG_ENVIRONMENT=development
       - APP_CONFIG_LOCATION=file:/hcom/servers/tomcat/appconfig
@@ -291,6 +292,8 @@ services:
       - APP_LOYALTY_ESTIMATION_SERVICE_CLIENT_READ_TIMEOUT=60000
       - APP_LOYALTY_ESTIMATION_SERVICE_CLIENT_CONNECTION_TIMEOUT=60000
       - APP_BPAS_ON_PAYMENT_OPTION_REQUEST_CIRCUIT_BREAKER_TIMEOUT_MS=60000
+      - APP_PASSBOOK_CERTIFICATES_LOCATION_HCOM=/hcom/globalconf/hotels.com/PassKeyCert.p12
+      - APP_PASSBOOK_WWDR_CERTIFICATE_LOCATION=/hcom/globalconf/wwdr.pem
 
       # Development overrides
       - JAVA_JVM_ARGS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:1901 ${PROXY_CONFIG}
@@ -360,6 +363,7 @@ services:
     volumes:
       - ./logs/bma/:/hcom/servers/tomcat/logs/
       - mvt:/mvt
+      - ./globalconf/:/hcom/globalconf/
     environment:
       - APP_CONFIG_ENVIRONMENT=development
       - APP_CONFIG_LOCATION=file:/hcom/servers/tomcat/appconfig
@@ -400,6 +404,8 @@ services:
       - APP_LOYALTY_ESTIMATION_SERVICE_CLIENT_READ_TIMEOUT=60000
       - APP_LOYALTY_ESTIMATION_SERVICE_CLIENT_CONNECTION_TIMEOUT=60000
       - APP_BPAS_ON_PAYMENT_OPTION_REQUEST_CIRCUIT_BREAKER_TIMEOUT_MS=60000
+      - APP_PASSBOOK_CERTIFICATES_LOCATION_HCOM=/hcom/globalconf/hotels.com/PassKeyCert.p12
+      - APP_PASSBOOK_WWDR_CERTIFICATE_LOCATION=/hcom/globalconf/wwdr.pem
 
       # Development overrides
       - JAVA_JVM_ARGS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:1901 ${PROXY_CONFIG}
