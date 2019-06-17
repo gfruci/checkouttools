@@ -5,7 +5,7 @@ volumes:
 services:
 
   styxpres:
-    image: 181651482125.dkr.ecr.us-west-2.amazonaws.com/hotels/styxpres:0.2.913
+    image: 181651482125.dkr.ecr.us-west-2.amazonaws.com/hotels/styxpres:release
     container_name: styxpres
     ports:
       - "9000:9000"
