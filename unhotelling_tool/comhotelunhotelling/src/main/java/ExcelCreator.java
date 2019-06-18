@@ -50,7 +50,7 @@ public class ExcelCreator {
         sheet.setColumnView(0, 40);
         sheet.addCell(headerLabel);
 
-        headerLabel = new Label(4, 0, "UNHOTELLING NOT TRANSLATED", headerFormat);
+        headerLabel = new Label(4, 0, "UNHOTELLING PROPERTY NOT TRANSLATED", headerFormat);
         sheet.setColumnView(0, 40);
         sheet.addCell(headerLabel);
 
@@ -106,8 +106,8 @@ public class ExcelCreator {
 
             column++;
 
-            if (output.isUnhotellingNotTranslated() != null) {
-                Boolean unhotellingNotTranslated = new Boolean(column, row, output.isUnhotellingNotTranslated(), format);
+            if (output.isUnhotellingPropertyNotTranslated() != null) {
+                Boolean unhotellingNotTranslated = new Boolean(column, row, output.isUnhotellingPropertyNotTranslated(), format);
                 sheet.addCell(unhotellingNotTranslated);
             }
 
