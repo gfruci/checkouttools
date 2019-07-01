@@ -456,8 +456,6 @@ services:
       - APP_DIONYSUS_UIPACK_HOME=file:///dionysusuipack/
       - APP_EMAIL_TEMPLATES_BASEPATH=file:./appconfig/templates/
       - APP_LIS_EAPID=0
-      - APP_BOOKING_SEND_CONFIRMATION_SMS=false
-      - APP_SMS_CONFIRMATION_ENABLED=false
       - APP_spring.profiles.active=default
       - APP_VAULT_ADDR=https://vault.lab.hcom
       - APP_VAULT_USER_ID=ci-bca-01
@@ -568,8 +566,6 @@ services:
       - APP_MVT_BUSINESS_CONFIGURATION_LOCATION=file:///mvt/
       - APP_EMAIL_TEMPLATES_BASEPATH=file:./appconfig/templates/
       - APP_LIS_EAPID=0
-      - APP_BOOKING_SEND_CONFIRMATION_SMS=false
-      - APP_SMS_CONFIRMATION_ENABLED=false
       - APP_spring.profiles.active=default
       - APP_VAULT_ADDR=https://vault.lab.hcom
       - APP_VAULT_USER_ID=ci-bca-01
