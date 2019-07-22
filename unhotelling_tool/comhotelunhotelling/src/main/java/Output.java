@@ -7,7 +7,7 @@ public class Output {
     private Boolean missingUnhotellingKey;
     private Boolean differentUnhotellingText;
     private Boolean noPropertyKey;
-    private Boolean unhotellingNotTranslated;
+    private Boolean unhotellingPropertyNotTranslated;
     private String originalContentEN_GB;
     private String unhotellingContentEN_GB;
     private String unhotellingPropertyContent;
@@ -45,12 +45,12 @@ public class Output {
         this.noPropertyKey = noPropertyKey;
     }
 
-    public Boolean isUnhotellingNotTranslated() {
-        return unhotellingNotTranslated;
+    public Boolean isUnhotellingPropertyNotTranslated() {
+        return unhotellingPropertyNotTranslated;
     }
 
-    public void setUnhotellingNotTranslated(Boolean unhotellingNotTranslated) {
-        this.unhotellingNotTranslated = unhotellingNotTranslated;
+    public void setUnhotellingPropertyNotTranslated(Boolean unhotellingPropertyNotTranslated) {
+        this.unhotellingPropertyNotTranslated = unhotellingPropertyNotTranslated;
     }
 
     public String getOriginalContentEN_GB() {

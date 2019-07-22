@@ -207,6 +207,11 @@ function start-app {
 
     if [ "${APP}" == "checkito" ]
     then
+      if [ "${STUB_STATUS}" == "_no_stub" ]
+      then
+        return 1;
+      fi
+
       export SUIT=${SUIT}
     fi
 

@@ -64,7 +64,7 @@ public class Translator {
     }
 
     public boolean hotelRoomMatches(String originalEnGbValue) {
-        return originalEnGbValue.matches("(.*)hotel(.*)") || originalEnGbValue.matches("(.*)room(.*)");
+        return originalEnGbValue.matches("(.*)(?i:hotel)(.*)") || originalEnGbValue.matches("(.*)(?i:room)(.*)");
     }
 
     //File reader
@@ -115,7 +115,6 @@ public class Translator {
         URL unhotellingURL = new URL(concatenatedOriginalURL + ".unhotelling");
         HashMap<String, String> unhotellingResponseMap = hashMapResponse(unhotellingURL);
         String unhotellingEnGbValue = unhotellingResponseMap.get(ENG_LANGUAGE_KEY);
-        String unhotellingFRValue = unhotellingResponseMap.get(FR_LANGUAGE_KEY);
 
         if (unhotellingEnGbValue == null) {
             newOutput.setMissingUnhotellingKey(true);
@@ -125,12 +124,6 @@ public class Translator {
             }
 
             newOutput.setUnhotellingContentEN_GB(unhotellingEnGbValue);
-
-            if (unhotellingFRValue != null) {
-                if (unhotellingEnGbValue.equals(unhotellingFRValue)) {
-                    newOutput.setUnhotellingNotTranslated(true);
-                }
-            }
         }
     }
 
@@ -139,11 +132,18 @@ public class Translator {
         URL unhotellingPropertyKeyURL = new URL(concatenatedURL + ".unhotelling" + ".property");
         HashMap<String, String> unhotellingPropertyResponseMap = hashMapResponse(unhotellingPropertyKeyURL);
         String unhotellingPropertyEnGbValue = unhotellingPropertyResponseMap.get(ENG_LANGUAGE_KEY);
+        String unhotellingPropertyFRValue = unhotellingPropertyResponseMap.get(FR_LANGUAGE_KEY);
 
         if (unhotellingPropertyEnGbValue == null) {
             newOutput.setNoPropertyKey(true);
         } else {
             newOutput.setUnhotellingPropertyContetnt(unhotellingPropertyEnGbValue);
+
+            if (unhotellingPropertyFRValue != null) {
+                if (unhotellingPropertyEnGbValue.equals(unhotellingPropertyFRValue)) {
+                    newOutput.setUnhotellingPropertyNotTranslated(true);
+                }
+            }
         }
     }
 
@@ -155,13 +155,13 @@ public class Translator {
         }
 
         //BROWN
-        if ((output.isNoPropertyKey() != null || output.isUnhotellingNotTranslated() != null) && output.isMissingUnhotellingKey() == null) {
+        if ((output.isNoPropertyKey() != null || output.isUnhotellingPropertyNotTranslated() != null) && output.isMissingUnhotellingKey() == null) {
             output.setColorCode(ColorCodes.BROWN);
             return;
         }
 
         //GREEN
-        if (output.isNoPropertyKey() == null && output.isUnhotellingNotTranslated() == null && output.isMissingUnhotellingKey() == null) {
+        if (output.isNoPropertyKey() == null && output.isUnhotellingPropertyNotTranslated() == null && output.isMissingUnhotellingKey() == null) {
             output.setColorCode(ColorCodes.GREEN);
             return;
         }
