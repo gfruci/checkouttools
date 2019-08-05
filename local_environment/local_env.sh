@@ -24,12 +24,22 @@ cd ${PREV_DIR}
 # CONFIGS #
 #########################
 
-PROXY_CONFIG="-Dhttp.proxyHost=docker.for.mac.localhost -Dhttp.proxyPort=8888 -Dhttps.proxyHost=docker.for.mac.localhost -Dhttps.proxyPort=8888 -DproxyHost=docker.for.mac.localhost -DproxyPort=8888"
+if [[ "$OSTYPE" == "darwin" ]]; then
+        PROXY_CONFIG="-Dhttp.proxyHost=docker.for.mac.localhost -Dhttp.proxyPort=8888 -Dhttps.proxyHost=docker.for.mac.localhost -Dhttps.proxyPort=8888 -DproxyHost=docker.for.mac.localhost -DproxyPort=8888"
+elif [[ "$OSTYPE" == "win32" ]]; then
+        PROXY_CONFIG="-Dhttp.proxyHost=docker.for.win.localhost -Dhttp.proxyPort=8888 -Dhttps.proxyHost=docker.for.win.localhost -Dhttps.proxyPort=8888 -DproxyHost=docker.for.win.localhost -DproxyPort=8888"
+elif [[ "$OSTYPE" == "msys" ]]; then
+        PROXY_CONFIG="-Dhttp.proxyHost=docker.for.win.localhost -Dhttp.proxyPort=8888 -Dhttps.proxyHost=docker.for.win.localhost -Dhttps.proxyPort=8888 -DproxyHost=docker.for.win.localhost -DproxyPort=8888"
+else
+		PROXY_CONFIG="-Dhttp.proxyHost=docker.for.mac.localhost -Dhttp.proxyPort=8888 -Dhttps.proxyHost=docker.for.mac.localhost -Dhttps.proxyPort=8888 -DproxyHost=docker.for.mac.localhost -DproxyPort=8888"
+fi
+
 START_MODE=
 BA_VERSION=
 BMA_VERSION=
 BCA_VERSION=
 STUB_STATUS=
+SUIT="default"
 TRUSTSTORE_PATH="/hcom/share/java/default/lib/security/cacerts_plus_internal"
 DEBUG_OPTS="-Xdebug -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:1901"
 
@@ -40,7 +50,7 @@ declare -A APPS_CONF=(\
     ["styxpres,start_status_cmd"]="grep -i \"Started styx server in\" ${SCRIPT_DIR}/logs/styxpres.log"\
     ["styxpres,stop_status_cmd"]="grep -e \"styxpres.*ERROR\" ${SCRIPT_DIR}/logs/styxpres.log | grep -v \"locsClientLoader\""\
     ["styxpres,update_cmd"]="docker pull 181651482125.dkr.ecr.us-west-2.amazonaws.com/hotels/styxpres:release >> ${SCRIPT_DIR}/logs/startup.log 2>&1"\
-    ["checkito,start_status_cmd"]="grep \"checkito.*Checkito listening for HTTP requests\" ${SCRIPT_DIR}/logs/checkito.log"\
+    ["checkito,start_status_cmd"]="grep \"checkito.*Checkito listening for HTTPS requests\" ${SCRIPT_DIR}/logs/checkito.log"\
     ["checkito,stop_status_cmd"]="grep -e \"checkito.*ERROR\" ${SCRIPT_DIR}/logs/checkito.log"\
     ["checkito,update_cmd"]="docker pull 181651482125.dkr.ecr.us-west-2.amazonaws.com/hotels/checkito:latest >> ${SCRIPT_DIR}/logs/startup.log 2>&1"\
     ["nginx,start_status_cmd"]="grep -e \"nginx.*done\" ${SCRIPT_DIR}/logs/nginx.log"\
@@ -195,6 +205,16 @@ function start-app {
         fi
     fi
 
+    if [ "${APP}" == "checkito" ]
+    then
+      if [ "${STUB_STATUS}" == "_no_stub" ]
+      then
+        return 1;
+      fi
+
+      export SUIT=${SUIT}
+    fi
+
     cd ${SCRIPT_DIR}
     nohup docker-compose up --no-color ${APP}${APP_TYPE} >> ${SCRIPT_DIR}/logs/${APP}.log & 2>&1
     cd ${PREV_DIR}
@@ -310,6 +330,7 @@ function help {
     echo "-no-stub                                                  Start the local environment without using checkito as mocking server (by default is using Checkito)"
     echo "-proxy                                                    Set the local environment proxy host to docker.for.mac.localhost:8888"
     echo "-j8                                                       Sets Java 8 related options"
+    echo "-suit                                                     Configures which suit will be used with checkito"
     exit 0
 }
 
@@ -340,6 +361,11 @@ function init {
           ;;
         -proxy)
           export PROXY_CONFIG=${PROXY_CONFIG}
+          ;;
+        -suit)
+          SUIT=$2
+          export SUIT=${SUIT}
+          shift
           ;;
         -j8)
           DEBUG_OPTS="-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=1901"

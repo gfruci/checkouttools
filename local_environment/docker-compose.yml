@@ -620,6 +620,8 @@ services:
       - "2201:1901"
       - "8089:8089"
       - "8189:8189"
+    environment:
+      - SUIT=${SUIT}
 
   #  configsvc:
   #    image: 181651482125.dkr.ecr.us-west-2.amazonaws.com/hotels/cws:latest
