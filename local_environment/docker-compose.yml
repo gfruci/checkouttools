@@ -155,6 +155,7 @@ services:
       - APP_PAYMENT_OPTION_SERVICE_URL=http://checkito:8089/PaymentOptions/v2
       - APP_bpins.baseUrl=https://checkito:8189
       - APP_beps.baseUrl=https://checkito:8189
+      - APP_DUPLICATE_SERVICE_HOST_URL=http://checkito:8089
 
       #remote jmx
       - APP_com.sun.management.jmxremote=true
