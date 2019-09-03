@@ -33,7 +33,7 @@ import com.hotels.checkitotools.model.I18nMessagesLocalisationServiceModel;
  */
 public class I18nMockUpdater {
     private static final Logger LOGGER = LoggerFactory.getLogger(I18nMockUpdater.class);
-    private static final String LOCALISATION_SERVICE_STAGING_URL = "http://localisationsvc.staging.hcom/messages/";
+    private static final String LOCALISATION_SERVICE_STAGING_URL = "http://localisationmessagesvc.milan.hcom/messages/";
 
     /**
      * @param args The first parameter should be the input json file.

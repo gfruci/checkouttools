@@ -6,16 +6,18 @@ DEBUG="false"
 BA_HOME=""
 ACC_TEST_DIR_NAME="bookingapp-acceptance-test"
 COPY_TO_CLIPBOARD="false"
-ENV=dev
+ENV=dev_rom
+JAVA_11="false"
 
 
 function print_help(){
   echo "Usage:"
-  echo "${0} [-v] [-c] [-h] [-e env] <bookingapp directory>"
-  echo "-v  verbose"
-  echo "-c  copy result to clipboard (Windows bash only, it uses /dev/clipboard)"
-  echo "-e  acceptance tests env (e.g dev_rom). Default is dev."
-  echo "-h  print this help"
+  echo "${0} [-v] [-c] [-h] [-e env] [-j11] <bookingapp directory>"
+  echo "-v   verbose"
+  echo "-c   copy result to clipboard (Windows bash only, it uses /dev/clipboard)"
+  echo "-e   acceptance tests env (e.g dev_rom). Default is dev_rom."
+  echo "-j11 use Java 11 specific args"
+  echo "-h   print this help"
 }
 
 function debug_log(){
@@ -45,13 +47,18 @@ function parse_maven_settings(){
 }
 
 function parse_default_properties(){
-  awk '$1' ${1}/${ACC_TEST_DIR_NAME}/src/at/resources/conf/acceptance_test_{${ENV},additional_context_fragments}_system.properties \
+  awk '$1' ${1}/${ACC_TEST_DIR_NAME}/src/test/resources/conf/acceptance_test_{${ENV},additional_context_fragments}_system.properties \
   | grep -v '#' | awk '{printf("-D%s\n", $0)}'
 }
 
 function parse_pom_xml(){
+  if [[ "${JAVA_11}" == "true" ]]; then
+    JAVA_11_SPECIFIC_PATTERN='|java.locale.providers'
+  else
+    JAVA_11_SPECIFIC_PATTERN=''
+  fi
   cat ${1}/${ACC_TEST_DIR_NAME}/pom.xml \
-  | egrep "<(COOKIELESS_DOMAIN_ENABLED|LOCALISATION_DEV_LANGUAGE_TO_LOAD|UI_DEVELOPMENT_MODE_ENABLED)>" \
+  | egrep "<(COOKIELESS_DOMAIN_ENABLED|LOCALISATION_DEV_LANGUAGE_TO_LOAD|UI_DEVELOPMENT_MODE_ENABLED${JAVA_11_SPECIFIC_PATTERN})" \
   | awk -F'[<>]' '{printf("-D%s=%s\n",$2,$3)}'
 }
 
@@ -60,6 +67,7 @@ function process_args(){
     case "${1}" in
     -v) DEBUG="true" ;;
     -c) COPY_TO_CLIPBOARD="true" ;;
+    -j11) JAVA_11="true" ;;
     -h) print_help && exit 0 ;;
     -e) shift
         ENV=${1} ;;
@@ -71,7 +79,7 @@ function process_args(){
 }
 
 function main(){
-  local settings_from_maven settings_from_properties settings_from_pom_xml
+  local settings_from_maven settings_from_properties settings_from_pom_xml user_timezone
   
   ACC_TEST_DIR_NAME="$(basename ${BA_HOME})-acceptance-test"
   
@@ -88,15 +96,19 @@ function main(){
 
   echo -n "3. From project pom xml file..."
   settings_from_pom_xml=`parse_pom_xml ${BA_HOME}`
+
+  echo -n "4. Adding user timezone..."
+  user_timezone="-Duser.timezone=`date +"%Z"`"
+
   echo " done"
   debug_log "${settings_from_pom_xml}"
 
   if [[ "${COPY_TO_CLIPBOARD}" == "true" ]]; then
-    echo -e "${settings_from_maven//\\/\\\\}\n${settings_from_properties//\\/\\\\}\n${settings_from_pom_xml//\\/\\\\}" > /dev/clipboard
+    echo -e "${settings_from_maven//\\/\\\\}\n${settings_from_properties//\\/\\\\}\n${settings_from_pom_xml//\\/\\\\}\n${user_timezone//\\/\\\\}" > /dev/clipboard
     echo "Result copied to the clipboard"
   else
     echo -e "\nJVM args:\n"
-    echo -e "${settings_from_maven//\\/\\\\}\n${settings_from_properties//\\/\\\\}\n${settings_from_pom_xml//\\/\\\\}"
+    echo -e "${settings_from_maven//\\/\\\\}\n${settings_from_properties//\\/\\\\}\n${settings_from_pom_xml//\\/\\\\}\n${user_timezone//\\/\\\\}"
   fi
 }
 
