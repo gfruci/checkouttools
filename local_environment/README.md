@@ -177,7 +177,10 @@ Clone the repo.
 ### Start/Stop
 
 Move under the `local_environment`, give execution permissions to the `local_env.sh` bash script and run it.
-NOTE: the `local_env.sh` needs BASH version 4.x (or more) in order to work correctly.
+
+NOTE: the `local_env.sh` needs BASH version 4.x (or later) in order to work correctly. 
+Since macOS comes with an older version by default that is not suitable for running the script, 
+please check the bash version and upgrade it manually if needed. 
 
     $ cd <local_environment_root_folder>
     $ chmod a+x local_env.sh
@@ -412,6 +415,14 @@ If you need to enable the local proxy in WIN or if you want to modify the proxy 
     Docker -> Settings -> Shared drives -> click "Reset credentials...", tick the checkbox next to the "C" drive again, click Apply, then docker prompts you for the new password.
 
 * BMA startup fails when downloading `http://dispatcherapp.staging.hcom/templates/dionysus_ui_pack_templates-63.0.zip`?  Try increasing Docker's memory to at least 5GB.
+
+* If launching the local_env.sh starts with a warning message like `declare -A: invalid option`, although docker logs in successfully and the mvt app seems to be starting as well, 
+  in the end, the script terminates with an `exited with code 137` error.
+  
+  The above-mentioned warning message indicates that the bash cannot interpret the script, probably because the bash version is below the minimum requirements.
+  This is a unix-specific issue since macOS comes with an older version by default that is not compatible with the script.
+  Please check your bash version with `bash --version` and upgrade it manually (to 4.x or later) if necessary.
+
 
 ## FAQ
 
