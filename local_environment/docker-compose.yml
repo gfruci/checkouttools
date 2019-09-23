@@ -156,6 +156,7 @@ services:
       - APP_bpins.baseUrl=https://checkito:8189
       - APP_beps.baseUrl=https://checkito:8189
       - APP_DUPLICATE_SERVICE_HOST_URL=http://checkito:8089
+      - APP_GEOGRAPHY_CLIENT_BASE_URL=http://checkito:8089
 
       #remote jmx
       - APP_com.sun.management.jmxremote=true
