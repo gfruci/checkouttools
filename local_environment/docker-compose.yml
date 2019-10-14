@@ -32,6 +32,11 @@ services:
       - VAULT_ROLE_ID=8c120b81-dca6-28a8-c1de-208792e1500a
       - VAULT_SECRET_ID=a140e913-26ef-9b2c-59be-a62ffc070592
       - JVM_OTHER_OPTS=-Dplugins.all.dionysus.config.i18nServiceConfig.clientConfigSettings.maxRetries=0
+      - APP_DIONYSUS_PLUGIN_DISPATCHER_APP_BASE_URL=//a.staging1-cdn-hotels.com/uswest2/da
+      - APP_DIONYSUS_PLUGIN_ASSETS_BASE_URL=a.staging1-cdn-hotels.com/uswest2/da/assets
+      - APP_LOMS_ENDPOINT=https://loms.nginx-ingress.backend.k8s.decaf.lab.us-west-2.hcom.cloud
+      - APP_DIONYSUS_UIPACK_HOME=http://da.nginx-ingress.backend.k8s.decaf.lab.us-west-2.hcom.cloud
+      - APP_DIONYSUS_UIPACK_FB_HOME=http://statefulda.nginx-ingress.backend.k8s.decaf.lab.us-west-2.hcom.cloud
     volumes:
       - ./conf/:/styxconf
       - ./appcert/:/appcert
