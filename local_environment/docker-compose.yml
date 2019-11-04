@@ -643,3 +643,98 @@ services:
   #      - "8280:8080"
   #    environment:
   #      - RUN_EMBEDDED_ETCD=true
+
+  bpe:
+    image: 181651482125.dkr.ecr.us-west-2.amazonaws.com/hotels/bpe:latest
+    ports:
+      - "8090:8080"
+      - "8343:8443"
+      - "2301:1901"
+    environment:
+      - JAVA_JVM_ARGS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:1901
+      - APP_java.rmi.server.hostname=192.168.99.100
+      - APP_com.sun.management.jmxremote=true
+      - APP_com.sun.management.jmxremote.port=33661
+      - APP_com.sun.management.jmxremote.authenticate=false
+      - APP_com.sun.management.jmxremote.ssl=false
+      - APP_com.sun.management.jmxremote.rmi.port=33661
+      - APP_spring.profiles.active=default
+      - APP_VAULT_ADDR=https://vault.lab.hcom
+      - APP_VAULT_USER_ID=staging-bpe-01
+      - APP_VAULT_SECRETS_REMOTE_PATH=secret/app/bpe
+      - APP_VAULT_SECRETS_LOCAL_DIR=/home/hcom/secrets
+      - APP_VAULT_APP_ID=bpe
+      - APP_VAULT_CERT_DIR=pki/exp/20230314
+      - APP_pio.baseUrl=https://${PIO_LOCAL_HOST}:8443/
+  #   - APP_javax.net.debug=ssl:handshake
+  #  net: "host"::w
+
+  pio:
+    image: 181651482125.dkr.ecr.us-west-2.amazonaws.com/hotels/pio:latest
+    ports:
+      - "8080:8080"
+      - "2401:1901"
+      - "8443:8443"
+    environment:
+      - JAVA_JVM_ARGS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:1901 -Djavax.net.ssl.trustStore=/hcom/share/java/default/lib/security/cacerts_plus_internal -Djavax.net.ssl.trust-store-password=changeit ${PROXY_CONFIG}
+      - APP_java.rmi.server.hostname=docker.local
+      - APP_com.sun.management.jmxremote=true
+      - APP_com.sun.management.jmxremote.port=33661
+      - APP_com.sun.management.jmxremote.authenticate=false
+      - APP_com.sun.management.jmxremote.ssl=false
+      - APP_com.sun.management.jmxremote.rmi.port=33661
+      - APP_spring.profiles.active=default
+      - APP_sps.connections.defaultMaxPerRoute=5
+      - APP_sps.connections.maxTotal=5
+      - APP_sps.connections.validateAfterInactivity=2000
+      - APP_sps.client.connectionRequestTimeout=3000
+      - APP_sps.client.connectTimeout=3000
+      - APP_sps.client.socketTimeout=3000
+      - APP_sps.client.keepAlive=true
+      - APP_sps.client.tcpNoDelay=true
+      - APP_hystrix.command.getStoredPayments.execution.isolation.thread.timeoutInMilliseconds=5000
+      - APP_hystrix.threadpool.getStoredPayments.coreSize=5
+      - APP_graphite.reporter.enabled=true
+      - APP_VAULT_ADDR=https://vault.lab.hcom
+      - APP_VAULT_SECRETS_REMOTE_PATH=secret/app
+      - APP_VAULT_SECRETS_LOCAL_DIR=/home/hcom/secrets
+      - APP_VAULT_ROLE_ID=416b7308-1708-bb22-1878-7f93d18eb0bf
+      - APP_VAULT_SECRET_ID=403b14d7-9e2f-1a29-7809-7b8c9d2401ee
+      - APP_VAULT_SSL_CERTS_BASE_PATH=pio/pki/exp/20240131
+      - APP_bpins.baseUrl=https://checkito:8189
+      - APP_BPAS_HOST=checkito
+      - APP_BPAS_PORT=8089
+      - APP_BPAS_ACCESS_PROTOCOL=http
+
+  pio_no_stub:
+    image: 181651482125.dkr.ecr.us-west-2.amazonaws.com/hotels/pio:latest
+    ports:
+      - "8080:8080"
+      - "2401:1901"
+      - "8443:8443"
+    environment:
+      - JAVA_JVM_ARGS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:1901 -Djavax.net.ssl.trustStore=/hcom/share/java/default/lib/security/cacerts_plus_internal -Djavax.net.ssl.trust-store-password=changeit ${PROXY_CONFIG}
+      - APP_java.rmi.server.hostname=docker.local
+      - APP_com.sun.management.jmxremote=true
+      - APP_com.sun.management.jmxremote.port=33661
+      - APP_com.sun.management.jmxremote.authenticate=false
+      - APP_com.sun.management.jmxremote.ssl=false
+      - APP_com.sun.management.jmxremote.rmi.port=33661
+      - APP_spring.profiles.active=default
+      - APP_sps.connections.defaultMaxPerRoute=5
+      - APP_sps.connections.maxTotal=5
+      - APP_sps.connections.validateAfterInactivity=2000
+      - APP_sps.client.connectionRequestTimeout=3000
+      - APP_sps.client.connectTimeout=3000
+      - APP_sps.client.socketTimeout=3000
+      - APP_sps.client.keepAlive=true
+      - APP_sps.client.tcpNoDelay=true
+      - APP_hystrix.command.getStoredPayments.execution.isolation.thread.timeoutInMilliseconds=5000
+      - APP_hystrix.threadpool.getStoredPayments.coreSize=5
+      - APP_graphite.reporter.enabled=true
+      - APP_VAULT_ADDR=https://vault.lab.hcom
+      - APP_VAULT_SECRETS_REMOTE_PATH=secret/app
+      - APP_VAULT_SECRETS_LOCAL_DIR=/home/hcom/secrets
+      - APP_VAULT_ROLE_ID=416b7308-1708-bb22-1878-7f93d18eb0bf
+      - APP_VAULT_SECRET_ID=403b14d7-9e2f-1a29-7809-7b8c9d2401ee
+      - APP_VAULT_SSL_CERTS_BASE_PATH=pio/pki/exp/20240131
