@@ -671,6 +671,7 @@ services:
       - APP_VAULT_APP_ID=bpe
       - APP_VAULT_CERT_DIR=pki/exp/20230314
       - APP_pio.baseUrl=https://${PIO_LOCAL_HOST}:8443/
+      - APP_hystrix.command.initializePayment.execution.isolation.thread.timeoutInMilliseconds=10000
   #   - APP_javax.net.debug=ssl:handshake
   #  net: "host"::w
 
