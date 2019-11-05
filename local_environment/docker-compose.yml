@@ -13,7 +13,8 @@ services:
       - APP_CONFIG_ENVIRONMENT=dev
       - APP_CONFIG_FILE_LOCATION=/styxconf/env.yaml
       - APP_LOG_CONFIG_LOCATION=/styxconf/logback.xml
-      - ORIGINS_FILE=/styxconf/origins.yaml
+      #- ORIGINS_FILE=/styxconf/origins.yaml
+      - ORIGINS_FILE=${ORIGINS_PATH}
       - APP_CONFIG_LOCATION=/hcom/servers/styx/config
       - APP_jvmRouteName=
       - APP_LOC_CLIENT_CACHE_THREADPOOL_SIZE_FOR_BOOTSTRAP=50
@@ -650,11 +651,12 @@ services:
   #      - RUN_EMBEDDED_ETCD=true
 
   bpe:
-    image: 181651482125.dkr.ecr.us-west-2.amazonaws.com/hotels/bpe:latest
+    image: 181651482125.dkr.ecr.us-west-2.amazonaws.com/hotels/bpe:${BPE_VERSION}
     ports:
       - "8090:8080"
       - "8343:8443"
       - "2301:1901"
+    container_name: bpe
     environment:
       - JAVA_JVM_ARGS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:1901
       - APP_java.rmi.server.hostname=192.168.99.100
@@ -676,11 +678,12 @@ services:
   #  net: "host"::w
 
   pio:
-    image: 181651482125.dkr.ecr.us-west-2.amazonaws.com/hotels/pio:latest
+    image: 181651482125.dkr.ecr.us-west-2.amazonaws.com/hotels/pio:${PIO_VERSION}
     ports:
       - "8080:8080"
       - "2401:1901"
       - "8443:8443"
+    container_name: pio
     environment:
       - JAVA_JVM_ARGS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:1901 -Djavax.net.ssl.trustStore=/hcom/share/java/default/lib/security/cacerts_plus_internal -Djavax.net.ssl.trust-store-password=changeit ${PROXY_CONFIG}
       - APP_java.rmi.server.hostname=docker.local
@@ -718,6 +721,7 @@ services:
       - "8080:8080"
       - "2401:1901"
       - "8443:8443"
+    container_name: pio
     environment:
       - JAVA_JVM_ARGS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:1901 -Djavax.net.ssl.trustStore=/hcom/share/java/default/lib/security/cacerts_plus_internal -Djavax.net.ssl.trust-store-password=changeit ${PROXY_CONFIG}
       - APP_java.rmi.server.hostname=docker.local

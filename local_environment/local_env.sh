@@ -38,10 +38,17 @@ START_MODE=
 BA_VERSION=
 BMA_VERSION=
 BCA_VERSION=
+PIO_VERSION="latest"
+BPE_VERSION="latest"
+START_BPE_AND_PIO=false
 STUB_STATUS=
 SUIT="default"
 TRUSTSTORE_PATH="/hcom/share/java/default/lib/security/cacerts_plus_internal"
 DEBUG_OPTS="-Xdebug -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:1901"
+ORIGINS_PATH="/styxconf/origins.yaml"
+export ORIGINS_PATH=${ORIGINS_PATH}
+export PIO_VERSION=${PIO_VERSION}
+export BPE_VERSION=${BPE_VERSION}
 
 APPS=( "mvt" "ba" "bma" "bca" "pio" "bpe" "checkito" "styxpres" "nginx")
 
@@ -221,11 +228,22 @@ function start-app {
 
     if [ "${APP}" == "bpe" ]
     then
+      if ! $START_BPE_AND_PIO
+      then
+        return 1;
+      fi
       PIO_CONTAINER_ID=$(docker container ls | grep '/pio:' | tail -1 | awk -F ' ' '{print $1}')
       PIO_LOCAL_HOST=$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' $PIO_CONTAINER_ID)
-      export PIO_CONTAINER_ID=${PIO_CONTAINER_ID}
       export PIO_LOCAL_HOST=${PIO_LOCAL_HOST}
-      echo $PIO_CONTAINER_ID
+    fi
+
+    if [ "${APP}" == "pio" ]
+    then
+      if ! $START_BPE_AND_PIO
+      then
+        return 1;
+      fi
+      APP_TYPE=${STUB_STATUS}
     fi
 
     cd ${SCRIPT_DIR}
@@ -384,6 +402,19 @@ function init {
           DEBUG_OPTS="-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=1901"
           TRUSTSTORE_PATH="/hcom/share/java/default/jre/lib/security/cacerts_plus_internal"
           ;;
+        -pio-version)
+          PIO_VERSION=$2
+          export PIO_VERSION=${PIO_VERSION}
+          ORIGINS_PATH="/styxconf/origins_bpe_localhost.yaml"
+          export ORIGINS_PATH=${ORIGINS_PATH}
+          START_BPE_AND_PIO=true
+          ;;
+        -bpe-version)
+          BPE_VERSION=$2
+          export BPE_VERSION=${BPE_VERSION}
+          ORIGINS_PATH="/styxconf/origins_bpe_localhost.yaml"
+          export ORIGINS_PATH=${ORIGINS_PATH}
+          START_BPE_AND_PIO=true
       esac
       shift
     done

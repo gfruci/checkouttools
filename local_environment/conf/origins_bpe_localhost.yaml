@@ -77,8 +77,8 @@
     trustAllCerts:       true
     sslProvider:         OPENSSL     # Also supports JDK
   origins:
-  - { id: "staging-bpe-01", host: "chelapphot127.karmalab.net:39421" }
-  - { id: "staging-bpe-02", host: "chelapphot040.karmalab.net:39422" }
+  - { id: "bpe.docker", host: "bpe:8443" }
+  - { id: "bpe.localhost", host: "docker.for.win.localhost:38443" }
   
 - id: "thanos"
   path: "/thanos/"
