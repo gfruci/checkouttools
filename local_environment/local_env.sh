@@ -405,14 +405,14 @@ function init {
         -pio-version)
           PIO_VERSION=$2
           export PIO_VERSION=${PIO_VERSION}
-          ORIGINS_PATH="/styxconf/origins_bpe_localhost.yaml"
+          ORIGINS_PATH="/styxconf/be-app-rules/origins-bpe.yaml"
           export ORIGINS_PATH=${ORIGINS_PATH}
           START_BPE_AND_PIO=true
           ;;
         -bpe-version)
           BPE_VERSION=$2
           export BPE_VERSION=${BPE_VERSION}
-          ORIGINS_PATH="/styxconf/origins_bpe_localhost.yaml"
+          ORIGINS_PATH="/styxconf/be-app-rules/origins-bpe.yaml"
           export ORIGINS_PATH=${ORIGINS_PATH}
           START_BPE_AND_PIO=true
       esac
