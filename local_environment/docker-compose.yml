@@ -13,8 +13,7 @@ services:
       - APP_CONFIG_ENVIRONMENT=dev
       - APP_CONFIG_FILE_LOCATION=/styxconf/env.yaml
       - APP_LOG_CONFIG_LOCATION=/styxconf/logback.xml
-      - ORIGINS_FILE=/styxconf/origins.yaml
-      #- ORIGINS_FILE=${ORIGINS_PATH}
+      - ORIGINS_FILE=${ORIGINS_PATH}
       - APP_CONFIG_LOCATION=/hcom/servers/styx/config
       - APP_jvmRouteName=
       - APP_LOC_CLIENT_CACHE_THREADPOOL_SIZE_FOR_BOOTSTRAP=50
