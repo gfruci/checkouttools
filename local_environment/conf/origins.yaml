@@ -59,7 +59,29 @@
   origins:
   - { id: "bca.docker", host: "bca:8443" }
   - { id: "bca.localhost", host: "docker.for.win.localhost:39443" }
-  
+
+- id: "bpe"
+  path: "/bpe/"
+  rewrites:
+    - urlPattern: "/bpe/(.*)"
+      replacement: "$1"
+  healthCheck:
+    uri: "actuator/health"
+  connectionPool:
+    maxConnectionsPerHost: 40
+    maxPendingConnectionsPerHost: 20
+    socketTimeoutMillis: 120000
+    connectTimeoutMillis: 8000
+  responseTimeoutMillis: 300000
+  tlsSettings:
+    trustAllCerts:       true
+    sslProvider:         OPENSSL     # Also supports JDK
+  origins:
+    - { id: "staging-bpe-01", host: "chelapphot127.karmalab.net:39421" }
+    - { id: "staging-bpe-02", host: "chelapphot040.karmalab.net:39422" }
+    - { id: "bpe.docker", host: "bpe:8443" }
+    - { id: "bpe.localhost", host: "docker.for.win.localhost:38443" }
+
 - id: "thanos"
   path: "/thanos/"
   rewrites:
@@ -79,5 +101,3 @@
   origins:
   - { id: "staging-thanos-01", host: "chhlapphot667.karmalab.net:52721" }
   - { id: "staging-thanos-02", host: "chelapphot211.karmalab.net:52722" }
-
-include: be-app-rules/bpe/local.yaml
