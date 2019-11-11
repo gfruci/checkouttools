@@ -1,6 +1,0 @@
-include: ../origins.yaml
----
-- id: "bpe"
-  origins:
-  - { id: "bpe.docker", host: "bpe:8443" }
-  - { id: "bpe.localhost", host: "docker.for.win.localhost:38443" }
