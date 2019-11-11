@@ -1,0 +1,19 @@
+- id: "bpe"
+  path: "/bpe/"
+  rewrites:
+    - urlPattern: "/bpe/(.*)"
+      replacement: "$1"
+  healthCheck:
+    uri: "actuator/health"
+  connectionPool:
+    maxConnectionsPerHost: 40
+    maxPendingConnectionsPerHost: 20
+    socketTimeoutMillis: 120000
+    connectTimeoutMillis: 8000
+  responseTimeoutMillis: 300000
+  tlsSettings:
+    trustAllCerts:       true
+    sslProvider:         OPENSSL     # Also supports JDK
+  origins:
+    - { id: "bpe.docker", host: "bpe:8443" }
+    - { id: "bpe.localhost", host: "docker.for.win.localhost:38443" }
