@@ -101,13 +101,13 @@ function watch {
         timeEnd=`date +%s`
         timeTotal=$((timeEnd-timeStart))
         if [ ${timeTotal} -gt 600 ]
-  		  then
+  		then
             echo "Error! The application took too much time to start."
   			return 1
         fi
 
   		sleep 5
-	  done
+	done
 }
 
 function login {
