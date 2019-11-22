@@ -38,12 +38,20 @@ START_MODE=
 BA_VERSION=
 BMA_VERSION=
 BCA_VERSION=
+PIO_VERSION="latest"
+BPE_VERSION="latest"
+START_BPE=false
+START_PIO=false
 STUB_STATUS=
 SUIT="default"
 TRUSTSTORE_PATH="/hcom/share/java/default/lib/security/cacerts_plus_internal"
 DEBUG_OPTS="-Xdebug -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:1901"
+ORIGINS_PATH="/styxconf/origins.yaml"
+export ORIGINS_PATH=${ORIGINS_PATH}
+export PIO_VERSION=${PIO_VERSION}
+export BPE_VERSION=${BPE_VERSION}
 
-APPS=( "mvt" "ba" "bma" "bca" "checkito" "styxpres" "nginx")
+APPS=( "mvt" "ba" "bma" "bca" "pio" "bpe" "checkito" "styxpres" "nginx")
 
 declare -A APPS_CONF=(\
     ["mvt,update_cmd"]="docker pull 181651482125.dkr.ecr.us-west-2.amazonaws.com/hotels/mvt:latest >> ${SCRIPT_DIR}/logs/startup.log 2>&1"\
@@ -61,6 +69,10 @@ declare -A APPS_CONF=(\
     ["bma,stop_status_cmd"]="grep -e \"bma.*ERROR\" ${SCRIPT_DIR}/logs/bma.log | grep -v \"locsClientLoader\""\
     ["bca,start_status_cmd"]="grep \"bca.*Server startup\" ${SCRIPT_DIR}/logs/bca.log"\
     ["bca,stop_status_cmd"]="grep -e \"bca.*ERROR\" ${SCRIPT_DIR}/logs/bca.log | grep -v \"locsClientLoader\|ConfigurationReloadSupport\""\
+    ["pio,start_status_cmd"]="grep \"pio.*Started ServiceApplication\" ${SCRIPT_DIR}/logs/pio.log"\
+    ["pio,stop_status_cmd"]="grep -e \"pio.*ERROR\" ${SCRIPT_DIR}/logs/pio.log"\
+    ["bpe,start_status_cmd"]="grep \"bpe.*Started ServiceApplication\" ${SCRIPT_DIR}/logs/bpe.log"\
+    ["bpe,stop_status_cmd"]="grep \"bpe.*ERROR\" ${SCRIPT_DIR}/logs/bpe.log"\
 )
 
 #####################
@@ -213,6 +225,36 @@ function start-app {
       fi
 
       export SUIT=${SUIT}
+    fi
+
+    if [ "${APP}" == "bpe" ]
+    then
+      if ! ${START_BPE} && ! ${START_PIO}
+      then
+        return 1;
+      fi
+      if ! ${START_BPE} && [ ! "${START_MODE}" == "start-all" ]
+      then
+        echo "Error! BPE version NOT specified (missing -bpe-version parameter)!";
+        return 1;
+      fi
+      PIO_CONTAINER_ID=$(docker container ls | grep '/pio:' | tail -1 | awk -F ' ' '{print $1}')
+      PIO_LOCAL_HOST=$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' $PIO_CONTAINER_ID)
+      export PIO_LOCAL_HOST=${PIO_LOCAL_HOST}
+    fi
+
+    if [ "${APP}" == "pio" ]
+    then
+      if ! ${START_BPE} && ! ${START_PIO}
+      then
+        return 1;
+      fi
+      if ! ${START_PIO} && [ ! "${START_MODE}" == "start-all" ]
+      then
+        echo "Error! PIO version NOT specified (missing -pio-version parameter)!";
+        return 1;
+      fi
+      APP_TYPE=${STUB_STATUS}
     fi
 
     cd ${SCRIPT_DIR}
@@ -371,6 +413,19 @@ function init {
           DEBUG_OPTS="-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=1901"
           TRUSTSTORE_PATH="/hcom/share/java/default/jre/lib/security/cacerts_plus_internal"
           ;;
+        -pio-version)
+          PIO_VERSION=$2
+          export PIO_VERSION=${PIO_VERSION}
+          ORIGINS_PATH="/styxconf/origins_bpe_localhost.yaml"
+          export ORIGINS_PATH=${ORIGINS_PATH}
+          START_PIO=true
+          ;;
+        -bpe-version)
+          BPE_VERSION=$2
+          export BPE_VERSION=${BPE_VERSION}
+          ORIGINS_PATH="/styxconf/origins_bpe_localhost.yaml"
+          export ORIGINS_PATH=${ORIGINS_PATH}
+          START_BPE=true
       esac
       shift
     done
