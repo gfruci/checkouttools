@@ -40,7 +40,8 @@ BMA_VERSION=
 BCA_VERSION=
 PIO_VERSION="latest"
 BPE_VERSION="latest"
-START_BPE_AND_PIO=false
+START_BPE=false
+START_PIO=false
 STUB_STATUS=
 SUIT="default"
 TRUSTSTORE_PATH="/hcom/share/java/default/lib/security/cacerts_plus_internal"
@@ -228,8 +229,13 @@ function start-app {
 
     if [ "${APP}" == "bpe" ]
     then
-      if ! $START_BPE_AND_PIO
+      if ! ${START_BPE} && ! ${START_PIO}
       then
+        return 1;
+      fi
+      if ! ${START_BPE} && [ ! "${START_MODE}" == "start-all" ]
+      then
+        echo "Error! BPE version NOT specified (missing -bpe-version parameter)!";
         return 1;
       fi
       PIO_CONTAINER_ID=$(docker container ls | grep '/pio:' | tail -1 | awk -F ' ' '{print $1}')
@@ -239,8 +245,13 @@ function start-app {
 
     if [ "${APP}" == "pio" ]
     then
-      if ! $START_BPE_AND_PIO
+      if ! ${START_BPE} && ! ${START_PIO}
       then
+        return 1;
+      fi
+      if ! ${START_PIO} && [ ! "${START_MODE}" == "start-all" ]
+      then
+        echo "Error! PIO version NOT specified (missing -pio-version parameter)!";
         return 1;
       fi
       APP_TYPE=${STUB_STATUS}
@@ -407,14 +418,14 @@ function init {
           export PIO_VERSION=${PIO_VERSION}
           ORIGINS_PATH="/styxconf/origins_bpe_localhost.yaml"
           export ORIGINS_PATH=${ORIGINS_PATH}
-          START_BPE_AND_PIO=true
+          START_PIO=true
           ;;
         -bpe-version)
           BPE_VERSION=$2
           export BPE_VERSION=${BPE_VERSION}
           ORIGINS_PATH="/styxconf/origins_bpe_localhost.yaml"
           export ORIGINS_PATH=${ORIGINS_PATH}
-          START_BPE_AND_PIO=true
+          START_BPE=true
       esac
       shift
     done
