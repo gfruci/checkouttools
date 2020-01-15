@@ -454,7 +454,6 @@ services:
       - APP_jvm.route=development
       - APP_javax.net.ssl.trustStore=${TRUSTSTORE_PATH}
       - APP_javax.net.ssl.trustStorePassword=changeit
-      - APP_DIONYSUS_TEMPLATES_DOWNLOAD_PATH=/hcom/servers/tomcat/temp
       - APP_METRICS_GRAPHITE_REPORTING_INTERVAL=-1
       - APP_METRICS_BOOTSTRAPPER_METRIC_REGISTRATION_ENABLED=false
       - APP_METRICS_BOOTSTRAPPER_HEALTH_CHECK_REGISTRATION_ENABLED=false
@@ -463,7 +462,6 @@ services:
       - APP_DB_RW_DRIVERCLASSNAME=com.inet.tds.TdsDriver
       - APP_CURRENCY_EXCHANGE_RATE_PROPERTY_FILE_REQUIRED_AT_STARTUP=false
       - APP_MVT_BUSINESS_CONFIGURATION_LOCATION=file:///mvt/
-      - APP_DIONYSUS_UIPACK_HOME=file:///dionysusuipack/
       - APP_EMAIL_TEMPLATES_BASEPATH=file:./appconfig/templates/
       - APP_LIS_EAPID=0
       - APP_spring.profiles.active=default
@@ -483,7 +481,6 @@ services:
       - APP_DSC_DATASTAX_SSL_ENABLED=false
       - APP_DSC_DATASTAX_KEYSPACE_NAME=hermes
       - APP_LVS_CLIENT_BASE_URL=http://hcomcdslivevisitsservice.staging.hcom
-      - APP_DIONYSUS_TEMPLATE_PATH=http://dispatcherapp.staging.hcom/templates/dionysus_ui_pack_templates-63.0.zip
       - APP_LOYALTY_REST_CLIENT_CONNECT_TIMEOUT=60000
       - APP_LOYALTY_REST_CLIENT_READ_TIMEOUT=60000
       - APP_LOYALTY_ESTIMATION_SERVICE_CLIENT_READ_TIMEOUT=60000
