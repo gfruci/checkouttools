@@ -62,11 +62,8 @@
 
 - id: "bpe"
   path: "/bpe/"
-  rewrites:
-    - urlPattern: "/bpe/(.*)"
-      replacement: "$1"
   healthCheck:
-    uri: "actuator/health"
+    uri: "/bpe/actuator/health"
   connectionPool:
     maxConnectionsPerHost: 40
     maxPendingConnectionsPerHost: 20
@@ -77,8 +74,7 @@
     trustAllCerts:       true
     sslProvider:         OPENSSL     # Also supports JDK
   origins:
-  - { id: "staging-bpe-01", host: "chelapphot127.karmalab.net:39421" }
-  - { id: "staging-bpe-02", host: "chelapphot040.karmalab.net:39422" }
+  - { id: "bpe-lab-secure-us-west-2", host: "frontend.istio-gateway.backend.k8s.us-west-2.hcom-lab-secure.aws.hcom:443" }
 
 - id: "thanos"
   path: "/thanos/"
