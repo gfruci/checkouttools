@@ -304,7 +304,7 @@ the only difference between the 3 use cases above is the version of the BA to be
 ### DUP Feature branch testing
 
 DUP feature branch testing in local can be performed in the same way as in staging.
-You just need either to specify the DUP `feature-branch` parameter on the BF getlink or set the DUP feature-branch cookie
+You just need either to specify the DUP `feature-branch` parameter on the BF get url or set the DUP feature-branch cookie
 
 ### Logging
 
