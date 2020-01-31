@@ -85,7 +85,6 @@ services:
       - APP_BOOKING_SEND_CONFIRMATION_SMS=false
       - APP_SMS_CONFIRMATION_ENABLED=false
       - APP_spring.profiles.active=default,fakeauthentication
-      - APP_VAULT_ADDR=https://vault.lab.hcom
       - APP_VAULT_USER_ID=staging-ba-01
       - APP_VAULT_TIMEOUT=60
       - APP_TOMCAT_EXECUTOR_MAX_THREADS=50
@@ -202,7 +201,6 @@ services:
       - APP_BOOKING_SEND_CONFIRMATION_SMS=false
       - APP_SMS_CONFIRMATION_ENABLED=false
       - APP_spring.profiles.active=default,fakeauthentication
-      - APP_VAULT_ADDR=https://vault.lab.hcom
       - APP_VAULT_USER_ID=staging-ba-01
       - APP_VAULT_TIMEOUT=60
       - APP_TOMCAT_EXECUTOR_MAX_THREADS=50
