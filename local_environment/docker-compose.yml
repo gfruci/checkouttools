@@ -13,7 +13,7 @@ services:
       - APP_CONFIG_ENVIRONMENT=dev
       - APP_CONFIG_FILE_LOCATION=/styxconf/env.yaml
       - APP_LOG_CONFIG_LOCATION=/styxconf/logback.xml
-      - ORIGINS_FILE=/styxconf/origins.yaml
+      - ORIGINS_FILE=${ORIGINS_PATH}
       - APP_CONFIG_LOCATION=/hcom/servers/styx/config
       - APP_jvmRouteName=
       - APP_LOC_CLIENT_CACHE_THREADPOOL_SIZE_FOR_BOOTSTRAP=50
@@ -32,6 +32,11 @@ services:
       - VAULT_ROLE_ID=8c120b81-dca6-28a8-c1de-208792e1500a
       - VAULT_SECRET_ID=a140e913-26ef-9b2c-59be-a62ffc070592
       - JVM_OTHER_OPTS=-Dplugins.all.dionysus.config.i18nServiceConfig.clientConfigSettings.maxRetries=0
+      - APP_DIONYSUS_PLUGIN_DISPATCHER_APP_BASE_URL=//a.staging1-cdn-hotels.com/uswest2/da
+      - APP_DIONYSUS_PLUGIN_ASSETS_BASE_URL=a.staging1-cdn-hotels.com/uswest2/da/assets
+      - APP_LOMS_ENDPOINT=https://loms.nginx-ingress.backend.k8s.decaf.lab.us-west-2.hcom.cloud
+      - APP_DIONYSUS_UIPACK_HOME=http://da.nginx-ingress.backend.k8s.decaf.lab.us-west-2.hcom.cloud
+      - APP_DIONYSUS_UIPACK_FB_HOME=http://statefulda.nginx-ingress.backend.k8s.decaf.lab.us-west-2.hcom.cloud
     volumes:
       - ./conf/:/styxconf
       - ./appcert/:/appcert
@@ -73,8 +78,6 @@ services:
       - APP_METRICS_BOOTSTRAPPER_METRIC_REGISTRATION_ENABLED=false
       - APP_METRICS_BOOTSTRAPPER_HEALTH_CHECK_REGISTRATION_ENABLED=false
       - APP_COOKIELESS_DOMAIN_STATIC_ASSETS=a.staging1-cdn-hotels.com
-      - APP_DB_RO_DRIVERCLASSNAME=com.inet.tds.TdsDriver
-      - APP_DB_RW_DRIVERCLASSNAME=com.inet.tds.TdsDriver
       - APP_CURRENCY_EXCHANGE_RATE_PROPERTY_FILE_REQUIRED_AT_STARTUP=false
       - APP_MVT_BUSINESS_CONFIGURATION_LOCATION=file:///mvt/
       - APP_EMAIL_TEMPLATES_BASEPATH=file:./appconfig/templates/
@@ -89,12 +92,6 @@ services:
       - APP_TOMCAT_EXECUTOR_MIN_SPARE_THREADS=10
       - APP_TOMCAT_EXECUTOR_MAX_IDLE_TIME=20000
       - APP_TOMCAT_EXECUTOR_MAX_QUEUE_SIZE=30
-      - APP_DB_RO_URL="jdbc:inetdae7://HCOM_RO_staging.karmalab.net?database=HCOM_EMEA_PROD"
-      - APP_DB_RO_USERNAME=emea_appRO
-      - APP_DB_RO_PASSWORD=emea_appRO
-      - APP_DB_RW_URL="jdbc:inetdae7://HCOM_EMEA_PROD_staging.karmalab.net?database=HCOM_EMEA_PROD"
-      - APP_DB_RW_USERNAME=emea_app
-      - APP_DB_RW_PASSWORD=emea_app
       - APP_DSC_DATASTAX_SSL_ENABLED=false
       - APP_DSC_DATASTAX_KEYSPACE_NAME=hermes
       - APP_LVS_CLIENT_BASE_URL=http://hcomcdslivevisitsservice.staging.hcom
@@ -113,6 +110,10 @@ services:
       - APP_PSID_SERVICE_ENABLED=false
       - APP_WEBSITE_DOMAIN_DISCRIMINATOR=dev-
       - APP_DSC_STUB_MODE_ENABLED=true
+      - APP_DSC_LOCAL_DATA_REGION="AWS_US_WEST_2"
+      - APP_DSC_KNOWN_DATA_REGIONS="CHX,AWS_US_WEST_2"
+      - APP_UDT_LOCAL_DATACENTER_IDENTIFIER="AWS_US_WEST_2"
+      - APP_UDT_DB_HOSTS_AWS_US_EAST_1=
 
       # Not supported on checkito yet
       - APP_FENCED_VAP_ENABLED=false
@@ -134,6 +135,7 @@ services:
       - APP_PAYMENT_VAULT_SERVICE_HOST=checkito:8189
       - APP_PAYMENT_VAULT_SERVICE_ACCESS_PROTOCOL=https
       - APP_PROPERTY_CATALOGUE_SERVICE_BASE_URL=http://checkito:8089/property_catalogue_svc
+      - APP_MAPPING_SERVICE_BASE_URL=http://checkito:8089
       - APP_LOYALTY_SERVICE_HOST=checkito:8089
       - APP_STORED_VALUE_GATEWAY_ACCESS_PROTOCOL=https
       - APP_STORED_VALUE_GATEWAY_HOST=checkito:8189
@@ -147,8 +149,7 @@ services:
       - APP_CAR_TRAWLER_SECURE_URL_ENABLED=false
       - APP_BPAS_HOST=checkito
       - APP_BPAS_PORT=8089
-      - APP_COUPON_SERVICE_HOST=checkito
-      - APP_COUPON_SERVICE_PORT=8089
+      - APP_COUPON_SERVICE_HOST=checkito:8089
       - APP_BRAVOS_API_DOMAIN_NAME=checkito
       - APP_BRAVOS_API_PORT=8089
       - APP_PAYMENT_OPTION_SERVICE_HOST=checkito:8089
@@ -156,7 +157,15 @@ services:
       - APP_bpins.baseUrl=https://checkito:8189
       - APP_beps.baseUrl=https://checkito:8189
       - APP_DUPLICATE_SERVICE_HOST_URL=http://checkito:8089
-
+      - APP_GEOGRAPHY_CLIENT_BASE_URL=http://checkito:8089
+      - APP_PARTNER_SERVICE_BASE_URL_SCHEME=http
+      - APP_PARTNER_SERVICE_BASE_URL=checkito:8089
+      - APP_PARS_RETRIEVE_PROFILE_URL=http://checkito:8089/profile/{brand}/{token}
+      - APP_PARS_RETRIEVE_SECRETS_URL=http://checkito:8089/profile/{profileId}/secrets
+      - APP_CORE_AUTH_SERVICE_BASE_URL=https://checkito:8189
+      - APP_USER_DATA_PROFILE_DB=“dynamo”
+      - APP_USER_DATA_DYNAMO_TABLE=“CKO_BA_USER_DATA_DYNAMO_TABLE”
+      - APP_USER_DATA_DYNAMO_AWS_DEFAULT_REGION_OVERRIDE=“us-west-2”
       #remote jmx
       - APP_com.sun.management.jmxremote=true
       - APP_com.sun.management.jmxremote.port=38007
@@ -186,8 +195,6 @@ services:
       - APP_METRICS_BOOTSTRAPPER_METRIC_REGISTRATION_ENABLED=false
       - APP_METRICS_BOOTSTRAPPER_HEALTH_CHECK_REGISTRATION_ENABLED=false
       - APP_COOKIELESS_DOMAIN_STATIC_ASSETS=a.staging1-cdn-hotels.com
-      - APP_DB_RO_DRIVERCLASSNAME=com.inet.tds.TdsDriver
-      - APP_DB_RW_DRIVERCLASSNAME=com.inet.tds.TdsDriver
       - APP_CURRENCY_EXCHANGE_RATE_PROPERTY_FILE_REQUIRED_AT_STARTUP=false
       - APP_MVT_BUSINESS_CONFIGURATION_LOCATION=file:///mvt/
       - APP_EMAIL_TEMPLATES_BASEPATH=file:./appconfig/templates/
@@ -202,12 +209,6 @@ services:
       - APP_TOMCAT_EXECUTOR_MIN_SPARE_THREADS=10
       - APP_TOMCAT_EXECUTOR_MAX_IDLE_TIME=20000
       - APP_TOMCAT_EXECUTOR_MAX_QUEUE_SIZE=30
-      - APP_DB_RO_URL="jdbc:inetdae7://HCOM_RO_staging.karmalab.net?database=HCOM_EMEA_PROD"
-      - APP_DB_RO_USERNAME=emea_appRO
-      - APP_DB_RO_PASSWORD=emea_appRO
-      - APP_DB_RW_URL="jdbc:inetdae7://HCOM_EMEA_PROD_staging.karmalab.net?database=HCOM_EMEA_PROD"
-      - APP_DB_RW_USERNAME=emea_app
-      - APP_DB_RW_PASSWORD=emea_app
       - APP_DSC_DATASTAX_SSL_ENABLED=false
       - APP_DSC_DATASTAX_KEYSPACE_NAME=hermes
       - APP_LVS_CLIENT_BASE_URL=http://hcomcdslivevisitsservice.staging.hcom
@@ -216,7 +217,9 @@ services:
       - APP_LOYALTY_ESTIMATION_SERVICE_CLIENT_READ_TIMEOUT=60000
       - APP_LOYALTY_ESTIMATION_SERVICE_CLIENT_CONNECTION_TIMEOUT=60000
       - APP_BPAS_ON_PAYMENT_OPTION_REQUEST_CIRCUIT_BREAKER_TIMEOUT_MS=60000
-
+      - APP_USER_DATA_PROFILE_DB=“dynamo”
+      - APP_USER_DATA_DYNAMO_TABLE=“CKO_BA_USER_DATA_DYNAMO_TABLE”
+      - APP_USER_DATA_DYNAMO_AWS_DEFAULT_REGION_OVERRIDE=“us-west-2”
       # Development overrides
       - JAVA_JVM_ARGS=${DEBUG_OPTS} ${PROXY_CONFIG}
       - APP_UNIFIED_DATA_TOOLKIT_ENABLED=true
@@ -226,6 +229,10 @@ services:
       - APP_PSID_SERVICE_ENABLED=false
       - APP_WEBSITE_DOMAIN_DISCRIMINATOR=dev-
       - APP_DSC_STUB_MODE_ENABLED=true
+      - APP_DSC_LOCAL_DATA_REGION="AWS_US_WEST_2"
+      - APP_DSC_KNOWN_DATA_REGIONS="CHX,AWS_US_WEST_2"
+      - APP_UDT_LOCAL_DATACENTER_IDENTIFIER="AWS_US_WEST_2"
+      - APP_UDT_DB_HOSTS_AWS_US_EAST_1=
 
       # Not supported on checkito yet
       - APP_FENCED_VAP_ENABLED=false
@@ -261,8 +268,6 @@ services:
       - APP_METRICS_BOOTSTRAPPER_METRIC_REGISTRATION_ENABLED=false
       - APP_METRICS_BOOTSTRAPPER_HEALTH_CHECK_REGISTRATION_ENABLED=false
       - APP_COOKIELESS_DOMAIN_STATIC_ASSETS=a.staging1-cdn-hotels.com
-      - APP_DB_RO_DRIVERCLASSNAME=com.inet.tds.TdsDriver
-      - APP_DB_RW_DRIVERCLASSNAME=com.inet.tds.TdsDriver
       - APP_CURRENCY_EXCHANGE_RATE_PROPERTY_FILE_REQUIRED_AT_STARTUP=false
       - APP_MVT_BUSINESS_CONFIGURATION_LOCATION=file:///mvt/
       - APP_DIONYSUS_UIPACK_HOME=file:///dionysusuipack/
@@ -278,12 +283,6 @@ services:
       - APP_TOMCAT_EXECUTOR_MIN_SPARE_THREADS=10
       - APP_TOMCAT_EXECUTOR_MAX_IDLE_TIME=20000
       - APP_TOMCAT_EXECUTOR_MAX_QUEUE_SIZE=30
-      - APP_DB_RO_URL="jdbc:inetdae7://HCOM_RO_staging.karmalab.net?database=HCOM_EMEA_PROD"
-      - APP_DB_RO_USERNAME=emea_appRO
-      - APP_DB_RO_PASSWORD=emea_appRO
-      - APP_DB_RW_URL="jdbc:inetdae7://HCOM_EMEA_PROD_staging.karmalab.net?database=HCOM_EMEA_PROD"
-      - APP_DB_RW_USERNAME=emea_app
-      - APP_DB_RW_PASSWORD=emea_app
       - APP_DSC_DATASTAX_SSL_ENABLED=false
       - APP_DSC_DATASTAX_KEYSPACE_NAME=hermes
       - APP_LVS_CLIENT_BASE_URL=http://hcomcdslivevisitsservice.staging.hcom
@@ -305,6 +304,7 @@ services:
       - APP_PSID_SERVICE_ENABLED=false
       - APP_WEBSITE_DOMAIN_DISCRIMINATOR=dev-
       #- APP_DSC_STUB_MODE_ENABLED=true
+      - APP_DSC_KNOWN_DATA_REGIONS=CHX,AWS_US_WEST_2,AWS_US_EAST_1
 
       # Not supported on checkito yet
       - APP_FENCED_VAP_ENABLED=false
@@ -376,8 +376,6 @@ services:
       - APP_METRICS_BOOTSTRAPPER_METRIC_REGISTRATION_ENABLED=false
       - APP_METRICS_BOOTSTRAPPER_HEALTH_CHECK_REGISTRATION_ENABLED=false
       - APP_COOKIELESS_DOMAIN_STATIC_ASSETS=a.staging1-cdn-hotels.com
-      - APP_DB_RO_DRIVERCLASSNAME=com.inet.tds.TdsDriver
-      - APP_DB_RW_DRIVERCLASSNAME=com.inet.tds.TdsDriver
       - APP_CURRENCY_EXCHANGE_RATE_PROPERTY_FILE_REQUIRED_AT_STARTUP=false
       - APP_MVT_BUSINESS_CONFIGURATION_LOCATION=file:///mvt/
       - APP_EMAIL_TEMPLATES_BASEPATH=file:./appconfig/templates/
@@ -392,12 +390,6 @@ services:
       - APP_TOMCAT_EXECUTOR_MIN_SPARE_THREADS=10
       - APP_TOMCAT_EXECUTOR_MAX_IDLE_TIME=20000
       - APP_TOMCAT_EXECUTOR_MAX_QUEUE_SIZE=30
-      - APP_DB_RO_URL="jdbc:inetdae7://HCOM_RO_staging.karmalab.net?database=HCOM_EMEA_PROD"
-      - APP_DB_RO_USERNAME=emea_appRO
-      - APP_DB_RO_PASSWORD=emea_appRO
-      - APP_DB_RW_URL="jdbc:inetdae7://HCOM_EMEA_PROD_staging.karmalab.net?database=HCOM_EMEA_PROD"
-      - APP_DB_RW_USERNAME=emea_app
-      - APP_DB_RW_PASSWORD=emea_app
       - APP_DSC_DATASTAX_KEYSPACE_NAME=hermes
       - APP_LVS_CLIENT_BASE_URL=http://hcomcdslivevisitsservice.staging.hcom
       - APP_LOYALTY_REST_CLIENT_CONNECT_TIMEOUT=60000
@@ -416,6 +408,7 @@ services:
       - APP_CACHE_PRELOAD_ENABLED=false
       - APP_PSID_SERVICE_ENABLED=false
       - APP_WEBSITE_DOMAIN_DISCRIMINATOR=dev-
+      - APP_DSC_KNOWN_DATA_REGIONS=CHX,AWS_US_WEST_2,AWS_US_EAST_1
 
       # Not supported on checkito yet
       - APP_FENCED_VAP_ENABLED=false
@@ -445,7 +438,6 @@ services:
       - APP_jvm.route=development
       - APP_javax.net.ssl.trustStore=${TRUSTSTORE_PATH}
       - APP_javax.net.ssl.trustStorePassword=changeit
-      - APP_DIONYSUS_TEMPLATES_DOWNLOAD_PATH=/hcom/servers/tomcat/temp
       - APP_METRICS_GRAPHITE_REPORTING_INTERVAL=-1
       - APP_METRICS_BOOTSTRAPPER_METRIC_REGISTRATION_ENABLED=false
       - APP_METRICS_BOOTSTRAPPER_HEALTH_CHECK_REGISTRATION_ENABLED=false
@@ -454,7 +446,6 @@ services:
       - APP_DB_RW_DRIVERCLASSNAME=com.inet.tds.TdsDriver
       - APP_CURRENCY_EXCHANGE_RATE_PROPERTY_FILE_REQUIRED_AT_STARTUP=false
       - APP_MVT_BUSINESS_CONFIGURATION_LOCATION=file:///mvt/
-      - APP_DIONYSUS_UIPACK_HOME=file:///dionysusuipack/
       - APP_EMAIL_TEMPLATES_BASEPATH=file:./appconfig/templates/
       - APP_LIS_EAPID=0
       - APP_spring.profiles.active=default
@@ -474,13 +465,12 @@ services:
       - APP_DSC_DATASTAX_SSL_ENABLED=false
       - APP_DSC_DATASTAX_KEYSPACE_NAME=hermes
       - APP_LVS_CLIENT_BASE_URL=http://hcomcdslivevisitsservice.staging.hcom
-      - APP_DIONYSUS_TEMPLATE_PATH=http://dispatcherapp.staging.hcom/templates/dionysus_ui_pack_templates-63.0.zip
       - APP_LOYALTY_REST_CLIENT_CONNECT_TIMEOUT=60000
       - APP_LOYALTY_REST_CLIENT_READ_TIMEOUT=60000
       - APP_LOYALTY_ESTIMATION_SERVICE_CLIENT_READ_TIMEOUT=60000
       - APP_LOYALTY_ESTIMATION_SERVICE_CLIENT_CONNECTION_TIMEOUT=60000
       - APP_BPAS_ON_PAYMENT_OPTION_REQUEST_CIRCUIT_BREAKER_TIMEOUT_MS=60000
-      - APP_PROPERTY_CATALOGUE_SERVICE_BASE_URL=http://hcom-pcs-stg.staging-hotels.com/property_catalogue_svc
+      - APP_PROPERTY_CATALOGUE_SERVICE_BASE_URL=http://pcs.nginx-ingress.backend.k8s.decaf.lab.us-east-1.hcom.cloud/property_catalogue_svc
 
       # Development overrides
       - JAVA_JVM_ARGS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:1901 ${PROXY_CONFIG}
@@ -491,6 +481,7 @@ services:
       - APP_PSID_SERVICE_ENABLED=false
       - APP_WEBSITE_DOMAIN_DISCRIMINATOR=dev-
       #- APP_DSC_STUB_MODE_ENABLED=true
+      - APP_DSC_KNOWN_DATA_REGIONS=CHX,AWS_US_WEST_2,AWS_US_EAST_1
 
       # Not supported on checkito yet
       - APP_FENCED_VAP_ENABLED=false
@@ -589,7 +580,13 @@ services:
       - APP_LOYALTY_ESTIMATION_SERVICE_CLIENT_READ_TIMEOUT=60000
       - APP_LOYALTY_ESTIMATION_SERVICE_CLIENT_CONNECTION_TIMEOUT=60000
       - APP_BPAS_ON_PAYMENT_OPTION_REQUEST_CIRCUIT_BREAKER_TIMEOUT_MS=60000
-      - APP_PROPERTY_CATALOGUE_SERVICE_BASE_URL=http://hcom-pcs-stg.staging-hotels.com/property_catalogue_svc
+      - APP_PROPERTY_CATALOGUE_SERVICE_BASE_URL=http://pcs.nginx-ingress.backend.k8s.decaf.lab.us-west-2.hcom.cloud/property_catalogue_svc
+      - APP_MVTSERVICE_BASE_URL=http://mvtsvc.nginx-ingress.backend.k8s.decaf.lab.us-west-2.hcom.cloud/mvtsvc
+      - APP_MVTCLIENT_HTTP_CLIENT_CONNECTION_TIMEOUT=4200
+      - APP_MVTCLIENT_HTTP_CLIENT_SOCKET_TIMEOUT=4500
+      - APP_MVTCLIENT_HTTP_CLIENT_CONNECTION_REQUEST_TIMEOUT=4000
+      - APP_MVTCLIENT_TIMEOUT_IN_MILLISECONDS=5000
+      - APP_MVTCLIENT_MAX_RETRIES_ON_RESPONSE_EXCEPTION=3
 
       # Development overrides
       - JAVA_JVM_ARGS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:1901 ${PROXY_CONFIG}
@@ -600,6 +597,7 @@ services:
       - APP_PSID_SERVICE_ENABLED=false
       - APP_WEBSITE_DOMAIN_DISCRIMINATOR=dev-
       #- APP_DSC_STUB_MODE_ENABLED=true
+      - APP_DSC_KNOWN_DATA_REGIONS=CHX,AWS_US_WEST_2,AWS_US_EAST_1
 
       # Not supported on checkito yet
       - APP_FENCED_VAP_ENABLED=false
@@ -631,3 +629,102 @@ services:
   #      - "8280:8080"
   #    environment:
   #      - RUN_EMBEDDED_ETCD=true
+
+  bpe:
+    image: 181651482125.dkr.ecr.us-west-2.amazonaws.com/hotels/bpe:${BPE_VERSION}
+    ports:
+      - "8090:8080"
+      - "8343:8443"
+      - "2301:1901"
+    container_name: bpe
+    environment:
+      - JAVA_JVM_ARGS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:1901
+      - APP_java.rmi.server.hostname=192.168.99.100
+      - APP_com.sun.management.jmxremote=true
+      - APP_com.sun.management.jmxremote.port=33661
+      - APP_com.sun.management.jmxremote.authenticate=false
+      - APP_com.sun.management.jmxremote.ssl=false
+      - APP_com.sun.management.jmxremote.rmi.port=33661
+      - APP_spring.profiles.active=default
+      - APP_VAULT_ADDR=https://vault.lab.hcom
+      - APP_VAULT_USER_ID=staging-bpe-01
+      - APP_VAULT_SECRETS_REMOTE_PATH=secret/app/bpe
+      - APP_VAULT_SECRETS_LOCAL_DIR=/home/hcom/secrets
+      - APP_VAULT_APP_ID=bpe
+      - APP_VAULT_CERT_DIR=pki/exp/20230314
+      - APP_pio.baseUrl=https://${PIO_LOCAL_HOST}:8443/
+      - APP_hystrix.command.initializePayment.execution.isolation.thread.timeoutInMilliseconds=10000
+  #   - APP_javax.net.debug=ssl:handshake
+  #  net: "host"::w
+
+  pio:
+    image: 181651482125.dkr.ecr.us-west-2.amazonaws.com/hotels/pio:${PIO_VERSION}
+    ports:
+      - "8080:8080"
+      - "2401:1901"
+      - "8443:8443"
+    container_name: pio
+    environment:
+      - JAVA_JVM_ARGS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:1901 -Djavax.net.ssl.trustStore=/hcom/share/java/default/lib/security/cacerts_plus_internal -Djavax.net.ssl.trust-store-password=changeit ${PROXY_CONFIG}
+      - APP_java.rmi.server.hostname=docker.local
+      - APP_com.sun.management.jmxremote=true
+      - APP_com.sun.management.jmxremote.port=33661
+      - APP_com.sun.management.jmxremote.authenticate=false
+      - APP_com.sun.management.jmxremote.ssl=false
+      - APP_com.sun.management.jmxremote.rmi.port=33661
+      - APP_spring.profiles.active=default
+      - APP_sps.connections.defaultMaxPerRoute=5
+      - APP_sps.connections.maxTotal=5
+      - APP_sps.connections.validateAfterInactivity=2000
+      - APP_sps.client.connectionRequestTimeout=3000
+      - APP_sps.client.connectTimeout=3000
+      - APP_sps.client.socketTimeout=3000
+      - APP_sps.client.keepAlive=true
+      - APP_sps.client.tcpNoDelay=true
+      - APP_hystrix.command.getStoredPayments.execution.isolation.thread.timeoutInMilliseconds=5000
+      - APP_hystrix.threadpool.getStoredPayments.coreSize=5
+      - APP_graphite.reporter.enabled=true
+      - APP_VAULT_ADDR=https://vault.lab.hcom
+      - APP_VAULT_SECRETS_REMOTE_PATH=secret/app
+      - APP_VAULT_SECRETS_LOCAL_DIR=/home/hcom/secrets
+      - APP_VAULT_ROLE_ID=416b7308-1708-bb22-1878-7f93d18eb0bf
+      - APP_VAULT_SECRET_ID=403b14d7-9e2f-1a29-7809-7b8c9d2401ee
+      - APP_VAULT_SSL_CERTS_BASE_PATH=pio/pki/exp/20240131
+      - APP_bpins.baseUrl=https://checkito:8189
+      - APP_BPAS_HOST=checkito
+      - APP_BPAS_PORT=8089
+      - APP_BPAS_ACCESS_PROTOCOL=http
+
+  pio_no_stub:
+    image: 181651482125.dkr.ecr.us-west-2.amazonaws.com/hotels/pio:latest
+    ports:
+      - "8080:8080"
+      - "2401:1901"
+      - "8443:8443"
+    container_name: pio
+    environment:
+      - JAVA_JVM_ARGS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:1901 -Djavax.net.ssl.trustStore=/hcom/share/java/default/lib/security/cacerts_plus_internal -Djavax.net.ssl.trust-store-password=changeit ${PROXY_CONFIG}
+      - APP_java.rmi.server.hostname=docker.local
+      - APP_com.sun.management.jmxremote=true
+      - APP_com.sun.management.jmxremote.port=33661
+      - APP_com.sun.management.jmxremote.authenticate=false
+      - APP_com.sun.management.jmxremote.ssl=false
+      - APP_com.sun.management.jmxremote.rmi.port=33661
+      - APP_spring.profiles.active=default
+      - APP_sps.connections.defaultMaxPerRoute=5
+      - APP_sps.connections.maxTotal=5
+      - APP_sps.connections.validateAfterInactivity=2000
+      - APP_sps.client.connectionRequestTimeout=3000
+      - APP_sps.client.connectTimeout=3000
+      - APP_sps.client.socketTimeout=3000
+      - APP_sps.client.keepAlive=true
+      - APP_sps.client.tcpNoDelay=true
+      - APP_hystrix.command.getStoredPayments.execution.isolation.thread.timeoutInMilliseconds=5000
+      - APP_hystrix.threadpool.getStoredPayments.coreSize=5
+      - APP_graphite.reporter.enabled=true
+      - APP_VAULT_ADDR=https://vault.lab.hcom
+      - APP_VAULT_SECRETS_REMOTE_PATH=secret/app
+      - APP_VAULT_SECRETS_LOCAL_DIR=/home/hcom/secrets
+      - APP_VAULT_ROLE_ID=416b7308-1708-bb22-1878-7f93d18eb0bf
+      - APP_VAULT_SECRET_ID=403b14d7-9e2f-1a29-7809-7b8c9d2401ee
+      - APP_VAULT_SSL_CERTS_BASE_PATH=pio/pki/exp/20240131
