@@ -224,7 +224,7 @@ The environment can be started with some options.
     ./local_env.sh start -ba-version <ba-version> -bma-version <bma-version> -bca-version <bca-version>
 
 If you need only 1 of the apps just skip the other.
-In order to check that everything works you can open the following [stubbed hotel link](https://www.dev-hotels.com/booking/deep_link.html?pos=HCOM_US&locale=en_US&mvariant=1327.0%2C1943.1%2C1544.1%2C1400.1%2C985.1%2C1156.0%2C810.1%2C1881.1%2C316.1%2C1947.1%2C1539.1%2C839.2%2C1306.1%2C1735.1%2C6494.0&arrivalDate=09-12-2019&departureDate=10-12-2019&currency=USD&rooms%5B0%5D.numberOfAdults=2&rooms%5B0%5D.numberOfChildren=0&hotelId=434772&roomTypeCode=200310048&rateCode=201876673&businessModel=MERCHANT&ratePlanConfiguration=REGULAR&hotelContractCardinality=SINGLE)
+In order to check that everything works you can open the following [stubbed hotel link](https://uk.dev-hotels.com/booking/details.html?locale=en_GB&tab=description&destinationId=1506246&hotelId=977212000&arrivalDate=25-01-2021&departureDate=26-01-2021&rooms[0].numberOfAdults=1&validate=false&previousDateful=false&reviewOrder=date_newest_first&rateCode=20210125%7C20210126%7CW%7C254%7C107255%7CSUI.QN%7CGARA%7CRO%7C%7C1%7E1%7E0%7C%7CN&roomTypeCode=SUI.QN&tspid=82&businessModel=MERCHANT&ratePlanConfiguration=REGULAR&currency=GBP&marketingChannelCode=20&ratePlanType=UNKNOWN&init=true&bookingRequest.nightlyPrice=false&bookingRequest.taxExclusive=false)
 
 *Note:* the first time you start the local environment the setup may take a few minutes, since it needs to downloads various docker images.
 *Note:* if you're running all 3 frontend apps you need to increase the memory to at least 6GB. See paragraph: Increase the docker resources.
@@ -304,7 +304,7 @@ the only difference between the 3 use cases above is the version of the BA to be
 ### DUP Feature branch testing
 
 DUP feature branch testing in local can be performed in the same way as in staging.
-You just need either to specify the DUP `feature-branch` parameter on the BF deeplink or set the DUP feature-branch cookie
+You just need either to specify the DUP `feature-branch` parameter on the BF get url or set the DUP feature-branch cookie
 
 ### Logging
 
