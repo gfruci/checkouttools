@@ -258,6 +258,7 @@ services:
     environment:
       - APP_CONFIG_ENVIRONMENT=development
       - APP_CONFIG_LOCATION=file:/hcom/servers/tomcat/appconfig
+      - APP_CONFIG_LOCATION_RW=file:/hcom/servers/tomcat/appconfig
       - APP_jvm.route=development
       - APP_javax.net.ssl.trustStore=${TRUSTSTORE_PATH}
       - APP_javax.net.ssl.trustStorePassword=changeit
@@ -366,6 +367,7 @@ services:
     environment:
       - APP_CONFIG_ENVIRONMENT=development
       - APP_CONFIG_LOCATION=file:/hcom/servers/tomcat/appconfig
+      - APP_CONFIG_LOCATION_RW=file:/hcom/servers/tomcat/appconfig
       - APP_jvm.route=development
       - APP_javax.net.ssl.trustStore=${TRUSTSTORE_PATH}
       - APP_javax.net.ssl.trustStorePassword=changeit
