@@ -399,9 +399,9 @@ services:
       - APP_BPAS_ON_PAYMENT_OPTION_REQUEST_CIRCUIT_BREAKER_TIMEOUT_MS=60000
       - APP_PASSBOOK_CERTIFICATES_LOCATION_HCOM=/hcom/globalconf/hotels.com/PassKeyCert.p12
       - APP_PASSBOOK_WWDR_CERTIFICATE_LOCATION=/hcom/globalconf/wwdr.pem
-      - APP_MAPPING_SERVICE_URL=maps.nimbus:80
-      - APP_MAPPING_SERVICE_BASE_URL=http://maps.nimbus.svc.cluster.local
-      - APP_PROPERTY_CATALOGUE_SERVICE_BASE_URL=http://pcs.nimbus/property_catalogue_svc
+      - APP_MAPPING_SERVICE_URL=maps.istio-gateway.backend.k8s.us-west-2.hcom-lab-decaf.aws.hcom:80
+      - APP_MAPPING_SERVICE_BASE_URL=https://maps.istio-gateway.backend.k8s.us-west-2.hcom-lab-decaf.aws.hcom
+      - APP_PROPERTY_CATALOGUE_SERVICE_BASE_URL=https://pcs.istio-gateway.backend.k8s.us-west-2.hcom-lab-decaf.aws.hcom
       - APP_LOC_CLIENT_SERVICE_URL=https://loms.nginx-ingress.backend.k8s.decaf.lab.us-west-2.hcom.cloud
 
       # Development overrides
