@@ -474,7 +474,6 @@ services:
       - APP_LOYALTY_ESTIMATION_SERVICE_CLIENT_READ_TIMEOUT=60000
       - APP_LOYALTY_ESTIMATION_SERVICE_CLIENT_CONNECTION_TIMEOUT=60000
       - APP_BPAS_ON_PAYMENT_OPTION_REQUEST_CIRCUIT_BREAKER_TIMEOUT_MS=60000
-      - APP_PROPERTY_CATALOGUE_SERVICE_BASE_URL=http://pcs.nginx-ingress.backend.k8s.decaf.lab.us-east-1.hcom.cloud/property_catalogue_svc
 
       # Development overrides
       - JAVA_JVM_ARGS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:1901 ${PROXY_CONFIG}
@@ -584,7 +583,7 @@ services:
       - APP_LOYALTY_ESTIMATION_SERVICE_CLIENT_READ_TIMEOUT=60000
       - APP_LOYALTY_ESTIMATION_SERVICE_CLIENT_CONNECTION_TIMEOUT=60000
       - APP_BPAS_ON_PAYMENT_OPTION_REQUEST_CIRCUIT_BREAKER_TIMEOUT_MS=60000
-      - APP_PROPERTY_CATALOGUE_SERVICE_BASE_URL=http://pcs.nginx-ingress.backend.k8s.decaf.lab.us-west-2.hcom.cloud/property_catalogue_svc
+      - APP_PROPERTY_CATALOGUE_SERVICE_BASE_URL=https://pcs.istio-gateway.backend.k8s.us-west-2.hcom-lab-decaf.aws.hcom/property_catalogue_svc
       - APP_MVTSERVICE_BASE_URL=http://mvtsvc.nginx-ingress.backend.k8s.decaf.lab.us-west-2.hcom.cloud/mvtsvc
       - APP_MVTCLIENT_HTTP_CLIENT_CONNECTION_TIMEOUT=4200
       - APP_MVTCLIENT_HTTP_CLIENT_SOCKET_TIMEOUT=4500
