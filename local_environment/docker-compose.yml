@@ -474,6 +474,15 @@ services:
       - APP_LOYALTY_ESTIMATION_SERVICE_CLIENT_CONNECTION_TIMEOUT=60000
       - APP_BPAS_ON_PAYMENT_OPTION_REQUEST_CIRCUIT_BREAKER_TIMEOUT_MS=60000
 
+      # UDT
+      - APP_UDT_LOCAL_DATACENTER_IDENTIFIER=AWS_US_WEST_2
+      - APP_UDT_DB_HOSTS_AWS_US_EAST_1=
+      - APP_UDT_DB_PORT_AWS_US_EAST_1=
+      - APP_UDT_DB_HOSTS_AWS_US_WEST_2=cassandra.udt.01.us-west-2.hcom-lab-decaf.aws.hcom,cassandra.udt.02.us-west-2.hcom-lab-decaf.aws.hcom,cassandra.udt.03.us-west-2.hcom-lab-decaf.aws.hcom
+      - APP_UDT_DB_PORT_AWS_US_WEST_2=9042
+      - APP_web.kafka.metadata.broker.list=kafka-broker-cds-1.us-west-2.hcom-lab-decaf.aws.hcom:9092,kafka-broker-cds-2.us-west-2.hcom-lab-decaf.aws.hcom:9092,kafka-broker-cds-3.us-west-2.hcom-lab-decaf.aws.hcom:9092
+      - APP_audit.kafka.metadata.broker.list=kafka-broker-cds-1.us-west-2.hcom-lab-decaf.aws.hcom:9092,kafka-broker-cds-2.us-west-2.hcom-lab-decaf.aws.hcom:9092,kafka-broker-cds-3.us-west-2.hcom-lab-decaf.aws.hcom:9092
+
       # Development overrides
       - JAVA_JVM_ARGS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:1901 ${PROXY_CONFIG}
       - APP_UNIFIED_DATA_TOOLKIT_ENABLED=true
@@ -589,6 +598,15 @@ services:
       - APP_MVTCLIENT_HTTP_CLIENT_CONNECTION_REQUEST_TIMEOUT=4000
       - APP_MVTCLIENT_TIMEOUT_IN_MILLISECONDS=5000
       - APP_MVTCLIENT_MAX_RETRIES_ON_RESPONSE_EXCEPTION=3
+
+      # UDT
+      - APP_UDT_LOCAL_DATACENTER_IDENTIFIER=AWS_US_WEST_2
+      - APP_UDT_DB_HOSTS_AWS_US_EAST_1=
+      - APP_UDT_DB_PORT_AWS_US_EAST_1=
+      - APP_UDT_DB_HOSTS_AWS_US_WEST_2=cassandra.udt.01.us-west-2.hcom-lab-decaf.aws.hcom,cassandra.udt.02.us-west-2.hcom-lab-decaf.aws.hcom,cassandra.udt.03.us-west-2.hcom-lab-decaf.aws.hcom
+      - APP_UDT_DB_PORT_AWS_US_WEST_2=9042
+      - APP_web.kafka.metadata.broker.list=kafka-broker-cds-1.us-west-2.hcom-lab-decaf.aws.hcom:9092,kafka-broker-cds-2.us-west-2.hcom-lab-decaf.aws.hcom:9092,kafka-broker-cds-3.us-west-2.hcom-lab-decaf.aws.hcom:9092
+      - APP_audit.kafka.metadata.broker.list=kafka-broker-cds-1.us-west-2.hcom-lab-decaf.aws.hcom:9092,kafka-broker-cds-2.us-west-2.hcom-lab-decaf.aws.hcom:9092,kafka-broker-cds-3.us-west-2.hcom-lab-decaf.aws.hcom:9092
 
       # Development overrides
       - JAVA_JVM_ARGS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:1901 ${PROXY_CONFIG}
