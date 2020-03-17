@@ -403,7 +403,7 @@ services:
       - APP_PROPERTY_CATALOGUE_SERVICE_BASE_URL=https://pcs.istio-gateway.backend.k8s.us-west-2.hcom-lab-decaf.aws.hcom/property_catalogue_svc
       - APP_LOC_CLIENT_SERVICE_URL=https://loms.nginx-ingress.backend.k8s.decaf.lab.us-west-2.hcom.cloud
       - APP_PSID_SERVICE_ENDPOINT=https://psidsvc.nginx-ingress.backend.k8s.decaf.lab.us-west-2.hcom.cloud
-      - APP_CONVERSATION_SECRETS_KEY_NAME=circumnavigating
+      - APP_CONVERSATION_SECRETS_KEY_CONTENTS=circumnavigating
 
       # Development overrides
       - JAVA_JVM_ARGS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:1901 ${PROXY_CONFIG}
