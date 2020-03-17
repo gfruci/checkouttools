@@ -405,6 +405,18 @@ services:
       - APP_PSID_SERVICE_ENDPOINT=https://psidsvc.nginx-ingress.backend.k8s.decaf.lab.us-west-2.hcom.cloud
       - APP_CONVERSATION_SECRETS_KEY_NAME=circumnavigating
 
+      # Minos/DSC/UDT
+      - APP_MINOS_LOCAL_DATACENTER_IDENTIFIER=AWS_US_WEST_2
+      - APP_MINOS_DB_HOSTS_AWS_US_WEST_2=cassandra.minos.1.us-west-2.hcom-lab-decaf.aws.hcom
+      - APP_MINOS_DB_HOSTS_AWS_US_EAST_1=
+      - APP_MINOS_DB_PORT_AWS_US_WEST_2=9042
+      - APP_DSC_LOCAL_DATA_REGION=AWS_US_WEST_2
+      - APP_DSC_KNOWN_DATA_REGIONS=CHX,AWS_US_WEST_2
+      - APP_UDT_LOCAL_DATACENTER_IDENTIFIER=AWS_US_WEST_2
+      - APP_UDT_DB_HOSTS_AWS_US_WEST_2=cassandra.udt.1.us-west-2.hcom-lab-decaf.aws.hcom,cassandra.udt.2.us-west-2.hcom-lab-decaf.aws.hcom,cassandra.udt.3.us-west-2.hcom-lab-decaf.aws.hcom
+      - APP_UDT_DB_HOSTS_AWS_US_EAST_1=
+      - APP_UDT_DB_PORT_AWS_US_WEST_2=9042
+
       # Development overrides
       - JAVA_JVM_ARGS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:1901 ${PROXY_CONFIG}
       - APP_UNIFIED_DATA_TOOLKIT_ENABLED=true
@@ -413,7 +425,6 @@ services:
       - APP_CACHE_PRELOAD_ENABLED=false
       - APP_PSID_SERVICE_ENABLED=false
       - APP_WEBSITE_DOMAIN_DISCRIMINATOR=dev-
-      - APP_DSC_KNOWN_DATA_REGIONS=CHX,AWS_US_WEST_2,AWS_US_EAST_1
 
       # Not supported on checkito yet
       - APP_FENCED_VAP_ENABLED=false
