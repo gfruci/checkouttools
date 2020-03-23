@@ -93,7 +93,7 @@ services:
       - APP_TOMCAT_EXECUTOR_MAX_QUEUE_SIZE=30
       - APP_DSC_DATASTAX_SSL_ENABLED=false
       - APP_DSC_DATASTAX_KEYSPACE_NAME=hermes
-      - APP_LVS_CLIENT_BASE_URL=http://hcomcdslivevisitsservice.staging.hcom
+      - APP_LVS_CLIENT_BASE_URL=http://hclvs.nginx-ingress.backend.k8s.decaf.lab.us-west-2.hcom.cloud
       - APP_LOYALTY_REST_CLIENT_CONNECT_TIMEOUT=60000
       - APP_LOYALTY_REST_CLIENT_READ_TIMEOUT=60000
       - APP_LOYALTY_ESTIMATION_SERVICE_CLIENT_READ_TIMEOUT=60000
@@ -227,10 +227,7 @@ services:
       - APP_PSID_SERVICE_ENABLED=false
       - APP_WEBSITE_DOMAIN_DISCRIMINATOR=dev-
       - APP_DSC_STUB_MODE_ENABLED=true
-      - APP_DSC_LOCAL_DATA_REGION="AWS_US_WEST_2"
-      - APP_DSC_KNOWN_DATA_REGIONS="CHX,AWS_US_WEST_2"
-      - APP_UDT_LOCAL_DATACENTER_IDENTIFIER="AWS_US_WEST_2"
-      - APP_UDT_DB_HOSTS_AWS_US_EAST_1=
+       # Temp AWS url override for local development
       - APP_PROPERTY_CATALOGUE_SERVICE_BASE_URL=https://pcs.istio-gateway.backend.k8s.us-west-2.hcom-lab-decaf.aws.hcom/property_catalogue_svc
 
       # Not supported on checkito yet
