@@ -226,12 +226,21 @@ services:
       - APP_CACHE_PRELOAD_ENABLED=false
       - APP_PSID_SERVICE_ENABLED=false
       - APP_WEBSITE_DOMAIN_DISCRIMINATOR=dev-
+      - APP_LOC_CLIENT_SERVICE_URL=https://loms.nginx-ingress.backend.k8s.decaf.lab.us-west-2.hcom.cloud
+        # Minos settings
+      - APP_MINOS_LOCAL_DATACENTER_IDENTIFIER=AWS_US_WEST_2
+      - APP_MINOS_DB_HOSTS_AWS_US_WEST_2=cassandra.minos.1.us-west-2.hcom-lab-decaf.aws.hcom
+      - APP_MINOS_DB_HOSTS_AWS_US_EAST_1=
+      - APP_MINOS_DB_PORT_AWS_US_WEST_2=9042
+      - APP_MINOS_DB_HOSTS=chhlapphot165.karmalab.net,chhlapphot166.karmalab.net,chhlapphot167.karmalab.net
+      - APP_GEOGRAPHY_CLIENT_BASE_URL=http://gson.nginx-ingress.backend.k8s.decaf.lab.us-west-2.hcom.cloud/geography_service/v1
       - APP_DSC_STUB_MODE_ENABLED=true
       - APP_DSC_LOCAL_DATA_REGION="AWS_US_WEST_2"
-      - APP_DSC_KNOWN_DATA_REGIONS="CHX,AWS_US_WEST_2"
+      - APP_DSC_KNOWN_DATA_REGIONS="AWS_US_WEST_2"
       - APP_UDT_LOCAL_DATACENTER_IDENTIFIER="AWS_US_WEST_2"
       - APP_UDT_DB_HOSTS_AWS_US_EAST_1=
       - APP_PROPERTY_CATALOGUE_SERVICE_BASE_URL=https://pcs.istio-gateway.backend.k8s.us-west-2.hcom-lab-decaf.aws.hcom/property_catalogue_svc
+      - APP_MVTCLIENT_TIMEOUT_IN_MILLISECONDS=2000
 
       # Not supported on checkito yet
       - APP_FENCED_VAP_ENABLED=false
