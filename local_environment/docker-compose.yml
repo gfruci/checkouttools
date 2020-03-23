@@ -240,6 +240,9 @@ services:
       - APP_UDT_LOCAL_DATACENTER_IDENTIFIER="AWS_US_WEST_2"
       - APP_UDT_DB_HOSTS_AWS_US_EAST_1=
       - APP_PROPERTY_CATALOGUE_SERVICE_BASE_URL=https://pcs.istio-gateway.backend.k8s.us-west-2.hcom-lab-decaf.aws.hcom/property_catalogue_svc
+      - APP_MVTCLIENT_HTTP_CLIENT_CONNECTION_TIMEOUT=10000
+      - APP_MVTCLIENT_HTTP_CLIENT_SOCKET_TIMEOUT=10000
+      - APP_MVTCLIENT_HTTP_CLIENT_CONNECTION_REQUEST_TIMEOUT=10000
 
       # Not supported on checkito yet
       - APP_FENCED_VAP_ENABLED=false
