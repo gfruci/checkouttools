@@ -101,7 +101,7 @@ services:
       - APP_BPAS_ON_PAYMENT_OPTION_REQUEST_CIRCUIT_BREAKER_TIMEOUT_MS=60000
 
       # Development overrides
-      - JAVA_JVM_ARGS=${DEBUG_OPTS} ${PROXY_CONFIG}
+      - JAVA_JVM_ARGS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:1901 ${PROXY_CONFIG}
       - APP_UNIFIED_DATA_TOOLKIT_ENABLED=true
       - APP_LOCALIZATION_MESSAGE_PARALLEL_INITIALIZATION_ENABLED=true
       - APP_MVT_CONFIGURATION_PARALLEL_INITIALIZATION_ENABLED=true
@@ -110,7 +110,7 @@ services:
       - APP_WEBSITE_DOMAIN_DISCRIMINATOR=dev-
       - APP_DSC_STUB_MODE_ENABLED=true
       - APP_DSC_LOCAL_DATA_REGION="AWS_US_WEST_2"
-      - APP_DSC_KNOWN_DATA_REGIONS="CHX,AWS_US_WEST_2"
+      - APP_DSC_KNOWN_DATA_REGIONS="AWS_US_WEST_2"
       - APP_UDT_LOCAL_DATACENTER_IDENTIFIER="AWS_US_WEST_2"
       - APP_UDT_DB_HOSTS_AWS_US_EAST_1=
 
@@ -174,6 +174,17 @@ services:
       - APP_java.rmi.server.hostname=127.0.0.1
       - APP_com.sun.management.jmxremote.rmi.port=38007
 
+      - APP_PROPERTY_CATALOGUE_SERVICE_BASE_URL=http://pcs.nginx-ingress.backend.k8s.decaf.lab.us-west-2.hcom.cloud/property_catalogue_svc
+      - APP_MVTSERVICE_BASE_URL=http://mvtsvc.nginx-ingress.backend.k8s.decaf.lab.us-west-2.hcom.cloud/mvtsvc
+      - APP_LOC_CLIENT_SERVICE_URL=http://loms.nginx-ingress.backend.k8s.decaf.lab.us-west-2.hcom.cloud
+      - APP_MINOS_LOCAL_DATACENTER_IDENTIFIER="AWS_US_WEST_2"
+      - APP_MINOS_DB_HOSTS_AWS_US_WEST_2="cassandra.minos.1.us-west-2.hcom-lab-decaf.aws.hcom"
+      - APP_MINOS_DB_HOSTS=""
+      - APP_MINOS_DB_HOSTS_AWS_US_EAST_1=""
+      - APP_OMS_HMAC_AUTH_ENABLED=true
+      - APP_OMS_CREATE_ORDER_SERVICE_URL=https://create-oms.tslab.expedia.com/
+      - APP_OMS_RETRIEVE_ORDER_SERVICE_URL=https://retrieve-oms.tslab.expedia.com/
+
   ba_no_stub:
     image: 181651482125.dkr.ecr.us-west-2.amazonaws.com/hotels/ba:${BA_VERSION}
     container_name: ba
@@ -219,18 +230,28 @@ services:
       - APP_USER_DATA_DYNAMO_TABLE=“CKO_BA_USER_DATA_DYNAMO_TABLE”
       - APP_USER_DATA_DYNAMO_AWS_DEFAULT_REGION_OVERRIDE=“us-west-2”
       # Development overrides
-      - JAVA_JVM_ARGS=${DEBUG_OPTS} ${PROXY_CONFIG}
+      - JAVA_JVM_ARGS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:1901 ${PROXY_CONFIG}
       - APP_UNIFIED_DATA_TOOLKIT_ENABLED=true
       - APP_LOCALIZATION_MESSAGE_PARALLEL_INITIALIZATION_ENABLED=true
       - APP_MVT_CONFIGURATION_PARALLEL_INITIALIZATION_ENABLED=true
       - APP_CACHE_PRELOAD_ENABLED=false
       - APP_PSID_SERVICE_ENABLED=false
       - APP_WEBSITE_DOMAIN_DISCRIMINATOR=dev-
+      - APP_LOC_CLIENT_SERVICE_URL=https://loms.nginx-ingress.backend.k8s.decaf.lab.us-west-2.hcom.cloud
+        # Minos settings
+      - APP_MINOS_LOCAL_DATACENTER_IDENTIFIER=AWS_US_WEST_2
+      - APP_MINOS_DB_HOSTS_AWS_US_WEST_2=cassandra.minos.1.us-west-2.hcom-lab-decaf.aws.hcom
+      - APP_MINOS_DB_HOSTS_AWS_US_EAST_1=
+      - APP_MINOS_DB_PORT_AWS_US_WEST_2=9042
+      - APP_MINOS_DB_HOSTS=chhlapphot165.karmalab.net,chhlapphot166.karmalab.net,chhlapphot167.karmalab.net
+      - APP_GEOGRAPHY_CLIENT_BASE_URL=http://gson.nginx-ingress.backend.k8s.decaf.lab.us-west-2.hcom.cloud/geography_service/v1
       - APP_DSC_STUB_MODE_ENABLED=true
       - APP_DSC_LOCAL_DATA_REGION="AWS_US_WEST_2"
-      - APP_DSC_KNOWN_DATA_REGIONS="CHX,AWS_US_WEST_2"
+      - APP_DSC_KNOWN_DATA_REGIONS="AWS_US_WEST_2"
       - APP_UDT_LOCAL_DATACENTER_IDENTIFIER="AWS_US_WEST_2"
       - APP_UDT_DB_HOSTS_AWS_US_EAST_1=
+      - APP_PROPERTY_CATALOGUE_SERVICE_BASE_URL=https://pcs.istio-gateway.backend.k8s.us-west-2.hcom-lab-decaf.aws.hcom/property_catalogue_svc
+      - APP_MVTCLIENT_TIMEOUT_IN_MILLISECONDS=2000
 
       # Not supported on checkito yet
       - APP_FENCED_VAP_ENABLED=false
@@ -244,6 +265,17 @@ services:
       - APP_com.sun.management.jmxremote.local.only=false
       - APP_java.rmi.server.hostname=127.0.0.1
       - APP_com.sun.management.jmxremote.rmi.port=38007
+
+      - APP_PROPERTY_CATALOGUE_SERVICE_BASE_URL=http://pcs.nginx-ingress.backend.k8s.decaf.lab.us-west-2.hcom.cloud/property_catalogue_svc
+      - APP_MVTSERVICE_BASE_URL=http://mvtsvc.nginx-ingress.backend.k8s.decaf.lab.us-west-2.hcom.cloud/mvtsvc
+      - APP_LOC_CLIENT_SERVICE_URL=http://loms.nginx-ingress.backend.k8s.decaf.lab.us-west-2.hcom.cloud
+      - APP_MINOS_LOCAL_DATACENTER_IDENTIFIER="AWS_US_WEST_2"
+      - APP_MINOS_DB_HOSTS_AWS_US_WEST_2="cassandra.minos.1.us-west-2.hcom-lab-decaf.aws.hcom"
+      - APP_MINOS_DB_HOSTS=""
+      - APP_MINOS_DB_HOSTS_AWS_US_EAST_1=""
+      - APP_OMS_HMAC_AUTH_ENABLED=true
+      - APP_OMS_CREATE_ORDER_SERVICE_URL=https://create-oms.tslab.expedia.com/
+      - APP_OMS_RETRIEVE_ORDER_SERVICE_URL=https://retrieve-oms.tslab.expedia.com/
 
   bma:
     image: 181651482125.dkr.ecr.us-west-2.amazonaws.com/hotels/bma:${BMA_VERSION}
@@ -274,6 +306,7 @@ services:
       - APP_BOOKING_SEND_CONFIRMATION_SMS=false
       - APP_SMS_CONFIRMATION_ENABLED=false
       - APP_spring.profiles.active=default
+      - APP_READ_PASSBOOK_CERTIFICATES_FROM_VAULT=true
       - APP_TOMCAT_EXECUTOR_MAX_THREADS=50
       - APP_TOMCAT_EXECUTOR_MIN_SPARE_THREADS=10
       - APP_TOMCAT_EXECUTOR_MAX_IDLE_TIME=20000
@@ -289,6 +322,8 @@ services:
       - APP_BPAS_ON_PAYMENT_OPTION_REQUEST_CIRCUIT_BREAKER_TIMEOUT_MS=60000
       - APP_PASSBOOK_CERTIFICATES_LOCATION_HCOM=/hcom/globalconf/hotels.com/PassKeyCert.p12
       - APP_PASSBOOK_WWDR_CERTIFICATE_LOCATION=/hcom/globalconf/wwdr.pem
+      - APP_OMS_RETRIEVE_ORDER_SERVICE_URL=https://retrieve-oms.tslab.expedia.com
+      - APP_HEADER_SERVICE_URL="http://csvc.istio-gateway.backend.k8s.us-west-2.hcom-lab-decaf.aws.hcom/component_svc"
 
       # Development overrides
       - JAVA_JVM_ARGS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:1901 ${PROXY_CONFIG}
@@ -299,7 +334,7 @@ services:
       - APP_PSID_SERVICE_ENABLED=false
       - APP_WEBSITE_DOMAIN_DISCRIMINATOR=dev-
       #- APP_DSC_STUB_MODE_ENABLED=true
-      - APP_DSC_KNOWN_DATA_REGIONS=CHX,AWS_US_WEST_2,AWS_US_EAST_1
+      - APP_DSC_KNOWN_DATA_REGIONS=AWS_US_WEST_2
 
       # Vault
       - APP_VAULT_ADDR=https://vault.us-west-2.shared-lab.aws.hcom
@@ -385,6 +420,7 @@ services:
       - APP_BOOKING_SEND_CONFIRMATION_SMS=false
       - APP_SMS_CONFIRMATION_ENABLED=false
       - APP_spring.profiles.active=default
+      - APP_READ_PASSBOOK_CERTIFICATES_FROM_VAULT=true
       - APP_TOMCAT_EXECUTOR_MAX_THREADS=50
       - APP_TOMCAT_EXECUTOR_MIN_SPARE_THREADS=10
       - APP_TOMCAT_EXECUTOR_MAX_IDLE_TIME=20000
@@ -411,6 +447,21 @@ services:
       - APP_CHATBOT_SECRETS_REMOTE_PATH=bma/kv/chatbot
       - APP_VAULT_USER_ID=staging-bma-01
       - APP_VAULT_TIMEOUT=60
+      - APP_CONVERSATION_SECRETS_KEY_CONTENTS=circumnavigating
+      - APP_OMS_RETRIEVE_ORDER_SERVICE_URL=https://retrieve-oms.tslab.expedia.com
+      - APP_HEADER_SERVICE_URL="http://csvc.istio-gateway.backend.k8s.us-west-2.hcom-lab-decaf.aws.hcom/component_svc"
+
+      # Minos/DSC/UDT
+      - APP_MINOS_LOCAL_DATACENTER_IDENTIFIER=AWS_US_WEST_2
+      - APP_MINOS_DB_HOSTS_AWS_US_WEST_2=cassandra.minos.1.us-west-2.hcom-lab-decaf.aws.hcom
+      - APP_MINOS_DB_HOSTS_AWS_US_EAST_1=
+      - APP_MINOS_DB_PORT_AWS_US_WEST_2=9042
+      - APP_DSC_LOCAL_DATA_REGION=AWS_US_WEST_2
+      - APP_DSC_KNOWN_DATA_REGIONS=AWS_US_WEST_2
+      - APP_UDT_LOCAL_DATACENTER_IDENTIFIER=AWS_US_WEST_2
+      - APP_UDT_DB_HOSTS_AWS_US_WEST_2=cassandra.udt.1.us-west-2.hcom-lab-decaf.aws.hcom,cassandra.udt.2.us-west-2.hcom-lab-decaf.aws.hcom,cassandra.udt.3.us-west-2.hcom-lab-decaf.aws.hcom
+      - APP_UDT_DB_HOSTS_AWS_US_EAST_1=
+      - APP_UDT_DB_PORT_AWS_US_WEST_2=9042
 
       # Development overrides
       - JAVA_JVM_ARGS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:1901 ${PROXY_CONFIG}
@@ -420,7 +471,6 @@ services:
       - APP_CACHE_PRELOAD_ENABLED=false
       - APP_PSID_SERVICE_ENABLED=false
       - APP_WEBSITE_DOMAIN_DISCRIMINATOR=dev-
-      - APP_DSC_KNOWN_DATA_REGIONS=CHX,AWS_US_WEST_2,AWS_US_EAST_1
       - APP_OMS_HMAC_AUTH_ENABLED=true
 
       # Not supported on checkito yet
@@ -483,6 +533,15 @@ services:
       - APP_LOYALTY_ESTIMATION_SERVICE_CLIENT_READ_TIMEOUT=60000
       - APP_LOYALTY_ESTIMATION_SERVICE_CLIENT_CONNECTION_TIMEOUT=60000
       - APP_BPAS_ON_PAYMENT_OPTION_REQUEST_CIRCUIT_BREAKER_TIMEOUT_MS=60000
+
+      # UDT
+      - APP_UDT_LOCAL_DATACENTER_IDENTIFIER=AWS_US_WEST_2
+      - APP_UDT_DB_HOSTS_AWS_US_EAST_1=
+      - APP_UDT_DB_PORT_AWS_US_EAST_1=
+      - APP_UDT_DB_HOSTS_AWS_US_WEST_2=cassandra.udt.01.us-west-2.hcom-lab-decaf.aws.hcom,cassandra.udt.02.us-west-2.hcom-lab-decaf.aws.hcom,cassandra.udt.03.us-west-2.hcom-lab-decaf.aws.hcom
+      - APP_UDT_DB_PORT_AWS_US_WEST_2=9042
+      - APP_web.kafka.metadata.broker.list=kafka-broker-cds-1.us-west-2.hcom-lab-decaf.aws.hcom:9092,kafka-broker-cds-2.us-west-2.hcom-lab-decaf.aws.hcom:9092,kafka-broker-cds-3.us-west-2.hcom-lab-decaf.aws.hcom:9092
+      - APP_audit.kafka.metadata.broker.list=kafka-broker-cds-1.us-west-2.hcom-lab-decaf.aws.hcom:9092,kafka-broker-cds-2.us-west-2.hcom-lab-decaf.aws.hcom:9092,kafka-broker-cds-3.us-west-2.hcom-lab-decaf.aws.hcom:9092
 
       # Development overrides
       - JAVA_JVM_ARGS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:1901 ${PROXY_CONFIG}
@@ -594,11 +653,21 @@ services:
       - APP_BPAS_ON_PAYMENT_OPTION_REQUEST_CIRCUIT_BREAKER_TIMEOUT_MS=60000
       - APP_PROPERTY_CATALOGUE_SERVICE_BASE_URL=https://pcs.istio-gateway.backend.k8s.us-west-2.hcom-lab-decaf.aws.hcom/property_catalogue_svc
       - APP_MVTSERVICE_BASE_URL=http://mvtsvc.nginx-ingress.backend.k8s.decaf.lab.us-west-2.hcom.cloud/mvtsvc
-      - APP_MVTCLIENT_HTTP_CLIENT_CONNECTION_TIMEOUT=4200
-      - APP_MVTCLIENT_HTTP_CLIENT_SOCKET_TIMEOUT=4500
-      - APP_MVTCLIENT_HTTP_CLIENT_CONNECTION_REQUEST_TIMEOUT=4000
-      - APP_MVTCLIENT_TIMEOUT_IN_MILLISECONDS=5000
+      - APP_LOC_CLIENT_SERVICE_URL=http://loms.nginx-ingress.backend.k8s.decaf.lab.us-west-2.hcom.cloud
+      - APP_MVTCLIENT_HTTP_CLIENT_CONNECTION_TIMEOUT=10000
+      - APP_MVTCLIENT_HTTP_CLIENT_SOCKET_TIMEOUT=15500
+      - APP_MVTCLIENT_HTTP_CLIENT_CONNECTION_REQUEST_TIMEOUT=14000
+      - APP_MVTCLIENT_TIMEOUT_IN_MILLISECONDS=15000
       - APP_MVTCLIENT_MAX_RETRIES_ON_RESPONSE_EXCEPTION=3
+
+      # UDT
+      - APP_UDT_LOCAL_DATACENTER_IDENTIFIER=AWS_US_WEST_2
+      - APP_UDT_DB_HOSTS_AWS_US_EAST_1=
+      - APP_UDT_DB_PORT_AWS_US_EAST_1=
+      - APP_UDT_DB_HOSTS_AWS_US_WEST_2=cassandra.udt.01.us-west-2.hcom-lab-decaf.aws.hcom,cassandra.udt.02.us-west-2.hcom-lab-decaf.aws.hcom,cassandra.udt.03.us-west-2.hcom-lab-decaf.aws.hcom
+      - APP_UDT_DB_PORT_AWS_US_WEST_2=9042
+      - APP_web.kafka.metadata.broker.list=kafka-broker-cds-1.us-west-2.hcom-lab-decaf.aws.hcom:9092,kafka-broker-cds-2.us-west-2.hcom-lab-decaf.aws.hcom:9092,kafka-broker-cds-3.us-west-2.hcom-lab-decaf.aws.hcom:9092
+      - APP_audit.kafka.metadata.broker.list=kafka-broker-cds-1.us-west-2.hcom-lab-decaf.aws.hcom:9092,kafka-broker-cds-2.us-west-2.hcom-lab-decaf.aws.hcom:9092,kafka-broker-cds-3.us-west-2.hcom-lab-decaf.aws.hcom:9092
 
       # Development overrides
       - JAVA_JVM_ARGS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:1901 ${PROXY_CONFIG}
