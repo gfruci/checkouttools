@@ -306,11 +306,6 @@ services:
       - APP_BOOKING_SEND_CONFIRMATION_SMS=false
       - APP_SMS_CONFIRMATION_ENABLED=false
       - APP_spring.profiles.active=default
-      - APP_VAULT_ADDR=https://vault.us-west-2.shared-lab.aws.hcom
-      - APP_VAULT_USER_ID=staging-bma-01
-      - APP_VAULT_TIMEOUT=60
-      - APP_VAULT_SECRETS_REMOTE_PATH=bma/kv
-      - APP_CHATBOT_SECRETS_REMOTE_PATH=bma/kv/chatbot
       - APP_READ_PASSBOOK_CERTIFICATES_FROM_VAULT=true
       - APP_TOMCAT_EXECUTOR_MAX_THREADS=50
       - APP_TOMCAT_EXECUTOR_MIN_SPARE_THREADS=10
@@ -340,6 +335,13 @@ services:
       - APP_WEBSITE_DOMAIN_DISCRIMINATOR=dev-
       #- APP_DSC_STUB_MODE_ENABLED=true
       - APP_DSC_KNOWN_DATA_REGIONS=AWS_US_WEST_2
+
+      # Vault
+      - APP_VAULT_ADDR=https://vault.us-west-2.shared-lab.aws.hcom
+      - APP_VAULT_SECRETS_REMOTE_PATH=bma/kv
+      - APP_CHATBOT_SECRETS_REMOTE_PATH=bma/kv/chatbot
+      - APP_VAULT_USER_ID=staging-bma-01
+      - APP_VAULT_TIMEOUT=60
 
       # Not supported on checkito yet
       - APP_FENCED_VAP_ENABLED=false
@@ -418,11 +420,6 @@ services:
       - APP_BOOKING_SEND_CONFIRMATION_SMS=false
       - APP_SMS_CONFIRMATION_ENABLED=false
       - APP_spring.profiles.active=default
-      - APP_VAULT_ADDR=https://vault.us-west-2.shared-lab.aws.hcom
-      - APP_VAULT_USER_ID=staging-bma-01
-      - APP_VAULT_TIMEOUT=60
-      - APP_VAULT_SECRETS_REMOTE_PATH=bma/kv
-      - APP_CHATBOT_SECRETS_REMOTE_PATH=bma/kv/chatbot
       - APP_READ_PASSBOOK_CERTIFICATES_FROM_VAULT=true
       - APP_TOMCAT_EXECUTOR_MAX_THREADS=50
       - APP_TOMCAT_EXECUTOR_MIN_SPARE_THREADS=10
@@ -442,9 +439,16 @@ services:
       - APP_PROPERTY_CATALOGUE_SERVICE_BASE_URL=https://pcs.istio-gateway.backend.k8s.us-west-2.hcom-lab-decaf.aws.hcom/property_catalogue_svc
       - APP_LOC_CLIENT_SERVICE_URL=https://loms.nginx-ingress.backend.k8s.decaf.lab.us-west-2.hcom.cloud
       - APP_PSID_SERVICE_ENDPOINT=https://psidsvc.nginx-ingress.backend.k8s.decaf.lab.us-west-2.hcom.cloud
-      - APP_CONVERSATION_SECRETS_KEY_CONTENTS=circumnavigating
       - APP_OMS_RETRIEVE_ORDER_SERVICE_URL=https://retrieve-oms.tslab.expedia.com
       - APP_HEADER_SERVICE_URL="http://csvc.istio-gateway.backend.k8s.us-west-2.hcom-lab-decaf.aws.hcom/component_svc"
+
+      # Vault
+      - APP_VAULT_ADDR=https://vault.us-west-2.shared-lab.aws.hcom
+      - APP_VAULT_SECRETS_REMOTE_PATH=bma/kv
+      - APP_CHATBOT_SECRETS_REMOTE_PATH=bma/kv/chatbot
+      - APP_VAULT_USER_ID=staging-bma-01
+      - APP_VAULT_TIMEOUT=60
+      - APP_CONVERSATION_SECRETS_KEY_CONTENTS=circumnavigating
 
       # Minos/DSC/UDT
       - APP_MINOS_LOCAL_DATACENTER_IDENTIFIER=AWS_US_WEST_2
@@ -466,6 +470,7 @@ services:
       - APP_CACHE_PRELOAD_ENABLED=false
       - APP_PSID_SERVICE_ENABLED=false
       - APP_WEBSITE_DOMAIN_DISCRIMINATOR=dev-
+      - APP_OMS_HMAC_AUTH_ENABLED=true
 
       # Not supported on checkito yet
       - APP_FENCED_VAP_ENABLED=false
