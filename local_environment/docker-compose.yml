@@ -440,6 +440,7 @@ services:
       - APP_LOC_CLIENT_SERVICE_URL=https://loms.nginx-ingress.backend.k8s.decaf.lab.us-west-2.hcom.cloud
       - APP_PSID_SERVICE_ENDPOINT=https://psidsvc.nginx-ingress.backend.k8s.decaf.lab.us-west-2.hcom.cloud
       - APP_OMS_RETRIEVE_ORDER_SERVICE_URL=https://retrieve-oms.tslab.expedia.com
+      - APP_HEADER_SERVICE_URL="http://csvc.istio-gateway.backend.k8s.us-west-2.hcom-lab-decaf.aws.hcom/component_svc"
 
       # Vault
       - APP_VAULT_ADDR=https://vault.us-west-2.shared-lab.aws.hcom
@@ -448,7 +449,6 @@ services:
       - APP_VAULT_USER_ID=staging-bma-01
       - APP_VAULT_TIMEOUT=60
       - APP_CONVERSATION_SECRETS_KEY_CONTENTS=circumnavigating
-      - APP_HEADER_SERVICE_URL="http://csvc.istio-gateway.backend.k8s.us-west-2.hcom-lab-decaf.aws.hcom/component_svc"
 
       # Minos/DSC/UDT
       - APP_MINOS_LOCAL_DATACENTER_IDENTIFIER=AWS_US_WEST_2
