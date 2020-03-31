@@ -233,7 +233,6 @@ services:
       - APP_CACHE_PRELOAD_ENABLED=false
       - APP_PSID_SERVICE_ENABLED=false
       - APP_WEBSITE_DOMAIN_DISCRIMINATOR=dev-
-      - APP_LOC_CLIENT_SERVICE_URL=https://loms.nginx-ingress.backend.k8s.decaf.lab.us-west-2.hcom.cloud
       - APP_GEOGRAPHY_CLIENT_BASE_URL=http://gson.nginx-ingress.backend.k8s.decaf.lab.us-west-2.hcom.cloud/geography_service/v1
       - APP_DSC_STUB_MODE_ENABLED=true
       - APP_MVTCLIENT_TIMEOUT_IN_MILLISECONDS=2000
