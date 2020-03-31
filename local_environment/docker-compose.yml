@@ -172,7 +172,7 @@ services:
 
       - APP_PROPERTY_CATALOGUE_SERVICE_BASE_URL=http://pcs.nginx-ingress.backend.k8s.decaf.lab.us-west-2.hcom.cloud/property_catalogue_svc
       - APP_MVTSERVICE_BASE_URL=http://mvtsvc.nginx-ingress.backend.k8s.decaf.lab.us-west-2.hcom.cloud/mvtsvc
-      - APP_LOC_CLIENT_SERVICE_URL=http://loms.nginx-ingress.backend.k8s.decaf.lab.us-west-2.hcom.cloud
+      - APP_LOC_CLIENT_SERVICE_URL=https://loms.nginx-ingress.backend.k8s.decaf.lab.us-west-2.hcom.cloud
       - APP_MINOS_LOCAL_DATACENTER_IDENTIFIER="AWS_US_WEST_2"
       - APP_MINOS_DB_HOSTS_AWS_US_WEST_2="cassandra.minos.1.us-west-2.hcom-lab-decaf.aws.hcom"
       - APP_MINOS_DB_HOSTS=""
@@ -233,7 +233,6 @@ services:
       - APP_CACHE_PRELOAD_ENABLED=false
       - APP_PSID_SERVICE_ENABLED=false
       - APP_WEBSITE_DOMAIN_DISCRIMINATOR=dev-
-      - APP_LOC_CLIENT_SERVICE_URL=https://loms.nginx-ingress.backend.k8s.decaf.lab.us-west-2.hcom.cloud
       - APP_GEOGRAPHY_CLIENT_BASE_URL=http://gson.nginx-ingress.backend.k8s.decaf.lab.us-west-2.hcom.cloud/geography_service/v1
       - APP_DSC_STUB_MODE_ENABLED=true
       - APP_MVTCLIENT_TIMEOUT_IN_MILLISECONDS=2000
@@ -253,7 +252,7 @@ services:
 
       - APP_PROPERTY_CATALOGUE_SERVICE_BASE_URL=http://pcs.nginx-ingress.backend.k8s.decaf.lab.us-west-2.hcom.cloud/property_catalogue_svc
       - APP_MVTSERVICE_BASE_URL=http://mvtsvc.nginx-ingress.backend.k8s.decaf.lab.us-west-2.hcom.cloud/mvtsvc
-      - APP_LOC_CLIENT_SERVICE_URL=http://loms.nginx-ingress.backend.k8s.decaf.lab.us-west-2.hcom.cloud
+      - APP_LOC_CLIENT_SERVICE_URL=https://loms.nginx-ingress.backend.k8s.decaf.lab.us-west-2.hcom.cloud
       - APP_MINOS_LOCAL_DATACENTER_IDENTIFIER="AWS_US_WEST_2"
       - APP_MINOS_DB_HOSTS_AWS_US_WEST_2="cassandra.minos.1.us-west-2.hcom-lab-decaf.aws.hcom"
       - APP_MINOS_DB_HOSTS=""
@@ -637,7 +636,7 @@ services:
       - APP_BPAS_ON_PAYMENT_OPTION_REQUEST_CIRCUIT_BREAKER_TIMEOUT_MS=60000
       - APP_PROPERTY_CATALOGUE_SERVICE_BASE_URL=https://pcs.istio-gateway.backend.k8s.us-west-2.hcom-lab-decaf.aws.hcom/property_catalogue_svc
       - APP_MVTSERVICE_BASE_URL=http://mvtsvc.nginx-ingress.backend.k8s.decaf.lab.us-west-2.hcom.cloud/mvtsvc
-      - APP_LOC_CLIENT_SERVICE_URL=http://loms.nginx-ingress.backend.k8s.decaf.lab.us-west-2.hcom.cloud
+      - APP_LOC_CLIENT_SERVICE_URL=https://loms.nginx-ingress.backend.k8s.decaf.lab.us-west-2.hcom.cloud
       - APP_MVTCLIENT_HTTP_CLIENT_CONNECTION_TIMEOUT=10000
       - APP_MVTCLIENT_HTTP_CLIENT_SOCKET_TIMEOUT=15500
       - APP_MVTCLIENT_HTTP_CLIENT_CONNECTION_REQUEST_TIMEOUT=14000
