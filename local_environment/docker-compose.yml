@@ -518,11 +518,17 @@ services:
       - APP_LOYALTY_ESTIMATION_SERVICE_CLIENT_CONNECTION_TIMEOUT=60000
       - APP_BPAS_ON_PAYMENT_OPTION_REQUEST_CIRCUIT_BREAKER_TIMEOUT_MS=60000
 
-      # UDT
+      # Minos/DSC/UDT
+      - APP_MINOS_LOCAL_DATACENTER_IDENTIFIER=AWS_US_WEST_2
+      - APP_MINOS_DB_HOSTS_AWS_US_WEST_2=cassandra.minos.1.us-west-2.hcom-lab-decaf.aws.hcom
+      - APP_MINOS_DB_HOSTS_AWS_US_EAST_1=
+      - APP_MINOS_DB_PORT_AWS_US_WEST_2=9042
+      - APP_DSC_LOCAL_DATA_REGION=AWS_US_WEST_2
+      - APP_DSC_KNOWN_DATA_REGIONS=AWS_US_WEST_2
       - APP_UDT_LOCAL_DATACENTER_IDENTIFIER=AWS_US_WEST_2
       - APP_UDT_DB_HOSTS_AWS_US_EAST_1=
       - APP_UDT_DB_PORT_AWS_US_EAST_1=
-      - APP_UDT_DB_HOSTS_AWS_US_WEST_2=cassandra.udt.01.us-west-2.hcom-lab-decaf.aws.hcom,cassandra.udt.02.us-west-2.hcom-lab-decaf.aws.hcom,cassandra.udt.03.us-west-2.hcom-lab-decaf.aws.hcom
+      - APP_UDT_DB_HOSTS_AWS_US_WEST_2=cassandra.udt.1.us-west-2.hcom-lab-decaf.aws.hcom,cassandra.udt.2.us-west-2.hcom-lab-decaf.aws.hcom,cassandra.udt.3.us-west-2.hcom-lab-decaf.aws.hcom
       - APP_UDT_DB_PORT_AWS_US_WEST_2=9042
       - APP_web.kafka.metadata.broker.list=kafka-broker-cds-1.us-west-2.hcom-lab-decaf.aws.hcom:9092,kafka-broker-cds-2.us-west-2.hcom-lab-decaf.aws.hcom:9092,kafka-broker-cds-3.us-west-2.hcom-lab-decaf.aws.hcom:9092
       - APP_audit.kafka.metadata.broker.list=kafka-broker-cds-1.us-west-2.hcom-lab-decaf.aws.hcom:9092,kafka-broker-cds-2.us-west-2.hcom-lab-decaf.aws.hcom:9092,kafka-broker-cds-3.us-west-2.hcom-lab-decaf.aws.hcom:9092
@@ -634,7 +640,7 @@ services:
       - APP_LOYALTY_ESTIMATION_SERVICE_CLIENT_READ_TIMEOUT=60000
       - APP_LOYALTY_ESTIMATION_SERVICE_CLIENT_CONNECTION_TIMEOUT=60000
       - APP_BPAS_ON_PAYMENT_OPTION_REQUEST_CIRCUIT_BREAKER_TIMEOUT_MS=60000
-      - APP_PROPERTY_CATALOGUE_SERVICE_BASE_URL=https://pcs.istio-gateway.backend.k8s.us-west-2.hcom-lab-decaf.aws.hcom/property_catalogue_svc
+      - APP_PROPERTY_CATALOGUE_SERVICE_BASE_URL=https://pcs.nginx-ingress.backend.k8s.decaf.lab.us-west-2.hcom.cloud/property_catalogue_svc
       - APP_MVTSERVICE_BASE_URL=http://mvtsvc.nginx-ingress.backend.k8s.decaf.lab.us-west-2.hcom.cloud/mvtsvc
       - APP_LOC_CLIENT_SERVICE_URL=https://loms.nginx-ingress.backend.k8s.decaf.lab.us-west-2.hcom.cloud
       - APP_MVTCLIENT_HTTP_CLIENT_CONNECTION_TIMEOUT=10000
@@ -643,11 +649,17 @@ services:
       - APP_MVTCLIENT_TIMEOUT_IN_MILLISECONDS=15000
       - APP_MVTCLIENT_MAX_RETRIES_ON_RESPONSE_EXCEPTION=3
 
-      # UDT
+      # Minos/DSC/UDT
+      - APP_MINOS_LOCAL_DATACENTER_IDENTIFIER=AWS_US_WEST_2
+      - APP_MINOS_DB_HOSTS_AWS_US_WEST_2=cassandra.minos.1.us-west-2.hcom-lab-decaf.aws.hcom
+      - APP_MINOS_DB_HOSTS_AWS_US_EAST_1=
+      - APP_MINOS_DB_PORT_AWS_US_WEST_2=9042
+      - APP_DSC_LOCAL_DATA_REGION=AWS_US_WEST_2
+      - APP_DSC_KNOWN_DATA_REGIONS=AWS_US_WEST_2
       - APP_UDT_LOCAL_DATACENTER_IDENTIFIER=AWS_US_WEST_2
       - APP_UDT_DB_HOSTS_AWS_US_EAST_1=
       - APP_UDT_DB_PORT_AWS_US_EAST_1=
-      - APP_UDT_DB_HOSTS_AWS_US_WEST_2=cassandra.udt.01.us-west-2.hcom-lab-decaf.aws.hcom,cassandra.udt.02.us-west-2.hcom-lab-decaf.aws.hcom,cassandra.udt.03.us-west-2.hcom-lab-decaf.aws.hcom
+      - APP_UDT_DB_HOSTS_AWS_US_WEST_2=cassandra.udt.1.us-west-2.hcom-lab-decaf.aws.hcom,cassandra.udt.2.us-west-2.hcom-lab-decaf.aws.hcom,cassandra.udt.3.us-west-2.hcom-lab-decaf.aws.hcom
       - APP_UDT_DB_PORT_AWS_US_WEST_2=9042
       - APP_web.kafka.metadata.broker.list=kafka-broker-cds-1.us-west-2.hcom-lab-decaf.aws.hcom:9092,kafka-broker-cds-2.us-west-2.hcom-lab-decaf.aws.hcom:9092,kafka-broker-cds-3.us-west-2.hcom-lab-decaf.aws.hcom:9092
       - APP_audit.kafka.metadata.broker.list=kafka-broker-cds-1.us-west-2.hcom-lab-decaf.aws.hcom:9092,kafka-broker-cds-2.us-west-2.hcom-lab-decaf.aws.hcom:9092,kafka-broker-cds-3.us-west-2.hcom-lab-decaf.aws.hcom:9092
