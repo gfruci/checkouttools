@@ -96,12 +96,13 @@ function main(){
 
   echo -n "3. From project pom xml file..."
   settings_from_pom_xml=`parse_pom_xml ${BA_HOME}`
+  echo " done"
+  debug_log "${settings_from_pom_xml}"
 
   echo -n "4. Adding user timezone..."
   user_timezone="-Duser.timezone=`date +"%Z"`"
-
   echo " done"
-  debug_log "${settings_from_pom_xml}"
+  debug_log "${user_timezone}"
 
   if [[ "${COPY_TO_CLIPBOARD}" == "true" ]]; then
     echo -e "${settings_from_maven//\\/\\\\}\n${settings_from_properties//\\/\\\\}\n${settings_from_pom_xml//\\/\\\\}\n${user_timezone//\\/\\\\}" > /dev/clipboard

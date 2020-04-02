@@ -1,7 +1,8 @@
 #!/bin/bash
 
-BASEDIR=""
-DESIRED_VERSION=""
+BASEDIR=
+DESIRED_VERSION=
+JIRA_TICKET=
 PUSH="false"
 
 function print_help(){
@@ -10,7 +11,8 @@ function print_help(){
   echo "Update version for maven projects."
   echo "Default behavior is increasing the major version and committing the changes without pushing it to master."
   echo "-v  set specific version, default is increasing the major version"
-  echo "-p  push changes to master"
+  echo "-p  push changes to master (or branch generated from jira ticket, see: -j )"
+  echo "-j  jira ticket for branch name and commit message"
   echo "-h  print this help"
   echo ""
   echo "Examples:"
@@ -25,6 +27,8 @@ function process_args(){
 	-p) PUSH="true" ;;
     -v) shift
         DESIRED_VERSION=${1} ;;
+    -j) shift
+        JIRA_TICKET=${1} ;;
     *) BASEDIR=${1} ;;
     esac
     shift
@@ -32,12 +36,12 @@ function process_args(){
 }
 
 function check_if_basedir_exists() {
-  if [ ! -d "$BASEDIR" ]; then
+  if [[ ! -d ${BASEDIR} ]]; then
     echo "No directory found in \"${BASEDIR}\". Exiting."
     exit 1
   fi
   # Go to BASEDIR
-  cd $BASEDIR
+  cd ${BASEDIR}
   echo "Updating ${PWD##*/} version"
 }
 
@@ -50,7 +54,7 @@ function stash_changes_and_get_master(){
   ANYTHING_STASHED="$(git stash)"
   
   # Get a fresh master
-  if [ "$BRANCH" != "master" ]; then
+  if [[ ${BRANCH} != "master" ]]; then
     git checkout master
   fi
   git pull
@@ -58,25 +62,36 @@ function stash_changes_and_get_master(){
 
 function update_version(){
   # Get the current version from maven
-  VERSION=$(printf 'VER\t${project.version}' | mvn help:evaluate | grep '^VER' | cut -f2 | cut -f1 -d".")
-  
-  if [ "$DESIRED_VERSION" != "" ]; then
-    NEW_VERSION_STRING=$DESIRED_VERSION
+  VERSION=$(mvn -q -Dexec.executable=echo -Dexec.args='${project.version}' --non-recursive exec:exec)
+
+  echo "Current version is ${VERSION}"
+
+  if [[ ! -z ${DESIRED_VERSION} ]]; then
+    echo "Setting provided version: ${DESIRED_VERSION}"
+    NEW_VERSION_STRING=${DESIRED_VERSION}
   else
 	# Increase the major version
-	((NEW_VERSION=VERSION+1))
+	VERSION=$(echo "${VERSION}" | cut -d '.' -f1)
+	NEW_VERSION=$((VERSION + 1))
 	NEW_VERSION_STRING=${NEW_VERSION}.0-SNAPSHOT
   fi
-  
+  echo "Target version is ${NEW_VERSION_STRING}"
+
   # Update the version with maven
-  mvn versions:set -DnewVersion=$NEW_VERSION_STRING
+  mvn -q versions:set -DnewVersion="${NEW_VERSION_STRING}"
 }
 
 function commit_and_push_changes(){
-  git add ./\*.xml
-  git commit -m "@noissue: Version updated to $NEW_VERSION_STRING"
-  if [ $PUSH != "true" ]; then
-    echo "The changes below won't be pushed to master. Exiting..."
+  if [[ -z ${JIRA_TICKET} ]]; then
+    git add ./\*.xml
+    git commit -m "@noissue: Version updated to ${NEW_VERSION_STRING}"
+  else
+    git checkout -B feature/${JIRA_TICKET}-update-version
+    git add ./\*.xml
+    git commit -m "${JIRA_TICKET}: Version updated to ${NEW_VERSION_STRING}"
+  fi
+  if [[ ${PUSH} != "true" ]]; then
+    echo "The changes below won't be pushed. Exiting..."
 	git status
     exit 0
   fi
@@ -85,9 +100,9 @@ function commit_and_push_changes(){
 
 function get_back_changes_from_stash(){
   # Switch back to original branch
-  git checkout $BRANCH
+  git checkout ${BRANCH}
   
-  if [ "No local changes to save" != "$ANYTHING_STASHED" ]; then
+  if [[ "No local changes to save" != ${ANYTHING_STASHED} ]]; then
   	git stash pop
   fi
 }
