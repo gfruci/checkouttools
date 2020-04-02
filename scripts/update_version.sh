@@ -89,6 +89,9 @@ function commit_and_push_changes(){
     git checkout -B feature/${JIRA_TICKET}-update-version
     git add ./\*.xml
     git commit -m "${JIRA_TICKET}: Version updated to ${NEW_VERSION_STRING}"
+    if [[ ${PUSH} == "true" ]]; then
+      git branch -u origin/feature/${JIRA_TICKET}-update-version
+    fi
   fi
   if [[ ${PUSH} != "true" ]]; then
     echo "The changes below won't be pushed. Exiting..."
