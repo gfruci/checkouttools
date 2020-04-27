@@ -496,10 +496,6 @@ services:
       - APP_EMAIL_TEMPLATES_BASEPATH=file:./appconfig/templates/
       - APP_LIS_EAPID=0
       - APP_spring.profiles.active=default
-      - APP_VAULT_ADDR=https://vault.us-west-2.shared-lab.aws.hcom
-      - APP_VAULT_USER_ID=ci-bca-01
-      - APP_VAULT_TIMEOUT=60
-      - APP_VAULT_SECRETS_REMOTE_PATH=bca/kv
       - APP_TOMCAT_EXECUTOR_MAX_THREADS=50
       - APP_TOMCAT_EXECUTOR_MIN_SPARE_THREADS=10
       - APP_TOMCAT_EXECUTOR_MAX_IDLE_TIME=20000
@@ -514,6 +510,13 @@ services:
       - APP_BPAS_ON_PAYMENT_OPTION_REQUEST_CIRCUIT_BREAKER_TIMEOUT_MS=60000
       - APP_HFOX_SERVICE_URL=http://hfox.nginx-ingress.backend.k8s.decaf.lab.us-west-2.hcom.cloud/allfxratesbybasecurrency/
       - APP_HFOX_HISTORICAL_SERVICE_URL=http://hfox.nginx-ingress.backend.k8s.decaf.lab.us-west-2.hcom.cloud/historicalfxrates/
+
+      # Vault
+      - APP_VAULT_ADDR=https://vault.us-west-2.shared-lab.aws.hcom
+      - APP_ROLE_ID=023cd91e-3749-e7fc-9bc5-53b557cffcfe
+      - APP_SECRET_ID=4b86fa1a-7ceb-edc4-2340-2e91d2c62fd1
+      - APP_VAULT_TIMEOUT=60
+      - APP_VAULT_SECRETS_REMOTE_PATH=bca/kv
 
       # Minos/DSC/UDT
       - APP_MINOS_LOCAL_DATACENTER_IDENTIFIER=AWS_US_WEST_2
@@ -617,9 +620,6 @@ services:
       - APP_EMAIL_TEMPLATES_BASEPATH=file:./appconfig/templates/
       - APP_LIS_EAPID=0
       - APP_spring.profiles.active=default
-      - APP_VAULT_ADDR=https://vault.lab.hcom
-      - APP_VAULT_USER_ID=ci-bca-01
-      - APP_VAULT_TIMEOUT=60
       - APP_TOMCAT_EXECUTOR_MAX_THREADS=50
       - APP_TOMCAT_EXECUTOR_MIN_SPARE_THREADS=10
       - APP_TOMCAT_EXECUTOR_MAX_IDLE_TIME=20000
@@ -642,6 +642,13 @@ services:
       - APP_MVTCLIENT_MAX_RETRIES_ON_RESPONSE_EXCEPTION=3
       - APP_HFOX_SERVICE_URL=http://hfox.nginx-ingress.backend.k8s.decaf.lab.us-west-2.hcom.cloud/allfxratesbybasecurrency/
       - APP_HFOX_HISTORICAL_SERVICE_URL=http://hfox.nginx-ingress.backend.k8s.decaf.lab.us-west-2.hcom.cloud/historicalfxrates/
+
+      # Vault
+      - APP_VAULT_ADDR=https://vault.us-west-2.shared-lab.aws.hcom
+      - APP_ROLE_ID=023cd91e-3749-e7fc-9bc5-53b557cffcfe
+      - APP_SECRET_ID=4b86fa1a-7ceb-edc4-2340-2e91d2c62fd1
+      - APP_VAULT_TIMEOUT=60
+      - APP_VAULT_SECRETS_REMOTE_PATH=bca/kv
 
       # Minos/DSC/UDT
       - APP_MINOS_LOCAL_DATACENTER_IDENTIFIER=AWS_US_WEST_2
