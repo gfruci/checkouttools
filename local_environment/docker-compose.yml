@@ -442,7 +442,10 @@ services:
       - APP_DSC_LOCAL_DATA_REGION=AWS_US_WEST_2
       - APP_DSC_KNOWN_DATA_REGIONS=AWS_US_WEST_2
       - APP_UDT_LOCAL_DATACENTER_IDENTIFIER=AWS_US_WEST_2
-      - APP_UDT_DB_HOSTS_AWS_US_WEST_2=cassandra.udt.1.us-west-2.hcom-lab-decaf.aws.hcom,cassandra.udt.2.us-west-2.hcom-lab-decaf.aws.hcom,cassandra.udt.3.us-west-2.hcom-lab-decaf.aws.hcom
+      - APP_UDT_DB_HOSTS_AWS_US_WEST_2=cassandra.shared.1.us-west-2.hcom-lab-decaf.aws.hcom,cassandra.shared.2.us-west-2.hcom-lab-decaf.aws.hcom,cassandra.shared.3.us-west-2.hcom-lab-decaf.aws.hcom,cassandra.shared.4.us-west-2.hcom-lab-decaf.aws.hcom,cassandra.shared.5.us-west-2.hcom-lab-decaf.aws.hcom,cassandra.shared.6.us-west-2.hcom-lab-decaf.aws.hcom
+      - APP_UDT_CASSANDRA_AUTH_ENABLED=true
+      - APP_UDT_CASSANDRA_VAULT_ROLE_ID=4ec7e656-f121-d691-6a32-7c7f13dee572
+      - APP_UDT_CASSANDRA_VAULT_SECRET_ID=5049b32f-1e10-2c67-db09-9fca30521cc8
       - APP_UDT_DB_HOSTS_AWS_US_EAST_1=
       - APP_UDT_DB_PORT_AWS_US_WEST_2=9042
 
@@ -522,7 +525,10 @@ services:
       - APP_UDT_LOCAL_DATACENTER_IDENTIFIER=AWS_US_WEST_2
       - APP_UDT_DB_HOSTS_AWS_US_EAST_1=
       - APP_UDT_DB_PORT_AWS_US_EAST_1=
-      - APP_UDT_DB_HOSTS_AWS_US_WEST_2=cassandra.udt.1.us-west-2.hcom-lab-decaf.aws.hcom,cassandra.udt.2.us-west-2.hcom-lab-decaf.aws.hcom,cassandra.udt.3.us-west-2.hcom-lab-decaf.aws.hcom
+      - APP_UDT_DB_HOSTS_AWS_US_WEST_2=cassandra.shared.1.us-west-2.hcom-lab-decaf.aws.hcom,cassandra.shared.2.us-west-2.hcom-lab-decaf.aws.hcom,cassandra.shared.3.us-west-2.hcom-lab-decaf.aws.hcom,cassandra.shared.4.us-west-2.hcom-lab-decaf.aws.hcom,cassandra.shared.5.us-west-2.hcom-lab-decaf.aws.hcom,cassandra.shared.6.us-west-2.hcom-lab-decaf.aws.hcom
+      - APP_UDT_CASSANDRA_AUTH_ENABLED=true
+      - APP_UDT_CASSANDRA_VAULT_ROLE_ID=4ec7e656-f121-d691-6a32-7c7f13dee572
+      - APP_UDT_CASSANDRA_VAULT_SECRET_ID=5049b32f-1e10-2c67-db09-9fca30521cc8
       - APP_UDT_DB_PORT_AWS_US_WEST_2=9042
       - APP_web.kafka.metadata.broker.list=kafka-broker-cds-1.us-west-2.hcom-lab-decaf.aws.hcom:9092,kafka-broker-cds-2.us-west-2.hcom-lab-decaf.aws.hcom:9092,kafka-broker-cds-3.us-west-2.hcom-lab-decaf.aws.hcom:9092
       - APP_audit.kafka.metadata.broker.list=kafka-broker-cds-1.us-west-2.hcom-lab-decaf.aws.hcom:9092,kafka-broker-cds-2.us-west-2.hcom-lab-decaf.aws.hcom:9092,kafka-broker-cds-3.us-west-2.hcom-lab-decaf.aws.hcom:9092
@@ -647,7 +653,10 @@ services:
       - APP_UDT_LOCAL_DATACENTER_IDENTIFIER=AWS_US_WEST_2
       - APP_UDT_DB_HOSTS_AWS_US_EAST_1=
       - APP_UDT_DB_PORT_AWS_US_EAST_1=
-      - APP_UDT_DB_HOSTS_AWS_US_WEST_2=cassandra.udt.1.us-west-2.hcom-lab-decaf.aws.hcom,cassandra.udt.2.us-west-2.hcom-lab-decaf.aws.hcom,cassandra.udt.3.us-west-2.hcom-lab-decaf.aws.hcom
+      - APP_UDT_DB_HOSTS_AWS_US_WEST_2=cassandra.shared.1.us-west-2.hcom-lab-decaf.aws.hcom,cassandra.shared.2.us-west-2.hcom-lab-decaf.aws.hcom,cassandra.shared.3.us-west-2.hcom-lab-decaf.aws.hcom,cassandra.shared.4.us-west-2.hcom-lab-decaf.aws.hcom,cassandra.shared.5.us-west-2.hcom-lab-decaf.aws.hcom,cassandra.shared.6.us-west-2.hcom-lab-decaf.aws.hcom
+      - APP_UDT_CASSANDRA_AUTH_ENABLED=true
+      - APP_UDT_CASSANDRA_VAULT_ROLE_ID=4ec7e656-f121-d691-6a32-7c7f13dee572
+      - APP_UDT_CASSANDRA_VAULT_SECRET_ID=5049b32f-1e10-2c67-db09-9fca30521cc8
       - APP_UDT_DB_PORT_AWS_US_WEST_2=9042
       - APP_web.kafka.metadata.broker.list=kafka-broker-cds-1.us-west-2.hcom-lab-decaf.aws.hcom:9092,kafka-broker-cds-2.us-west-2.hcom-lab-decaf.aws.hcom:9092,kafka-broker-cds-3.us-west-2.hcom-lab-decaf.aws.hcom:9092
       - APP_audit.kafka.metadata.broker.list=kafka-broker-cds-1.us-west-2.hcom-lab-decaf.aws.hcom:9092,kafka-broker-cds-2.us-west-2.hcom-lab-decaf.aws.hcom:9092,kafka-broker-cds-3.us-west-2.hcom-lab-decaf.aws.hcom:9092
