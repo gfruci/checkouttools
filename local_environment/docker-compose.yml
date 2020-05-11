@@ -101,7 +101,7 @@ services:
       - APP_BPAS_ON_PAYMENT_OPTION_REQUEST_CIRCUIT_BREAKER_TIMEOUT_MS=60000
       - APP_lara.hystrix.plugins.registration.enabled=false
       - APP_LARA_LASER_HOSTNAME=laser.nginx-ingress.backend.k8s.decaf.lab.us-west-2.hcom.cloud
-      - APP_assembly.customercare.minos.population.service.shortname=ls
+      - APP_assembly.customercare.minos.population.service.shortname=laser
 
       # Development overrides
       - JAVA_JVM_ARGS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:1901 ${PROXY_CONFIG}
@@ -230,7 +230,7 @@ services:
       - APP_USER_DATA_DYNAMO_AWS_DEFAULT_REGION_OVERRIDE=“us-west-2”
       - APP_lara.hystrix.plugins.registration.enabled=false
       - APP_LARA_LASER_HOSTNAME=laser.nginx-ingress.backend.k8s.decaf.lab.us-west-2.hcom.cloud
-      - APP_assembly.customercare.minos.population.service.shortname=ls
+      - APP_assembly.customercare.minos.population.service.shortname=laser
 
       # Development overrides
       - JAVA_JVM_ARGS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:1901 ${PROXY_CONFIG}
