@@ -317,6 +317,7 @@ services:
       - APP_HEADER_SERVICE_URL="http://csvc.istio-gateway.backend.k8s.us-west-2.hcom-lab-decaf.aws.hcom/component_svc"
 
       # LARA - LASER
+      - APP_assembly.customercare.minos.population.service.shortname=laser
       - APP_LARA_LASER_HOSTNAME=laser.istio-gateway.backend.k8s.us-west-2.hcom-lab-decaf.aws.hcom
       - APP_lara.hystrix.plugins.registration.enabled=false
 
@@ -438,6 +439,7 @@ services:
       - APP_HEADER_SERVICE_URL="http://csvc.istio-gateway.backend.k8s.us-west-2.hcom-lab-decaf.aws.hcom/component_svc"
 
       # LARA - LASER
+      - APP_assembly.customercare.minos.population.service.shortname=laser
       - APP_LARA_LASER_HOSTNAME=laser.istio-gateway.backend.k8s.us-west-2.hcom-lab-decaf.aws.hcom
       - APP_lara.hystrix.plugins.registration.enabled=false
 
