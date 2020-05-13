@@ -315,6 +315,9 @@ services:
       - APP_PASSBOOK_WWDR_CERTIFICATE_LOCATION=/hcom/globalconf/wwdr.pem
       - APP_OMS_RETRIEVE_ORDER_SERVICE_URL=https://retrieve-oms.tslab.expedia.com
       - APP_HEADER_SERVICE_URL="http://csvc.istio-gateway.backend.k8s.us-west-2.hcom-lab-decaf.aws.hcom/component_svc"
+
+      # LARA - LASER
+      - APP_LARA_LASER_HOSTNAME=laser.istio-gateway.backend.k8s.us-west-2.hcom-lab-decaf.aws.hcom
       - APP_lara.hystrix.plugins.registration.enabled=false
 
       # Development overrides
@@ -433,6 +436,9 @@ services:
       - APP_PSID_SERVICE_ENDPOINT=https://psidsvc.nginx-ingress.backend.k8s.decaf.lab.us-west-2.hcom.cloud
       - APP_OMS_RETRIEVE_ORDER_SERVICE_URL=https://retrieve-oms.tslab.expedia.com
       - APP_HEADER_SERVICE_URL="http://csvc.istio-gateway.backend.k8s.us-west-2.hcom-lab-decaf.aws.hcom/component_svc"
+
+      # LARA - LASER
+      - APP_LARA_LASER_HOSTNAME=laser.istio-gateway.backend.k8s.us-west-2.hcom-lab-decaf.aws.hcom
       - APP_lara.hystrix.plugins.registration.enabled=false
 
       # Vault
