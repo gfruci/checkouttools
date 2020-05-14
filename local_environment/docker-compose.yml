@@ -100,7 +100,7 @@ services:
       - APP_LOYALTY_ESTIMATION_SERVICE_CLIENT_CONNECTION_TIMEOUT=60000
       - APP_BPAS_ON_PAYMENT_OPTION_REQUEST_CIRCUIT_BREAKER_TIMEOUT_MS=60000
       - APP_lara.hystrix.plugins.registration.enabled=false
-      - APP_LARA_LASER_HOSTNAME=laser.nginx-ingress.backend.k8s.decaf.lab.us-west-2.hcom.cloud
+      - APP_LARA_LASER_HOSTNAME=laser.istio-gateway.backend.k8s.us-west-2.hcom-lab-decaf.aws.hcom
       - APP_assembly.customercare.minos.population.service.shortname=laser
 
       # Development overrides
@@ -229,7 +229,7 @@ services:
       - APP_USER_DATA_DYNAMO_TABLE=“CKO_BA_USER_DATA_DYNAMO_TABLE”
       - APP_USER_DATA_DYNAMO_AWS_DEFAULT_REGION_OVERRIDE=“us-west-2”
       - APP_lara.hystrix.plugins.registration.enabled=false
-      - APP_LARA_LASER_HOSTNAME=laser.nginx-ingress.backend.k8s.decaf.lab.us-west-2.hcom.cloud
+      - APP_LARA_LASER_HOSTNAME=laser.istio-gateway.backend.k8s.us-west-2.hcom-lab-decaf.aws.hcom
       - APP_assembly.customercare.minos.population.service.shortname=laser
 
       # Development overrides
