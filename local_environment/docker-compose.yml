@@ -315,7 +315,6 @@ services:
       - APP_PASSBOOK_WWDR_CERTIFICATE_LOCATION=/hcom/globalconf/wwdr.pem
       - APP_OMS_RETRIEVE_ORDER_SERVICE_URL=https://retrieve-oms.tslab.expedia.com
       - APP_HEADER_SERVICE_URL="http://csvc.istio-gateway.backend.k8s.us-west-2.hcom-lab-decaf.aws.hcom/component_svc"
-      - APP_TARGETING_BASE_URL=https://ts.istio-gateway.backend.k8s.us-west-2.hcom-lab-decaf.aws.hcom/targeting
 
       # LARA - LASER
       - APP_assembly.customercare.minos.population.service.shortname=laser
@@ -438,7 +437,6 @@ services:
       - APP_PSID_SERVICE_ENDPOINT=https://psidsvc.nginx-ingress.backend.k8s.decaf.lab.us-west-2.hcom.cloud
       - APP_OMS_RETRIEVE_ORDER_SERVICE_URL=https://retrieve-oms.tslab.expedia.com
       - APP_HEADER_SERVICE_URL="http://csvc.istio-gateway.backend.k8s.us-west-2.hcom-lab-decaf.aws.hcom/component_svc"
-      - APP_TARGETING_BASE_URL=https://ts.istio-gateway.backend.k8s.us-west-2.hcom-lab-decaf.aws.hcom/targeting
 
       # LARA - LASER
       - APP_assembly.customercare.minos.population.service.shortname=laser
