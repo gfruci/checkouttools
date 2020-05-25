@@ -285,6 +285,7 @@ services:
       - APP_GEOGRAPHY_CLIENT_BASE_URL=http://gson.nginx-ingress.backend.k8s.decaf.lab.us-west-2.hcom.cloud/geography_service/v1
       - APP_DSC_STUB_MODE_ENABLED=true
       - APP_MVTCLIENT_TIMEOUT_IN_MILLISECONDS=2000
+      - APP_VALUE_ADD_PROMOTIONS_JSON_API_HOST=http://tls-lvas.us-west-2.test.tls.expedia.com/
 
       # Not supported on checkito yet
       - APP_FENCED_VAP_ENABLED=false
