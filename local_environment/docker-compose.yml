@@ -197,7 +197,7 @@ services:
       - APP_com.sun.management.jmxremote.rmi.port=38007
 
       - APP_PROPERTY_CATALOGUE_SERVICE_BASE_URL=https://pcs.istio-gateway.backend.k8s.us-west-2.hcom-lab-decaf.aws.hcom/property_catalogue_svc
-      - APP_MVTSERVICE_BASE_URL=http://mvtsvc.nginx-ingress.backend.k8s.decaf.lab.us-west-2.hcom.cloud/mvtsvc
+      - APP_MVTSERVICE_BASE_URL=https://mvtsvc.istio-gateway.backend.k8s.us-west-2.hcom-lab-decaf.aws.hcom/mvtsvc
       - APP_LOC_CLIENT_SERVICE_URL=https://loms.nginx-ingress.backend.k8s.decaf.lab.us-west-2.hcom.cloud
       - APP_OMS_HMAC_AUTH_ENABLED=true
       - APP_OMS_CREATE_ORDER_SERVICE_URL=https://create-oms.tslab.expedia.com/
@@ -301,7 +301,7 @@ services:
       - APP_com.sun.management.jmxremote.rmi.port=38007
 
       - APP_PROPERTY_CATALOGUE_SERVICE_BASE_URL=https://pcs.istio-gateway.backend.k8s.us-west-2.hcom-lab-decaf.aws.hcom/property_catalogue_svc
-      - APP_MVTSERVICE_BASE_URL=http://mvtsvc.nginx-ingress.backend.k8s.decaf.lab.us-west-2.hcom.cloud/mvtsvc
+      - APP_MVTSERVICE_BASE_URL=https://mvtsvc.istio-gateway.backend.k8s.us-west-2.hcom-lab-decaf.aws.hcom/mvtsvc
       - APP_LOC_CLIENT_SERVICE_URL=https://loms.nginx-ingress.backend.k8s.decaf.lab.us-west-2.hcom.cloud
       - APP_OMS_HMAC_AUTH_ENABLED=true
       - APP_OMS_CREATE_ORDER_SERVICE_URL=https://create-oms.tslab.expedia.com/
@@ -724,7 +724,7 @@ services:
       - APP_LOYALTY_ESTIMATION_SERVICE_CLIENT_CONNECTION_TIMEOUT=60000
       - APP_BPAS_ON_PAYMENT_OPTION_REQUEST_CIRCUIT_BREAKER_TIMEOUT_MS=60000
       - APP_PROPERTY_CATALOGUE_SERVICE_BASE_URL=https://pcs.istio-gateway.backend.k8s.us-west-2.hcom-lab-decaf.aws.hcom/property_catalogue_svc
-      - APP_MVTSERVICE_BASE_URL=http://mvtsvc.nginx-ingress.backend.k8s.decaf.lab.us-west-2.hcom.cloud/mvtsvc
+      - APP_MVTSERVICE_BASE_URL=https://mvtsvc.istio-gateway.backend.k8s.us-west-2.hcom-lab-decaf.aws.hcom/mvtsvc
       - APP_LOC_CLIENT_SERVICE_URL=https://loms.nginx-ingress.backend.k8s.decaf.lab.us-west-2.hcom.cloud
       - APP_MVTCLIENT_HTTP_CLIENT_CONNECTION_TIMEOUT=10000
       - APP_MVTCLIENT_HTTP_CLIENT_SOCKET_TIMEOUT=15500
