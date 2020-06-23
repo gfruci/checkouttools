@@ -434,6 +434,8 @@ services:
       - APP_CAR_TRAWLER_SECURE_URL_ENABLED=false
       - APP_COUPON_SERVICE_HOST=checkito
       - APP_COUPON_SERVICE_PORT=8089
+      - APP_BRAVOS_API_DOMAIN_NAME=checkito
+      - APP_BRAVOS_API_PORT=8089
       - APP_PAYMENT_OPTION_SERVICE_HOST=checkito:8089
       - APP_PAYMENT_OPTION_SERVICE_URL=http://checkito:8089/PaymentOptions/v2
       - APP_bpins.baseUrl=https://checkito:8189
