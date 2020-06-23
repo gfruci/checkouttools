@@ -198,7 +198,6 @@ services:
 
       - APP_PROPERTY_CATALOGUE_SERVICE_BASE_URL=https://pcs.istio-gateway.backend.k8s.us-west-2.hcom-lab-decaf.aws.hcom/property_catalogue_svc
       - APP_MVTSERVICE_BASE_URL=https://mvtsvc.istio-gateway.backend.k8s.us-west-2.hcom-lab-decaf.aws.hcom/mvtsvc
-      - APP_LOC_CLIENT_SERVICE_URL=https://loms.istio-gateway.backend.k8s.us-west-2.hcom-lab-decaf.aws.hcom
       - APP_OMS_HMAC_AUTH_ENABLED=true
       - APP_OMS_CREATE_ORDER_SERVICE_URL=http://checkito:8089/OrderService?wsdl
       - APP_OMS_RETRIEVE_ORDER_SERVICE_URL=http://checkito:8089/OrderService?wsdl
@@ -303,7 +302,6 @@ services:
 
       - APP_PROPERTY_CATALOGUE_SERVICE_BASE_URL=https://pcs.istio-gateway.backend.k8s.us-west-2.hcom-lab-decaf.aws.hcom/property_catalogue_svc
       - APP_MVTSERVICE_BASE_URL=https://mvtsvc.istio-gateway.backend.k8s.us-west-2.hcom-lab-decaf.aws.hcom/mvtsvc
-      - APP_LOC_CLIENT_SERVICE_URL=https://loms.istio-gateway.backend.k8s.us-west-2.hcom-lab-decaf.aws.hcom
       - APP_OMS_HMAC_AUTH_ENABLED=true
       - APP_OMS_CREATE_ORDER_SERVICE_URL=https://create-oms.tslab.expedia.com/
       - APP_OMS_RETRIEVE_ORDER_SERVICE_URL=https://retrieve-oms.tslab.expedia.com/
@@ -436,8 +434,6 @@ services:
       - APP_CAR_TRAWLER_SECURE_URL_ENABLED=false
       - APP_COUPON_SERVICE_HOST=checkito
       - APP_COUPON_SERVICE_PORT=8089
-      - APP_BRAVOS_API_DOMAIN_NAME=checkito
-      - APP_BRAVOS_API_PORT=8089
       - APP_PAYMENT_OPTION_SERVICE_HOST=checkito:8089
       - APP_PAYMENT_OPTION_SERVICE_URL=http://checkito:8089/PaymentOptions/v2
       - APP_bpins.baseUrl=https://checkito:8189
