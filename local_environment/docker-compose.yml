@@ -204,7 +204,7 @@ services:
       - APP_ZIPKIN_SAMPLE_RATE=0
 
   ba_no_stub:
-    image: kumo-docker-release-local.artylab.expedia.biz/library/bookingapp:${BA_VERSION}
+    image: bookingapp:${BA_VERSION}
     container_name: ba
     ports:
       - "1901:1901"
