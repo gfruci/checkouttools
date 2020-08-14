@@ -59,7 +59,7 @@ services:
       - mvt:/mvt
 
   ba:
-    image: bookingapp:${BA_VERSION}
+    image: bookingapp:latest
     container_name: ba
     ports:
       - "1901:1901"
