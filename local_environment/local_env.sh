@@ -53,21 +53,21 @@ APPS=( "mvt" "ba" "bma" "bca" "pio" "bpe" "checkito" "styxpres" "nginx")
 app_cmd() {
     case "$1" in
         "mvt,update_cmd")
-            echo "docker pull 181651482125.dkr.ecr.us-west-2.amazonaws.com/hotels/mvt:latest >> ${SCRIPT_DIR}/logs/startup.log 2>&1";;
+            echo "docker pull kumo-docker-release-local.artylab.expedia.biz/library/hcom-mvt:latest >> ${SCRIPT_DIR}/logs/startup.log 2>&1";;
 
         "styxpres,start_status_cmd")
             echo "grep -i \"Started styx server in\" ${SCRIPT_DIR}/logs/styxpres.log";;
         "styxpres,stop_status_cmd")
             echo "grep -e \"styxpres.*ERROR\" ${SCRIPT_DIR}/logs/styxpres.log | grep -v \"locsClientLoader\"";;
         "styxpres,update_cmd")
-            echo "docker pull 181651482125.dkr.ecr.us-west-2.amazonaws.com/hotels/styxpres:release >> ${SCRIPT_DIR}/logs/startup.log 2>&1";;
+            echo "docker pull kumo-docker-release-local.artylab.expedia.biz/library/styxpres:release >> ${SCRIPT_DIR}/logs/startup.log 2>&1";;
 
         "checkito,start_status_cmd")
             echo "grep \"checkito.*Checkito listening for HTTPS requests\" ${SCRIPT_DIR}/logs/checkito.log";;
         "checkito,stop_status_cmd")
             echo "grep -e \"checkito.*ERROR\" ${SCRIPT_DIR}/logs/checkito.log";;
         "checkito,update_cmd")
-            echo "docker pull 181651482125.dkr.ecr.us-west-2.amazonaws.com/hotels/checkito:latest >> ${SCRIPT_DIR}/logs/startup.log 2>&1";;
+            echo "docker pull kumo-docker-release-local.artylab.expedia.biz/library/checkito:[tag] >> ${SCRIPT_DIR}/logs/startup.log 2>&1";;
 
         "nginx,start_status_cmd")
             echo "grep -e \"nginx.*done\" ${SCRIPT_DIR}/logs/nginx.log";;
@@ -141,18 +141,11 @@ function watch {
 }
 
 function login {
-    docker pull 181651482125.dkr.ecr.us-west-2.amazonaws.com/hotels/mvt:latest > /dev/null 2>&1
+    docker login kumo-docker-release-local.artylab.expedia.biz
 
     if [ $? -eq 1 ]; then
-        command -v docker_login > /dev/null 2>&1
-        if [ $? -eq 0 ]; then
-            echo -e "\n$COLOR_HEADER Login to Docker $COLOR_RESET"
-            docker_login
-        else
-            echo -e "\nOps, docker_login command not found, please login to docker manually!"
-            echo -e "For more info on docker_login command check https://confluence/display/HCOMCheckout/Payments+-+AWS+ECR+Docker+Login"
-            exit 1
-        fi
+        echo -e "\n$COLOR_ERROR Docker login failed! $COLOR_RESET"
+        exit 1
     fi
 }
 

@@ -5,7 +5,7 @@ volumes:
 services:
 
   styxpres:
-    image: 181651482125.dkr.ecr.us-west-2.amazonaws.com/hotels/styxpres:0.2.1086
+    image: kumo-docker-release-local.artylab.expedia.biz/library/styxpres:0.2.1086
     container_name: styxpres
     ports:
       - "9000:9000"
@@ -53,13 +53,13 @@ services:
       - ./certs/:/certs/
 
   mvt:
-    image: 181651482125.dkr.ecr.us-west-2.amazonaws.com/hotels/mvt:latest
+    image: kumo-docker-release-local.artylab.expedia.biz/library/hcom-mvt:latest
     container_name: mvt
     volumes:
       - mvt:/mvt
 
   ba:
-    image: 181651482125.dkr.ecr.us-west-2.amazonaws.com/hotels/ba:${BA_VERSION}
+    image: bookingapp:${BA_VERSION}
     container_name: ba
     ports:
       - "1901:1901"
@@ -204,7 +204,7 @@ services:
       - APP_ZIPKIN_SAMPLE_RATE=0
 
   ba_no_stub:
-    image: 181651482125.dkr.ecr.us-west-2.amazonaws.com/hotels/ba:${BA_VERSION}
+    image: kumo-docker-release-local.artylab.expedia.biz/library/bookingapp:${BA_VERSION}
     container_name: ba
     ports:
       - "1901:1901"
@@ -308,7 +308,7 @@ services:
       - APP_ZIPKIN_SAMPLE_RATE=0
 
   bma:
-    image: 181651482125.dkr.ecr.us-west-2.amazonaws.com/hotels/bma:${BMA_VERSION}
+    image: bookingmanagementapp:${BMA_VERSION}
     container_name: bma
     ports:
       - "2001:1901"
@@ -451,7 +451,7 @@ services:
       - APP_com.sun.management.jmxremote.rmi.port=38007
 
   bma_no_stub:
-    image: 181651482125.dkr.ecr.us-west-2.amazonaws.com/hotels/bma:${BMA_VERSION}
+    image: bookingmanagementapp:${BMA_VERSION}
     container_name: bma
     ports:
       - "2001:1901"
@@ -561,7 +561,7 @@ services:
       - APP_com.sun.management.jmxremote.rmi.port=38007
 
   bca:
-    image: 181651482125.dkr.ecr.us-west-2.amazonaws.com/hotels/bca:${BCA_VERSION}
+    image: bookingchangeapp:${BCA_VERSION}
     container_name: bca
     ports:
       - "2101:1901"
@@ -692,7 +692,7 @@ services:
       - APP_com.sun.management.jmxremote.rmi.port=38007
 
   bca_no_stub:
-    image: 181651482125.dkr.ecr.us-west-2.amazonaws.com/hotels/bca:${BCA_VERSION}
+    image: bookingchangeapp:${BCA_VERSION}
     container_name: bca
     ports:
       - "2101:1901"
@@ -795,7 +795,7 @@ services:
       - APP_com.sun.management.jmxremote.rmi.port=38007
 
   checkito:
-    image: 181651482125.dkr.ecr.us-west-2.amazonaws.com/hotels/checkito:latest
+    image: checkito:latest
     container_name: checkito
     ports:
       - "2201:1901"
@@ -813,7 +813,7 @@ services:
   #      - RUN_EMBEDDED_ETCD=true
 
   bpe:
-    image: 181651482125.dkr.ecr.us-west-2.amazonaws.com/hotels/bpe:${BPE_VERSION}
+    image: bookingpaymentedge:${BPE_VERSION}
     ports:
       - "8090:8080"
       - "8343:8443"
@@ -840,7 +840,7 @@ services:
   #  net: "host"::w
 
   pio:
-    image: 181651482125.dkr.ecr.us-west-2.amazonaws.com/hotels/pio:${PIO_VERSION}
+    image: paymentinitializationorchestrator:${PIO_VERSION}
     ports:
       - "8080:8080"
       - "2401:1901"
@@ -882,7 +882,7 @@ services:
       - APP_BPAS_ACCESS_PROTOCOL=http
 
   pio_no_stub:
-    image: 181651482125.dkr.ecr.us-west-2.amazonaws.com/hotels/pio:latest
+    image: paymentinitializationorchestrator:latest
     ports:
       - "8080:8080"
       - "2401:1901"
