@@ -59,7 +59,7 @@ services:
       - mvt:/mvt
 
   ba:
-    image: kumo-docker-release-local.artylab.expedia.biz/library/bookingapp:${BA_VERSION}
+    image: ${BA_VERSION}
     container_name: ba
     ports:
       - "1901:1901"
@@ -308,7 +308,7 @@ services:
       - APP_ZIPKIN_SAMPLE_RATE=0
 
   bma:
-    image: kumo-docker-release-local.artylab.expedia.biz/library/bookingmanagementapp:${BMA_VERSION}
+    image: ${BMA_VERSION}
     container_name: bma
     ports:
       - "2001:1901"
@@ -451,7 +451,7 @@ services:
       - APP_com.sun.management.jmxremote.rmi.port=38007
 
   bma_no_stub:
-    image: kumo-docker-release-local.artylab.expedia.biz/library/bookingmanagementapp:${BMA_VERSION}
+    image: ${BMA_VERSION}
     container_name: bma
     ports:
       - "2001:1901"
@@ -561,7 +561,7 @@ services:
       - APP_com.sun.management.jmxremote.rmi.port=38007
 
   bca:
-    image: kumo-docker-release-local.artylab.expedia.biz/library/bookingchangeapp:${BCA_VERSION}
+    image: ${BCA_VERSION}
     container_name: bca
     ports:
       - "2101:1901"
@@ -692,7 +692,7 @@ services:
       - APP_com.sun.management.jmxremote.rmi.port=38007
 
   bca_no_stub:
-    image: kumo-docker-release-local.artylab.expedia.biz/library/bookingchangeapp:${BCA_VERSION}
+    image: ${BCA_VERSION}
     container_name: bca
     ports:
       - "2101:1901"
