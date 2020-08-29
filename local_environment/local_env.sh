@@ -204,7 +204,16 @@ function start-app {
                 help
                 exit 1
             fi
-        fi
+		else
+			if [ "${BA_VERSION}" = "local" ]
+			then
+				echo "Using local build"
+				BA_VERSION="bookingapp:latest"
+			else
+				BA_VERSION="kumo-docker-release-local.artylab.expedia.biz/library/bookingapp:${BA_VERSION}"
+				echo "Using ba version: ${BA_VERSION}"
+			fi
+		fi
     fi
 
     if [ "${APP}" = "bma" ]
