@@ -49,25 +49,29 @@ DEBUG_OPTS="-Xdebug -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,addres
 export ORIGINS_PATH="/styxconf/origins.yaml"
 
 APPS=( "mvt" "ba" "bma" "bca" "pio" "bpe" "checkito" "styxpres" "nginx")
+DOCKER_IMAGE_PREFIX="kumo-docker-release-local.artylab.expedia.biz/library"
+BA_IMAGE_NAME="bookingapp"
+BMA_IMAGE_NAME="bookingchangeapp"
+BCA_IMAGE_NAME="bookingmanagementapp"
 
 app_cmd() {
     case "$1" in
         "mvt,update_cmd")
-            echo "docker pull kumo-docker-release-local.artylab.expedia.biz/library/hcom-mvt:latest >> ${SCRIPT_DIR}/logs/startup.log 2>&1";;
+            echo "docker pull ${DOCKER_IMAGE_PREFIX}/hcom-mvt:latest >> ${SCRIPT_DIR}/logs/startup.log 2>&1";;
 
         "styxpres,start_status_cmd")
             echo "grep -i \"Started styx server in\" ${SCRIPT_DIR}/logs/styxpres.log";;
         "styxpres,stop_status_cmd")
             echo "grep -e \"styxpres.*ERROR\" ${SCRIPT_DIR}/logs/styxpres.log | grep -v \"locsClientLoader\"";;
         "styxpres,update_cmd")
-            echo "docker pull kumo-docker-release-local.artylab.expedia.biz/library/styxpres:release >> ${SCRIPT_DIR}/logs/startup.log 2>&1";;
+            echo "docker pull ${DOCKER_IMAGE_PREFIX}/styxpres:release >> ${SCRIPT_DIR}/logs/startup.log 2>&1";;
 
         "checkito,start_status_cmd")
             echo "grep \"checkito.*Checkito listening for HTTPS requests\" ${SCRIPT_DIR}/logs/checkito.log";;
         "checkito,stop_status_cmd")
             echo "grep -e \"checkito.*ERROR\" ${SCRIPT_DIR}/logs/checkito.log";;
         "checkito,update_cmd")
-            echo "docker pull kumo-docker-release-local.artylab.expedia.biz/library/checkito:[tag] >> ${SCRIPT_DIR}/logs/startup.log 2>&1";;
+            echo "docker pull ${DOCKER_IMAGE_PREFIX}/checkito:[tag] >> ${SCRIPT_DIR}/logs/startup.log 2>&1";;
 
         "nginx,start_status_cmd")
             echo "grep -e \"nginx.*done\" ${SCRIPT_DIR}/logs/nginx.log";;
@@ -204,7 +208,16 @@ function start-app {
                 help
                 exit 1
             fi
-        fi
+		else
+			if [ "${BA_VERSION}" = "local" ]
+			then
+				echo "Using local build"
+				BA_VERSION="${BA_IMAGE_NAME}:latest"
+			else
+				BA_VERSION="${DOCKER_IMAGE_PREFIX}/${BA_IMAGE_NAME}:${BA_VERSION}"
+				echo "Using version: ${BA_VERSION}"
+			fi
+		fi
     fi
 
     if [ "${APP}" = "bma" ]
@@ -220,7 +233,16 @@ function start-app {
                 help
                 exit 1
             fi
-        fi
+		else
+			if [ "${BMA_VERSION}" = "local" ]
+			then
+				echo "Using local build"
+				BMA_VERSION="${BMA_IMAGE_NAME}:latest"
+			else
+				BMA_VERSION="${DOCKER_IMAGE_PREFIX}/${BMA_IMAGE_NAME}:${BMA_VERSION}"
+				echo "Using version: ${BMA_VERSION}"
+			fi
+		fi
     fi
 
     if [ "${APP}" = "bca" ]
@@ -236,7 +258,16 @@ function start-app {
                 help
                 exit 1
             fi
-        fi
+		else
+			if [ "${BCA_VERSION}" = "local" ]
+			then
+				echo "Using local build"
+				BCA_VERSION="${BMA_IMAGE_NAME}:latest"
+			else
+				BCA_VERSION="${DOCKER_IMAGE_PREFIX}/${BMA_IMAGE_NAME}:${BCA_VERSION}"
+				echo "Using version: ${BCA_VERSION}"
+			fi
+		fi
     fi
 
     if [ "${APP}" = "checkito" ]
@@ -386,6 +417,8 @@ function help {
     echo "start -ba-version <ba-version> [-no-stub] [-proxy] [-j8] Start the local environment, using the BA version: <ba-version>"
     echo "start -bma-version <bma-version> [-no-stub] [-proxy]      Start the local environment, using the BMA version: <bma-version>"
     echo "start -bca-version <bca-version> [-no-stub] [-proxy]      Start the local environment, using the BMA version: <bma-version>"
+	echo "                                                          Use 'local' as version to start up with local built image"
+	echo ""
     echo "stop                                                      Stop the local environment"
     echo "status                                                    Print the local environment status"
     echo "start-app <app_id>                                        Start only the specified app ($(for APP in "${APPS[@]}"; do echo -n " ${APP}"; done) )"

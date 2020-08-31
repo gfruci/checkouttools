@@ -59,7 +59,7 @@ services:
       - mvt:/mvt
 
   ba:
-    image: bookingapp:latest
+    image: ${BA_VERSION}
     container_name: ba
     ports:
       - "1901:1901"
@@ -204,7 +204,7 @@ services:
       - APP_ZIPKIN_SAMPLE_RATE=0
 
   ba_no_stub:
-    image: bookingapp:latest
+    image: ${BA_VERSION}
     container_name: ba
     ports:
       - "1901:1901"
@@ -308,7 +308,7 @@ services:
       - APP_ZIPKIN_SAMPLE_RATE=0
 
   bma:
-    image: bookingmanagementapp:latest
+    image: ${BMA_VERSION}
     container_name: bma
     ports:
       - "2001:1901"
@@ -451,7 +451,7 @@ services:
       - APP_com.sun.management.jmxremote.rmi.port=38007
 
   bma_no_stub:
-    image: bookingmanagementapp:latest
+    image: ${BMA_VERSION}
     container_name: bma
     ports:
       - "2001:1901"
@@ -561,7 +561,7 @@ services:
       - APP_com.sun.management.jmxremote.rmi.port=38007
 
   bca:
-    image: bookingchangeapp:latest
+    image: ${BCA_VERSION}
     container_name: bca
     ports:
       - "2101:1901"
@@ -692,7 +692,7 @@ services:
       - APP_com.sun.management.jmxremote.rmi.port=38007
 
   bca_no_stub:
-    image: bookingchangeapp:latest
+    image: ${BCA_VERSION}
     container_name: bca
     ports:
       - "2101:1901"
