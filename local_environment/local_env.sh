@@ -262,9 +262,9 @@ function start-app {
 			if [ "${BCA_VERSION}" = "local" ]
 			then
 				echo "Using local build"
-				BCA_VERSION="${BMA_IMAGE_NAME}:latest"
+				BCA_VERSION="${BCA_IMAGE_NAME}:latest"
 			else
-				BCA_VERSION="${DOCKER_IMAGE_PREFIX}/${BMA_IMAGE_NAME}:${BCA_VERSION}"
+				BCA_VERSION="${DOCKER_IMAGE_PREFIX}/${BCA_IMAGE_NAME}:${BCA_VERSION}"
 				echo "Using version: ${BCA_VERSION}"
 			fi
 		fi
