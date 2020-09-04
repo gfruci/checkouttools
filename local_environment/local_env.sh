@@ -51,8 +51,8 @@ export ORIGINS_PATH="/styxconf/origins.yaml"
 APPS=( "mvt" "ba" "bma" "bca" "pio" "bpe" "checkito" "styxpres" "nginx")
 DOCKER_IMAGE_PREFIX="kumo-docker-release-local.artylab.expedia.biz/library"
 BA_IMAGE_NAME="bookingapp"
-BMA_IMAGE_NAME="bookingchangeapp"
-BCA_IMAGE_NAME="bookingmanagementapp"
+BMA_IMAGE_NAME="bookingmanagementapp"
+BCA_IMAGE_NAME="bookingchangeapp"
 
 app_cmd() {
     case "$1" in
@@ -417,8 +417,8 @@ function help {
     echo "start -ba-version <ba-version> [-no-stub] [-proxy] [-j8] Start the local environment, using the BA version: <ba-version>"
     echo "start -bma-version <bma-version> [-no-stub] [-proxy]      Start the local environment, using the BMA version: <bma-version>"
     echo "start -bca-version <bca-version> [-no-stub] [-proxy]      Start the local environment, using the BMA version: <bma-version>"
-	echo "                                                          Use 'local' as version to start up with local built image"
-	echo ""
+	  echo "                                                          Use 'local' as version to start up with local built image"
+	  echo ""
     echo "stop                                                      Stop the local environment"
     echo "status                                                    Print the local environment status"
     echo "start-app <app_id>                                        Start only the specified app ($(for APP in "${APPS[@]}"; do echo -n " ${APP}"; done) )"
