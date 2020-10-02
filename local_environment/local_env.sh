@@ -27,9 +27,11 @@ cd ${PREV_DIR}
 if [[ "$OSTYPE" == "darwin" ]]; then
     PROXY_CONFIG="-Dhttp.proxyHost=docker.for.mac.localhost -Dhttp.proxyPort=8888 -Dhttps.proxyHost=docker.for.mac.localhost -Dhttps.proxyPort=8888 -DproxyHost=docker.for.mac.localhost -DproxyPort=8888"
 elif [[ "$OSTYPE" == "win32" ]]; then
+    LOGIN_COMMAND_PREFIX="winpty"
     PROXY_CONFIG="-Dhttp.proxyHost=docker.for.win.localhost -Dhttp.proxyPort=8888 -Dhttps.proxyHost=docker.for.win.localhost -Dhttps.proxyPort=8888 -DproxyHost=docker.for.win.localhost -DproxyPort=8888"
 elif [[ "$OSTYPE" == "msys" ]]; then
     PROXY_CONFIG="-Dhttp.proxyHost=docker.for.win.localhost -Dhttp.proxyPort=8888 -Dhttps.proxyHost=docker.for.win.localhost -Dhttps.proxyPort=8888 -DproxyHost=docker.for.win.localhost -DproxyPort=8888"
+    LOGIN_COMMAND_PREFIX="winpty"
 else
     PROXY_CONFIG="-Dhttp.proxyHost=docker.for.mac.localhost -Dhttp.proxyPort=8888 -Dhttps.proxyHost=docker.for.mac.localhost -Dhttps.proxyPort=8888 -DproxyHost=docker.for.mac.localhost -DproxyPort=8888"
 fi
@@ -145,7 +147,7 @@ function watch {
 }
 
 function login {
-    docker login kumo-docker-release-local.artylab.expedia.biz
+    eval "$LOGIN_COMMAND_PREFIX docker login kumo-docker-release-local.artylab.expedia.biz"
 
     if [ $? -eq 1 ]; then
         echo -e "\n$COLOR_ERROR Docker login failed! $COLOR_RESET"
