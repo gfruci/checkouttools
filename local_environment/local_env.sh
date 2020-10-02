@@ -415,24 +415,29 @@ function status {
 function help {
     echo "Usage: $0 <command> <options>"
     echo "Commands:"
-    echo "start [-proxy]                                            Start the local environment, with no front-end apps (BA)"
-    echo "start -ba-version <ba-version> [-no-stub] [-proxy] [-j8] Start the local environment, using the BA version: <ba-version>"
-    echo "start -bma-version <bma-version> [-no-stub] [-proxy]      Start the local environment, using the BMA version: <bma-version>"
-    echo "start -bca-version <bca-version> [-no-stub] [-proxy]      Start the local environment, using the BMA version: <bma-version>"
+    echo "./local_env.sh start [-proxy]                                            Start the local environment, with no front-end apps (BA)"
+    echo "./local_env.sh start -ba-version <ba-version> [-no-stub] [-proxy] [-j8] Start the local environment, using the BA version: <ba-version>"
+    echo "./local_env.sh start -bma-version <bma-version> [-no-stub] [-proxy]      Start the local environment, using the BMA version: <bma-version>"
+    echo "./local_env.sh start -bca-version <bca-version> [-no-stub] [-proxy]      Start the local environment, using the BMA version: <bma-version>"
 	  echo "                                                          Use 'local' as version to start up with local built image"
 	  echo ""
-    echo "stop                                                      Stop the local environment"
-    echo "status                                                    Print the local environment status"
-    echo "start-app <app_id>                                        Start only the specified app ($(for APP in "${APPS[@]}"; do echo -n " ${APP}"; done) )"
-    echo "stop-app <app_id>                                         Stop only the specified app ($(for APP in "${APPS[@]}"; do echo -n " ${APP}"; done) )"
-    echo "update [<app_id>]                                         Update local environment scripts, along with the specified app ( styxpres chekito mvt )."
+    echo "./local_env.sh stop                                                      Stop the local environment"
+    echo "./local_env.sh status                                                    Print the local environment status"
+    echo "./local_env.sh start-app <app_id>                                        Start only the specified app ($(for APP in "${APPS[@]}"; do echo -n " ${APP}"; done) )"
+    echo "./local_env.sh stop-app <app_id>                                         Stop only the specified app ($(for APP in "${APPS[@]}"; do echo -n " ${APP}"; done) )"
+    echo "./local_env.sh update [<app_id>]                                         Update local environment scripts, along with the specified app ( styxpres chekito mvt )."
     echo "                                                          By default updates styxpres, chekito and mvt docker images"
+    echo
+    echo "Example ba start: ./local_env.sh start -ba-verion [#version]"
+    echo "Example bma start: ./local_env.sh start -bma-verion [#version]"
     echo
     echo "Options:"
     echo "-no-stub                                                  Start the local environment without using checkito as mocking server (by default is using Checkito)"
     echo "-proxy                                                    Set the local environment proxy host to docker.for.mac.localhost:8888"
     echo "-j8                                                       Sets Java 8 related options"
     echo "-suit                                                     Configures which suit will be used with checkito"
+    echo
+    echo "For any other help, please check out README at https://github.expedia.biz/hotels-checkout/checkouttools/blob/master/local_environment/README.md"
     exit 0
 }
 
