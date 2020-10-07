@@ -24,13 +24,13 @@ services:
       - JVM_OTHER_MEM=-XX:CompressedClassSpaceSize=20m -XX:InitialCodeCacheSize=50m -XX:ReservedCodeCacheSize=50m
       - JVM_HEAP_DUMP=-XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/var/tmp
       - JAVA_OPTS= -Dfile.encoding=UTF-8
-      - VAULT_ADDR=https://vault.lab.hcom
+      - VAULT_ADDR=https://vault.us-west-2.shared-lab.aws.hcom
       - INSTANCE_NAME=staging1-styxpres-01
       - APPLICATION_NAME=styxpres
-      - SECRETS_PATH=secret/app/styxpres/staging
+      - SECRETS_PATH=styxpres/kv-v2
       - FETCH_CREDENTIALS=1
-      - VAULT_ROLE_ID=8c120b81-dca6-28a8-c1de-208792e1500a
-      - VAULT_SECRET_ID=a140e913-26ef-9b2c-59be-a62ffc070592
+      - VAULT_ROLE_ID=b45e739a-b6be-97cd-a9f5-98464e4e5c9c
+      - VAULT_SECRET_ID=1b51a1d7-2955-2bd8-5533-cad18b4c5a28
       - JVM_OTHER_OPTS=-Dplugins.all.dionysus.config.i18nServiceConfig.clientConfigSettings.maxRetries=0
       - APP_DIONYSUS_PLUGIN_DISPATCHER_APP_BASE_URL=//a.staging1-cdn-hotels.com/uswest2/da
       - APP_DIONYSUS_PLUGIN_ASSETS_BASE_URL=a.staging1-cdn-hotels.com/uswest2/da/assets
