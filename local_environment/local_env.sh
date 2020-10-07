@@ -145,7 +145,7 @@ function watch {
 }
 
 function login {
-	docker login kumo-docker-release-local.artylab.expedia.biz || echo "You're using windows and git bash and these can not understand some commands. Try to use bash (near to your sh command under git/bin) to run the script"
+    docker login kumo-docker-release-local.artylab.expedia.biz || echo "You're using windows and git bash and these can not understand some commands. Try to use bash (near to your sh command under git/bin) to run the script"
 
     if [ $? -eq 1 ]; then
         echo -e "\n$COLOR_ERROR Docker login failed! $COLOR_RESET"
