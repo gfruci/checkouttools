@@ -326,6 +326,7 @@ function start-app {
     else
         echo -e "\n$COLOR_ERROR Error: ${APP} start error $COLOR_RESET"
         type terminal-notifier &>/dev/null && terminal-notifier -title "LESS" -message "📛 ${APP} start error" -sound 'default' -sender "com.apple.launchpad.launcher"
+	echo "Please check out README at https://github.expedia.biz/hotels-checkout/checkouttools/blob/master/local_environment/README.md, it contains several types of error and fixes."
         if [ "${START_MODE}" = "start-all" ]
         then
             stop
@@ -426,8 +427,16 @@ function help {
     echo "./local_env.sh update [<app_id>]                                         Update local environment scripts, along with the specified app ( styxpres chekito mvt )."
     echo "                                                          By default updates styxpres, chekito and mvt docker images"
     echo
-    echo "Example ba start: ./local_env.sh start -ba-verion [#version]"
-    echo "Example bma start: ./local_env.sh start -bma-verion [#version]"
+    echo "Start environment related services without any application (no checkito):"
+    echo "./local-env.sh start -no-stub"
+    echo "BA start examples:"
+    echo "./local_env.sh start-app ba -ba-version local -no-stub"
+    echo "./local_env.sh start-app ba -ba-version bf0538ab789c71793aa2c025400d884813c7bc18 -no-stub"
+    echo "./local_env.sh start-app ba -ba-version af092f20f5bc06af679259d6125c7eb8544c6b44-18627 -no-stub"
+    echo "BA start examples:"
+    echo "./local_env.sh start-app bma -bma-version local -no-stub"
+    echo "./local_env.sh start-app bma -bma-version dd95b6bc40cfb4227aa4738236fba516e87df669 -no-stub"
+    echo "./local_env.sh start-app bma -bma-version dd95b6bc40cfb4227aa4738236fba516e87df669-18627 -no-stub"
     echo
     echo "Options:"
     echo "-no-stub                                                  Start the local environment without using checkito as mocking server (by default is using Checkito)"
