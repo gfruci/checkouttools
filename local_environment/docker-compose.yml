@@ -828,9 +828,9 @@ services:
       - APP_com.sun.management.jmxremote.ssl=false
       - APP_com.sun.management.jmxremote.rmi.port=33661
       - APP_spring.profiles.active=default
-      - APP_VAULT_ADDR=https://vault.lab.hcom
+      - APP_VAULT_ADDR=https://vault.us-west-2.shared-lab.aws.hcom
       - APP_VAULT_USER_ID=staging-bpe-01
-      - APP_VAULT_SECRETS_REMOTE_PATH=secret/app/bpe
+      - APP_VAULT_SECRETS_REMOTE_PATH=bpe/kv
       - APP_VAULT_SECRETS_LOCAL_DIR=/home/hcom/secrets
       - APP_VAULT_APP_ID=bpe
       - APP_VAULT_CERT_DIR=pki/exp/20230314
