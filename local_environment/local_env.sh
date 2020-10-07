@@ -433,7 +433,8 @@ function help {
     echo "./local_env.sh start-app ba -ba-version local -no-stub"
     echo "./local_env.sh start-app ba -ba-version bf0538ab789c71793aa2c025400d884813c7bc18 -no-stub"
     echo "./local_env.sh start-app ba -ba-version af092f20f5bc06af679259d6125c7eb8544c6b44-18627 -no-stub"
-    echo "BA start examples:"
+    echo 
+    echo "BMA start examples:"
     echo "./local_env.sh start-app bma -bma-version local -no-stub"
     echo "./local_env.sh start-app bma -bma-version dd95b6bc40cfb4227aa4738236fba516e87df669 -no-stub"
     echo "./local_env.sh start-app bma -bma-version dd95b6bc40cfb4227aa4738236fba516e87df669-18627 -no-stub"
