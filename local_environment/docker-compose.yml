@@ -5,7 +5,7 @@ volumes:
 services:
 
   styxpres:
-    image: kumo-docker-release-local.artylab.expedia.biz/library/styxpres:e42e93a64926cb31cb2b0ae18f61d272b16c8201
+    image: kumo-docker-release-local.artylab.expedia.biz/library/styxpres:0.2.1086
     container_name: styxpres
     ports:
       - "9000:9000"
