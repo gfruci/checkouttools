@@ -25,6 +25,7 @@ services:
       - JVM_HEAP_DUMP=-XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/var/tmp
       - JAVA_OPTS= -Dfile.encoding=UTF-8
       - VAULT_ADDR=https://vault.us-west-2.shared-lab.aws.hcom
+      - VAULT_ENGINE=kv-v2
       - INSTANCE_NAME=staging1-styxpres-01
       - APPLICATION_NAME=styxpres
       - SECRETS_PATH=styxpres/kv-v2
