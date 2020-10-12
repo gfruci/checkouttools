@@ -352,7 +352,7 @@ services:
       - APP_BPAS_ON_PAYMENT_OPTION_REQUEST_CIRCUIT_BREAKER_TIMEOUT_MS=60000
       - APP_PASSBOOK_CERTIFICATES_LOCATION_HCOM=/hcom/globalconf/hotels.com/PassKeyCert.p12
       - APP_PASSBOOK_WWDR_CERTIFICATE_LOCATION=/hcom/globalconf/wwdr.pem
-      - APP_OMS_RETRIEVE_ORDER_SERVICE_URL=https://retrieve-oms.tslab.expedia.com
+      - APP_OMS_RETRIEVE_ORDER_SERVICE_URL=https://charon-maui.test.fctsordering.expedia.com/retrieve
       - APP_HEADER_SERVICE_URL="http://csvc.istio-gateway.backend.k8s.us-west-2.hcom-lab-decaf.aws.hcom/component_svc"
       - APP_BRS_BASE_URL=http://brs.istio-gateway.backend.k8s.us-west-2.hcom-lab-decaf.aws.hcom
 
