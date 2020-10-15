@@ -291,7 +291,7 @@ function start-app {
             echo "Error! BPE version NOT specified (missing -bpe-version parameter)!"
             return 1
         fi
-        PIO_CONTAINER_ID=$(docker container ls | grep '/paymentinitializationorchestrator:' | tail -1 | awk -F ' ' '{print $1}')
+        PIO_CONTAINER_ID=$(docker container ls | grep 'paymentinitializationorchestrator:' | tail -1 | awk -F ' ' '{print $1}')
         PIO_LOCAL_HOST=$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' $PIO_CONTAINER_ID)
         export PIO_LOCAL_HOST
     fi
