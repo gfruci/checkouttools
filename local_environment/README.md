@@ -67,24 +67,10 @@ For more details on how to migrate from Docker Toolbox read these:
 * https://docs.docker.com/docker-for-mac/docker-toolbox/
 * https://wiki.hcom/display/HTS/Upgrading+to+Docker+for+Mac
 
-### Login to the registry
+### Login to the registry using your SEA credentials
 
-Setup you docker login script by following the guide at: https://confluence/display/HCOMCheckout/Payments+-+AWS+ECR+Docker+Login
-
-Login to registry using your SEA credentials
-
-    docker_login
-----
-*[WINDOWS]*:
-If you're using Git BASH and you get the following error:
-
-    Error: Cannot perform an interactive login from a non TTY device
-
-you need to use the following command to login:
-
-    winpty docker_login
-----
-
+    docker login kumo-docker-release-local.artylab.expedia.biz
+    
 ### Increase the docker resources
 
 In `Docker -> Preferences -> Advanced`
