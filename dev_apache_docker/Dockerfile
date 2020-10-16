@@ -1,4 +1,4 @@
-FROM registry.docker.hcom/hotels/apache:latest
+FROM kumo-docker-release-local.artylab.expedia.biz/library/apache:latest
 MAINTAINER Checkout SDET Team <HcomTechCKOSDETs@expedia.com>
 
 COPY dev-rewrite.rules /tmp/overrides.rules

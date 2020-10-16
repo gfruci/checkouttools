@@ -44,7 +44,7 @@ services:
       - ./logs/styxpres/:/hcom/servers/styx/logs/
 
   nginx:
-    image: nginx:1.17.9-alpine
+    image: public-docker-virtual.artylab.expedia.biz/nginx:1.17.9-alpine
     container_name: nginx
     ports:
       - "443:443"
@@ -807,7 +807,7 @@ services:
       - SUIT=${SUIT}
 
   #  configsvc:
-  #    image: 181651482125.dkr.ecr.us-west-2.amazonaws.com/hotels/cws:latest
+  #    image: cws:latest
   #    container_name: cws
   #    ports:
   #      - "8280:8080"
