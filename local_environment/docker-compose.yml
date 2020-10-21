@@ -547,6 +547,7 @@ services:
       - APP_WEBSITE_DOMAIN_DISCRIMINATOR=dev-
       - APP_OMS_HMAC_AUTH_ENABLED=true
       - APP_MVTSERVICE_BASE_URL=https://mvtsvc.istio-gateway.backend.k8s.us-west-2.hcom-lab-decaf.aws.hcom/mvtsvc
+      - APP_LOCALIZED_VALUE_ADD_PROMOTIONS_API_HOST=https://las-int.test.lodgingshared.expedia.com
 
 
       # Not supported on checkito yet
