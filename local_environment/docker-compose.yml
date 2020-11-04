@@ -799,7 +799,7 @@ services:
       - APP_com.sun.management.jmxremote.rmi.port=38007
 
   checkito:
-    image: 181651482125.dkr.ecr.us-west-2.amazonaws.com/hotels/checkito:latest
+    image: ${CHECKITO_VERSION}
     container_name: checkito
     ports:
       - "2201:1901"

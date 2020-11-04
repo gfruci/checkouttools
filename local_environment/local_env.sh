@@ -268,7 +268,7 @@ function start-app {
         then
             return 1
         fi
-
+        export CHECKITO_VERSION="${DOCKER_IMAGE_PREFIX}/checkito:${CHECKITO_VERSION:-latest}"
         export SUIT
     fi
 
