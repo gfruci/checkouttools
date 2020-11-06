@@ -80,7 +80,6 @@ services:
       - APP_METRICS_BOOTSTRAPPER_HEALTH_CHECK_REGISTRATION_ENABLED=false
       - APP_COOKIELESS_DOMAIN_STATIC_ASSETS=a.staging1-cdn-hotels.com
       - APP_CURRENCY_EXCHANGE_RATE_PROPERTY_FILE_REQUIRED_AT_STARTUP=false
-      - APP_MVT_BUSINESS_CONFIGURATION_LOCATION=file:///mvt/
       - APP_EMAIL_TEMPLATES_BASEPATH=file:./appconfig/templates/
       - APP_LIS_EAPID=0
       - APP_BOOKING_SEND_CONFIRMATION_SMS=false
@@ -198,7 +197,9 @@ services:
       - APP_com.sun.management.jmxremote.rmi.port=38007
 
       - APP_PROPERTY_CATALOGUE_SERVICE_BASE_URL=https://pcs.istio-gateway.backend.k8s.us-west-2.hcom-lab-decaf.aws.hcom/property_catalogue_svc
+      - APP_MVT_BUSINESS_CONFIGURATION_LOCATION=file:///mvt/
       - APP_MVTSERVICE_BASE_URL=https://mvtsvc.istio-gateway.backend.k8s.us-west-2.hcom-lab-decaf.aws.hcom/mvtsvc
+      - APP_MVTCLIENT_TIMEOUT_IN_MILLISECONDS=2000
       - APP_OMS_HMAC_AUTH_ENABLED=true
       - APP_OMS_CREATE_ORDER_SERVICE_URL=http://checkito:8089/OrderService?wsdl
       - APP_OMS_RETRIEVE_ORDER_SERVICE_URL=http://checkito:8089/OrderService?wsdl
@@ -798,7 +799,7 @@ services:
       - APP_com.sun.management.jmxremote.rmi.port=38007
 
   checkito:
-    image: checkito:latest
+    image: ${CHECKITO_VERSION}
     container_name: checkito
     ports:
       - "2201:1901"

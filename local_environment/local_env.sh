@@ -24,15 +24,7 @@ cd ${PREV_DIR}
 # CONFIGS #
 #########################
 
-if [[ "$OSTYPE" == "darwin" ]]; then
-    PROXY_CONFIG="-Dhttp.proxyHost=docker.for.mac.localhost -Dhttp.proxyPort=8888 -Dhttps.proxyHost=docker.for.mac.localhost -Dhttps.proxyPort=8888 -DproxyHost=docker.for.mac.localhost -DproxyPort=8888"
-elif [[ "$OSTYPE" == "win32" ]]; then
-    PROXY_CONFIG="-Dhttp.proxyHost=docker.for.win.localhost -Dhttp.proxyPort=8888 -Dhttps.proxyHost=docker.for.win.localhost -Dhttps.proxyPort=8888 -DproxyHost=docker.for.win.localhost -DproxyPort=8888"
-elif [[ "$OSTYPE" == "msys" ]]; then
-    PROXY_CONFIG="-Dhttp.proxyHost=docker.for.win.localhost -Dhttp.proxyPort=8888 -Dhttps.proxyHost=docker.for.win.localhost -Dhttps.proxyPort=8888 -DproxyHost=docker.for.win.localhost -DproxyPort=8888"
-else
-    PROXY_CONFIG="-Dhttp.proxyHost=docker.for.mac.localhost -Dhttp.proxyPort=8888 -Dhttps.proxyHost=docker.for.mac.localhost -Dhttps.proxyPort=8888 -DproxyHost=docker.for.mac.localhost -DproxyPort=8888"
-fi
+PROXY_CONFIG="-Dhttp.proxyHost=${DOCKER_GATEWAY_HOST:-host.docker.internal} -Dhttp.proxyPort=8888 -Dhttps.proxyHost=${DOCKER_GATEWAY_HOST:-host.docker.internal} -Dhttps.proxyPort=8888 -DproxyHost=${DOCKER_GATEWAY_HOST:-host.docker.internal} -DproxyPort=8888"
 
 START_MODE=
 BA_VERSION=
@@ -276,7 +268,7 @@ function start-app {
         then
             return 1
         fi
-
+        export CHECKITO_VERSION="${DOCKER_IMAGE_PREFIX}/checkito:${CHECKITO_VERSION:-latest}"
         export SUIT
     fi
 
