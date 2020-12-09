@@ -71,7 +71,7 @@ do
   echo "$KEYSTORE" >> $FILE_NAME
   echo "----------------------------------------------------------------------------------------------" >> $FILE_NAME
   echo >> $FILE_NAME
-  echo "-------------------------------------- truststore_base64 ---------------------------------------" >> $FILE_NAME
+  echo "-------------------------------------- truststore_base64 -------------------------------------" >> $FILE_NAME
 
   echo "Getting truststore for $env..."
   TRUSTSTORE=$(curl -k -s -L -X POST \
@@ -94,5 +94,5 @@ do
 
   echo "Truststore donwloaded with success for $env..."
   echo "$TRUSTSTORE" >> $FILE_NAME
-  echo "------------------------------------------------------------------------------------------------" >> $FILE_NAME
+  echo "----------------------------------------------------------------------------------------------" >> $FILE_NAME
 done
