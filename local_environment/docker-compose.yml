@@ -127,7 +127,7 @@ services:
       - APP_UDT_DB_PORT_AWS_US_WEST_2=9042
 
       # Development overrides
-      - JAVA_JVM_ARGS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:1901 ${PROXY_CONFIG}
+      - JAVA_JVM_ARGS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:1901 -Djdk.tls.client.protocols=TLSv1.2 ${PROXY_CONFIG}
       - APP_UNIFIED_DATA_TOOLKIT_ENABLED=true
       - APP_LOCALIZATION_MESSAGE_PARALLEL_INITIALIZATION_ENABLED=true
       - APP_MVT_CONFIGURATION_PARALLEL_INITIALIZATION_ENABLED=true
@@ -278,7 +278,7 @@ services:
       - APP_UDT_DB_PORT_AWS_US_WEST_2=9042
 
       # Development overrides
-      - JAVA_JVM_ARGS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:1901 ${PROXY_CONFIG}
+      - JAVA_JVM_ARGS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:1901 -Djdk.tls.client.protocols=TLSv1.2 ${PROXY_CONFIG}
       - APP_UNIFIED_DATA_TOOLKIT_ENABLED=true
       - APP_LOCALIZATION_MESSAGE_PARALLEL_INITIALIZATION_ENABLED=true
       - APP_MVT_CONFIGURATION_PARALLEL_INITIALIZATION_ENABLED=true
@@ -387,7 +387,7 @@ services:
       - APP_UDT_DB_PORT_AWS_US_WEST_2=9042
 
       # Development overrides
-      - JAVA_JVM_ARGS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:1901 ${PROXY_CONFIG}
+      - JAVA_JVM_ARGS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:1901 -Djdk.tls.client.protocols=TLSv1.2 ${PROXY_CONFIG}
       - APP_UNIFIED_DATA_TOOLKIT_ENABLED=true
       - APP_LOCALIZATION_MESSAGE_PARALLEL_INITIALIZATION_ENABLED=true
       - APP_MVT_CONFIGURATION_PARALLEL_INITIALIZATION_ENABLED=true
@@ -541,7 +541,7 @@ services:
       - APP_UDT_DB_PORT_AWS_US_WEST_2=9042
 
       # Development overrides
-      - JAVA_JVM_ARGS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:1901 ${PROXY_CONFIG}
+      - JAVA_JVM_ARGS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:1901 -Djdk.tls.client.protocols=TLSv1.2 ${PROXY_CONFIG}
       - APP_UNIFIED_DATA_TOOLKIT_ENABLED=true
       - APP_LOCALIZATION_MESSAGE_PARALLEL_INITIALIZATION_ENABLED=true
       - APP_MVT_CONFIGURATION_PARALLEL_INITIALIZATION_ENABLED=true
@@ -637,7 +637,7 @@ services:
       - APP_audit.kafka.metadata.broker.list=kafka-broker-cds-1.us-west-2.hcom-lab-decaf.aws.hcom:9092,kafka-broker-cds-2.us-west-2.hcom-lab-decaf.aws.hcom:9092,kafka-broker-cds-3.us-west-2.hcom-lab-decaf.aws.hcom:9092
 
       # Development overrides
-      - JAVA_JVM_ARGS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:1901 ${PROXY_CONFIG}
+      - JAVA_JVM_ARGS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:1901 -Djdk.tls.client.protocols=TLSv1.2 ${PROXY_CONFIG}
       - APP_UNIFIED_DATA_TOOLKIT_ENABLED=true
       - APP_LOCALIZATION_MESSAGE_PARALLEL_INITIALIZATION_ENABLED=true
       - APP_MVT_CONFIGURATION_PARALLEL_INITIALIZATION_ENABLED=true
@@ -776,7 +776,7 @@ services:
       - APP_audit.kafka.metadata.broker.list=kafka-broker-cds-1.us-west-2.hcom-lab-decaf.aws.hcom:9092,kafka-broker-cds-2.us-west-2.hcom-lab-decaf.aws.hcom:9092,kafka-broker-cds-3.us-west-2.hcom-lab-decaf.aws.hcom:9092
 
       # Development overrides
-      - JAVA_JVM_ARGS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:1901 ${PROXY_CONFIG}
+      - JAVA_JVM_ARGS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:1901 -Djdk.tls.client.protocols=TLSv1.2 ${PROXY_CONFIG}
       - APP_UNIFIED_DATA_TOOLKIT_ENABLED=true
       - APP_LOCALIZATION_MESSAGE_PARALLEL_INITIALIZATION_ENABLED=true
       - APP_MVT_CONFIGURATION_PARALLEL_INITIALIZATION_ENABLED=true
