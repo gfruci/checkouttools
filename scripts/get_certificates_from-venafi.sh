@@ -53,7 +53,7 @@ do
         -H "Content-Type: application/json" \
         -H "Authorization: Bearer $TOKEN" \
         -d "{
-                \"CertificateDN\":\"\\\\VED\\\\Policy\\\\ExpediaGroup Applications\\\\Expedia\\\\StreamPlatform\\\\$env\\\\customers\\\\$SERVICE_ACCOUNT\\\\$SERVICE_ACCOUNT.$env.lcl\",
+                \"CertificateDN\":\"\\\\VED\\\\Policy\\\\EG Custom\\\\StreamPlatform\\\\$env\\\\customers\\\\$SERVICE_ACCOUNT\\\\$SERVICE_ACCOUNT.$env.lcl\",
                 \"Format\":\"JKS\",
                 \"IncludeChain\":\"false\",
                 \"RootFirstOrder\":\"true\",
@@ -78,7 +78,7 @@ do
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $TOKEN" \
           -d "{
-                  \"CertificateDN\":\"\\\\VED\\\\Policy\\\\ExpediaGroup Applications\\\\Expedia\\\\StreamPlatform\\\\$env\\\\customers\\\\$SERVICE_ACCOUNT\\\\$SERVICE_ACCOUNT.$env.lcl\",
+                  \"CertificateDN\":\"\\\\VED\\\\Policy\\\\EG Custom\\\\StreamPlatform\\\\$env\\\\customers\\\\$SERVICE_ACCOUNT\\\\$SERVICE_ACCOUNT.$env.lcl\",
                   \"Format\":\"JKS\",
                   \"IncludeChain\":\"true\",
                   \"RootFirstOrder\":\"true\",
