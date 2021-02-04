@@ -307,8 +307,8 @@ services:
       - APP_PROPERTY_CATALOGUE_SERVICE_BASE_URL=https://pcs.istio-gateway.backend.k8s.us-west-2.hcom-lab-decaf.aws.hcom/property_catalogue_svc
       - APP_MVTSERVICE_BASE_URL=https://mvtsvc.istio-gateway.backend.k8s.us-west-2.hcom-lab-decaf.aws.hcom/mvtsvc
       - APP_OMS_HMAC_AUTH_ENABLED=true
-      - APP_OMS_CREATE_ORDER_SERVICE_URL=https://create-oms.tslab.expedia.com/
-      - APP_OMS_RETRIEVE_ORDER_SERVICE_URL=https://retrieve-oms.tslab.expedia.com/
+      - APP_OMS_CREATE_ORDER_SERVICE_URL=https://charon-maui.test.fctsordering.expedia.com/create
+      - APP_OMS_RETRIEVE_ORDER_SERVICE_URL=https://charon-maui.test.fctsordering.expedia.com/retrieve
       - APP_ZIPKIN_SAMPLE_RATE=0
 
   bma:
