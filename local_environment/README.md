@@ -2,7 +2,7 @@
 
 The CKO local environment aims to simplify development and testing of checkout FE apps in local.
 
-It leverage the [local-app-server](http://stash.hcom/projects/STYX/repos/local-app-server/browse) to serve the CKO FE apps HTML pages using the dionysus styx plugin.
+It leverages the [local-app-server](https://github.expedia.biz/hotels-platform/local-app-server) to serve the CKO FE apps HTML pages using the dionysus styx plugin.
 
 ![local_env](assets/local_env_arch.png)
 
@@ -18,7 +18,7 @@ TBW
 
 ### Windows pre-requirements
 
-To facilitate the maintainance, there is a single (_bash_) script to set up the environment.
+To facilitate the maintenance, there is a single (_bash_) script to set up the environment.
 
 To run it on Windows, *Git BASH* is strongly recommended. It can be downloaded form https://gitforwindows.org/.
 If you're already using another BASH emulation tool you can use that one as well.
@@ -37,7 +37,7 @@ Download, install and launch Docker CE
 * WIN: https://store.docker.com/editions/community/docker-ce-desktop-windows
 * MAC: https://store.docker.com/editions/community/docker-ce-desktop-mac
 
-**Note:** If your are migrating from Docker Toolbox you will be asked to import your existing docker machine.
+**Note:** If you are migrating from Docker Toolbox you will be asked to import your existing docker machine.
 In case you have any docker image that you want to keep, select "Copy" - Otherwise "Skip"
 
 ![copy docker machine](assets/copy_docker_machine.png)
@@ -338,6 +338,10 @@ If you need to enable the local proxy in WIN or if you want to modify the proxy 
     - APP_https.proxyPort=8888
     - APP_proxyHost=docker.for.mac.localhost
     - APP_proxyPort=8888
+
+### Trusting private SSL certs
+
+Please refer to: https://pages.github.expedia.biz/hotels-checkout/bookingapp/trusting-ssl-certs-locally.html
 
 ## Troubleshooting common issues
 
