@@ -463,6 +463,10 @@ function init {
                 export BCA_VERSION=$2
                 shift
                 ;;
+             -checkito-version)
+                export CHECKITO_VERSION=$2
+                shift
+                ;;
             -proxy)
                 export PROXY_CONFIG
                 ;;
