@@ -280,7 +280,7 @@ the only difference between the 3 use cases above is the version of the BA to be
 
 * BA built in local:
 
-`./local_env.sh start -ba-version latest`
+`./local_env.sh start -ba-version local`
 
 *Note:* in order to build the BA in local you need to use the profile `-Pbuild-local`.
 
