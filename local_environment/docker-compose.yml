@@ -66,15 +66,13 @@ services:
       - "1901:1901"
       - "38007:38007"
     volumes:
-      - ./logs/ba/:/hcom/servers/tomcat/logs/
+      - ./logs/ba/:/app/servers/tomcat/logs/
       - mvt:/mvt
-      - ~/.aws/:/home/hcom/.aws
+      - ~/.aws/:/home/expedia/.aws
 
     environment:
       - APP_CONFIG_ENVIRONMENT=development
       - APP_jvm.route=development
-      - APP_javax.net.ssl.trustStore=${TRUSTSTORE_PATH}
-      - APP_javax.net.ssl.trustStorePassword=changeit
       - APP_METRICS_GRAPHITE_REPORTING_INTERVAL=-1
       - APP_METRICS_BOOTSTRAPPER_METRIC_REGISTRATION_ENABLED=false
       - APP_METRICS_BOOTSTRAPPER_HEALTH_CHECK_REGISTRATION_ENABLED=false
@@ -213,15 +211,13 @@ services:
       - "1901:1901"
       - "38007:38007"
     volumes:
-      - ./logs/ba/:/hcom/servers/tomcat/logs/
+      - ./logs/ba/:/app/servers/tomcat/logs/
       - mvt:/mvt
-      - ~/.aws/:/home/hcom/.aws
+      - ~/.aws/:/home/expedia/.aws
 
     environment:
       - APP_CONFIG_ENVIRONMENT=development
       - APP_jvm.route=development
-      - APP_javax.net.ssl.trustStore=${TRUSTSTORE_PATH}
-      - APP_javax.net.ssl.trustStorePassword=changeit
       - APP_METRICS_GRAPHITE_REPORTING_INTERVAL=-1
       - APP_METRICS_BOOTSTRAPPER_METRIC_REGISTRATION_ENABLED=false
       - APP_METRICS_BOOTSTRAPPER_HEALTH_CHECK_REGISTRATION_ENABLED=false
