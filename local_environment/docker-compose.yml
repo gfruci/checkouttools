@@ -286,6 +286,7 @@ services:
       - APP_MVTCLIENT_TIMEOUT_IN_MILLISECONDS=2000
       - APP_VALUE_ADD_PROMOTIONS_JSON_API_HOST=http://tls-lvas.us-west-2.test.tls.expedia.com/
       - APP_CPDS_API_DOMAIN_NAME=cpds.istio-gateway.backend.k8s.us-west-2.hcom-lab-secure.aws.hcom
+      - APP_platform-expsite.siteResolver.s3UpdateEnabled=false 
 
       # Not supported on checkito yet
       - APP_FENCED_VAP_ENABLED=false
