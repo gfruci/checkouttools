@@ -150,6 +150,50 @@ Please update your hosts file with the following.
 127.0.0.1 checkito.hcom checkito
 ```
 
+### Set Up AWS token generation
+
+Get Read-only level access to EWETEST account (SEA domain) -
+https://expedia.service-now.com/sp?id=access_request
+
+![ewetest_access](assets/tnl/ewetest_access.png)
+
+- Download egctl from: https://github.expedia.biz/Brand-Expedia/egctl/releases
+- Unzip the file.
+  - On Mac: Run the downloaded file, at first time you need to set allow the run in the security settings.
+  - On Windows: 
+- Configure the `bookingapp-local-env` profile.
+
+Use `egctl profile` command
+![egctl_profile_command](assets/tnl/profile_command.png)
+
+Choose `Create a new profile option`
+
+![create_new_profile](assets/tnl/create_profile_option.png)
+
+Use your SEA account details for configuration
+
+Create AWS configuration
+![aws_configuration](assets/tnl/configure_aws.png)
+
+Choose west region
+
+![setup_profile](assets/tnl/setup_profile.png)
+
+Authenticate with push
+
+![push_authentication](assets/tnl/sla-push.png)
+
+Pick `hcom-lab-secure` account
+
+![pick_account](assets/tnl/chose_account.png)
+
+Skip EKS configuration
+
+![eks_config](assets/tnl/eks_configuration.png)
+
+Rename profile to `bookingapp-local-env`
+![rename_profile](assets/tnl/rename_profile.png)
+
 ### Checkout the local environment
 
 The local environment scripts and assets are in the git `checkouttools` repo.

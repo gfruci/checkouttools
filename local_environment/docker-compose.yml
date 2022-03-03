@@ -913,3 +913,30 @@ services:
       - APP_MINOS_CASSANDRA_AUTH_ENABLED=true
       - APP_MINOS_CASSANDRA_VAULT_ROLE_ID=477c1f64-1d4f-e6c3-170d-7ad751c66cd8
       - APP_MINOS_CASSANDRA_VAULT_SECRET_ID=ce571543-345c-7a60-5143-b56b53ca2c0c
+
+  localstack:
+    image: public-docker-virtual.artylab.expedia.biz/localstack/localstack
+    container_name: ba-localstack
+    environment:
+      - SERVICES=s3
+
+  awscli:
+    image: public-docker-virtual.artylab.expedia.biz/garland/aws-cli-docker
+    container_name: ba-awscli
+    depends_on:
+      - localstack
+    environment:
+      - AWS_DEFAULT_REGION=us-west-2
+        - AWS_ACCESS_KEY_ID=accesskey
+        - AWS_SECRET_ACCESS_KEY=secretkey
+        - AWS_CBOR_DISABLE=true
+        - com.amazonaws.sdk.disableCertChecking=true
+    volumes:
+      - "${DATA_PATH}:/tmp/data"
+    command:
+      - /bin/sh
+      - -c
+      - |
+        sleep 20
+        aws --endpoint-url=http://localstack:4566 s3 mb s3://platform-experiment-test
+        aws --endpoint-url=http://localstack:4566 s3 sync /tmp/data/platform-experiment-test s3://platform-experiment-test
