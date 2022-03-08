@@ -932,7 +932,7 @@ services:
         - AWS_CBOR_DISABLE=true
         - com.amazonaws.sdk.disableCertChecking=true
     volumes:
-      - "${DATA_PATH}:/tmp/data"
+      - "./data:/tmp/data"
     command:
       - /bin/sh
       - -c

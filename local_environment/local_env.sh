@@ -40,8 +40,9 @@ TRUSTSTORE_PATH="/hcom/share/java/default/lib/security/cacerts_plus_internal"
 DEBUG_OPTS="-Xdebug -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:1901"
 export ORIGINS_PATH="/styxconf/origins.yaml"
 
-APPS=( "mvt" "ba" "bma" "bca" "pio" "bpe" "checkito" "styxpres" "nginx")
+APPS=( "mvt" "localstack" "ba" "bma" "bca" "pio" "bpe" "checkito" "styxpres" "nginx" "awscli")
 DOCKER_IMAGE_PREFIX="kumo-docker-release-local.artylab.expedia.biz/library"
+DOCKER_IMAGE_PREFIX_S3 ="public-docker-virtual.artylab.expedia.biz"
 BA_IMAGE_NAME="bookingapp"
 BMA_IMAGE_NAME="bookingmanagementapp"
 BCA_IMAGE_NAME="bookingchangeapp"
@@ -50,6 +51,13 @@ app_cmd() {
     case "$1" in
         "mvt,update_cmd")
             echo "docker pull ${DOCKER_IMAGE_PREFIX}/hcom-mvt:latest >> ${SCRIPT_DIR}/logs/startup.log 2>&1";;
+
+        "localstack,start_status_cmd")
+            echo "grep -i \"Execution of \" ${SCRIPT_DIR}/logs/localstack.log";;
+        "localstack,stop_status_cmd")
+            echo "grep -e \"localstack.*ERROR\" ${SCRIPT_DIR}/logs/localstack.log | grep -v \"locsClientLoader\"";;
+        "localstack,update_cmd")
+            echo "docker pull ${DOCKER_IMAGE_PREFIX_S3}/localstack/localstack:latest >> ${SCRIPT_DIR}/logs/startup.log 2>&1";;
 
         "styxpres,start_status_cmd")
             echo "grep -i \"Started styx server in\" ${SCRIPT_DIR}/logs/styxpres.log";;
@@ -69,6 +77,13 @@ app_cmd() {
             echo "grep -e \"nginx.*done\" ${SCRIPT_DIR}/logs/nginx.log";;
         "nginx,stop_status_cmd")
             echo "grep -e \"nginx.*error\" ${SCRIPT_DIR}/logs/nginx.log";;
+
+        "awscli,start_status_cmd")
+            echo "grep -i \"Execution of \" ${SCRIPT_DIR}/logs/awscli.log";;
+        "awscli,stop_status_cmd")
+            echo "grep -e \"awscli.*ERROR\" ${SCRIPT_DIR}/logs/awscli.log | grep -v \"locsClientLoader\"";;
+        "awscli,update_cmd")
+            echo "docker pull ${DOCKER_IMAGE_PREFIX_S3}/garland/aws-cli-docker:latest >> ${SCRIPT_DIR}/logs/startup.log 2>&1";;
 
         "ba,start_status_cmd")
             echo "grep \"ba.*Server startup\" ${SCRIPT_DIR}/logs/ba.log";;

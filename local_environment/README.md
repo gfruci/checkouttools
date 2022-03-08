@@ -160,7 +160,8 @@ https://expedia.service-now.com/sp?id=access_request
 - Download egctl from: https://github.expedia.biz/Brand-Expedia/egctl/releases
 - Unzip the file.
   - On Mac: Run the downloaded file, at first time you need to set allow the run in the security settings.
-  - On Windows: 
+  - On Windows: Add egctl to the path.
+![win_env_vars](assets/tnl/system_properties.png)
 - Configure the `bookingapp-local-env` profile.
 
 Use `egctl profile` command
