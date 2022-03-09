@@ -42,7 +42,6 @@ export ORIGINS_PATH="/styxconf/origins.yaml"
 
 APPS=( "mvt" "localstack" "ba" "bma" "bca" "pio" "bpe" "checkito" "styxpres" "nginx" "awscli")
 DOCKER_IMAGE_PREFIX="kumo-docker-release-local.artylab.expedia.biz/library"
-DOCKER_IMAGE_PREFIX_S3 ="public-docker-virtual.artylab.expedia.biz"
 BA_IMAGE_NAME="bookingapp"
 BMA_IMAGE_NAME="bookingmanagementapp"
 BCA_IMAGE_NAME="bookingchangeapp"
@@ -57,7 +56,7 @@ app_cmd() {
         "localstack,stop_status_cmd")
             echo "grep -e \"localstack.*ERROR\" ${SCRIPT_DIR}/logs/localstack.log | grep -v \"locsClientLoader\"";;
         "localstack,update_cmd")
-            echo "docker pull ${DOCKER_IMAGE_PREFIX_S3}/localstack/localstack:latest >> ${SCRIPT_DIR}/logs/startup.log 2>&1";;
+            echo "docker pull public-docker-virtual.artylab.expedia.biz/localstack/localstack:latest >> ${SCRIPT_DIR}/logs/startup.log 2>&1";;
 
         "styxpres,start_status_cmd")
             echo "grep -i \"Started styx server in\" ${SCRIPT_DIR}/logs/styxpres.log";;
@@ -83,7 +82,7 @@ app_cmd() {
         "awscli,stop_status_cmd")
             echo "grep -e \"awscli.*ERROR\" ${SCRIPT_DIR}/logs/awscli.log | grep -v \"locsClientLoader\"";;
         "awscli,update_cmd")
-            echo "docker pull ${DOCKER_IMAGE_PREFIX_S3}/garland/aws-cli-docker:latest >> ${SCRIPT_DIR}/logs/startup.log 2>&1";;
+            echo "docker pull public-docker-virtual.artylab.expedia.biz/garland/aws-cli-docker:latest >> ${SCRIPT_DIR}/logs/startup.log 2>&1";;
 
         "ba,start_status_cmd")
             echo "grep \"ba.*Server startup\" ${SCRIPT_DIR}/logs/ba.log";;
@@ -154,6 +153,8 @@ function watch {
 function login {
     egctl profile bookingapp-local-env || echo "bookingapp-local-env should be configured with egctl, please counfigure it"
     egctl login
+    mkdir -p data/platform-experiment-test
+    aws --profile=ewe-test-us-west-2 s3 cp --recursive s3://platform-experiment-test ./data/platform-experiment-test
     docker login kumo-docker-release-local.artylab.expedia.biz || echo "You're using windows and git bash and these can not understand some commands. Try to use bash (near to your sh command under git/bin) to run the script"
 
     if [ $? -eq 1 ]; then

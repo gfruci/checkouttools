@@ -918,7 +918,13 @@ services:
     image: public-docker-virtual.artylab.expedia.biz/localstack/localstack
     container_name: ba-localstack
     environment:
+      - AWS_DEFAULT_REGION=us-west-2
       - SERVICES=s3
+      - DATA_DIR=/tmp/localstack/data
+    ports:
+      - "4566:4566"
+    volumes:
+      - "./localstack:/tmp/localstack"
 
   awscli:
     image: public-docker-virtual.artylab.expedia.biz/garland/aws-cli-docker
@@ -932,7 +938,7 @@ services:
         - AWS_CBOR_DISABLE=true
         - com.amazonaws.sdk.disableCertChecking=true
     volumes:
-      - "./data:/tmp/data"
+      - "/tmp/data"
     command:
       - /bin/sh
       - -c
