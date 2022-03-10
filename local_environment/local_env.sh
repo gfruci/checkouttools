@@ -40,11 +40,12 @@ TRUSTSTORE_PATH="/hcom/share/java/default/lib/security/cacerts_plus_internal"
 DEBUG_OPTS="-Xdebug -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:1901"
 export ORIGINS_PATH="/styxconf/origins.yaml"
 
-APPS=( "mvt" "localstack" "ba" "bma" "bca" "pio" "bpe" "checkito" "styxpres" "nginx" "awscli")
+APPS=( "localstack" "styxpres" "nginx" "mvt" "awscli" "ba" "bma" "bca" "pio" "bpe" "checkito" )
 DOCKER_IMAGE_PREFIX="kumo-docker-release-local.artylab.expedia.biz/library"
 BA_IMAGE_NAME="bookingapp"
 BMA_IMAGE_NAME="bookingmanagementapp"
 BCA_IMAGE_NAME="bookingchangeapp"
+SYNC_EGTNL=false
 
 app_cmd() {
     case "$1" in
@@ -52,9 +53,9 @@ app_cmd() {
             echo "docker pull ${DOCKER_IMAGE_PREFIX}/hcom-mvt:latest >> ${SCRIPT_DIR}/logs/startup.log 2>&1";;
 
         "localstack,start_status_cmd")
-            echo "grep -i \"Execution of \" ${SCRIPT_DIR}/logs/localstack.log";;
+            echo "grep -e \"localstack.*Ready.$\" ${SCRIPT_DIR}/logs/localstack.log";;
         "localstack,stop_status_cmd")
-            echo "grep -e \"localstack.*ERROR\" ${SCRIPT_DIR}/logs/localstack.log | grep -v \"locsClientLoader\"";;
+            echo "grep -e \"Starting localstack...*error$\" ${SCRIPT_DIR}/logs/localstack.log | grep -v \"locsClientLoader\"";;
         "localstack,update_cmd")
             echo "docker pull public-docker-virtual.artylab.expedia.biz/localstack/localstack:latest >> ${SCRIPT_DIR}/logs/startup.log 2>&1";;
 
@@ -78,7 +79,7 @@ app_cmd() {
             echo "grep -e \"nginx.*error\" ${SCRIPT_DIR}/logs/nginx.log";;
 
         "awscli,start_status_cmd")
-            echo "grep -i \"Execution of \" ${SCRIPT_DIR}/logs/awscli.log";;
+            echo "grep -i \"awscli exited with code 0\" ${SCRIPT_DIR}/logs/awscli.log";;
         "awscli,stop_status_cmd")
             echo "grep -e \"awscli.*ERROR\" ${SCRIPT_DIR}/logs/awscli.log | grep -v \"locsClientLoader\"";;
         "awscli,update_cmd")
@@ -151,16 +152,20 @@ function watch {
 }
 
 function login {
-    egctl profile bookingapp-local-env || echo "bookingapp-local-env should be configured with egctl, please counfigure it"
-    egctl login
-    mkdir -p data/platform-experiment-test
-    aws --profile=ewe-test-us-west-2 s3 cp --recursive s3://platform-experiment-test ./data/platform-experiment-test
     docker login kumo-docker-release-local.artylab.expedia.biz || echo "You're using windows and git bash and these can not understand some commands. Try to use bash (near to your sh command under git/bin) to run the script"
 
     if [ $? -eq 1 ]; then
         echo -e "\n$COLOR_ERROR Docker login failed! $COLOR_RESET"
         exit 1
     fi
+}
+
+function egtnlsync {
+    echo -e "\n$COLOR_HEADER Syncing local EG TNL S3 bucket ... $COLOR_RESET"
+    egctl profile bookingapp-local-env || echo "bookingapp-local-env should be configured with egctl, please counfigure it"
+    egctl login
+    mkdir -p data/platform-experiment-test
+    aws s3 cp --recursive s3://platform-experiment-test ./data/platform-experiment-test
 }
 
 function update {
@@ -380,6 +385,8 @@ function start {
 
     echo -e "\n$COLOR_HEADER Starting local environment ... $COLOR_RESET"
 
+    [ ${SYNC_EGTNL} = true ] && egtnlsync
+
     for APP in "${APPS[@]}"
     do
         start-app ${APP} $@
@@ -439,6 +446,8 @@ function help {
     echo
     echo "Start environment related services without any application (no checkito):"
     echo "./local-env.sh start -no-stub"
+    echo "Start environment related services with syncing EG TNL local S3 bucket "
+    echo "./local-env.sh start [-no-stub] -sync-egtnl"
     echo "BA start examples:"
     echo "./local_env.sh start-app ba -ba-version local -no-stub"
     echo "./local_env.sh start-app ba -ba-version bf0538ab789c71793aa2c025400d884813c7bc18 -no-stub"
@@ -454,6 +463,7 @@ function help {
     echo "-proxy                                                    Set the local environment proxy host to docker.for.mac.localhost:8888"
     echo "-j8                                                       Sets Java 8 related options"
     echo "-suit                                                     Configures which suit will be used with checkito"
+    echo "-sync-egtnl                                               Sync EG TNL local S3 bucket"
     echo
     echo "For any other help, please check out README at https://github.expedia.biz/hotels-checkout/checkouttools/blob/master/local_environment/README.md"
     exit 0
@@ -505,6 +515,10 @@ function init {
                 export BPE_VERSION=$2
                 export ORIGINS_PATH="/styxconf/origins_bpe_localhost.yaml"
                 START_BPE=true
+                ;;
+            -sync-egtnl)
+                export SYNC_EGTNL=true
+                ;;
         esac
         shift
     done

@@ -916,33 +916,35 @@ services:
 
   localstack:
     image: public-docker-virtual.artylab.expedia.biz/localstack/localstack
-    container_name: ba-localstack
+    container_name: localstack
     environment:
       - AWS_DEFAULT_REGION=us-west-2
       - SERVICES=s3
       - DATA_DIR=/tmp/localstack/data
     ports:
-      - "4566:4566"
+      - 4566:4566
     volumes:
       - "./localstack:/tmp/localstack"
 
   awscli:
     image: public-docker-virtual.artylab.expedia.biz/garland/aws-cli-docker
-    container_name: ba-awscli
+    container_name: awscli
     depends_on:
       - localstack
     environment:
       - AWS_DEFAULT_REGION=us-west-2
-        - AWS_ACCESS_KEY_ID=accesskey
-        - AWS_SECRET_ACCESS_KEY=secretkey
-        - AWS_CBOR_DISABLE=true
-        - com.amazonaws.sdk.disableCertChecking=true
+      - AWS_ACCESS_KEY_ID=accesskey
+      - AWS_SECRET_ACCESS_KEY=secretkey
+      - AWS_CBOR_DISABLE=true
+      - com.amazonaws.sdk.disableCertChecking=true
     volumes:
-      - "/tmp/data"
+      - "./data:/tmp/data"
+    healthcheck:
+      test: [ "CMD", "awslocal", "s3api", "wait", "bucket-exists", "--bucket", "platform-experiment-test" ]
     command:
       - /bin/sh
       - -c
       - |
         sleep 20
-        aws --endpoint-url=http://localstack:4566 s3 mb s3://platform-experiment-test
+        aws --endpoint-url=http://localstack:4566 s3 mb s3://platform-experiment-test 2>/dev/null
         aws --endpoint-url=http://localstack:4566 s3 sync /tmp/data/platform-experiment-test s3://platform-experiment-test
