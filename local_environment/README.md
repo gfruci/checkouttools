@@ -44,7 +44,7 @@ In case you have any docker image that you want to keep, select "Copy" - Otherwi
 
 #### WIN specific setup
 
-* Share the drive on which the local environment folder will be checked out: `Docker -> Settings -> Shared Drives`
+* Share the drive on which the local environment folder will be checked out: `Docker -> Settings -> Shared Drives` **Note:** if you are on a newer Docker version, which uses the WSL 2 based engine, this is not necessary
 
 ![shared drives](assets/shared_drives.png)
 
@@ -76,6 +76,8 @@ For more details on how to migrate from Docker Toolbox read these:
 In `Docker -> Preferences -> Advanced`
 * increase the docker memory to at least 4GB
 * Increase the number of CPU to 6
+
+**Note:** if you are on Windows and use the WSL 2 based engine, then your resources are automatically managed by Windows, and you may not need to bother with this
 
 ![increase_docker_resources](assets/increase_docker_resources.png)
 
@@ -412,6 +414,12 @@ Please refer to: https://pages.github.expedia.biz/hotels-checkout/bookingapp/tru
   The above-mentioned warning message indicates that the bash cannot interpret the script, probably because the bash version is below the minimum requirements.
   This is a unix-specific issue since macOS comes with an older version by default that is not compatible with the script.
   Please check your bash version with `bash --version` and upgrade it manually (to 4.x or later) if necessary.
+
+* If during startup you see the following error in the logs:
+    ```
+    service "ba/ba_no_stub/checkito/etc..." has neither an image nor a build context specified: invalid compose project
+    ```
+    you should open `Docker -> Settings -> General` and **untick** *Use Docker Compose V2*.
 
 
 ## FAQ
