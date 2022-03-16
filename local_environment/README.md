@@ -44,7 +44,7 @@ In case you have any docker image that you want to keep, select "Copy" - Otherwi
 
 #### WIN specific setup
 
-* Share the drive on which the local environment folder will be checked out: `Docker -> Settings -> Shared Drives` **Note:** if you are on a newer Docker version, which uses the WSL 2 based engine, this is not necessary
+* Share the drive on which the local environment folder will be checked out: `Docker -> Settings -> Shared Drives` **Note:** if you are on a newer Docker version, which has the WSL 2 based engine enabled, then completing this bullet point is not necessary
 
 ![shared drives](assets/shared_drives.png)
 
@@ -77,7 +77,7 @@ In `Docker -> Preferences -> Advanced`
 * increase the docker memory to at least 4GB
 * Increase the number of CPU to 6
 
-**Note:** if you are on Windows and use the WSL 2 based engine, then your resources are automatically managed by Windows, and you may not need to bother with this
+**Note:** if you are on Windows and use the WSL 2 based engine, then your resources are automatically managed by Windows; you don't need to allocate resources
 
 ![increase_docker_resources](assets/increase_docker_resources.png)
 
@@ -415,11 +415,17 @@ Please refer to: https://pages.github.expedia.biz/hotels-checkout/bookingapp/tru
   This is a unix-specific issue since macOS comes with an older version by default that is not compatible with the script.
   Please check your bash version with `bash --version` and upgrade it manually (to 4.x or later) if necessary.
 
-* If during startup you see the following error in the logs:
+* If you see startup errors in the logs similar to this:
     ```
-    service "ba/ba_no_stub/checkito/etc..." has neither an image nor a build context specified: invalid compose project
+    time="2022-03-11T13:38:24+01:00" level=warning msg="The \"BA_VERSION\" variable is not set. Defaulting to a blank string."
+    time="2022-03-11T13:38:24+01:00" level=warning msg="The \"BMA_VERSION\" variable is not set. Defaulting to a blank string."
+    time="2022-03-11T13:38:24+01:00" level=warning msg="The \"CHECKITO_VERSION\" variable is not set. Defaulting to a blank string."
+    time="2022-03-11T13:38:24+01:00" level=warning msg="The \"SUIT\" variable is not set. Defaulting to a blank string."
+    time="2022-03-11T13:38:24+01:00" level=warning msg="The \"PROXY_CONFIG\" variable is not set. Defaulting to a blank string."
+    time="2022-03-11T13:38:24+01:00" level=warning msg="The \"BCA_VERSION\" variable is not set. Defaulting to a blank string."
+    service "ba_no_stub" has neither an image nor a build context specified: invalid compose project
     ```
-    you should open `Docker -> Settings -> General` and **untick** *Use Docker Compose V2*.
+    you should go to `Docker -> Settings -> General` and **untick** the *Use Docker Compose V2* option.
 
 
 ## FAQ
