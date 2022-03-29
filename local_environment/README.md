@@ -161,7 +161,7 @@ https://expedia.service-now.com/sp?id=access_request
 - Unzip the file.
   - On Mac: Run the downloaded file, at first time you need to set allow the run in the security settings.
 
-![mac_security_exception](assets/tnl/security_allow_on_mac.png)
+![mac_security_exception](assets/tnl/mac_security_allow.png)
 
   - On Windows: Add egctl to the path.
 

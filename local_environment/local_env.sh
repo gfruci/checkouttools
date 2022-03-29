@@ -218,7 +218,6 @@ function start-app {
 				echo "Using version: ${BA_VERSION}"
 			fi
             login-to-aws
-
 		fi
     fi
 
@@ -497,7 +496,6 @@ function init {
                 export BPE_VERSION=$2
                 export ORIGINS_PATH="/styxconf/origins_bpe_localhost.yaml"
                 START_BPE=true
-                ;;
         esac
         shift
     done
