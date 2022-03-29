@@ -160,11 +160,16 @@ https://expedia.service-now.com/sp?id=access_request
 - Download egctl from: https://github.expedia.biz/Brand-Expedia/egctl/releases
 - Unzip the file.
   - On Mac: Run the downloaded file, at first time you need to set allow the run in the security settings.
+
+![mac_security_exception](assets/tnl/security_allow_on_mac.png)
+
   - On Windows: Add egctl to the path.
+
 ![win_env_vars](assets/tnl/system_properties.png)
 - Configure the `bookingapp-local-env` profile.
 
 Use `egctl profile` command
+
 ![egctl_profile_command](assets/tnl/profile_command.png)
 
 Choose `Create a new profile option`
@@ -174,6 +179,7 @@ Choose `Create a new profile option`
 Use your SEA account details for configuration
 
 Create AWS configuration
+
 ![aws_configuration](assets/tnl/configure_aws.png)
 
 Choose west region
@@ -184,15 +190,16 @@ Authenticate with push
 
 ![push_authentication](assets/tnl/sla-push.png)
 
-Pick `hcom-lab-secure` account
+Pick `ewe-test` account
 
-![pick_account](assets/tnl/chose_account.png)
+![pick_account](assets/tnl/choose_aws_account.png)
 
-Skip EKS configuration
+Skip EKS configuration:
 
 ![eks_config](assets/tnl/eks_configuration.png)
 
-Rename profile to `bookingapp-local-env`
+Rename profile to `bookingapp-local-env`:
+
 ![rename_profile](assets/tnl/rename_profile.png)
 
 ### Checkout the local environment

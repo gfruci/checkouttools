@@ -286,7 +286,7 @@ services:
       - APP_MVTCLIENT_TIMEOUT_IN_MILLISECONDS=2000
       - APP_VALUE_ADD_PROMOTIONS_JSON_API_HOST=http://tls-lvas.us-west-2.test.tls.expedia.com/
       - APP_CPDS_API_DOMAIN_NAME=cpds.istio-gateway.backend.k8s.us-west-2.hcom-lab-secure.aws.hcom
-      - APP_platform-expsite.siteResolver.s3UpdateEnabled=false 
+      - APP_platform-expsite.siteResolver.s3UpdateEnabled=true 
 
       # Not supported on checkito yet
       - APP_FENCED_VAP_ENABLED=false
@@ -913,38 +913,3 @@ services:
       - APP_MINOS_CASSANDRA_AUTH_ENABLED=true
       - APP_MINOS_CASSANDRA_VAULT_ROLE_ID=477c1f64-1d4f-e6c3-170d-7ad751c66cd8
       - APP_MINOS_CASSANDRA_VAULT_SECRET_ID=ce571543-345c-7a60-5143-b56b53ca2c0c
-
-  localstack:
-    image: public-docker-virtual.artylab.expedia.biz/localstack/localstack
-    container_name: localstack
-    environment:
-      - AWS_DEFAULT_REGION=us-west-2
-      - SERVICES=s3
-      - DATA_DIR=/tmp/localstack/data
-    ports:
-      - 4566:4566
-    volumes:
-      - "./localstack:/tmp/localstack"
-
-  awscli:
-    image: public-docker-virtual.artylab.expedia.biz/garland/aws-cli-docker
-    container_name: awscli
-    depends_on:
-      - localstack
-    environment:
-      - AWS_DEFAULT_REGION=us-west-2
-      - AWS_ACCESS_KEY_ID=accesskey
-      - AWS_SECRET_ACCESS_KEY=secretkey
-      - AWS_CBOR_DISABLE=true
-      - com.amazonaws.sdk.disableCertChecking=true
-    volumes:
-      - "./data:/tmp/data"
-    healthcheck:
-      test: [ "CMD", "awslocal", "s3api", "wait", "bucket-exists", "--bucket", "platform-experiment-test" ]
-    command:
-      - /bin/sh
-      - -c
-      - |
-        sleep 20
-        aws --endpoint-url=http://localstack:4566 s3 mb s3://platform-experiment-test 2>/dev/null
-        aws --endpoint-url=http://localstack:4566 s3 sync /tmp/data/platform-experiment-test s3://platform-experiment-test
