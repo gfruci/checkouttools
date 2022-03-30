@@ -152,13 +152,10 @@ Please update your hosts file with the following.
 
 ### Set Up AWS token generation
 
-Get Read-only level access to EWETEST account (SEA domain) -
-https://expedia.service-now.com/sp?id=access_request
+1. Join the SEA `AWS-034324643013-ADFS-Developer` security group: https://expediasg.sea.corp.expecn.com/ExpediaSG/Groups/Properties?identity=ZjA5YTc5YTcyY2IzNGQ0MDkzOTEyYTMzM2ZiNGZkMTl8Z3JvdXA=. Please note that your request will need to be approved before attempting to run BA locally.
 
-![ewetest_access](assets/tnl/ewetest_access.png)
-
-- Download egctl from: https://github.expedia.biz/Brand-Expedia/egctl/releases
-- Unzip the file.
+2. Download egctl from: https://github.expedia.biz/Brand-Expedia/egctl/releases
+Unzip the file.
   - On Mac: Run the downloaded file, at first time you need to set allow the run in the security settings.
 
 ![mac_security_exception](assets/tnl/mac_security_allow.png)
@@ -168,31 +165,35 @@ https://expedia.service-now.com/sp?id=access_request
 ![win_env_vars](assets/tnl/system_properties.png)
 - Configure the `bookingapp-local-env` profile.
 
-Use `egctl profile` command
+Use `egctl profile` command:
 
 ![egctl_profile_command](assets/tnl/profile_command.png)
 
-Choose `Create a new profile option`
+Choose `Create a new profile option`:
 
 ![create_new_profile](assets/tnl/create_profile_option.png)
 
 Use your SEA account details for configuration
 
-Create AWS configuration
+Create AWS configuration:
 
 ![aws_configuration](assets/tnl/configure_aws.png)
 
-Choose west region
+Choose west region:
 
 ![setup_profile](assets/tnl/setup_profile.png)
 
-Authenticate with push
+Authenticate with push:
 
 ![push_authentication](assets/tnl/sla-push.png)
 
-Pick `ewe-test` account
+Pick `ewe-test` account:
 
 ![pick_account](assets/tnl/choose_aws_account.png)
+
+If you get prompted, pick the ADFS-Developer role:
+
+![developer_role](assets/tnl/pick_a_role.png)
 
 Skip EKS configuration:
 
