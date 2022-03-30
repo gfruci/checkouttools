@@ -152,9 +152,9 @@ Please update your hosts file with the following.
 
 ### Set Up AWS token generation
 
-1. Join the SEA `AWS-034324643013-ADFS-Developer` security group: https://expediasg.sea.corp.expecn.com/ExpediaSG/Groups/Properties?identity=ZjA5YTc5YTcyY2IzNGQ0MDkzOTEyYTMzM2ZiNGZkMTl8Z3JvdXA=. Please note that your request will need to be approved before attempting to run BA locally.
+- Join the SEA `AWS-034324643013-ADFS-Developer` security group: https://expediasg.sea.corp.expecn.com/ExpediaSG/Groups/Properties?identity=ZjA5YTc5YTcyY2IzNGQ0MDkzOTEyYTMzM2ZiNGZkMTl8Z3JvdXA= - Please note that your request will need to be approved before attempting to run BA locally.
 
-2. Download egctl from: https://github.expedia.biz/Brand-Expedia/egctl/releases
+- Download egctl from: https://github.expedia.biz/Brand-Expedia/egctl/releases
 Unzip the file.
   - On Mac: Run the downloaded file, at first time you need to set allow the run in the security settings.
 
@@ -163,45 +163,48 @@ Unzip the file.
   - On Windows: Add egctl to the path.
 
 ![win_env_vars](assets/tnl/system_properties.png)
-- Configure the `bookingapp-local-env` profile.
 
-Use `egctl profile` command:
+- Configure the new `bookingapp-local-env` profile:
+
+- Use `egctl profile` command:
 
 ![egctl_profile_command](assets/tnl/profile_command.png)
 
-Choose `Create a new profile option`:
+- Choose `Create a new profile option`:
 
 ![create_new_profile](assets/tnl/create_profile_option.png)
 
-Use your SEA account details for configuration
+Use your SEA account details for configuration.
 
-Create AWS configuration:
+- Create AWS configuration:
 
 ![aws_configuration](assets/tnl/configure_aws.png)
 
-Choose west region:
+- Choose west region:
 
 ![setup_profile](assets/tnl/setup_profile.png)
 
-Authenticate with push:
+- Authenticate with push:
 
 ![push_authentication](assets/tnl/sla-push.png)
 
-Pick `ewe-test` account:
+- Pick `ewe-test` account:
 
 ![pick_account](assets/tnl/choose_aws_account.png)
 
-If you get prompted, pick the ADFS-Developer role:
+- If you get prompted, pick the ADFS-Developer role:
 
 ![developer_role](assets/tnl/pick_a_role.png)
 
-Skip EKS configuration:
+- Skip EKS configuration:
 
 ![eks_config](assets/tnl/eks_configuration.png)
 
-Rename profile to `bookingapp-local-env`:
+- Rename profile to `bookingapp-local-env`:
 
 ![rename_profile](assets/tnl/rename_profile.png)
+
+If you forget to rename the profile, you can manually change it in `~/.config/egctl.yaml`.
 
 ### Checkout the local environment
 
