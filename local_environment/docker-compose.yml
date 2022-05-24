@@ -829,7 +829,8 @@ services:
       - APP_VAULT_SECRETS_REMOTE_PATH=bpe/kv
       - APP_VAULT_APP_ID=bpe
       - APP_VAULT_CERT_DIR=exp/20230314
-      - PIO_BASEURL=https://pio.istio-gateway.backend.k8s.us-west-2.hcom-lab-secure.aws.hcom/
+      #- PIO_BASEURL=https://pio.istio-gateway.backend.k8s.us-west-2.hcom-lab-secure.aws.hcom/
+      - PIO_BASEURL=https://${PIO_LOCAL_HOST}:8443/
       - HYSTRIX_COMMAND_GETBINDATA_EXECUTION_ISOLATION_THREAD_TIMEOUTINMILLISECONDS=10000
       - HYSTRIX_COMMAND_INITIALIZEPAYMENT_EXECUTION_ISOLATION_THREAD_TIMEOUTINMILLISECONDS=10000
   #   - APP_javax.net.debug=ssl:handshake
@@ -843,25 +844,7 @@ services:
       - "8443:8443"
     container_name: pio
     environment:
-      - JAVA_JVM_ARGS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:1901 -Djavax.net.ssl.trustStore=/opt/java/openjdk/lib/security/cacerts -Djavax.net.ssl.trust-store-password=changeit ${PROXY_CONFIG}
-#      - APP_java.rmi.server.hostname=docker.local
-#      - APP_com.sun.management.jmxremote=true
-#      - APP_com.sun.management.jmxremote.port=33661
-#      - APP_com.sun.management.jmxremote.authenticate=false
-#      - APP_com.sun.management.jmxremote.ssl=false
-#      - APP_com.sun.management.jmxremote.rmi.port=33661
-#      - APP_spring.profiles.active=default
-#      - APP_sps.connections.defaultMaxPerRoute=5
-#      - APP_sps.connections.maxTotal=5
-#      - APP_sps.connections.validateAfterInactivity=2000
-#      - APP_sps.client.connectionRequestTimeout=3000
-#      - APP_sps.client.connectTimeout=3000
-#      - APP_sps.client.socketTimeout=3000
-#      - APP_sps.client.keepAlive=true
-#      - APP_sps.client.tcpNoDelay=true
-#      - APP_hystrix.command.getStoredPayments.execution.isolation.thread.timeoutInMilliseconds=5000
-#      - APP_hystrix.threadpool.getStoredPayments.coreSize=5
-      #      - APP_graphite.reporter.enabled=true
+      - JAVA_JVM_ARGS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:1901 -Djdk.tls.client.protocols=TLSv1.2
       - APP_spring.profiles.active=staging
       - SAPS_HTTP_CONNECTION_DEFAULT_MAX_PER_ROUTE=5
       - SAPS_HTTP_CONNECTION_MAX_TOTAL=5
@@ -881,8 +864,6 @@ services:
       - MINOS_CASSANDRA_VAULT_ROLE_ID=477c1f64-1d4f-e6c3-170d-7ad751c66cd8
       - MINOS_CASSANDRA_VAULT_SECRET_ID=ce571543-345c-7a60-5143-b56b53ca2c0c
       - MINOS_DB_PORT_AWS_US_WEST_2=9042
-      - MINOS_DB_HOSTS_AWS_US_WEST_2=cassandra.shared.1.us-west-2.hcom-lab-decaf.aws.hcom,cassandra.shared.2.us-west-2.hcom-lab-decaf.aws.hcom,cassandra.shared.3.us-west-2.hcom-lab-decaf.aws.hcom,cassandra.shared.4.us-west-2.hcom-lab-decaf.aws.hcom,cassandra.shared.5.us-west-2.hcom-lab-decaf.aws.hcom,cassandra.shared.6.us-west-2.hcom-lab-decaf.aws.hcom
-      - MINOS_DB_HOSTS_AWS_US_EAST_1=cassandra.shared.1.us-west-2.hcom-lab-decaf.aws.hcom,cassandra.shared.2.us-west-2.hcom-lab-decaf.aws.hcom,cassandra.shared.3.us-west-2.hcom-lab-decaf.aws.hcom,cassandra.shared.4.us-west-2.hcom-lab-decaf.aws.hcom,cassandra.shared.5.us-west-2.hcom-lab-decaf.aws.hcom,cassandra.shared.6.us-west-2.hcom-lab-decaf.aws.hcom
       - BPAS_HOST=bpas.istio-gateway.backend.k8s.us-west-2.hcom-lab-decaf.aws.hcom
       - SAPS_HOST=saps.istio-gateway.backend.k8s.us-west-2.hcom-lab-decaf.aws.hcom
       - APP_bpins.baseUrl=https://checkito:8189
@@ -898,25 +879,7 @@ services:
       - "8443:8443"
     container_name: pio
     environment:
-      - JAVA_JVM_ARGS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:1901 -Djavax.net.ssl.trustStore=/opt/java/openjdk/lib/security/cacerts -Djavax.net.ssl.trust-store-password=changeit ${PROXY_CONFIG}
-#      - APP_java.rmi.server.hostname=docker.local
-#      - APP_com.sun.management.jmxremote=true
-#      - APP_com.sun.management.jmxremote.port=33661
-#      - APP_com.sun.management.jmxremote.authenticate=false
-#      - APP_com.sun.management.jmxremote.ssl=false
-#      - APP_com.sun.management.jmxremote.rmi.port=33661
-#      - APP_spring.profiles.active=default
-#      - APP_sps.connections.defaultMaxPerRoute=5
-#      - APP_sps.connections.maxTotal=5
-#      - APP_sps.connections.validateAfterInactivity=2000
-#      - APP_sps.client.connectionRequestTimeout=3000
-#      - APP_sps.client.connectTimeout=3000
-#      - APP_sps.client.socketTimeout=3000
-      #      - APP_sps.client.keepAlive=true
-      #      - APP_sps.client.tcpNoDelay=true
-      #      - APP_hystrix.command.getStoredPayments.execution.isolation.thread.timeoutInMilliseconds=5000
-      #      - APP_hystrix.threadpool.getStoredPayments.coreSize=5
-      #      - APP_graphite.reporter.enabled=true
+      - JAVA_JVM_ARGS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:1901 -Djdk.tls.client.protocols=TLSv1.2
       - APP_spring.profiles.active=staging
       - SAPS_HTTP_CONNECTION_DEFAULT_MAX_PER_ROUTE=5
       - SAPS_HTTP_CONNECTION_MAX_TOTAL=5
@@ -938,5 +901,3 @@ services:
       - MINOS_DB_PORT_AWS_US_WEST_2=9042
       - BPAS_HOST=bpas.istio-gateway.backend.k8s.us-west-2.hcom-lab-decaf.aws.hcom
       - SAPS_HOST=saps.istio-gateway.backend.k8s.us-west-2.hcom-lab-decaf.aws.hcom
-      - MINOS_DB_HOSTS_AWS_US_WEST_2=cassandra.shared.1.us-west-2.hcom-lab-decaf.aws.hcom,cassandra.shared.2.us-west-2.hcom-lab-decaf.aws.hcom,cassandra.shared.3.us-west-2.hcom-lab-decaf.aws.hcom,cassandra.shared.4.us-west-2.hcom-lab-decaf.aws.hcom,cassandra.shared.5.us-west-2.hcom-lab-decaf.aws.hcom,cassandra.shared.6.us-west-2.hcom-lab-decaf.aws.hcom
-      - MINOS_DB_HOSTS_AWS_US_EAST_1=cassandra.shared.1.us-west-2.hcom-lab-decaf.aws.hcom,cassandra.shared.2.us-west-2.hcom-lab-decaf.aws.hcom,cassandra.shared.3.us-west-2.hcom-lab-decaf.aws.hcom,cassandra.shared.4.us-west-2.hcom-lab-decaf.aws.hcom,cassandra.shared.5.us-west-2.hcom-lab-decaf.aws.hcom,cassandra.shared.6.us-west-2.hcom-lab-decaf.aws.hcom
