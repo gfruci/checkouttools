@@ -829,7 +829,7 @@ services:
       - APP_VAULT_SECRETS_REMOTE_PATH=bpe/kv
       - APP_VAULT_APP_ID=bpe
       - APP_VAULT_CERT_DIR=exp/20230314
-      - PIO_BASEURL=https://${PIO_LOCAL_HOST}:8443/
+      - PIO_BASEURL=https://pio.istio-gateway.backend.k8s.us-west-2.hcom-lab-secure.aws.hcom/
       - HYSTRIX_COMMAND_GETBINDATA_EXECUTION_ISOLATION_THREAD_TIMEOUTINMILLISECONDS=10000
       - HYSTRIX_COMMAND_INITIALIZEPAYMENT_EXECUTION_ISOLATION_THREAD_TIMEOUTINMILLISECONDS=10000
   #   - APP_javax.net.debug=ssl:handshake
@@ -861,8 +861,8 @@ services:
 #      - APP_sps.client.tcpNoDelay=true
 #      - APP_hystrix.command.getStoredPayments.execution.isolation.thread.timeoutInMilliseconds=5000
 #      - APP_hystrix.threadpool.getStoredPayments.coreSize=5
-#      - APP_graphite.reporter.enabled=true
-      - SPRING_PROFILES_ACTIVE=default
+      #      - APP_graphite.reporter.enabled=true
+      - APP_spring.profiles.active=staging
       - SAPS_HTTP_CONNECTION_DEFAULT_MAX_PER_ROUTE=5
       - SAPS_HTTP_CONNECTION_MAX_TOTAL=5
       - SAPS_REQUEST_TIMEOUT=3000
@@ -872,7 +872,7 @@ services:
       - MANAGEMENT_METRICS_EXPORT_GRAPHITE_ENABLED=true
       - APP_VAULT_ADDR=https://vault.us-west-2.shared-lab.aws.hcom
       - APP_VAULT_SECRETS_REMOTE_PATH=pio/kv
-      - APP_VAULT_SECRETS_LOCAL_DIR=/home/hcom/secrets
+      - APP_VAULT_SECRETS_LOCAL_DIR=/app/secrets
       - APP_VAULT_ROLE_ID=d685aa35-8d88-8763-f4ac-083f8d76aeb5
       - APP_VAULT_SECRET_ID=ba16f439-45e6-0618-1513-5468a821abc2
       - APP_VAULT_SSL_CERTS_BASE_PATH=exp/20240131
@@ -889,7 +889,6 @@ services:
       - APP_BPAS_HOST=checkito
       - APP_BPAS_PORT=8089
       - APP_BPAS_ACCESS_PROTOCOL=http
-      - CONFIG_ENVIRONMENT=staging
 
   pio_no_stub:
     image: paymentinitializationorchestrator:latest
@@ -913,12 +912,12 @@ services:
 #      - APP_sps.client.connectionRequestTimeout=3000
 #      - APP_sps.client.connectTimeout=3000
 #      - APP_sps.client.socketTimeout=3000
-#      - APP_sps.client.keepAlive=true
-#      - APP_sps.client.tcpNoDelay=true
-#      - APP_hystrix.command.getStoredPayments.execution.isolation.thread.timeoutInMilliseconds=5000
-#      - APP_hystrix.threadpool.getStoredPayments.coreSize=5
-#      - APP_graphite.reporter.enabled=true
-      - SPRING_PROFILES_ACTIVE=default
+      #      - APP_sps.client.keepAlive=true
+      #      - APP_sps.client.tcpNoDelay=true
+      #      - APP_hystrix.command.getStoredPayments.execution.isolation.thread.timeoutInMilliseconds=5000
+      #      - APP_hystrix.threadpool.getStoredPayments.coreSize=5
+      #      - APP_graphite.reporter.enabled=true
+      - APP_spring.profiles.active=staging
       - SAPS_HTTP_CONNECTION_DEFAULT_MAX_PER_ROUTE=5
       - SAPS_HTTP_CONNECTION_MAX_TOTAL=5
       - SAPS_REQUEST_TIMEOUT=3000
@@ -928,7 +927,7 @@ services:
       - MANAGEMENT_METRICS_EXPORT_GRAPHITE_ENABLED=true
       - APP_VAULT_ADDR=https://vault.us-west-2.shared-lab.aws.hcom
       - APP_VAULT_SECRETS_REMOTE_PATH=pio/kv
-      - APP_VAULT_SECRETS_LOCAL_DIR=/home/hcom/secrets
+      - APP_VAULT_SECRETS_LOCAL_DIR=/app/secrets
       - APP_VAULT_ROLE_ID=d685aa35-8d88-8763-f4ac-083f8d76aeb5
       - APP_VAULT_SECRET_ID=ba16f439-45e6-0618-1513-5468a821abc2
       - APP_VAULT_SSL_CERTS_BASE_PATH=exp/20240131
@@ -941,4 +940,3 @@ services:
       - SAPS_HOST=saps.istio-gateway.backend.k8s.us-west-2.hcom-lab-decaf.aws.hcom
       - MINOS_DB_HOSTS_AWS_US_WEST_2=cassandra.shared.1.us-west-2.hcom-lab-decaf.aws.hcom,cassandra.shared.2.us-west-2.hcom-lab-decaf.aws.hcom,cassandra.shared.3.us-west-2.hcom-lab-decaf.aws.hcom,cassandra.shared.4.us-west-2.hcom-lab-decaf.aws.hcom,cassandra.shared.5.us-west-2.hcom-lab-decaf.aws.hcom,cassandra.shared.6.us-west-2.hcom-lab-decaf.aws.hcom
       - MINOS_DB_HOSTS_AWS_US_EAST_1=cassandra.shared.1.us-west-2.hcom-lab-decaf.aws.hcom,cassandra.shared.2.us-west-2.hcom-lab-decaf.aws.hcom,cassandra.shared.3.us-west-2.hcom-lab-decaf.aws.hcom,cassandra.shared.4.us-west-2.hcom-lab-decaf.aws.hcom,cassandra.shared.5.us-west-2.hcom-lab-decaf.aws.hcom,cassandra.shared.6.us-west-2.hcom-lab-decaf.aws.hcom
-      - CONFIG_ENVIRONMENT=staging
