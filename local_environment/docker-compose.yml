@@ -816,6 +816,7 @@ services:
     container_name: bpe
     environment:
       - JAVA_JVM_ARGS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:1901
+      - MANAGEMENT_METRICS_EXPORT_GRAPHITE_ENABLED=false
       - APP_java.rmi.server.hostname=192.168.99.100
       - APP_com.sun.management.jmxremote=true
       - APP_com.sun.management.jmxremote.port=33661
@@ -829,7 +830,8 @@ services:
       - APP_VAULT_APP_ID=bpe
       - APP_VAULT_CERT_DIR=exp/20230314
       - PIO_BASEURL=https://${PIO_LOCAL_HOST}:8443/
-      - APP_hystrix.command.initializePayment.execution.isolation.thread.timeoutInMilliseconds=10000
+      - HYSTRIX_COMMAND_GETBINDATA_EXECUTION_ISOLATION_THREAD_TIMEOUTINMILLISECONDS=10000
+      - HYSTRIX_COMMAND_INITIALIZEPAYMENT_EXECUTION_ISOLATION_THREAD_TIMEOUTINMILLISECONDS=10000
   #   - APP_javax.net.debug=ssl:handshake
   #  net: "host"::w
 
@@ -870,6 +872,7 @@ services:
       - MANAGEMENT_METRICS_EXPORT_GRAPHITE_ENABLED=true
       - APP_VAULT_ADDR=https://vault.us-west-2.shared-lab.aws.hcom
       - APP_VAULT_SECRETS_REMOTE_PATH=pio/kv
+      - APP_VAULT_SECRETS_LOCAL_DIR=/home/hcom/secrets
       - APP_VAULT_ROLE_ID=d685aa35-8d88-8763-f4ac-083f8d76aeb5
       - APP_VAULT_SECRET_ID=ba16f439-45e6-0618-1513-5468a821abc2
       - APP_VAULT_SSL_CERTS_BASE_PATH=exp/20240131
@@ -925,6 +928,7 @@ services:
       - MANAGEMENT_METRICS_EXPORT_GRAPHITE_ENABLED=true
       - APP_VAULT_ADDR=https://vault.us-west-2.shared-lab.aws.hcom
       - APP_VAULT_SECRETS_REMOTE_PATH=pio/kv
+      - APP_VAULT_SECRETS_LOCAL_DIR=/home/hcom/secrets
       - APP_VAULT_ROLE_ID=d685aa35-8d88-8763-f4ac-083f8d76aeb5
       - APP_VAULT_SECRET_ID=ba16f439-45e6-0618-1513-5468a821abc2
       - APP_VAULT_SSL_CERTS_BASE_PATH=exp/20240131
