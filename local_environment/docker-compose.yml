@@ -816,6 +816,7 @@ services:
     container_name: bpe
     environment:
       - JAVA_JVM_ARGS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:1901
+      - MANAGEMENT_METRICS_EXPORT_GRAPHITE_ENABLED=false
       - APP_java.rmi.server.hostname=192.168.99.100
       - APP_com.sun.management.jmxremote=true
       - APP_com.sun.management.jmxremote.port=33661
@@ -826,11 +827,39 @@ services:
       - APP_VAULT_ADDR=https://vault.us-west-2.shared-lab.aws.hcom
       - APP_VAULT_USER_ID=staging-bpe-01
       - APP_VAULT_SECRETS_REMOTE_PATH=bpe/kv
-      - APP_VAULT_SECRETS_LOCAL_DIR=/home/hcom/secrets
       - APP_VAULT_APP_ID=bpe
       - APP_VAULT_CERT_DIR=exp/20230314
-      - APP_pio.baseUrl=https://${PIO_LOCAL_HOST}:8443/
-      - APP_hystrix.command.initializePayment.execution.isolation.thread.timeoutInMilliseconds=10000
+      - PIO_BASEURL=https://pio.istio-gateway.backend.k8s.us-west-2.hcom-lab-secure.aws.hcom/
+      - HYSTRIX_COMMAND_GETBINDATA_EXECUTION_ISOLATION_THREAD_TIMEOUTINMILLISECONDS=10000
+      - HYSTRIX_COMMAND_INITIALIZEPAYMENT_EXECUTION_ISOLATION_THREAD_TIMEOUTINMILLISECONDS=10000
+  #   - APP_javax.net.debug=ssl:handshake
+  #  net: "host"::w
+
+  bpe_pio_local:
+    image: bookingpaymentedge:latest
+    ports:
+      - "8090:8080"
+      - "8343:8443"
+      - "2301:1901"
+    container_name: bpe
+    environment:
+      - JAVA_JVM_ARGS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:1901
+      - MANAGEMENT_METRICS_EXPORT_GRAPHITE_ENABLED=false
+      - APP_java.rmi.server.hostname=192.168.99.100
+      - APP_com.sun.management.jmxremote=true
+      - APP_com.sun.management.jmxremote.port=33661
+      - APP_com.sun.management.jmxremote.authenticate=false
+      - APP_com.sun.management.jmxremote.ssl=false
+      - APP_com.sun.management.jmxremote.rmi.port=33661
+      - APP_spring.profiles.active=default
+      - APP_VAULT_ADDR=https://vault.us-west-2.shared-lab.aws.hcom
+      - APP_VAULT_USER_ID=staging-bpe-01
+      - APP_VAULT_SECRETS_REMOTE_PATH=bpe/kv
+      - APP_VAULT_APP_ID=bpe
+      - APP_VAULT_CERT_DIR=exp/20230314
+      - PIO_BASEURL=https://${PIO_LOCAL_HOST}:8443/
+      - HYSTRIX_COMMAND_GETBINDATA_EXECUTION_ISOLATION_THREAD_TIMEOUTINMILLISECONDS=10000
+      - HYSTRIX_COMMAND_INITIALIZEPAYMENT_EXECUTION_ISOLATION_THREAD_TIMEOUTINMILLISECONDS=10000
   #   - APP_javax.net.debug=ssl:handshake
   #  net: "host"::w
 
@@ -842,35 +871,28 @@ services:
       - "8443:8443"
     container_name: pio
     environment:
-      - JAVA_JVM_ARGS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:1901 -Djavax.net.ssl.trustStore=/hcom/share/java/default/lib/security/cacerts_plus_internal -Djavax.net.ssl.trust-store-password=changeit ${PROXY_CONFIG}
-      - APP_java.rmi.server.hostname=docker.local
-      - APP_com.sun.management.jmxremote=true
-      - APP_com.sun.management.jmxremote.port=33661
-      - APP_com.sun.management.jmxremote.authenticate=false
-      - APP_com.sun.management.jmxremote.ssl=false
-      - APP_com.sun.management.jmxremote.rmi.port=33661
-      - APP_spring.profiles.active=default
-      - APP_sps.connections.defaultMaxPerRoute=5
-      - APP_sps.connections.maxTotal=5
-      - APP_sps.connections.validateAfterInactivity=2000
-      - APP_sps.client.connectionRequestTimeout=3000
-      - APP_sps.client.connectTimeout=3000
-      - APP_sps.client.socketTimeout=3000
-      - APP_sps.client.keepAlive=true
-      - APP_sps.client.tcpNoDelay=true
-      - APP_hystrix.command.getStoredPayments.execution.isolation.thread.timeoutInMilliseconds=5000
-      - APP_hystrix.threadpool.getStoredPayments.coreSize=5
-      - APP_graphite.reporter.enabled=true
+      - JAVA_JVM_ARGS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:1901 -Djdk.tls.client.protocols=TLSv1.2
+      - APP_spring.profiles.active=staging
+      - SAPS_HTTP_CONNECTION_DEFAULT_MAX_PER_ROUTE=5
+      - SAPS_HTTP_CONNECTION_MAX_TOTAL=5
+      - SAPS_REQUEST_TIMEOUT=3000
+      - SAPS_CONNECTION_TIMEOUT=3000
+      - HYSTRIX_COMMAND_GETSTOREDPAYMENTS_EXECUTION_ISOLATION_THREAD_TIMEOUTINMILLISECONDS=5000
+      - HYSTRIX_THREADPOOL_GETSTOREDPAYMENTS_CORESIZE=5
+      - MANAGEMENT_METRICS_EXPORT_GRAPHITE_ENABLED=true
       - APP_VAULT_ADDR=https://vault.us-west-2.shared-lab.aws.hcom
       - APP_VAULT_SECRETS_REMOTE_PATH=pio/kv
-      - APP_VAULT_SECRETS_LOCAL_DIR=/home/hcom/secrets
+      - APP_VAULT_SECRETS_LOCAL_DIR=/app/secrets
       - APP_VAULT_ROLE_ID=d685aa35-8d88-8763-f4ac-083f8d76aeb5
       - APP_VAULT_SECRET_ID=ba16f439-45e6-0618-1513-5468a821abc2
       - APP_VAULT_SSL_CERTS_BASE_PATH=exp/20240131
-      - APP_MINOS_LOCAL_DATACENTER_IDENTIFIER=AWS_US_WEST_2
-      - APP_MINOS_CASSANDRA_AUTH_ENABLED=true
-      - APP_MINOS_CASSANDRA_VAULT_ROLE_ID=477c1f64-1d4f-e6c3-170d-7ad751c66cd8
-      - APP_MINOS_CASSANDRA_VAULT_SECRET_ID=ce571543-345c-7a60-5143-b56b53ca2c0c
+      - MINOS_LOCAL_DATACENTER_IDENTIFIER=AWS_US_WEST_2
+      - MINOS_AUTHENTICATION_ENABLED=true
+      - MINOS_CASSANDRA_VAULT_ROLE_ID=477c1f64-1d4f-e6c3-170d-7ad751c66cd8
+      - MINOS_CASSANDRA_VAULT_SECRET_ID=ce571543-345c-7a60-5143-b56b53ca2c0c
+      - MINOS_DB_PORT_AWS_US_WEST_2=9042
+      - BPAS_HOST=bpas.istio-gateway.backend.k8s.us-west-2.hcom-lab-decaf.aws.hcom
+      - SAPS_HOST=saps.istio-gateway.backend.k8s.us-west-2.hcom-lab-decaf.aws.hcom
       - APP_bpins.baseUrl=https://checkito:8189
       - APP_BPAS_HOST=checkito
       - APP_BPAS_PORT=8089
@@ -884,32 +906,25 @@ services:
       - "8443:8443"
     container_name: pio
     environment:
-      - JAVA_JVM_ARGS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:1901 -Djavax.net.ssl.trustStore=/hcom/share/java/default/lib/security/cacerts_plus_internal -Djavax.net.ssl.trust-store-password=changeit ${PROXY_CONFIG}
-      - APP_java.rmi.server.hostname=docker.local
-      - APP_com.sun.management.jmxremote=true
-      - APP_com.sun.management.jmxremote.port=33661
-      - APP_com.sun.management.jmxremote.authenticate=false
-      - APP_com.sun.management.jmxremote.ssl=false
-      - APP_com.sun.management.jmxremote.rmi.port=33661
-      - APP_spring.profiles.active=default
-      - APP_sps.connections.defaultMaxPerRoute=5
-      - APP_sps.connections.maxTotal=5
-      - APP_sps.connections.validateAfterInactivity=2000
-      - APP_sps.client.connectionRequestTimeout=3000
-      - APP_sps.client.connectTimeout=3000
-      - APP_sps.client.socketTimeout=3000
-      - APP_sps.client.keepAlive=true
-      - APP_sps.client.tcpNoDelay=true
-      - APP_hystrix.command.getStoredPayments.execution.isolation.thread.timeoutInMilliseconds=5000
-      - APP_hystrix.threadpool.getStoredPayments.coreSize=5
-      - APP_graphite.reporter.enabled=true
+      - JAVA_JVM_ARGS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:1901 -Djdk.tls.client.protocols=TLSv1.2
+      - APP_spring.profiles.active=staging
+      - SAPS_HTTP_CONNECTION_DEFAULT_MAX_PER_ROUTE=5
+      - SAPS_HTTP_CONNECTION_MAX_TOTAL=5
+      - SAPS_REQUEST_TIMEOUT=3000
+      - SAPS_CONNECTION_TIMEOUT=3000
+      - HYSTRIX_COMMAND_GETSTOREDPAYMENTS_EXECUTION_ISOLATION_THREAD_TIMEOUTINMILLISECONDS=5000
+      - HYSTRIX_THREADPOOL_GETSTOREDPAYMENTS_CORESIZE=5
+      - MANAGEMENT_METRICS_EXPORT_GRAPHITE_ENABLED=true
       - APP_VAULT_ADDR=https://vault.us-west-2.shared-lab.aws.hcom
       - APP_VAULT_SECRETS_REMOTE_PATH=pio/kv
-      - APP_VAULT_SECRETS_LOCAL_DIR=/home/hcom/secrets
+      - APP_VAULT_SECRETS_LOCAL_DIR=/app/secrets
       - APP_VAULT_ROLE_ID=d685aa35-8d88-8763-f4ac-083f8d76aeb5
       - APP_VAULT_SECRET_ID=ba16f439-45e6-0618-1513-5468a821abc2
       - APP_VAULT_SSL_CERTS_BASE_PATH=exp/20240131
-      - APP_MINOS_LOCAL_DATACENTER_IDENTIFIER=AWS_US_WEST_2
-      - APP_MINOS_CASSANDRA_AUTH_ENABLED=true
-      - APP_MINOS_CASSANDRA_VAULT_ROLE_ID=477c1f64-1d4f-e6c3-170d-7ad751c66cd8
-      - APP_MINOS_CASSANDRA_VAULT_SECRET_ID=ce571543-345c-7a60-5143-b56b53ca2c0c
+      - MINOS_LOCAL_DATACENTER_IDENTIFIER=AWS_US_WEST_2
+      - MINOS_AUTHENTICATION_ENABLED=true
+      - MINOS_CASSANDRA_VAULT_ROLE_ID=477c1f64-1d4f-e6c3-170d-7ad751c66cd8
+      - MINOS_CASSANDRA_VAULT_SECRET_ID=ce571543-345c-7a60-5143-b56b53ca2c0c
+      - MINOS_DB_PORT_AWS_US_WEST_2=9042
+      - BPAS_HOST=bpas.istio-gateway.backend.k8s.us-west-2.hcom-lab-decaf.aws.hcom
+      - SAPS_HOST=saps.istio-gateway.backend.k8s.us-west-2.hcom-lab-decaf.aws.hcom
