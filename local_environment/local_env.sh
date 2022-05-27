@@ -283,15 +283,23 @@ function start-app {
 
     if [ "${APP}" = "bpe" ]
     then
-        if ! ${START_BPE} && [ "${START_MODE}" != "start-all" ]
+        if ! ${START_BPE}
         then
-            echo "Error! BPE version NOT specified (missing -bpe-version parameter)!"
+            if [ "${START_MODE}" != "start-all" ]
+            then
+                echo "Error! BPE version NOT specified (missing -bpe-version parameter)!"
+            fi
             return 1
         fi
         if ${START_PIO}
         then
           APP_TYPE="_pio_local"
           PIO_CONTAINER_ID=$(docker container ls | grep 'paymentinitializationorchestrator:' | tail -1 | awk -F ' ' '{print $1}')
+          if [ -z "$PIO_CONTAINER_ID" ]
+          then
+            echo "No running PIO container found, cannot start BPE with PIO locally"
+            return 1
+          fi
           PIO_LOCAL_HOST=$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' $PIO_CONTAINER_ID)
           export PIO_LOCAL_HOST
         fi
@@ -301,11 +309,10 @@ function start-app {
     then
         if ! ${START_PIO}
         then
-            return 1
-        fi
-        if ! ${START_PIO} && [ "${START_MODE}" != "start-all" ]
-        then
-            echo "Error! PIO version NOT specified (missing -pio-version parameter)!"
+            if [ "${START_MODE}" != "start-all" ]
+            then
+                echo "Error! PIO version NOT specified (missing -pio-version parameter)!"
+            fi
             return 1
         fi
         APP_TYPE=${STUB_STATUS}
