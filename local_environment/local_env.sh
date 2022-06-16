@@ -199,6 +199,15 @@ function retrieve-secrets-from-eg-vault {
     vault login -namespace=lab -method=ldap username="$SEA_USER_NAME"
 
     # generate secrets at secrets.json
+    echo "Checking if jq is installed"
+    jq_install_path=$(which jq)
+    jq_installed=$?
+    if [[ $jq_installed -ne 0 ]]; then
+      echo "jq command not found. Please install it"
+      exit 1
+    else
+      echo "jq command found in $jq_install_path"
+    fi
     vault kv get -format=json -namespace $NAMESPACE  $SECRETS_PATH | jq '.data.data' > secrets.json
     echo "Retrieved secrets"
 }
