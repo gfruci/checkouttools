@@ -214,6 +214,7 @@ services:
       - ./logs/ba/:/app/servers/tomcat/logs/
       - mvt:/mvt
       - ~/.aws/:/home/expedia/.aws
+      - "./secrets.json:/vault/secrets/secrets.json"
 
     environment:
       - APP_CONFIG_ENVIRONMENT=development
@@ -229,6 +230,7 @@ services:
       - APP_BOOKING_SEND_CONFIRMATION_SMS=false
       - APP_SMS_CONFIRMATION_ENABLED=false
       - APP_spring.profiles.active=default,fakeauthentication
+      - EG_VAULT_ENABLED=${RCP_CONFIG}
       - APP_VAULT_USER_ID=staging-ba-01
       - APP_VAULT_TIMEOUT=60
       - APP_TOMCAT_EXECUTOR_MAX_THREADS=50
