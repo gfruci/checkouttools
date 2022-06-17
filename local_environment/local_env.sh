@@ -524,7 +524,7 @@ function init {
                 export PROXY_CONFIG
                 ;;
             -rcp)
-                export RCP_CONFIG=true
+                RCP_CONFIG=true
                 ;;
             -suit)
                 export SUIT=$2
