@@ -230,7 +230,7 @@ function start-app {
     if [ "${APP}" = "ba" ]
     then
         APP_TYPE=${STUB_STATUS}
-        if [ "${BA_VERSION}" = "" ] || [ "${BA_VERSION}" = "$NO_IMAGE"]
+        if [ "${BA_VERSION}" = "" ] || [ "${BA_VERSION}" = "$NO_IMAGE" ]
         then
             if [ "${START_MODE}" = "start-all" ]
             then
