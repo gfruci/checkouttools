@@ -180,8 +180,8 @@ function update {
 function login-to-aws {
     echo "Starting egctl"
     export AWS_PROFILE=default
-    ./egctl profile bookingapp-local-env || echo "bookingapp-local-env should be configured with egctl, please configure it using the instructions in the readme"
-    ./egctl login
+    egctl profile bookingapp-local-env || echo "bookingapp-local-env should be configured with egctl, please configure it using the instructions in the readme"
+    egctl login
     echo "Your token will expire after 1 hour, please either run \"egctl login\" or restart BA to continue to use EG TnL."
 }
 
