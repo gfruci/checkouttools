@@ -28,9 +28,11 @@ PROXY_CONFIG="-Dhttp.proxyHost=${DOCKER_GATEWAY_HOST:-host.docker.internal} -Dht
 export RCP_CONFIG=false
 
 START_MODE=
-BA_VERSION=
-BMA_VERSION=
-BCA_VERSION=
+NO_IMAGE=no_image
+export BA_VERSION=${NO_IMAGE}
+export BMA_VERSION=${NO_IMAGE}
+export BCA_VERSION=${NO_IMAGE}
+export CHECKITO_VERSION=${NO_IMAGE}
 export PIO_VERSION="latest"  # N.B.: export only marks variables for automatic export
 export BPE_VERSION="latest"
 START_BPE=false
@@ -178,8 +180,8 @@ function update {
 function login-to-aws {
     echo "Starting egctl"
     export AWS_PROFILE=default
-    egctl profile bookingapp-local-env || echo "bookingapp-local-env should be configured with egctl, please configure it using the instructions in the readme"
-    egctl login
+    ./egctl profile bookingapp-local-env || echo "bookingapp-local-env should be configured with egctl, please configure it using the instructions in the readme"
+    ./egctl login
     echo "Your token will expire after 1 hour, please either run \"egctl login\" or restart BA to continue to use EG TnL."
 }
 
@@ -228,7 +230,7 @@ function start-app {
     if [ "${APP}" = "ba" ]
     then
         APP_TYPE=${STUB_STATUS}
-        if [ "${BA_VERSION}" = "" ]
+        if [ "${BA_VERSION}" = "" ] || [ "${BA_VERSION}" = "$NO_IMAGE"]
         then
             if [ "${START_MODE}" = "start-all" ]
             then
@@ -258,7 +260,7 @@ function start-app {
     if [ "${APP}" = "bma" ]
     then
         APP_TYPE=${STUB_STATUS}
-        if [ "${BMA_VERSION}" = "" ]
+        if [ "${BMA_VERSION}" = "" ] || [ "${BMA_VERSION}" = "$NO_IMAGE" ]
         then
             if [ "${START_MODE}" = "start-all" ]
             then
@@ -283,7 +285,7 @@ function start-app {
     if [ "${APP}" = "bca" ]
     then
         APP_TYPE=${STUB_STATUS}
-        if [ "${BCA_VERSION}" = "" ]
+        if [ "${BCA_VERSION}" = "" ] || [ "${BCA_VERSION}" = "$NO_IMAGE" ]
         then
             if [ "${START_MODE}" = "start-all" ]
             then
