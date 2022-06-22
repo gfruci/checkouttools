@@ -25,11 +25,14 @@ cd ${PREV_DIR}
 #########################
 
 PROXY_CONFIG="-Dhttp.proxyHost=${DOCKER_GATEWAY_HOST:-host.docker.internal} -Dhttp.proxyPort=8888 -Dhttps.proxyHost=${DOCKER_GATEWAY_HOST:-host.docker.internal} -Dhttps.proxyPort=8888 -DproxyHost=${DOCKER_GATEWAY_HOST:-host.docker.internal} -DproxyPort=8888"
+export RCP_CONFIG=false
 
 START_MODE=
-BA_VERSION=
-BMA_VERSION=
-BCA_VERSION=
+NO_IMAGE=no_image
+export BA_VERSION=${NO_IMAGE}
+export BMA_VERSION=${NO_IMAGE}
+export BCA_VERSION=${NO_IMAGE}
+export CHECKITO_VERSION=${NO_IMAGE}
 export PIO_VERSION="latest"  # N.B.: export only marks variables for automatic export
 export BPE_VERSION="latest"
 START_BPE=false
@@ -182,6 +185,35 @@ function login-to-aws {
     echo "Your token will expire after 1 hour, please either run \"egctl login\" or restart BA to continue to use EG TnL."
 }
 
+function retrieve-secrets-from-eg-vault {
+    echo "retrieving secrets from eg vault"
+    export VAULT_ADDR=https://vault-enterprise.us-west-2.secrets.runtime.test-cts.exp-aws.net
+    export VAULT_SKIP_VERIFY=true
+    NAMESPACE='lab/islands/lodgingdemand'
+    SECRETS_PATH='lodging-reservation-checkout/kv-v2/bookingapp/secrets'
+
+
+    SYSTEM_USERNAME=$(id -un)
+
+    read -r -p "Enter SEA username ($SYSTEM_USERNAME): " SEA_USER_NAME
+    SEA_USER_NAME=${SEA_USER_NAME:-$SYSTEM_USERNAME}
+
+    vault login -namespace=lab -method=ldap username="$SEA_USER_NAME"
+
+    # generate secrets at secrets.json
+    echo "Checking if jq is installed"
+    jq_install_path=$(which jq)
+    jq_installed=$?
+    if [[ $jq_installed -ne 0 ]]; then
+      echo "jq command not found. Please install it"
+      exit 1
+    else
+      echo "jq command found in $jq_install_path"
+    fi
+    vault kv get -format=json -namespace $NAMESPACE  $SECRETS_PATH | jq '.data.data' > secrets.json
+    echo "Retrieved secrets"
+}
+
 ###############################
 # START/STOP/STATUS FUNCTIONS #
 ###############################
@@ -198,7 +230,7 @@ function start-app {
     if [ "${APP}" = "ba" ]
     then
         APP_TYPE=${STUB_STATUS}
-        if [ "${BA_VERSION}" = "" ]
+        if [ "${BA_VERSION}" = "" ] || [ "${BA_VERSION}" = "$NO_IMAGE" ]
         then
             if [ "${START_MODE}" = "start-all" ]
             then
@@ -218,13 +250,17 @@ function start-app {
 				echo "Using version: ${BA_VERSION}"
 			fi
             login-to-aws
+            if [ "${RCP_CONFIG}" = "true" ]
+            then
+              retrieve-secrets-from-eg-vault
+            fi
 		fi
     fi
 
     if [ "${APP}" = "bma" ]
     then
         APP_TYPE=${STUB_STATUS}
-        if [ "${BMA_VERSION}" = "" ]
+        if [ "${BMA_VERSION}" = "" ] || [ "${BMA_VERSION}" = "$NO_IMAGE" ]
         then
             if [ "${START_MODE}" = "start-all" ]
             then
@@ -249,7 +285,7 @@ function start-app {
     if [ "${APP}" = "bca" ]
     then
         APP_TYPE=${STUB_STATUS}
-        if [ "${BCA_VERSION}" = "" ]
+        if [ "${BCA_VERSION}" = "" ] || [ "${BCA_VERSION}" = "$NO_IMAGE" ]
         then
             if [ "${START_MODE}" = "start-all" ]
             then
@@ -423,7 +459,8 @@ function help {
     echo "Usage: $0 <command> <options>"
     echo "Commands:"
     echo "./local_env.sh start [-proxy]                                            Start the local environment, with no front-end apps (BA)"
-    echo "./local_env.sh start -ba-version <ba-version> [-no-stub] [-proxy] [-j8] Start the local environment, using the BA version: <ba-version>"
+    echo "./local_env.sh start -ba-version <ba-version> [-no-stub] [-proxy] [-j8]  Start the local environment, using the BA version: <ba-version>"
+    echo "./local_env.sh start -ba-version <ba-version> [-no-stub] [-proxy] [-rcp] Start the local environment with the RCP secret handling, using the BA version: <ba-version>"
     echo "./local_env.sh start -bma-version <bma-version> [-no-stub] [-proxy]      Start the local environment, using the BMA version: <bma-version>"
     echo "./local_env.sh start -bca-version <bca-version> [-no-stub] [-proxy]      Start the local environment, using the BMA version: <bma-version>"
 	  echo "                                                          Use 'local' as version to start up with local built image"
@@ -439,6 +476,7 @@ function help {
     echo "./local-env.sh start -no-stub"
     echo "BA start examples:"
     echo "./local_env.sh start-app ba -ba-version local -no-stub"
+    echo "./local_env.sh start-app ba -ba-version local -no-stub -rcp"
     echo "./local_env.sh start-app ba -ba-version bf0538ab789c71793aa2c025400d884813c7bc18 -no-stub"
     echo "./local_env.sh start-app ba -ba-version af092f20f5bc06af679259d6125c7eb8544c6b44-18627 -no-stub"
     echo 
@@ -449,6 +487,7 @@ function help {
     echo
     echo "Options:"
     echo "-no-stub                                                  Start the local environment without using checkito as mocking server (by default is using Checkito)"
+    echo "-rcp                                                      Start the local environment with RCP secret handling (only valid for the BookingApp so far)"
     echo "-proxy                                                    Set the local environment proxy host to docker.for.mac.localhost:8888"
     echo "-j8                                                       Sets Java 8 related options"
     echo "-suit                                                     Configures which suit will be used with checkito"
@@ -485,6 +524,9 @@ function init {
                 ;;
             -proxy)
                 export PROXY_CONFIG
+                ;;
+            -rcp)
+                RCP_CONFIG=true
                 ;;
             -suit)
                 export SUIT=$2
