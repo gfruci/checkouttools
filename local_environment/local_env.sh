@@ -529,6 +529,7 @@ function init {
             -rcp)
                 RCP_CONFIG=true
                 LOGGING_PATH="classpath:conf/logback/logback-aws-rcp.xml"
+                export ORIGINS_PATH="/styxconf/origins_rcp.yaml"
                 ;;
             -suit)
                 export SUIT=$2
