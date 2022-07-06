@@ -26,6 +26,7 @@ cd ${PREV_DIR}
 
 PROXY_CONFIG="-Dhttp.proxyHost=${DOCKER_GATEWAY_HOST:-host.docker.internal} -Dhttp.proxyPort=8888 -Dhttps.proxyHost=${DOCKER_GATEWAY_HOST:-host.docker.internal} -Dhttps.proxyPort=8888 -DproxyHost=${DOCKER_GATEWAY_HOST:-host.docker.internal} -DproxyPort=8888"
 export RCP_CONFIG=false
+export LOGGING_PATH="classpath:conf/logback/logback-aws.xml"
 
 START_MODE=
 NO_IMAGE=no_image
@@ -527,6 +528,7 @@ function init {
                 ;;
             -rcp)
                 RCP_CONFIG=true
+                LOGGING_PATH="classpath:conf/logback/logback-aws-rcp.xml"
                 ;;
             -suit)
                 export SUIT=$2
