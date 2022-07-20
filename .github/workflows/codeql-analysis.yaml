@@ -21,7 +21,8 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v2
 
-    - name: Setup Java
+    - if: matrix.language == 'java'
+      name: Setup Java
       uses: actions/setup-java@v2
       with:
         java-version: 11
