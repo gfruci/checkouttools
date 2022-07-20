@@ -10,35 +10,19 @@ on:
     - cron: '58 17 * * 3'
 
 jobs:
-  analyze-python:
-    name: Analyze (python)
-    runs-on: [ eg-securityscan ]
-    strategy:
-      fail-fast: false
-      matrix:
-        language: [ python ]
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-
-      - name: Initialize CodeQL
-        uses: github/codeql-action/init@v1
-
-      - name: Perform CodeQL Analysis
-        uses: github/codeql-action/analyze@v1
-
-  analyze-java:
-    name: Analyze (java)
+  analyze:
+    name: Analyze
     runs-on: [ eg-securityscan ]
     strategy:
         fail-fast: false
         matrix:
-            language: [ java ]
+            language: [ python, java ]
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
 
-    - name: Setup Java
+    - if: matrix.language == 'java'
+      name: Setup Java
       uses: actions/setup-java@v2
       with:
         java-version: 11
@@ -47,20 +31,26 @@ jobs:
 
     - name: Initialize CodeQL
       uses: github/codeql-action/init@v1
+      with:
+        languages: ${{ matrix.language }}
 
-    - name: Build configuration_tracer
+    - if: matrix.language == 'java'
+      name: Build configuration_tracer
       working-directory: ./configuration_tracer
       run: mvn install
 
-    - name: Build jsp-tracer
+    - if: matrix.language == 'java'
+      name: Build jsp-tracer
       working-directory: ./jsp-tracer
       run: mvn install
 
-    - name: Build mockupdater
+    - if: matrix.language == 'java'
+      name: Build mockupdater
       working-directory: ./mockupdater
       run: mvn install
 
-    - name: Build rokt_public_key_converter
+    - if: matrix.language == 'java'
+      name: Build rokt_public_key_converter
       working-directory: ./rokt_public_key_converter
       run: mvn install
 
