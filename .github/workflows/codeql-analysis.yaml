@@ -33,8 +33,8 @@ jobs:
         languages: ${{ matrix.language }}
     # Autobuild attempts to build any compiled languages  (C/C++, C#, or Java).
     # If this step fails, then you should remove it and run the build manually (see below)
-    - name: Autobuild
-      uses: github/codeql-action/autobuild@v1
+#    - name: Autobuild
+#      uses: github/codeql-action/autobuild@v1
 
     # ✏️ If the Autobuild fails above, remove it and uncomment the following three lines
     #    and modify them (or add more) to build your code if your project
@@ -43,5 +43,22 @@ jobs:
     #- run: |
     #   make bootstrap
     #   make release
+
+    - name: Build configuration_tracer
+      working-directory: ./configuration_tracer
+      run: mvn install
+
+    - name: Build jsp-tracer
+      working-directory: ./jsp-tracer
+      run: mvn install
+
+    - name: Build mockupdater
+      working-directory: ./mockupdater
+      run: mvn install
+
+    - name: Build rokt_public_key_converter
+      working-directory: ./rokt_public_key_converter
+      run: mvn install
+
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v1
