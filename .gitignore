@@ -2,3 +2,4 @@
 /starter_script/env.conf
 .DS_Store
 target/
+*.iml
