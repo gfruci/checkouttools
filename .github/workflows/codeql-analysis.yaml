@@ -21,8 +21,7 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v2
 
-    - if: matrix.language == 'java'
-      name: Setup Java
+    - name: Setup Java
       uses: actions/setup-java@v2
       with:
         java-version: 11
@@ -34,30 +33,8 @@ jobs:
       with:
         languages: ${{ matrix.language }}
 
-    - if: matrix.language == 'java'
-      name: Build configuration_tracer
-      working-directory: ./configuration_tracer
-      run: mvn install
-
-    - if: matrix.language == 'java'
-      name: Build jsp-tracer
-      working-directory: ./jsp-tracer
-      run: mvn install
-
-    - if: matrix.language == 'java'
-      name: Build mockupdater
-      working-directory: ./mockupdater
-      run: mvn install
-
-    - if: matrix.language == 'java'
-      name: Build rokt_public_key_converter
-      working-directory: ./rokt_public_key_converter
-      run: mvn install
-
-    - if: matrix.language == 'java'
-      name: Build unhotelling_tool
-      working-directory: ./unhotelling_tool/comhotelunhotelling
-      run: mvn install
+    - name: Autobuild
+      uses: github/codeql-action/autobuild@v1
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v1
