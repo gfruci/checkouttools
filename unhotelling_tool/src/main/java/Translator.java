@@ -9,10 +9,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Logger;
-
 import com.google.gson.Gson;
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -22,7 +22,7 @@ public class Translator {
     static String baseLomsURLString = "http://localisationmessagesvc.milan.hcom/messages/";
     static String ENG_LANGUAGE_KEY = "en_GB";
     static String FR_LANGUAGE_KEY = "fr_FR";
-    final static Logger logger = Logger.getLogger(Translator.class);
+    final static Logger LOGGER = LoggerFactory.getLogger(Translator.class);
 
     public List<Output> urlCall() throws MalformedURLException, IOException {
 
@@ -32,8 +32,8 @@ public class Translator {
         List<String> readedKeys = keyReader();
         int i = 1;
         for (String key : readedKeys) {
-            logger.info("processing: " + i++ + " out of " + readedKeys.size());
-            logger.info("key : " + key);
+            LOGGER.info("processing: " + i++ + " out of " + readedKeys.size());
+            LOGGER.info("key : " + key);
             URL concatenatedOriginalURL = new URL(baseLomsURL + key);
 
             Output newOutput = new Output();
@@ -75,7 +75,7 @@ public class Translator {
         try {
             String strLine;
             while ((strLine = br.readLine()) != null) {
-                logger.info(strLine);
+                LOGGER.info(strLine);
 
                 String[] valuesInQuotes = StringUtils.substringsBetween(strLine, "\"", "\"");
 

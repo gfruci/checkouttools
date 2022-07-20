@@ -5,11 +5,6 @@ import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Mojo;
 
-/**
- * This goal will run the main
- *
- * @goal translate
- */
 @Mojo(name = "translate")
 public class Main extends AbstractMojo {
 
