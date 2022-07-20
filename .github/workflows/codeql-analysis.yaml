@@ -54,5 +54,10 @@ jobs:
       working-directory: ./rokt_public_key_converter
       run: mvn install
 
+    - if: matrix.langugae == 'java'
+      name: Build unhotelling_tool
+      working-directory: ./unhotelling_tool/comhotelunhotelling
+      run: mvn install
+
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v1
