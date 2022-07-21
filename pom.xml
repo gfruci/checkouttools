@@ -13,6 +13,5 @@
 		<module>jsp-tracer</module>
 		<module>mockupdater</module>
 		<module>rokt_public_key_converter</module>
-		<module>unhotelling_tool</module>
 	</modules>
 </project>
