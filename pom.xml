@@ -9,7 +9,6 @@
 	<packaging>pom</packaging>
 
 	<modules>
-		<module>configuration_tracer</module>
 		<module>jsp-tracer</module>
 		<module>mockupdater</module>
 		<module>rokt_public_key_converter</module>
