@@ -21,12 +21,6 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v2
 
-    - if: matrix.language == 'python'
-      name: Setup Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: 3.9
-
     - if: matrix.language == 'java'
       name: Setup Java
       uses: actions/setup-java@v2
@@ -39,6 +33,7 @@ jobs:
       uses: github/codeql-action/init@v1
       with:
         languages: ${{ matrix.language }}
+        setup-python-dependencies: false
 
     - name: Autobuild
       uses: github/codeql-action/autobuild@v1
