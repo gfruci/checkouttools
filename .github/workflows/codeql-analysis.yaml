@@ -24,8 +24,8 @@ jobs:
     - if: matrix.language == 'python'
       name: Setup Python
       uses: actions/setup-python@v4
-        with:
-          python-version: 3.9
+      with:
+        python-version: 3.9
 
     - if: matrix.language == 'java'
       name: Setup Java
