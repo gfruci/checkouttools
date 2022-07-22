@@ -16,27 +16,15 @@ jobs:
     strategy:
         fail-fast: false
         matrix:
-            language: [ python, java ]
+            language: [ python ]
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
 
-    - if: matrix.language == 'java'
-      name: Setup Java
-      uses: actions/setup-java@v2
-      with:
-        java-version: 11
-        distribution: adopt
-        overwrite-settings: false
-
     - name: Initialize CodeQL
       uses: github/codeql-action/init@v1
       with:
-        languages: ${{ matrix.language }}
         setup-python-dependencies: false
-
-    - name: Autobuild
-      uses: github/codeql-action/autobuild@v1
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v1
