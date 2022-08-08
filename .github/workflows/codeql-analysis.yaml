@@ -1,31 +1,37 @@
-name: "GitHub-Advanced-Security-Scan"
+---
+name: GHAS-CodeQL-Scan
 
 on:
+  workflow_dispatch:
   push:
-    branches: [ master ]
+    branches: [master]
   pull_request:
     # The branches below must be a subset of the branches above
-    branches: [ master ]
+    branches: [master]
   schedule:
     - cron: '58 17 * * 3'
 
 jobs:
   analyze:
     name: Analyze
-    runs-on: [ eg-securityscan ]
+    runs-on: [eg-securityscan]
     strategy:
-        fail-fast: false
-        matrix:
-            language: [ python ]
+      fail-fast: false
+      matrix:
+        language: [python]
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
-
-    - name: Initialize CodeQL
-      uses: github/codeql-action/init@v1
-      with:
-        languages: ${{ matrix.language }}
-        setup-python-dependencies: false
-
-    - name: Perform CodeQL Analysis
-      uses: github/codeql-action/analyze@v1
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Setup Python
+        if: matrix.language == 'python'
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.x
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v2
+        with:
+          languages: ${{ matrix.language }}
+          setup-python-dependencies: false
+          queries: security-extended
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v2
