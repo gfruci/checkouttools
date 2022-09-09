@@ -311,6 +311,8 @@ services:
       - APP_OMS_RETRIEVE_ORDER_SERVICE_URL=https://charon-maui.test.fctsordering.expedia.com/retrieve
       - APP_ZIPKIN_SAMPLE_RATE=0
 
+      - APP_COUPON_ROUTING_SERVICE_THERMOS_TIMEOUT_IN_MILLISECONDS=25000
+
   bma:
     image: ${BMA_VERSION}
     container_name: bma
