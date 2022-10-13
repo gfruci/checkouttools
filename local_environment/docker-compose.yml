@@ -107,7 +107,7 @@ services:
       - APP_MINOS_CASSANDRA_VAULT_ROLE_ID=477c1f64-1d4f-e6c3-170d-7ad751c66cd8
       - APP_MINOS_CASSANDRA_VAULT_SECRET_ID=ce571543-345c-7a60-5143-b56b53ca2c0c
       - APP_MINOS_DB_HOSTS=
-      - APP_MINOS_DB_HOSTS_AWS_US_WEST_2=cassandra.shared.1.us-west-2.hcom-lab-decaf.aws.hcom:9042,cassandra.shared.2.us-west-2.hcom-lab-decaf.aws.hcom:9042,cassandra.shared.3.us-west-2.hcom-lab-decaf.aws.hcom:9042,cassandra.shared.4.us-west-2.hcom-lab-decaf.aws.:9042hcom:9042,cassandra.shared.5.us-west-2.hcom-lab-decaf.aws.hcom:9042,cassandra.shared.6.us-west-2.hcom-lab-decaf.aws.hcom:9042
+      - APP_MINOS_DB_HOSTS_AWS_US_WEST_2=cassandra.shared.1.us-west-2.hcom-lab-decaf.aws.hcom:9042,cassandra.shared.2.us-west-2.hcom-lab-decaf.aws.hcom:9042,cassandra.shared.3.us-west-2.hcom-lab-decaf.aws.hcom:9042,cassandra.shared.4.us-west-2.hcom-lab-decaf.aws.hcom:9042,cassandra.shared.5.us-west-2.hcom-lab-decaf.aws.hcom:9042,cassandra.shared.6.us-west-2.hcom-lab-decaf.aws.hcom:9042
       - APP_MINOS_DB_HOSTS_AWS_US_EAST_1=
       - APP_MINOS_DB_PORT_AWS_US_WEST_2=9042
       - APP_DSC_CASSANDRA_AUTH_ENABLED=true
@@ -259,7 +259,7 @@ services:
       - APP_MINOS_CASSANDRA_VAULT_ROLE_ID=477c1f64-1d4f-e6c3-170d-7ad751c66cd8
       - APP_MINOS_CASSANDRA_VAULT_SECRET_ID=ce571543-345c-7a60-5143-b56b53ca2c0c
       - APP_MINOS_DB_HOSTS=
-      - APP_MINOS_DB_HOSTS_AWS_US_WEST_2=cassandra.shared.1.us-west-2.hcom-lab-decaf.aws.hcom:9042,cassandra.shared.2.us-west-2.hcom-lab-decaf.aws.hcom:9042,cassandra.shared.3.us-west-2.hcom-lab-decaf.aws.hcom:9042,cassandra.shared.4.us-west-2.hcom-lab-decaf.aws.:9042hcom:9042,cassandra.shared.5.us-west-2.hcom-lab-decaf.aws.hcom:9042,cassandra.shared.6.us-west-2.hcom-lab-decaf.aws.hcom:9042
+      - APP_MINOS_DB_HOSTS_AWS_US_WEST_2=cassandra.shared.1.us-west-2.hcom-lab-decaf.aws.hcom:9042,cassandra.shared.2.us-west-2.hcom-lab-decaf.aws.hcom:9042,cassandra.shared.3.us-west-2.hcom-lab-decaf.aws.hcom:9042,cassandra.shared.4.us-west-2.hcom-lab-decaf.aws.hcom:9042,cassandra.shared.5.us-west-2.hcom-lab-decaf.aws.hcom:9042,cassandra.shared.6.us-west-2.hcom-lab-decaf.aws.hcom:9042
       - APP_MINOS_DB_HOSTS_AWS_US_EAST_1=
       - APP_MINOS_DB_PORT_AWS_US_WEST_2=9042
       - APP_DSC_CASSANDRA_AUTH_ENABLED=true
