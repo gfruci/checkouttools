@@ -328,7 +328,6 @@ services:
     volumes:
       - ./logs/bma/:/app/servers/tomcat/logs/
       - mvt:/mvt
-      - ./globalconf/:/app/globalconf/
     environment:
       - APP_CONFIG_ENVIRONMENT=development
       - APP_jvm.route=development
@@ -465,7 +464,6 @@ services:
     volumes:
       - ./logs/bma/:/app/servers/tomcat/logs/
       - mvt:/mvt
-      - ./globalconf/:/app/globalconf/
     environment:
       - APP_CONFIG_ENVIRONMENT=development
       - APP_jvm.route=development
