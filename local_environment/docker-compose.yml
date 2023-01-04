@@ -294,7 +294,7 @@ services:
       - APP_MVTCLIENT_TIMEOUT_IN_MILLISECONDS=2000
       - APP_VALUE_ADD_PROMOTIONS_JSON_API_HOST=http://tls-lvas.us-west-2.test.tls.expedia.com/
       - APP_CPDS_API_DOMAIN_NAME=cpds.istio-gateway.backend.k8s.us-west-2.hcom-lab-secure.aws.hcom
-      - APP_platform-expsite.siteResolver.s3UpdateEnabled=true 
+      - APP_platform-expsite.siteResolver.s3UpdateEnabled=true
 
       # Not supported on checkito yet
       - APP_FENCED_VAP_ENABLED=false
@@ -315,6 +315,7 @@ services:
       - APP_OMS_CREATE_ORDER_SERVICE_URL=https://charon-maui.test.fctsordering.expedia.com/create
       - APP_OMS_RETRIEVE_ORDER_SERVICE_URL=https://charon-maui.test.fctsordering.expedia.com/retrieve
       - APP_ZIPKIN_SAMPLE_RATE=0
+      - APP_TNL_S3_OBJECT_KEY=v3/activeExperiments.json.gz
 
       - APP_COUPON_ROUTING_SERVICE_THERMOS_TIMEOUT_IN_MILLISECONDS=15000
       - APP_USER_SERVICE_THERMOS_TIMEOUT_IN_MILLISECONDS=15000
