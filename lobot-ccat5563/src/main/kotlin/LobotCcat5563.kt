@@ -179,7 +179,7 @@ fun createRoutingRuleWithEncryptedId(url: String, authToken: String, posHumanNam
   "variables": {
     "endpointRule": {
       "identifier": "ccat5563-h2b-${endpoint}-to-trip-overview-with-encrypted-id-${posHumanName}-${environment}",
-      "description": "Reroutes HCOM Classic ${endpoint} (with encrypted id) traffic to HoB Trip Overview when PoSa is ${posHumanName} and environment is ${environment}. More details: https://jira.expedia.biz/browse/CCAT-5563",
+      "description": "Reroutes HCOM Classic ${endpoint} (with encrypted id) traffic to HoB Trip Overview when PoSa is ${posHumanName.capitalized()} and environment is ${environment}. More details: https://jira.expedia.biz/browse/CCAT-5563",
       "version": 1,
       "tenants": [
         "hcom"
@@ -235,7 +235,7 @@ fun createRoutingRuleWithItineraryId(url: String, authToken: String, posHumanNam
   "variables": {
     "endpointRule": {
       "identifier": "ccat5563-h2b-${endpoint}-to-trip-overview-with-itinerary-id-${posHumanName}-${environment}",
-      "description": "Reroutes HCOM Classic ${endpoint} (with non-encrypted \"itineraryId\") traffic to HoB Trip Overview when PoSa is ${posHumanName} and environment is ${environment}. More details: https://jira.expedia.biz/browse/CCAT-5563",
+      "description": "Reroutes HCOM Classic ${endpoint} (with non-encrypted \"itineraryId\") traffic to HoB Trip Overview when PoSa is ${posHumanName.capitalized()} and environment is ${environment}. More details: https://jira.expedia.biz/browse/CCAT-5563",
       "version": 1,
       "tenants": [
         "hcom"
@@ -295,6 +295,12 @@ fun insertStaging1ForLabHost(prodHost: String) : String =
         throw IllegalArgumentException("prodHost has unexpected suffix: ${prodHost}")
     }
 
+/**
+ * Creates the necessary Lobot objects for rerouting traffic related to 1 certain POSa.
+ *
+ * Routing rules with 'itineraryId' query parameter are intentionally NOT created for the print_receipt endpoint,
+ * because that endpoint only supports the encrypted 'id' query parameter.
+ */
 fun createForPoSa(url: String, authToken: String, posHumanName: String,
     oldPos: String, oldLocale: String, oldProdHost: String,
     newPos: String, newLocale: String, newProdHost: String) {
@@ -310,14 +316,12 @@ fun createForPoSa(url: String, authToken: String, posHumanName: String,
     createRoutingRuleWithItineraryId(url, authToken, posHumanName, "lab", "web-vrp-desktop")
     createRoutingRuleWithEncryptedId(url, authToken, posHumanName, "lab", "web-vrp-mobile")
     createRoutingRuleWithItineraryId(url, authToken, posHumanName, "lab", "web-vrp-mobile")
-//    createRoutingRuleWithEncryptedId(url, authToken, posHumanName, "lab", "print-receipt")
-    createRoutingRuleWithItineraryId(url, authToken, posHumanName, "lab", "print-receipt")
+    createRoutingRuleWithEncryptedId(url, authToken, posHumanName, "lab", "print-receipt")
     createRoutingRuleWithEncryptedId(url, authToken, posHumanName, "prod", "web-vrp-desktop")
     createRoutingRuleWithItineraryId(url, authToken, posHumanName, "prod", "web-vrp-desktop")
     createRoutingRuleWithEncryptedId(url, authToken, posHumanName, "prod", "web-vrp-mobile")
     createRoutingRuleWithItineraryId(url, authToken, posHumanName, "prod", "web-vrp-mobile")
-//    createRoutingRuleWithEncryptedId(url, authToken, posHumanName, "prod", "print-receipt")
-    createRoutingRuleWithItineraryId(url, authToken, posHumanName, "prod", "print-receipt")
+    createRoutingRuleWithEncryptedId(url, authToken, posHumanName, "prod", "print-receipt")
 }
 
 fun createForPoSas(url: String, authToken: String) {
@@ -328,8 +332,8 @@ fun createForPoSas(url: String, authToken: String) {
         "HCOM_BE", "de_BE","de.hotels.com",
         "HCOM_BE", "de_BE", "be.hotels.com")
     createForPoSa(url, authToken, "belgium-french",
-        "HCOM_BE", "fr_CA","fr.hotels.com",
-        "HCOM_BE", "fr_CA", "be.hotels.com")
+        "HCOM_BE", "fr_BE","fr.hotels.com",
+        "HCOM_BE", "fr_BE", "be.hotels.com")
     createForPoSa(url, authToken, "belize",
         "HCOM_LATAM", "es_BZ", "www.hoteles.com",
         "HCOM_LATAM", "en_US", "www.hoteles.com")
@@ -340,7 +344,7 @@ fun createForPoSas(url: String, authToken: String) {
         "HCOM_CA", "fr_CA","fr.hotels.com",
         "HCOM_CA", "fr_CA", "ca.hotels.com")
     createForPoSa(url, authToken, "czech",
-        "HCOM_CZ", "HCOM_CZ","cs.hotels.com",
+        "HCOM_CZ", "cs_CZ","cs.hotels.com",
         "HCOM_EMEA", "en_IE", "www.hotels.com")
     createForPoSa(url, authToken, "china-english",
         "HCOM_ASIA", "en_CN","www.hotels.com",
@@ -406,7 +410,7 @@ fun createForPoSas(url: String, authToken: String) {
         "HCOM_LATAM", "en_LA","www.hotels.com",
         "HCOM_LATAM", "en_US", "www.hoteles.com")
     createForPoSa(url, authToken, "slovakia",
-        "HCOM_SK", "HCOM_SK","sk.hotels.com",
+        "HCOM_SK", "sk_SK","sk.hotels.com",
         "HCOM_EMEA", "en_IE", "www.hotels.com")
     createForPoSa(url, authToken, "south-korea-english",
         "HCOM_ASIA", "en_KR","www.hotels.com",
