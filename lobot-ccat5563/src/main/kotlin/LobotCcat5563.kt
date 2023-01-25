@@ -403,9 +403,6 @@ fun createForPoSas(url: String, authToken: String) {
     createForPoSa(url, authToken, "poland",
         "HCOM_PL", "pl_PL","pl.hotels.com",
         "HCOM_EMEA", "en_IE", "www.hotels.com")
-    createForPoSa(url, authToken, "rest-of-africa-english",
-        "HCOM_EMEA", "en_IE","www.hotels.com",
-        "HCOM_ME", "en_GB", "www.hotels.com")
     createForPoSa(url, authToken, "rest-of-latam-english",
         "HCOM_LATAM", "en_LA","www.hotels.com",
         "HCOM_LATAM", "en_US", "www.hoteles.com")
