@@ -188,6 +188,7 @@ services:
       - APP_USER_DATA_PROFILE_DB="dynamo"
       - APP_USER_DATA_DYNAMO_TABLE="CKO_BA_USER_DATA_DYNAMO_TABLE"
       - APP_USER_DATA_DYNAMO_AWS_DEFAULT_REGION_OVERRIDE="us-west-2"
+      - APP_LOC_CLIENT_CACHE_BOOTSTRAP_ON_STARTUP=false
       #remote jmx
       - APP_com.sun.management.jmxremote=true
       - APP_com.sun.management.jmxremote.port=38007
@@ -295,6 +296,7 @@ services:
       - APP_VALUE_ADD_PROMOTIONS_JSON_API_HOST=http://tls-lvas.us-west-2.test.tls.expedia.com/
       - APP_CPDS_API_DOMAIN_NAME=cpds.istio-gateway.backend.k8s.us-west-2.hcom-lab-secure.aws.hcom
       - APP_platform-expsite.siteResolver.s3UpdateEnabled=true
+      - APP_LOC_CLIENT_CACHE_BOOTSTRAP_ON_STARTUP=false
 
       # Not supported on checkito yet
       - APP_FENCED_VAP_ENABLED=false
