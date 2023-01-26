@@ -161,6 +161,7 @@ Unzip the file.
   - On Mac: Run the downloaded file, at first time you need to set allow the run in the security settings.
 
 ![mac_security_exception](assets/tnl/mac_security_allow.png)
+  - Move it to the directory `/usr/local/bin` .
 
   - On Windows: Add egctl to the path.
 
