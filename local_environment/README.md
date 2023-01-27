@@ -209,7 +209,20 @@ Use your SEA account details for configuration.
 
 If you forget to rename the profile, you can manually change it in `~/.config/egctl.yaml`.
 
-### Checkout the local environment
+### How to run BA on an M1 mac (arm64 architecture)
+1. Upgrade your macOS to Ventura 13.2+
+2. Install Rosetta 2: softwareupdate --install-rosetta --agree-to-license
+3. Download the M1 Docker version: https://docs.docker.com/desktop/mac/apple-silicon/ (be sure to remove your old Docker first)
+4. Enable the following settings in Docker:
+    a. General --> Use Virtualization framework
+    b. Docker Engine:
+        i. Experimental = true
+        ii. buildkit = true
+    c. Features in development --> Use Rosetta for x86/amd64 emulation on Apple Silicon
+5. Go to the task/COPB-8949-run-ba-on-m1 branch
+6. Start BA locally like normal.
+
+## Checkout the local environment
 
 The local environment scripts and assets are in the git `checkouttools` repo.
 Clone the repo.
