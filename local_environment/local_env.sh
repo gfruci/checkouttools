@@ -70,7 +70,9 @@ app_cmd() {
             echo "docker pull ${DOCKER_IMAGE_PREFIX}/checkito:[tag] >> ${SCRIPT_DIR}/logs/startup.log 2>&1";;
 
         "nginx,start_status_cmd")
-            echo "grep -e \"nginx.*done\" ${SCRIPT_DIR}/logs/nginx.log";;
+            # echo "grep -e \"nginx.*done\" ${SCRIPT_DIR}/logs/nginx.log";;
+            # For M1 mac only - A different startup message is shown.
+            echo "grep -e \"Attaching to nginx\" ${SCRIPT_DIR}/logs/nginx.log";;
         "nginx,stop_status_cmd")
             echo "grep -e \"nginx.*error\" ${SCRIPT_DIR}/logs/nginx.log";;
 
