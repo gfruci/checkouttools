@@ -1,3 +1,5 @@
+package com.expedia.ccat5563
+
 import java.net.URI
 import java.net.http.HttpClient
 import java.net.http.HttpRequest
@@ -456,7 +458,10 @@ fun main(args: Array<String>) {
     val authToken = authToken(url, seaUsername, seaPassword)
     println("authToken=${authToken}")
 
-    createForPoSa(url, authToken, "mexico-english",
-        "HCOM_LATAM", "en_MX","www.hotels.com",
-        "HCOM_LATAM", "en_US", "www.hoteles.com")
+//    createForPoSa(url, authToken, "mexico-english",
+//        "HCOM_LATAM", "en_MX","www.hotels.com",
+//        "HCOM_LATAM", "en_US", "www.hoteles.com")
+
+    val ruleId = RoutingRuleIdentifierToIdConverter().convert(url, authToken, "h2b-web-vrp-desktop-to-trip-overview-with-encrypted-id")
+    println(ruleId)
 }

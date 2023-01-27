@@ -1,3 +1,5 @@
+package com.expedia.ccat5563
+
 import java.util.Locale
 
 fun String.capitalized() =
