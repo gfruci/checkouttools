@@ -211,15 +211,18 @@ If you forget to rename the profile, you can manually change it in `~/.config/eg
 
 ### How to run BA on an M1 mac (arm64 architecture)
 1. Upgrade your macOS to Ventura 13.2+
-2. Install Rosetta 2: softwareupdate --install-rosetta --agree-to-license
+2. Install Rosetta 2: ```softwareupdate --install-rosetta --agree-to-license```
 3. Download the M1 Docker version: https://docs.docker.com/desktop/mac/apple-silicon/ (be sure to remove your old Docker first)
 4. Enable the following settings in Docker:
     a. General --> Use Virtualization framework
+    ![use_virtualization_framework](assets/m1_mac/use_virtualization_framework.png)
     b. Docker Engine:
-        i. Experimental = true
-        ii. buildkit = true
+        i. ```Experimental = true```
+        ii. ```buildkit = true```
+    ![enable_experimental_and_buildkit](assets/m1_mac/enable_experimental_and_buildkit.png)
     c. Features in development --> Use Rosetta for x86/amd64 emulation on Apple Silicon
-5. Go to the task/COPB-8949-run-ba-on-m1 branch
+    ![enable_rosetta](assets/m1_mac/enable_rosetta.png)
+5. Go to the ```task/COPB-8949-run-ba-on-m1``` branch
 6. Start BA locally like normal.
 
 ## Checkout the local environment
