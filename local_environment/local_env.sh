@@ -49,7 +49,6 @@ DOCKER_IMAGE_PREFIX="kumo-docker-release-local.artylab.expedia.biz/library"
 BA_IMAGE_NAME="bookingapp"
 BMA_IMAGE_NAME="bookingmanagementapp"
 BCA_IMAGE_NAME="bookingchangeapp"
-export OS_NAME_ARM_64="arm64"
 
 app_cmd() {
     case "$1" in
@@ -71,12 +70,7 @@ app_cmd() {
             echo "docker pull ${DOCKER_IMAGE_PREFIX}/checkito:[tag] >> ${SCRIPT_DIR}/logs/startup.log 2>&1";;
 
         "nginx,start_status_cmd")
-            if [ "$(uname -m)" = $OS_NAME_ARM_64 ]
-            then
-                echo "grep -e \"Attaching to nginx\" ${SCRIPT_DIR}/logs/nginx.log";
-            else
-                echo "grep -e \"nginx.*done\" ${SCRIPT_DIR}/logs/nginx.log";
-            fi;;
+            echo "grep -e \"nginx.*done\" ${SCRIPT_DIR}/logs/nginx.log";;
         "nginx,stop_status_cmd")
             echo "grep -e \"nginx.*error\" ${SCRIPT_DIR}/logs/nginx.log";;
 
