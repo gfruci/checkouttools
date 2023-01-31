@@ -70,7 +70,7 @@ app_cmd() {
             echo "docker pull ${DOCKER_IMAGE_PREFIX}/checkito:[tag] >> ${SCRIPT_DIR}/logs/startup.log 2>&1";;
 
         "nginx,start_status_cmd")
-            echo "grep -e \"nginx.*done\" ${SCRIPT_DIR}/logs/nginx.log";;
+            echo "grep -E \"nginx.*done|Attaching to nginx\" ${SCRIPT_DIR}/logs/nginx.log";;
         "nginx,stop_status_cmd")
             echo "grep -e \"nginx.*error\" ${SCRIPT_DIR}/logs/nginx.log";;
 
