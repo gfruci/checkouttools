@@ -223,8 +223,7 @@ If you forget to rename the profile, you can manually change it in `~/.config/eg
    3. Features in development --> Use Rosetta for x86/amd64 emulation on Apple Silicon
    ![enable_rosetta](assets/m1_mac/enable_rosetta.png)
    4. Click "Apply & restart" to save your changes.
-5. Go to the ```task/COPB-8949-run-ba-on-m1``` branch
-6. Start BA/BMA/BCA locally like normal.
+5. Start BA/BMA/BCA locally like normal.
 
 ## Checkout the local environment
 
