@@ -215,13 +215,17 @@ If you forget to rename the profile, you can manually change it in `~/.config/eg
 3. Download the M1 Docker version: https://docs.docker.com/desktop/mac/apple-silicon/ (be sure to remove your old Docker first)
 4. Enable the following settings in Docker:
     a. General --> Use Virtualization framework
+    
     ![use_virtualization_framework](assets/m1_mac/use_virtualization_framework.png)
     b. Docker Engine:
         i. ```Experimental = true```
         ii. ```buildkit = true```
+    
     ![enable_experimental_and_buildkit](assets/m1_mac/enable_experimental_and_buildkit.png)
     c. Features in development --> Use Rosetta for x86/amd64 emulation on Apple Silicon
+    
     ![enable_rosetta](assets/m1_mac/enable_rosetta.png)
+    d. Click "Apply & restart" to save your changes.
 5. Go to the ```task/COPB-8949-run-ba-on-m1``` branch
 6. Start BA/BMA/BCA locally like normal.
 
