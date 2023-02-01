@@ -18,7 +18,7 @@ services:
       - APP_jvmRouteName=
       - APP_LOC_CLIENT_CACHE_THREADPOOL_SIZE_FOR_BOOTSTRAP=50
       - MAX_TIME_TO_WAIT=60
-      - JVM_HEAP_SIZE=-Xms1536m -Xmx1536m
+      - JVM_HEAP_SIZE=-Xms2048m -Xmx2048m
       - JVM_METASPACE=-XX:MetaspaceSize=100m -XX:MaxMetaspaceSize=100m -XX:MinMetaspaceFreeRatio=0 -XX:MaxMetaspaceFreeRatio=100
       - JVM_DIRECT_MEMORY=-XX:MaxDirectMemorySize=512m
       - JVM_OTHER_MEM=-XX:CompressedClassSpaceSize=20m -XX:InitialCodeCacheSize=50m -XX:ReservedCodeCacheSize=50m
