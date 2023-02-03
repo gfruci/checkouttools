@@ -4,7 +4,7 @@ import com.expedia.ccat5563.client.LobotApiClient
 import com.expedia.ccat5563.domain.Rerouting
 import com.expedia.ccat5563.mutation.RedirectModifier
 import com.expedia.ccat5563.mutation.SharedConditionModifier
-import com.expedia.ccat5563.mutation.routingrule.RoutingRuleIdentifierToIdConverter
+import com.expedia.ccat5563.mutation.routingrule.RuleUpdateParamsRetriever
 import com.expedia.ccat5563.mutation.routingrule.RoutingRuleModifier
 
 private const val FIRST_INDEX = 0
@@ -140,7 +140,7 @@ fun main(args: Array<String>) {
     val lobotReroutingEditor = LobotReroutingEditor(
         SharedConditionModifier(lobotApiClient),
         RedirectModifier(lobotApiClient),
-        RoutingRuleModifier(lobotApiClient, RoutingRuleIdentifierToIdConverter(lobotApiClient))
+        RoutingRuleModifier(lobotApiClient, RuleUpdateParamsRetriever(lobotApiClient))
     )
     val authToken = getAuthToken(lobotApiClient, args)
 

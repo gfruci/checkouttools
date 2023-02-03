@@ -5,7 +5,7 @@ import com.expedia.ccat5563.client.LobotApiClient
 
 class RoutingRuleModifier(
     private val lobotApiClient: LobotApiClient,
-    private val routingRuleIdentifierToIdConverter: RoutingRuleIdentifierToIdConverter
+    private val ruleUpdateParamsRetriever: RuleUpdateParamsRetriever
 ) {
     /**
      * https://github.expedia.biz/Brand-Expedia/lobot-api-java/wiki/Routing-Rules#create-endpoint-rule
@@ -126,7 +126,7 @@ class RoutingRuleModifier(
      */
     fun removeTestHeaderValidationFromRuleWithEncryptedId(authToken: String, posHumanName: String, environment: String, endpoint: String) {
         val ruleIdentifier = "ccat5563-h2b-$endpoint-to-trip-overview-with-encrypted-id-$posHumanName-$environment"
-        val ruleId = routingRuleIdentifierToIdConverter.convert(authToken, ruleIdentifier)
+        val ruleUpdateParams = ruleUpdateParamsRetriever.retrieve(authToken, ruleIdentifier)
         val requestBody = """
 {
   "query": "mutation removeTestHeaderValidationFromRuleWithEncryptedId(${'$'}endpointRule: EndpointRuleInput!, ${'$'}id: Long!) { updateEndpointRule(endpointRule: ${'$'}endpointRule, id: ${'$'}id) { id endpoint { id identifier description } identifier description site { siteIdentifiers siteHostnames } conditions experiments { experimentId shouldLog } result { application { id identifier description } weight metadata { pageName } interceptErrors nerfMode actions } version audit { createdAt createdBy lastUpdatedAt lastUpdatedBy } } }",
@@ -134,6 +134,7 @@ class RoutingRuleModifier(
     "endpointRule": {
       "identifier": "$ruleIdentifier",
       "description": "Reroutes HCOM Classic $endpoint (with encrypted id) traffic to HoB Trip Overview when PoSa is ${posHumanName.capitalized()} and environment is $environment. More details: https://jira.expedia.biz/browse/CCAT-5563",
+      "version": ${ruleUpdateParams.version},
       "tenants": [
         "hcom"
       ],
@@ -175,7 +176,7 @@ class RoutingRuleModifier(
       },
       "endpointIdentifier": "hcom-classic-$endpoint"
     },
-    "id": "$ruleId"
+    "id": "${ruleUpdateParams.id}"
   }
 }
         """.trimIndent()
@@ -187,7 +188,7 @@ class RoutingRuleModifier(
      */
     fun removeTestHeaderValidationFromRuleWithItineraryId(authToken: String, posHumanName: String, environment: String, endpoint: String) {
         val ruleIdentifier = "ccat5563-h2b-$endpoint-to-trip-overview-with-itinerary-id-$posHumanName-$environment"
-        val ruleId = routingRuleIdentifierToIdConverter.convert(authToken, ruleIdentifier)
+        val ruleUpdateParams = ruleUpdateParamsRetriever.retrieve(authToken, ruleIdentifier)
         val requestBody = """
 {
   "query": "mutation removeTestHeaderValidationFromRuleWithItineraryId(${'$'}endpointRule: EndpointRuleInput!, ${'$'}id: Long!) { updateEndpointRule(endpointRule: ${'$'}endpointRule, id: ${'$'}id) { id endpoint { id identifier description } identifier description site { siteIdentifiers siteHostnames } conditions experiments { experimentId shouldLog } result { application { id identifier description } weight metadata { pageName } interceptErrors nerfMode actions } version audit { createdAt createdBy lastUpdatedAt lastUpdatedBy } } }",
@@ -195,6 +196,7 @@ class RoutingRuleModifier(
     "endpointRule": {
       "identifier": "$ruleIdentifier",
       "description": "Reroutes HCOM Classic $endpoint (with non-encrypted \"itineraryId\") traffic to HoB Trip Overview when PoSa is ${posHumanName.capitalized()} and environment is $environment. More details: https://jira.expedia.biz/browse/CCAT-5563",
+      "version": ${ruleUpdateParams.version},
       "tenants": [
         "hcom"
       ],
@@ -240,7 +242,7 @@ class RoutingRuleModifier(
       },
       "endpointIdentifier": "hcom-classic-$endpoint"
     },
-    "id": "$ruleId"
+    "id": "${ruleUpdateParams.id}"
   }
 }
         """.trimIndent()

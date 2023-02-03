@@ -1,20 +1,24 @@
 package com.expedia.ccat5563.mutation.routingrule
 
 import com.expedia.ccat5563.client.LobotApiClient
+import com.expedia.ccat5563.domain.RuleUpdateParams
 
 private const val DELIMITER_COLON = ':'
-private const val CLOSING_CURLY_BRACE = '}'
+private const val DELIMITER_CLOSING_CURLY_BRACE = '}'
+private const val DELIMITER_COMMA = ','
 private const val IGNORE_CASE = true
-private const val SUBSTRING_LIMIT = 10
-private const val FOURTH_INDEX = 3
+private const val SUBSTRING_LIMIT = 100
+private const val ID_INDEX = 3
+private const val VERSION_INDEX = 5
 
-class RoutingRuleIdentifierToIdConverter(
+class RuleUpdateParamsRetriever(
     private val lobotApiClient: LobotApiClient
 ) {
-    fun convert(authToken: String, ruleIdentifier: String): String {
+    fun retrieve(authToken: String, ruleIdentifier: String): RuleUpdateParams {
         val response = sendRequest(ruleIdentifier, authToken)
-        val subStrings = response.split(DELIMITER_COLON, CLOSING_CURLY_BRACE, ignoreCase = IGNORE_CASE, limit = SUBSTRING_LIMIT)
-        return subStrings[FOURTH_INDEX]
+        println(response)
+        val subStrings = response.split(DELIMITER_COLON, DELIMITER_CLOSING_CURLY_BRACE, DELIMITER_COMMA, ignoreCase = IGNORE_CASE, limit = SUBSTRING_LIMIT)
+        return RuleUpdateParams(subStrings[ID_INDEX], subStrings[VERSION_INDEX])
     }
 
     /**
@@ -23,7 +27,7 @@ class RoutingRuleIdentifierToIdConverter(
     private fun sendRequest(ruleIdentifier: String, authToken: String): String {
         val requestBody = """
             {
-              "query": "query routingRuleIdentifierToId(${'$'}identifier: String!) { endpointRuleByIdentifier(identifier: ${'$'}identifier) { id } }",
+              "query": "query routingRuleIdentifierToId(${'$'}identifier: String!) { endpointRuleByIdentifier(identifier: ${'$'}identifier) { id version } }",
               "variables": {
                 "identifier": "$ruleIdentifier"          
               }
