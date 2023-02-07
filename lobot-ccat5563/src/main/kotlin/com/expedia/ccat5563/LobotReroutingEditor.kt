@@ -1,5 +1,6 @@
 package com.expedia.ccat5563
 
+import com.expedia.ccat5563.documentation.ConfluenceHtmlGenerator
 import com.expedia.ccat5563.domain.Rerouting
 import com.expedia.ccat5563.mutation.RedirectModifier
 import com.expedia.ccat5563.mutation.SharedConditionModifier
@@ -14,13 +15,15 @@ private const val PRINT_RECEIPT = "print-receipt"
 class LobotReroutingEditor(
     private val sharedConditionModifier: SharedConditionModifier,
     private val redirectModifier: RedirectModifier,
-    private val routingRuleModifier: RoutingRuleModifier
+    private val routingRuleModifier: RoutingRuleModifier,
+    private val confluenceHtmlGenerator: ConfluenceHtmlGenerator
 ) {
     fun createForPoSas(authToken: String, reroutings: List<Rerouting>) =
         reroutings.forEach{ rerouting -> createForPoSa(authToken, rerouting) }
 
     /**
-     * Creates the necessary Lobot objects for rerouting traffic related to 1 certain POSa.
+     * Creates the necessary Lobot objects for rerouting traffic related to 1 certain POSa,
+     * and the corresponding HTML links for documentation purposes.
      *
      * Routing rules with 'itineraryId' query parameter are intentionally NOT created for the print_receipt endpoint,
      * because that endpoint only supports the encrypted 'id' query parameter.
@@ -29,21 +32,30 @@ class LobotReroutingEditor(
         val oldLabHost = insertStaging1ForLabHost(rerouting.oldProdHost)
         val newLabHost = insertStaging1ForLabHost(rerouting.newProdHost)
         println()
-        sharedConditionModifier.create(authToken, rerouting, oldLabHost)
-        redirectModifier.createWithEncryptedId(authToken, rerouting, LAB, newLabHost)
-        redirectModifier.createWithItineraryId(authToken, rerouting, LAB, newLabHost)
-        redirectModifier.createWithEncryptedId(authToken, rerouting, PROD, rerouting.newProdHost)
-        redirectModifier.createWithItineraryId(authToken, rerouting, PROD, rerouting.newProdHost)
-        routingRuleModifier.createWithEncryptedId(authToken, rerouting.posHumanName, LAB, WEB_VRP_DESKTOP)
-        routingRuleModifier.createWithItineraryId(authToken, rerouting.posHumanName, LAB, WEB_VRP_DESKTOP)
-        routingRuleModifier.createWithEncryptedId(authToken, rerouting.posHumanName, LAB, WEB_VRP_MOBILE)
-        routingRuleModifier.createWithItineraryId(authToken, rerouting.posHumanName, LAB, WEB_VRP_MOBILE)
-        routingRuleModifier.createWithEncryptedId(authToken, rerouting.posHumanName, LAB, PRINT_RECEIPT)
-        routingRuleModifier.createWithEncryptedId(authToken, rerouting.posHumanName, PROD, WEB_VRP_DESKTOP)
-        routingRuleModifier.createWithItineraryId(authToken, rerouting.posHumanName, PROD, WEB_VRP_DESKTOP)
-        routingRuleModifier.createWithEncryptedId(authToken, rerouting.posHumanName, PROD, WEB_VRP_MOBILE)
-        routingRuleModifier.createWithItineraryId(authToken, rerouting.posHumanName, PROD, WEB_VRP_MOBILE)
-        routingRuleModifier.createWithEncryptedId(authToken, rerouting.posHumanName, PROD, PRINT_RECEIPT)
+        confluenceHtmlGenerator.generateHtmlRowAndSave(
+            rerouting.posHumanName,
+            listOf(
+                redirectModifier.createWithEncryptedId(authToken, rerouting, LAB, newLabHost),
+                redirectModifier.createWithItineraryId(authToken, rerouting, LAB, newLabHost),
+                redirectModifier.createWithEncryptedId(authToken, rerouting, PROD, rerouting.newProdHost),
+                redirectModifier.createWithItineraryId(authToken, rerouting, PROD, rerouting.newProdHost)
+            ),
+            listOf(
+                sharedConditionModifier.create(authToken, rerouting, oldLabHost)
+            ),
+            listOf(
+                routingRuleModifier.createWithEncryptedId(authToken, rerouting.posHumanName, LAB, WEB_VRP_DESKTOP),
+                routingRuleModifier.createWithItineraryId(authToken, rerouting.posHumanName, LAB, WEB_VRP_DESKTOP),
+                routingRuleModifier.createWithEncryptedId(authToken, rerouting.posHumanName, LAB, WEB_VRP_MOBILE),
+                routingRuleModifier.createWithItineraryId(authToken, rerouting.posHumanName, LAB, WEB_VRP_MOBILE),
+                routingRuleModifier.createWithEncryptedId(authToken, rerouting.posHumanName, LAB, PRINT_RECEIPT),
+                routingRuleModifier.createWithEncryptedId(authToken, rerouting.posHumanName, PROD, WEB_VRP_DESKTOP),
+                routingRuleModifier.createWithItineraryId(authToken, rerouting.posHumanName, PROD, WEB_VRP_DESKTOP),
+                routingRuleModifier.createWithEncryptedId(authToken, rerouting.posHumanName, PROD, WEB_VRP_MOBILE),
+                routingRuleModifier.createWithItineraryId(authToken, rerouting.posHumanName, PROD, WEB_VRP_MOBILE),
+                routingRuleModifier.createWithEncryptedId(authToken, rerouting.posHumanName, PROD, PRINT_RECEIPT)
+            )
+        )
     }
 
     private fun insertStaging1ForLabHost(prodHost: String) : String =

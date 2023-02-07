@@ -1,6 +1,7 @@
 package com.expedia.ccat5563
 
 import com.expedia.ccat5563.client.LobotApiClient
+import com.expedia.ccat5563.documentation.ConfluenceHtmlGenerator
 import com.expedia.ccat5563.domain.Rerouting
 import com.expedia.ccat5563.mutation.RedirectModifier
 import com.expedia.ccat5563.mutation.SharedConditionModifier
@@ -137,17 +138,21 @@ private val REROUTINGS = listOf(
  */
 fun main(args: Array<String>) {
     val lobotApiClient = LobotApiClient()
+    val confluenceHtmlGenerator = ConfluenceHtmlGenerator()
     val lobotReroutingEditor = LobotReroutingEditor(
-        SharedConditionModifier(lobotApiClient),
-        RedirectModifier(lobotApiClient),
-        RoutingRuleModifier(lobotApiClient, RuleUpdateParamsRetriever(lobotApiClient))
+        SharedConditionModifier(lobotApiClient, confluenceHtmlGenerator),
+        RedirectModifier(lobotApiClient, confluenceHtmlGenerator),
+        RoutingRuleModifier(lobotApiClient, RuleUpdateParamsRetriever(lobotApiClient), confluenceHtmlGenerator),
+        confluenceHtmlGenerator
     )
     val authToken = getAuthToken(lobotApiClient, args)
 
     /**
-     * Run this to create shared condition, redirects, routing rules for all rerouting scenarios in REROUTINGS.
+     * Run this to create shared condition, redirects, routing rules for all rerouting scenarios in REROUTINGS,
+     * and print all the HTML links ready to be copy-pasted into our confluence page here:
+     * https://confluence.expedia.biz/display/LCB2/Lobot+objects+created+for+Booking+Management+rerouting
      */
-//    lobotReroutingEditor.createForPoSas(authToken, REROUTINGS)
+//    createForPoSasAndPrintHtmlForConfluence(authToken, lobotReroutingEditor, confluenceHtmlGenerator)
 
     /**
      * Run this to prepare routing rules for PROD release: removes the "h2b-hcpb-to-trip-overview" test header validation from them.
@@ -162,4 +167,9 @@ private fun getAuthToken(lobotApiClient: LobotApiClient, args: Array<String>): S
     val authToken = AuthTokenProvider(lobotApiClient).provide(seaUsername, seaPassword)
     println("authToken=${authToken}")
     return authToken
+}
+
+private fun createForPoSasAndPrintHtmlForConfluence(authToken: String, lobotReroutingEditor: LobotReroutingEditor, confluenceHtmlGenerator: ConfluenceHtmlGenerator) {
+    lobotReroutingEditor.createForPoSas(authToken, REROUTINGS)
+    confluenceHtmlGenerator.printHtmlRows()
 }
