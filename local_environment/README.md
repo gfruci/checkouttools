@@ -161,6 +161,7 @@ Unzip the file.
   - On Mac: Run the downloaded file, at first time you need to set allow the run in the security settings.
 
 ![mac_security_exception](assets/tnl/mac_security_allow.png)
+  - Move it to the directory `/usr/local/bin` .
 
   - On Windows: Add egctl to the path.
 
@@ -208,7 +209,23 @@ Use your SEA account details for configuration.
 
 If you forget to rename the profile, you can manually change it in `~/.config/egctl.yaml`.
 
-### Checkout the local environment
+### How to run BA/BMA/BCA on an M1 mac (arm64 architecture)
+1. Upgrade your macOS to Ventura 13.2+
+2. Install Rosetta 2: ```softwareupdate --install-rosetta --agree-to-license```
+3. Download and install the M1 Docker version: https://docs.docker.com/desktop/mac/apple-silicon/
+4. Enable the following settings in Docker:
+   1. General --> Use Virtualization framework
+   ![use_virtualization_framework](assets/m1_mac/use_virtualization_framework.png)
+   2. Docker Engine:    
+       1. ```Experimental = true```
+       2. ```buildkit = true```
+   ![enable_experimental_and_buildkit](assets/m1_mac/enable_experimental_and_buildkit.png) 
+   3. Features in development --> Use Rosetta for x86/amd64 emulation on Apple Silicon
+   ![enable_rosetta](assets/m1_mac/enable_rosetta.png)
+   4. Click "Apply & restart" to save your changes.
+5. Start BA/BMA/BCA locally like normal.
+
+## Checkout the local environment
 
 The local environment scripts and assets are in the git `checkouttools` repo.
 Clone the repo.

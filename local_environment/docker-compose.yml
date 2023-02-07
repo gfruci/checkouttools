@@ -18,7 +18,7 @@ services:
       - APP_jvmRouteName=
       - APP_LOC_CLIENT_CACHE_THREADPOOL_SIZE_FOR_BOOTSTRAP=50
       - MAX_TIME_TO_WAIT=60
-      - JVM_HEAP_SIZE=-Xms1536m -Xmx1536m
+      - JVM_HEAP_SIZE=-Xms2048m -Xmx2048m
       - JVM_METASPACE=-XX:MetaspaceSize=100m -XX:MaxMetaspaceSize=100m -XX:MinMetaspaceFreeRatio=0 -XX:MaxMetaspaceFreeRatio=100
       - JVM_DIRECT_MEMORY=-XX:MaxDirectMemorySize=512m
       - JVM_OTHER_MEM=-XX:CompressedClassSpaceSize=20m -XX:InitialCodeCacheSize=50m -XX:ReservedCodeCacheSize=50m
@@ -294,7 +294,7 @@ services:
       - APP_MVTCLIENT_TIMEOUT_IN_MILLISECONDS=2000
       - APP_VALUE_ADD_PROMOTIONS_JSON_API_HOST=http://tls-lvas.us-west-2.test.tls.expedia.com/
       - APP_CPDS_API_DOMAIN_NAME=cpds.istio-gateway.backend.k8s.us-west-2.hcom-lab-secure.aws.hcom
-      - APP_platform-expsite.siteResolver.s3UpdateEnabled=true 
+      - APP_platform-expsite.siteResolver.s3UpdateEnabled=true
 
       # Not supported on checkito yet
       - APP_FENCED_VAP_ENABLED=false
@@ -315,6 +315,7 @@ services:
       - APP_OMS_CREATE_ORDER_SERVICE_URL=https://charon-maui.test.fctsordering.expedia.com/create
       - APP_OMS_RETRIEVE_ORDER_SERVICE_URL=https://charon-maui.test.fctsordering.expedia.com/retrieve
       - APP_ZIPKIN_SAMPLE_RATE=0
+      - APP_TNL_S3_OBJECT_KEY=v3/activeExperiments.json.gz
 
       - APP_COUPON_ROUTING_SERVICE_THERMOS_TIMEOUT_IN_MILLISECONDS=15000
       - APP_USER_SERVICE_THERMOS_TIMEOUT_IN_MILLISECONDS=15000
@@ -604,13 +605,17 @@ services:
       - APP_VAULT_SECRETS_REMOTE_PATH=bca/kv
 
       # Minos/DSC/UDT
-      - APP_MINOS_LOCAL_DATACENTER_IDENTIFIER=AWS_US_WEST_2
+      - APP_MINOS_LOCAL_DATACENTER_IDENTIFIER=RCP_US_WEST_2
+      - APP_MINOS_AUTHENTICATION_ENABLED=true
+      - APP_MINOS_RCP_AUTHENTICATION_ENABLED=true
       - APP_MINOS_CASSANDRA_AUTH_ENABLED=true
       - APP_MINOS_CASSANDRA_VAULT_ROLE_ID=477c1f64-1d4f-e6c3-170d-7ad751c66cd8
       - APP_MINOS_CASSANDRA_VAULT_SECRET_ID=ce571543-345c-7a60-5143-b56b53ca2c0c
-      - APP_MINOS_DB_HOSTS_AWS_US_WEST_2=cassandra.shared.1.us-west-2.hcom-lab-decaf.aws.hcom,cassandra.shared.2.us-west-2.hcom-lab-decaf.aws.hcom,cassandra.shared.3.us-west-2.hcom-lab-decaf.aws.hcom,cassandra.shared.4.us-west-2.hcom-lab-decaf.aws.hcom,cassandra.shared.5.us-west-2.hcom-lab-decaf.aws.hcom,cassandra.shared.6.us-west-2.hcom-lab-decaf.aws.hcom
       - APP_MINOS_DB_HOSTS_AWS_US_EAST_1=
+      - APP_MINOS_DB_HOSTS_RCP_US_EAST_1=
       - APP_MINOS_DB_PORT_AWS_US_WEST_2=9042
+      - APP_aws.us.west.2.minos.connectTimeoutMillis=30000
+      - APP_aws.us.west.2.minos.readTimeoutMillis=30000
       - APP_DSC_CASSANDRA_AUTH_ENABLED=true
       - APP_DSC_CASSANDRA_VAULT_ROLE_ID=e2558c4d-a309-5824-63be-06ef02143247
       - APP_DSC_CASSANDRA_VAULT_SECRET_ID=c80151e5-a227-8954-2f11-e9efab0a46ee
@@ -625,6 +630,8 @@ services:
       - APP_UDT_CASSANDRA_VAULT_ROLE_ID=4ec7e656-f121-d691-6a32-7c7f13dee572
       - APP_UDT_CASSANDRA_VAULT_SECRET_ID=5049b32f-1e10-2c67-db09-9fca30521cc8
       - APP_UDT_DB_PORT_AWS_US_WEST_2=9042
+      - APP_aws.us.west.2.udt.connectTimeoutMillis=30000
+      - APP_aws.us.west.2.udt.readTimeoutMillis=30000
       - APP_web.kafka.metadata.broker.list=kafka-broker-cds-1.us-west-2.hcom-lab-decaf.aws.hcom:9092,kafka-broker-cds-2.us-west-2.hcom-lab-decaf.aws.hcom:9092,kafka-broker-cds-3.us-west-2.hcom-lab-decaf.aws.hcom:9092
       - APP_audit.kafka.metadata.broker.list=kafka-broker-cds-1.us-west-2.hcom-lab-decaf.aws.hcom:9092,kafka-broker-cds-2.us-west-2.hcom-lab-decaf.aws.hcom:9092,kafka-broker-cds-3.us-west-2.hcom-lab-decaf.aws.hcom:9092
 
@@ -741,13 +748,17 @@ services:
       - APP_VAULT_SECRETS_REMOTE_PATH=bca/kv
 
       # Minos/DSC/UDT
-      - APP_MINOS_LOCAL_DATACENTER_IDENTIFIER=AWS_US_WEST_2
+      - APP_MINOS_LOCAL_DATACENTER_IDENTIFIER=RCP_US_WEST_2
+      - APP_MINOS_AUTHENTICATION_ENABLED=true
+      - APP_MINOS_RCP_AUTHENTICATION_ENABLED=true
       - APP_MINOS_CASSANDRA_AUTH_ENABLED=true
       - APP_MINOS_CASSANDRA_VAULT_ROLE_ID=477c1f64-1d4f-e6c3-170d-7ad751c66cd8
       - APP_MINOS_CASSANDRA_VAULT_SECRET_ID=ce571543-345c-7a60-5143-b56b53ca2c0c
-      - APP_MINOS_DB_HOSTS_AWS_US_WEST_2=cassandra.shared.1.us-west-2.hcom-lab-decaf.aws.hcom,cassandra.shared.2.us-west-2.hcom-lab-decaf.aws.hcom,cassandra.shared.3.us-west-2.hcom-lab-decaf.aws.hcom,cassandra.shared.4.us-west-2.hcom-lab-decaf.aws.hcom,cassandra.shared.5.us-west-2.hcom-lab-decaf.aws.hcom,cassandra.shared.6.us-west-2.hcom-lab-decaf.aws.hcom
       - APP_MINOS_DB_HOSTS_AWS_US_EAST_1=
+      - APP_MINOS_DB_HOSTS_RCP_US_EAST_1=
       - APP_MINOS_DB_PORT_AWS_US_WEST_2=9042
+      - APP_aws.us.west.2.minos.connectTimeoutMillis=30000
+      - APP_aws.us.west.2.minos.readTimeoutMillis=30000
       - APP_DSC_CASSANDRA_AUTH_ENABLED=true
       - APP_DSC_CASSANDRA_VAULT_ROLE_ID=e2558c4d-a309-5824-63be-06ef02143247
       - APP_DSC_CASSANDRA_VAULT_SECRET_ID=c80151e5-a227-8954-2f11-e9efab0a46ee
@@ -762,6 +773,8 @@ services:
       - APP_UDT_CASSANDRA_VAULT_ROLE_ID=4ec7e656-f121-d691-6a32-7c7f13dee572
       - APP_UDT_CASSANDRA_VAULT_SECRET_ID=5049b32f-1e10-2c67-db09-9fca30521cc8
       - APP_UDT_DB_PORT_AWS_US_WEST_2=9042
+      - APP_aws.us.west.2.udt.connectTimeoutMillis=30000
+      - APP_aws.us.west.2.udt.readTimeoutMillis=30000
       - APP_web.kafka.metadata.broker.list=kafka-broker-cds-1.us-west-2.hcom-lab-decaf.aws.hcom:9092,kafka-broker-cds-2.us-west-2.hcom-lab-decaf.aws.hcom:9092,kafka-broker-cds-3.us-west-2.hcom-lab-decaf.aws.hcom:9092
       - APP_audit.kafka.metadata.broker.list=kafka-broker-cds-1.us-west-2.hcom-lab-decaf.aws.hcom:9092,kafka-broker-cds-2.us-west-2.hcom-lab-decaf.aws.hcom:9092,kafka-broker-cds-3.us-west-2.hcom-lab-decaf.aws.hcom:9092
 
