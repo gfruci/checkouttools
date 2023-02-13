@@ -212,16 +212,24 @@ If you forget to rename the profile, you can manually change it in `~/.config/eg
 - Install jq command
 In order to correctly parse downloaded EG-Vault secrets, it's needed to have jq installed.
 On OSX you can run this command:
-```bash
+```
+bash
 brew install jq
+```
 
 - Install the Vault commands CLI
+It can be downloaded from this link:
+```
 https://releases.hashicorp.com/vault/
+```
 
 - Join the EG Vault security group
-In order to run the BookingApp, it's needed to join the 
+In order to retrieve the secrets from EG Vault it's needed to join the 
 lodging-tech-res-islands-standard 
-security group
+security group.
+Check in
+[ServiceNow](https://expedia.service-now.com/askeg?id=sc_cat_item_guide&sys_id=bd101a5adb3ac950dc1b287d1396198b)
+if you've joined the above security group
 
 ### How to run BA/BMA/BCA on an M1 mac (arm64 architecture)
 1. Upgrade your macOS to Ventura 13.2+

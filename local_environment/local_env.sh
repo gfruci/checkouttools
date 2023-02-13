@@ -25,7 +25,7 @@ cd ${PREV_DIR}
 #########################
 
 PROXY_CONFIG="-Dhttp.proxyHost=${DOCKER_GATEWAY_HOST:-host.docker.internal} -Dhttp.proxyPort=8888 -Dhttps.proxyHost=${DOCKER_GATEWAY_HOST:-host.docker.internal} -Dhttps.proxyPort=8888 -DproxyHost=${DOCKER_GATEWAY_HOST:-host.docker.internal} -DproxyPort=8888"
-LOGGING_PATH="classpath:conf/logback/logback-aws-rcp.xml"
+export LOGGING_PATH="classpath:conf/logback/logback-aws-rcp.xml"
 export ORIGINS_PATH="/styxconf/origins_rcp.yaml"
 
 START_MODE=
@@ -201,10 +201,8 @@ function retrieve-secrets-from-eg-vault {
     vault login -namespace=lab -method=ldap username="$SEA_USER_NAME"
 
     #delete secrets.json file
-    echo "deleting existing secrets.json file"
-    rm -rf secrets.json
-    echo "re-creating secrets.json file"
-    touch secrets.json
+    echo "deleting existing secrets.json file and recreating it"
+    rm -rf secrets.json && touch secrets.json
 
     # generate secrets at secrets.json
     echo "Checking if jq is installed"
@@ -217,7 +215,7 @@ function retrieve-secrets-from-eg-vault {
       echo "jq command found in $jq_install_path"
     fi
     echo "In case of vault command not found error please install the Vault commands CLI. See the readme for more info."
-    echo "In case of issues logging into EG Vault pls check in [ServiceNow](https://expedia.service-now.com/askeg?id=sc_cat_item_guide&sys_id=bd101a5adb3ac950dc1b287d1396198b) if you have joined the `lodging-tech-res-islands-standard` security group"
+    echo "In case of issues logging into EG Vault pls check in [ServiceNow](https://expedia.service-now.com/askeg?id=sc_cat_item_guide&sys_id=bd101a5adb3ac950dc1b287d1396198b) if you have joined the lodging-tech-res-islands-standard security group"
     vault kv get -format=json -namespace $NAMESPACE  $SECRETS_PATH | jq '.data.data' > secrets.json
     echo "Retrieved secrets"
 }
@@ -248,18 +246,18 @@ function start-app {
                 help
                 exit 1
             fi
-		else
-			if [ "${BA_VERSION}" = "local" ]
-			then
-				echo "Using local build"
-				BA_VERSION="${BA_IMAGE_NAME}:latest"
-			else
-				BA_VERSION="${DOCKER_IMAGE_PREFIX}/${BA_IMAGE_NAME}:${BA_VERSION}"
-				echo "Using version: ${BA_VERSION}"
-			fi
-            login-to-aws
-            retrieve-secrets-from-eg-vault
-		fi
+		    else
+			    if [ "${BA_VERSION}" = "local" ]
+			    then
+				    echo "Using local build"
+				    BA_VERSION="${BA_IMAGE_NAME}:latest"
+			    else
+				    BA_VERSION="${DOCKER_IMAGE_PREFIX}/${BA_IMAGE_NAME}:${BA_VERSION}"
+				    echo "Using version: ${BA_VERSION}"
+			    fi
+          login-to-aws
+          retrieve-secrets-from-eg-vault
+		    fi
     fi
 
     if [ "${APP}" = "bma" ]
