@@ -209,6 +209,16 @@ Use your SEA account details for configuration.
 
 If you forget to rename the profile, you can manually change it in `~/.config/egctl.yaml`.
 
+- Install jq command
+In order to run the BookingApp, it's needed to have jq installed.
+On iOS you can run this command:
+brew install jq
+
+- Join the EG Vault security group
+In order to run the BookingApp, it's needed to join the 
+lodging-tech-res-islands-standard 
+security group
+
 ### How to run BA/BMA/BCA on an M1 mac (arm64 architecture)
 1. Upgrade your macOS to Ventura 13.2+
 2. Install Rosetta 2: ```softwareupdate --install-rosetta --agree-to-license```

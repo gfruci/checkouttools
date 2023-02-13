@@ -187,7 +187,6 @@ function login-to-aws {
 
 function retrieve-secrets-from-eg-vault {
     echo "retrieving secrets from eg vault"
-    echo "In case of issues logging into eg vault pls check in https://expediasg if you have joined the lodging-tech-res-islands-standard security group"
     export VAULT_ADDR=https://vault-enterprise.us-west-2.secrets.runtime.test-cts.exp-aws.net
     export VAULT_SKIP_VERIFY=true
     NAMESPACE='lab/islands/lodgingdemand'
@@ -217,6 +216,7 @@ function retrieve-secrets-from-eg-vault {
     else
       echo "jq command found in $jq_install_path"
     fi
+    echo "In case of issues logging into eg vault pls check in https://expediasg if you have joined the lodging-tech-res-islands-standard security group"
     vault kv get -format=json -namespace $NAMESPACE  $SECRETS_PATH | jq '.data.data' > secrets.json
     echo "Retrieved secrets"
 }
