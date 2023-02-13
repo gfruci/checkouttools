@@ -214,6 +214,9 @@ In order to run the BookingApp, it's needed to have jq installed.
 On OSX you can run this command:
 brew install jq
 
+- Install the Vault commands CLI
+https://releases.hashicorp.com/vault/
+
 - Join the EG Vault security group
 In order to run the BookingApp, it's needed to join the 
 lodging-tech-res-islands-standard 
