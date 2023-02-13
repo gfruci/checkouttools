@@ -25,8 +25,8 @@ cd ${PREV_DIR}
 #########################
 
 PROXY_CONFIG="-Dhttp.proxyHost=${DOCKER_GATEWAY_HOST:-host.docker.internal} -Dhttp.proxyPort=8888 -Dhttps.proxyHost=${DOCKER_GATEWAY_HOST:-host.docker.internal} -Dhttps.proxyPort=8888 -DproxyHost=${DOCKER_GATEWAY_HOST:-host.docker.internal} -DproxyPort=8888"
-export RCP_CONFIG=false
-export LOGGING_PATH="classpath:conf/logback/logback-aws.xml"
+LOGGING_PATH="classpath:conf/logback/logback-aws-rcp.xml"
+export ORIGINS_PATH="/styxconf/origins_rcp.yaml"
 
 START_MODE=
 NO_IMAGE=no_image
@@ -42,7 +42,6 @@ STUB_STATUS=
 SUIT="default"
 TRUSTSTORE_PATH="/hcom/share/java/default/lib/security/cacerts_plus_internal"
 DEBUG_OPTS="-Xdebug -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:1901"
-export ORIGINS_PATH="/styxconf/origins.yaml"
 
 APPS=( "mvt" "ba" "bma" "bca" "pio" "bpe" "checkito" "styxpres" "nginx")
 DOCKER_IMAGE_PREFIX="kumo-docker-release-local.artylab.expedia.biz/library"
@@ -201,12 +200,18 @@ function retrieve-secrets-from-eg-vault {
 
     vault login -namespace=lab -method=ldap username="$SEA_USER_NAME"
 
+    #delete secrets.json file
+    echo "deleting existing secrets.json file"
+    rm secrets.json
+    echo "re-creating secrets.json file"
+    touch secrets.json
+
     # generate secrets at secrets.json
     echo "Checking if jq is installed"
     jq_install_path=$(which jq)
     jq_installed=$?
     if [[ $jq_installed -ne 0 ]]; then
-      echo "jq command not found. Please install it"
+      echo "jq command not found. Please install it. On iOS you can use brew install jq command"
       exit 1
     else
       echo "jq command found in $jq_install_path"
@@ -251,10 +256,7 @@ function start-app {
 				echo "Using version: ${BA_VERSION}"
 			fi
             login-to-aws
-            if [ "${RCP_CONFIG}" = "true" ]
-            then
-              retrieve-secrets-from-eg-vault
-            fi
+            retrieve-secrets-from-eg-vault
 		fi
     fi
 
@@ -461,7 +463,6 @@ function help {
     echo "Commands:"
     echo "./local_env.sh start [-proxy]                                            Start the local environment, with no front-end apps (BA)"
     echo "./local_env.sh start -ba-version <ba-version> [-no-stub] [-proxy] [-j8]  Start the local environment, using the BA version: <ba-version>"
-    echo "./local_env.sh start -ba-version <ba-version> [-no-stub] [-proxy] [-rcp] Start the local environment with the RCP secret handling, using the BA version: <ba-version>"
     echo "./local_env.sh start -bma-version <bma-version> [-no-stub] [-proxy]      Start the local environment, using the BMA version: <bma-version>"
     echo "./local_env.sh start -bca-version <bca-version> [-no-stub] [-proxy]      Start the local environment, using the BMA version: <bma-version>"
 	  echo "                                                          Use 'local' as version to start up with local built image"
@@ -477,7 +478,6 @@ function help {
     echo "./local-env.sh start -no-stub"
     echo "BA start examples:"
     echo "./local_env.sh start-app ba -ba-version local -no-stub"
-    echo "./local_env.sh start-app ba -ba-version local -no-stub -rcp"
     echo "./local_env.sh start-app ba -ba-version bf0538ab789c71793aa2c025400d884813c7bc18 -no-stub"
     echo "./local_env.sh start-app ba -ba-version af092f20f5bc06af679259d6125c7eb8544c6b44-18627 -no-stub"
     echo 
@@ -488,7 +488,6 @@ function help {
     echo
     echo "Options:"
     echo "-no-stub                                                  Start the local environment without using checkito as mocking server (by default is using Checkito)"
-    echo "-rcp                                                      Start the local environment with RCP secret handling (only valid for the BookingApp so far)"
     echo "-proxy                                                    Set the local environment proxy host to docker.for.mac.localhost:8888"
     echo "-j8                                                       Sets Java 8 related options"
     echo "-suit                                                     Configures which suit will be used with checkito"
@@ -525,11 +524,6 @@ function init {
                 ;;
             -proxy)
                 export PROXY_CONFIG
-                ;;
-            -rcp)
-                RCP_CONFIG=true
-                LOGGING_PATH="classpath:conf/logback/logback-aws-rcp.xml"
-                export ORIGINS_PATH="/styxconf/origins_rcp.yaml"
                 ;;
             -suit)
                 export SUIT=$2
