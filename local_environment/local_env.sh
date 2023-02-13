@@ -217,7 +217,7 @@ function retrieve-secrets-from-eg-vault {
       echo "jq command found in $jq_install_path"
     fi
     echo "In case of vault command not found error please install the Vault commands CLI. See the readme for more info."
-    echo "In case of issues logging into eg vault pls check in https://expediasg if you have joined the lodging-tech-res-islands-standard security group"
+    echo "In case of issues logging into EG Vault pls check in [ServiceNow](https://expedia.service-now.com/askeg?id=sc_cat_item_guide&sys_id=bd101a5adb3ac950dc1b287d1396198b) if you have joined the `lodging-tech-res-islands-standard` security group"
     vault kv get -format=json -namespace $NAMESPACE  $SECRETS_PATH | jq '.data.data' > secrets.json
     echo "Retrieved secrets"
 }
