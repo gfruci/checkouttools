@@ -212,6 +212,7 @@ If you forget to rename the profile, you can manually change it in `~/.config/eg
 - Install jq command
 In order to run the BookingApp, it's needed to have jq installed.
 On OSX you can run this command:
+```bash
 brew install jq
 
 - Install the Vault commands CLI
