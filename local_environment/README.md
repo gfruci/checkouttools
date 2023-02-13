@@ -210,7 +210,7 @@ Use your SEA account details for configuration.
 If you forget to rename the profile, you can manually change it in `~/.config/egctl.yaml`.
 
 - Install jq command
-In order to run the BookingApp, it's needed to have jq installed.
+In order to correctly parse downloaded EG-Vault secrets, it's needed to have jq installed.
 On OSX you can run this command:
 ```bash
 brew install jq
