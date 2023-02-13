@@ -69,7 +69,7 @@ services:
       - ./logs/ba/:/app/servers/tomcat/logs/
       - mvt:/mvt
       - ~/.aws/:/home/expedia/.aws
-      - ./secrets.json:/vault/secrets/secrets.json
+      - ./vault/secrets.json:/vault/secrets/secrets.json
 
     environment:
       - APP_CONFIG_ENVIRONMENT=development
@@ -218,7 +218,7 @@ services:
       - ./logs/ba/:/app/servers/tomcat/logs/
       - mvt:/mvt
       - ~/.aws/:/home/expedia/.aws
-      - ./secrets.json:/vault/secrets/secrets.json
+      - ./vault/secrets.json:/vault/secrets/secrets.json
 
     environment:
       - APP_CONFIG_ENVIRONMENT=development
