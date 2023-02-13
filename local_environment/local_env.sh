@@ -211,7 +211,7 @@ function retrieve-secrets-from-eg-vault {
     jq_install_path=$(which jq)
     jq_installed=$?
     if [[ $jq_installed -ne 0 ]]; then
-      echo "jq command not found. Please install it. On iOS you can use brew install jq command"
+      echo "jq command not found. Please install it. On OSX you can use brew install jq command"
       exit 1
     else
       echo "jq command found in $jq_install_path"

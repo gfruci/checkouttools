@@ -211,7 +211,7 @@ If you forget to rename the profile, you can manually change it in `~/.config/eg
 
 - Install jq command
 In order to run the BookingApp, it's needed to have jq installed.
-On iOS you can run this command:
+On OSX you can run this command:
 brew install jq
 
 - Join the EG Vault security group
