@@ -187,6 +187,7 @@ function login-to-aws {
 
 function retrieve-secrets-from-eg-vault {
     echo "retrieving secrets from eg vault"
+    echo "In case of issues logging into eg vault pls check in https://expediasg if you have joined the lodging-tech-res-islands-standard security group"
     export VAULT_ADDR=https://vault-enterprise.us-west-2.secrets.runtime.test-cts.exp-aws.net
     export VAULT_SKIP_VERIFY=true
     NAMESPACE='lab/islands/lodgingdemand'
@@ -202,7 +203,7 @@ function retrieve-secrets-from-eg-vault {
 
     #delete secrets.json file
     echo "deleting existing secrets.json file"
-    rm secrets.json
+    rm -rf secrets.json
     echo "re-creating secrets.json file"
     touch secrets.json
 
