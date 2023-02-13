@@ -186,6 +186,8 @@ function login-to-aws {
 }
 
 function retrieve-secrets-from-eg-vault {
+    echo "Moving to $SCRIPT_DIR"
+    cd ${SCRIPT_DIR}
     echo "Logging into eg vault"
     export VAULT_ADDR=https://vault-enterprise.us-west-2.secrets.runtime.test-cts.exp-aws.net
     export VAULT_SKIP_VERIFY=true
@@ -202,7 +204,10 @@ function retrieve-secrets-from-eg-vault {
 
     #delete secrets.json file
     echo "Deleting existing secrets.json file and recreating it"
-    rm -rf secrets.json && rm -rf vault && mkdir vault && touch vault/secrets.json
+    rm -rf secrets.json
+    rm -rf vault
+    mkdir vault
+    touch vault/secrets.json
 
     # generate secrets at secrets.json
     echo "Checking if jq is installed"
@@ -228,6 +233,8 @@ function retrieve-secrets-from-eg-vault {
        exit 1
     fi
     echo "Retrieved secrets"
+    echo "Moving back to $PREV_DIR"
+    cd ${PREV_DIR}
 }
 
 ###############################
@@ -235,7 +242,6 @@ function retrieve-secrets-from-eg-vault {
 ###############################
 
 function start-app {
-
     export DEBUG_OPTS
     export TRUSTSTORE_PATH
     APP=$1
