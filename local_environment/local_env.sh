@@ -49,6 +49,10 @@ BA_IMAGE_NAME="bookingapp"
 BMA_IMAGE_NAME="bookingmanagementapp"
 BCA_IMAGE_NAME="bookingchangeapp"
 
+EG_VAULT_SECRETS_DIR=vault
+EG_VAULT_SECRETS_FILE_NAME=secrets.json
+EG_VAULT_SECRETS_FILE_PATH="${EG_VAULT_SECRETS_DIR}/${EG_VAULT_SECRETS_FILE_NAME}"
+
 app_cmd() {
     case "$1" in
         "mvt,update_cmd")
@@ -194,7 +198,6 @@ function retrieve-secrets-from-eg-vault {
     NAMESPACE='lab/islands/lodgingdemand'
     SECRETS_PATH='lodging-reservation-checkout/kv-v2/bookingapp/secrets'
 
-
     SYSTEM_USERNAME=$(id -un)
 
     read -r -p "Enter SEA username ($SYSTEM_USERNAME): " SEA_USER_NAME
@@ -204,10 +207,10 @@ function retrieve-secrets-from-eg-vault {
 
     #delete secrets.json file
     echo "Deleting existing secrets.json file and recreating it"
-    rm -rf secrets.json
-    rm -rf vault
-    mkdir vault
-    touch vault/secrets.json
+    rm -rf $EG_VAULT_SECRETS_FILE_NAME
+    rm -rf $EG_VAULT_SECRETS_DIR
+    mkdir $EG_VAULT_SECRETS_DIR
+    touch $EG_VAULT_SECRETS_FILE_PATH
 
     # generate secrets at secrets.json
     echo "Checking if jq is installed"
@@ -222,9 +225,8 @@ function retrieve-secrets-from-eg-vault {
     echo "In case of vault command not found error please install the Vault commands CLI. See the readme for more info."
     echo "In case of issues logging into EG Vault pls check in \"[ServiceNow](https://expedia.service-now.com/askeg?id=sc_cat_item_guide&sys_id=bd101a5adb3ac950dc1b287d1396198b)\" if you have joined the \"lodging-tech-res-islands-standard\" security group"
     echo "Retrieving secrets from eg vault"
-    vault kv get -format=json -namespace $NAMESPACE  $SECRETS_PATH | jq '.data.data' > vault/secrets.json
+    vault kv get -format=json -namespace $NAMESPACE  $SECRETS_PATH | jq '.data.data' > $EG_VAULT_SECRETS_FILE_PATH
 
-    EG_VAULT_SECRETS_FILE_PATH=vault/secrets.json
     echo "Checking if file $EG_VAULT_SECRETS_FILE_PATH exists"
     if [[ -s $EG_VAULT_SECRETS_FILE_PATH ]]; then
        echo "Secret file found"
@@ -237,6 +239,16 @@ function retrieve-secrets-from-eg-vault {
     cd ${PREV_DIR}
 }
 
+function delete-local-secrets-file {
+
+    echo -e "\n$COLOR_HEADER Removing secrets file in dir ${EG_VAULT_SECRETS_DIR}/ ... $COLOR_RESET"
+    cd ${SCRIPT_DIR}
+    rm -rf "${EG_VAULT_SECRETS_DIR}" || true
+    cd ${PREV_DIR}
+
+    echo "done"
+
+}
 ###############################
 # START/STOP/STATUS FUNCTIONS #
 ###############################
@@ -448,6 +460,8 @@ function stop {
     do
         stop-app ${APP}
     done
+
+    delete-local-secrets-file
 
     status
 
