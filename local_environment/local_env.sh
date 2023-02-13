@@ -374,7 +374,7 @@ function start-app {
     fi
 
     cd ${SCRIPT_DIR}
-    nohup docker-compose up --no-color ${APP}${APP_TYPE} >> ${SCRIPT_DIR}/logs/${APP}.log 2>&1 &
+    nohup docker-compose up --no-color ${APP}${APP_TYPE} >> logs/${APP}.log 2>&1 &
     cd ${PREV_DIR}
 
     START_STATUS_CMD=$(app_cmd "${APP},start_status_cmd")
