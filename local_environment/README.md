@@ -227,9 +227,7 @@ https://releases.hashicorp.com/vault/
 In order to retrieve the secrets from EG Vault it's needed to join the 
 lodging-tech-res-islands-standard 
 security group.
-Check in
-[ServiceNow](https://expedia.service-now.com/askeg?id=sc_cat_item_guide&sys_id=bd101a5adb3ac950dc1b287d1396198b)
-if you've joined the above security group
+Check in [ServiceNow](https://expedia.service-now.com/askeg?id=sc_cat_item_guide&sys_id=bd101a5adb3ac950dc1b287d1396198b) if you've joined the above security group
 
 ### How to run BA/BMA/BCA on an M1 mac (arm64 architecture)
 1. Upgrade your macOS to Ventura 13.2+
