@@ -59,6 +59,10 @@
 
 - id: "bpe"
   path: "/bpe/"
+  rewrites:
+      # remove double slash to avoid 404 not found error
+    - urlPattern: "/bpe//(.*)"
+      replacement: "/bpe/$1"
   healthCheck:
     uri: "/bpe/actuator/health"
   connectionPool:

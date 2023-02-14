@@ -25,8 +25,8 @@ cd ${PREV_DIR}
 #########################
 
 PROXY_CONFIG="-Dhttp.proxyHost=${DOCKER_GATEWAY_HOST:-host.docker.internal} -Dhttp.proxyPort=8888 -Dhttps.proxyHost=${DOCKER_GATEWAY_HOST:-host.docker.internal} -Dhttps.proxyPort=8888 -DproxyHost=${DOCKER_GATEWAY_HOST:-host.docker.internal} -DproxyPort=8888"
-export RCP_CONFIG=false
-export LOGGING_PATH="classpath:conf/logback/logback-aws.xml"
+export LOGGING_PATH="classpath:conf/logback/logback-aws-rcp.xml"
+export ORIGINS_PATH="/styxconf/origins_rcp.yaml"
 
 START_MODE=
 NO_IMAGE=no_image
@@ -42,13 +42,16 @@ STUB_STATUS=
 SUIT="default"
 TRUSTSTORE_PATH="/hcom/share/java/default/lib/security/cacerts_plus_internal"
 DEBUG_OPTS="-Xdebug -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:1901"
-export ORIGINS_PATH="/styxconf/origins.yaml"
 
 APPS=( "mvt" "ba" "bma" "bca" "pio" "bpe" "checkito" "styxpres" "nginx")
 DOCKER_IMAGE_PREFIX="kumo-docker-release-local.artylab.expedia.biz/library"
 BA_IMAGE_NAME="bookingapp"
 BMA_IMAGE_NAME="bookingmanagementapp"
 BCA_IMAGE_NAME="bookingchangeapp"
+
+EG_VAULT_SECRETS_DIR=vault
+EG_VAULT_SECRETS_FILE_NAME=secrets.json
+EG_VAULT_SECRETS_FILE_PATH="${EG_VAULT_SECRETS_DIR}/${EG_VAULT_SECRETS_FILE_NAME}"
 
 app_cmd() {
     case "$1" in
@@ -187,12 +190,13 @@ function login-to-aws {
 }
 
 function retrieve-secrets-from-eg-vault {
-    echo "retrieving secrets from eg vault"
+    echo "Moving to $SCRIPT_DIR"
+    cd ${SCRIPT_DIR}
+    echo "Logging into eg vault"
     export VAULT_ADDR=https://vault-enterprise.us-west-2.secrets.runtime.test-cts.exp-aws.net
     export VAULT_SKIP_VERIFY=true
     NAMESPACE='lab/islands/lodgingdemand'
     SECRETS_PATH='lodging-reservation-checkout/kv-v2/bookingapp/secrets'
-
 
     SYSTEM_USERNAME=$(id -un)
 
@@ -201,26 +205,55 @@ function retrieve-secrets-from-eg-vault {
 
     vault login -namespace=lab -method=ldap username="$SEA_USER_NAME"
 
+    #delete secrets.json file
+    echo "Deleting existing secrets.json file and recreating it"
+    rm -rf $EG_VAULT_SECRETS_FILE_NAME
+    rm -rf $EG_VAULT_SECRETS_DIR
+    mkdir $EG_VAULT_SECRETS_DIR
+    touch $EG_VAULT_SECRETS_FILE_PATH
+
     # generate secrets at secrets.json
     echo "Checking if jq is installed"
     jq_install_path=$(which jq)
     jq_installed=$?
     if [[ $jq_installed -ne 0 ]]; then
-      echo "jq command not found. Please install it"
+      echo "jq command not found. Please install it. On OSX you can use brew install jq command"
       exit 1
     else
       echo "jq command found in $jq_install_path"
     fi
-    vault kv get -format=json -namespace $NAMESPACE  $SECRETS_PATH | jq '.data.data' > secrets.json
+    echo "In case of vault command not found error please install the Vault commands CLI. See the readme for more info."
+    echo "In case of issues logging into EG Vault pls check in \"[ServiceNow](https://expedia.service-now.com/askeg?id=sc_cat_item_guide&sys_id=bd101a5adb3ac950dc1b287d1396198b)\" if you have joined the \"lodging-tech-res-islands-standard\" security group"
+    echo "Retrieving secrets from eg vault"
+    vault kv get -format=json -namespace $NAMESPACE  $SECRETS_PATH | jq '.data.data' > $EG_VAULT_SECRETS_FILE_PATH
+
+    echo "Checking if file $EG_VAULT_SECRETS_FILE_PATH exists"
+    if [[ -s $EG_VAULT_SECRETS_FILE_PATH ]]; then
+       echo "Secret file found"
+    else
+       echo " File doesn't exist"
+       exit 1
+    fi
     echo "Retrieved secrets"
+    echo "Moving back to $PREV_DIR"
+    cd ${PREV_DIR}
 }
 
+function delete-local-secrets-file {
+
+    echo -e "\n$COLOR_HEADER Removing secrets file in dir ${EG_VAULT_SECRETS_DIR}/ ... $COLOR_RESET"
+    cd ${SCRIPT_DIR}
+    rm -rf "${EG_VAULT_SECRETS_DIR}" || true
+    cd ${PREV_DIR}
+
+    echo "done"
+
+}
 ###############################
 # START/STOP/STATUS FUNCTIONS #
 ###############################
 
 function start-app {
-
     export DEBUG_OPTS
     export TRUSTSTORE_PATH
     APP=$1
@@ -241,21 +274,18 @@ function start-app {
                 help
                 exit 1
             fi
-		else
-			if [ "${BA_VERSION}" = "local" ]
-			then
-				echo "Using local build"
-				BA_VERSION="${BA_IMAGE_NAME}:latest"
-			else
-				BA_VERSION="${DOCKER_IMAGE_PREFIX}/${BA_IMAGE_NAME}:${BA_VERSION}"
-				echo "Using version: ${BA_VERSION}"
-			fi
-            login-to-aws
-            if [ "${RCP_CONFIG}" = "true" ]
-            then
-              retrieve-secrets-from-eg-vault
-            fi
-		fi
+		    else
+			    if [ "${BA_VERSION}" = "local" ]
+			    then
+				    echo "Using local build"
+				    BA_VERSION="${BA_IMAGE_NAME}:latest"
+			    else
+				    BA_VERSION="${DOCKER_IMAGE_PREFIX}/${BA_IMAGE_NAME}:${BA_VERSION}"
+				    echo "Using version: ${BA_VERSION}"
+			    fi
+          login-to-aws
+          retrieve-secrets-from-eg-vault
+		    fi
     fi
 
     if [ "${APP}" = "bma" ]
@@ -356,7 +386,7 @@ function start-app {
     fi
 
     cd ${SCRIPT_DIR}
-    nohup docker-compose up --no-color ${APP}${APP_TYPE} >> ${SCRIPT_DIR}/logs/${APP}.log 2>&1 &
+    nohup docker-compose up --no-color ${APP}${APP_TYPE} >> logs/${APP}.log 2>&1 &
     cd ${PREV_DIR}
 
     START_STATUS_CMD=$(app_cmd "${APP},start_status_cmd")
@@ -431,6 +461,8 @@ function stop {
         stop-app ${APP}
     done
 
+    delete-local-secrets-file
+
     status
 
     exit 0
@@ -461,7 +493,6 @@ function help {
     echo "Commands:"
     echo "./local_env.sh start [-proxy]                                            Start the local environment, with no front-end apps (BA)"
     echo "./local_env.sh start -ba-version <ba-version> [-no-stub] [-proxy] [-j8]  Start the local environment, using the BA version: <ba-version>"
-    echo "./local_env.sh start -ba-version <ba-version> [-no-stub] [-proxy] [-rcp] Start the local environment with the RCP secret handling, using the BA version: <ba-version>"
     echo "./local_env.sh start -bma-version <bma-version> [-no-stub] [-proxy]      Start the local environment, using the BMA version: <bma-version>"
     echo "./local_env.sh start -bca-version <bca-version> [-no-stub] [-proxy]      Start the local environment, using the BMA version: <bma-version>"
 	  echo "                                                          Use 'local' as version to start up with local built image"
@@ -477,7 +508,6 @@ function help {
     echo "./local-env.sh start -no-stub"
     echo "BA start examples:"
     echo "./local_env.sh start-app ba -ba-version local -no-stub"
-    echo "./local_env.sh start-app ba -ba-version local -no-stub -rcp"
     echo "./local_env.sh start-app ba -ba-version bf0538ab789c71793aa2c025400d884813c7bc18 -no-stub"
     echo "./local_env.sh start-app ba -ba-version af092f20f5bc06af679259d6125c7eb8544c6b44-18627 -no-stub"
     echo 
@@ -488,7 +518,6 @@ function help {
     echo
     echo "Options:"
     echo "-no-stub                                                  Start the local environment without using checkito as mocking server (by default is using Checkito)"
-    echo "-rcp                                                      Start the local environment with RCP secret handling (only valid for the BookingApp so far)"
     echo "-proxy                                                    Set the local environment proxy host to docker.for.mac.localhost:8888"
     echo "-j8                                                       Sets Java 8 related options"
     echo "-suit                                                     Configures which suit will be used with checkito"
@@ -525,11 +554,6 @@ function init {
                 ;;
             -proxy)
                 export PROXY_CONFIG
-                ;;
-            -rcp)
-                RCP_CONFIG=true
-                LOGGING_PATH="classpath:conf/logback/logback-aws-rcp.xml"
-                export ORIGINS_PATH="/styxconf/origins_rcp.yaml"
                 ;;
             -suit)
                 export SUIT=$2
