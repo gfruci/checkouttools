@@ -60,11 +60,10 @@
 - id: "bpe"
   path: "/bpe/"
   rewrites:
-      # remove double slash to avoid 404 not found error
-    - urlPattern: "/bpe//(.*)"
-      replacement: "/bpe/$1"
+    - urlPattern: "/bpe/(.*)"
+      replacement: "$1"
   healthCheck:
-    uri: "/bpe/actuator/health"
+    uri: "/actuator/health/readiness"
   connectionPool:
     maxConnectionsPerHost: 40
     maxPendingConnectionsPerHost: 20
@@ -72,7 +71,12 @@
     connectTimeoutMillis: 8000
   responseTimeoutMillis: 300000
   tlsSettings:
-    trustAllCerts:       true
-    sslProvider:         OPENSSL     # Also supports JDK
+    sslProvider: OPENSSL
+    authenticate: false
+  overrideHostHeader: true
+  tcpKeepAliveSettings:
+    keepAliveIdleTimeSeconds: 240
+    keepAliveIntervalSeconds: 30
+    keepAliveRetryCount: 3
   origins:
-  - { id: "bpe-lab-secure-us-west-2", host: "frontend.istio-gateway.backend.k8s.us-west-2.hcom-lab-secure.aws.hcom:443" }
+    - { id: "bpe-cde-test-us-west-2", host: "bookingpaymentedge.rcp.us-west-2.lodgingdemand.test-cde.exp-aws.net:443" }
