@@ -5,7 +5,7 @@ volumes:
 services:
 
   styxpres:
-    image: kumo-docker-release-local.artylab.expedia.biz/library/styxpres:0.2.1086
+    image: kumo-docker-release-local.artylab.expedia.biz/library/styxpres:7fc7867dba5e6a6f5824e3d60fb5e6496a6478a3
     container_name: styxpres
     ports:
       - "9000:9000"
@@ -104,8 +104,16 @@ services:
       - APP_assembly.customercare.minos.population.service.shortname=laser
 
       # Minos/DSC/UDT
-      - APP_MINOS_LOCAL_DATACENTER_IDENTIFIER=AWS_US_WEST_2
+      - APP_MINOS_LOCAL_DATACENTER_IDENTIFIER=RCP_US_WEST_2
       - APP_MINOS_CASSANDRA_AUTH_ENABLED=true
+      - APP_MINOS_AUTHENTICATION_ENABLED=true
+      - APP_MINOS_RCP_AUTHENTICATION_ENABLED=true
+      - APP_rcp.us.west.2.minos.tlsEnabled=true
+      - APP_MINOS_DB_HOSTS_RCP_US_WEST_2=cassandra-minos.lodgingdemand.test-cts.exp-aws.net:9042
+      - APP_MINOS_DB_PORT_RCP_US_WEST_2=9042
+      - APP_MINOS_DB_HOSTS_RCP_US_EAST_1=
+      - APP_aws.us.west.2.minos.connectTimeoutMillis=30000
+      - APP_aws.us.west.2.minos.readTimeoutMillis=30000
       - APP_MINOS_CASSANDRA_VAULT_ROLE_ID=477c1f64-1d4f-e6c3-170d-7ad751c66cd8
       - APP_MINOS_CASSANDRA_VAULT_SECRET_ID=ce571543-345c-7a60-5143-b56b53ca2c0c
       - APP_MINOS_DB_HOSTS=
@@ -137,7 +145,7 @@ services:
       - APP_PSID_SERVICE_ENABLED=false
       - APP_WEBSITE_DOMAIN_DISCRIMINATOR=dev-
       - APP_DSC_STUB_MODE_ENABLED=true
-      - APP_CPDS_API_DOMAIN_NAME=cpds.istio-gateway.backend.k8s.us-west-2.hcom-lab-secure.aws.hcom
+      - APP_CPDS_API_DOMAIN_NAME=cpds.istio-gateway.backend.k8s.us-west-2.hcom-lab-decaf.aws.hcom
 
       # Not supported on checkito yet
       - APP_FENCED_VAP_ENABLED=false
@@ -251,16 +259,23 @@ services:
       - APP_LOYALTY_ESTIMATION_SERVICE_CLIENT_CONNECTION_TIMEOUT=60000
       - APP_BPAS_ON_PAYMENT_OPTION_REQUEST_CIRCUIT_BREAKER_TIMEOUT_MS=60000
       - APP_USER_DATA_PROFILE_DB="dynamo"
-      - APP_USER_DATA_DYNAMO_TABLE="CKO_BA_USER_DATA_DYNAMO_TABLE"
+      - APP_USER_DATA_DYNAMO_TABLE="test-dynamodb-lodgingdemandcts-cko-ba-user-data"
       - APP_USER_DATA_DYNAMO_AWS_DEFAULT_REGION_OVERRIDE="us-west-2"
       - APP_lara.hystrix.plugins.registration.enabled=false
       - APP_LARA_LASER_HOSTNAME=laser.istio-gateway.backend.k8s.us-west-2.hcom-lab-decaf.aws.hcom
       - APP_assembly.customercare.minos.population.service.shortname=laser
 
       # Minos/DSC/UDT
-      - APP_MINOS_LOCAL_DATACENTER_IDENTIFIER=AWS_US_WEST_2
+      - APP_MINOS_LOCAL_DATACENTER_IDENTIFIER=RCP_US_WEST_2
       - APP_MINOS_CASSANDRA_AUTH_ENABLED=true
       - APP_MINOS_AUTHENTICATION_ENABLED=true
+      - APP_MINOS_RCP_AUTHENTICATION_ENABLED=true
+      - APP_rcp.us.west.2.minos.tlsEnabled=true
+      - APP_MINOS_DB_HOSTS_RCP_US_WEST_2=cassandra-minos.lodgingdemand.test-cts.exp-aws.net:9042
+      - APP_MINOS_DB_PORT_RCP_US_WEST_2=9042
+      - APP_MINOS_DB_HOSTS_RCP_US_EAST_1=
+      - APP_aws.us.west.2.minos.connectTimeoutMillis=30000
+      - APP_aws.us.west.2.minos.readTimeoutMillis=30000
       - APP_MINOS_CASSANDRA_VAULT_ROLE_ID=477c1f64-1d4f-e6c3-170d-7ad751c66cd8
       - APP_MINOS_CASSANDRA_VAULT_SECRET_ID=ce571543-345c-7a60-5143-b56b53ca2c0c
       - APP_MINOS_DB_HOSTS=
@@ -282,7 +297,6 @@ services:
       - APP_UDT_CASSANDRA_VAULT_SECRET_ID=5049b32f-1e10-2c67-db09-9fca30521cc8
       - APP_UDT_DB_HOSTS_AWS_US_EAST_1=
       - APP_UDT_DB_PORT_AWS_US_WEST_2=9042
-
       # Development overrides
       - JAVA_JVM_ARGS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:1901 -Djdk.tls.client.protocols=TLSv1.2 ${PROXY_CONFIG}
       - APP_UNIFIED_DATA_TOOLKIT_ENABLED=true
@@ -295,7 +309,7 @@ services:
       - APP_DSC_STUB_MODE_ENABLED=true
       - APP_MVTCLIENT_TIMEOUT_IN_MILLISECONDS=2000
       - APP_VALUE_ADD_PROMOTIONS_JSON_API_HOST=http://tls-lvas.us-west-2.test.tls.expedia.com/
-      - APP_CPDS_API_DOMAIN_NAME=cpds.istio-gateway.backend.k8s.us-west-2.hcom-lab-secure.aws.hcom
+      - APP_CPDS_API_DOMAIN_NAME=cpds.istio-gateway.backend.k8s.us-west-2.hcom-lab-decaf.aws.hcom
       - APP_platform-expsite.siteResolver.s3UpdateEnabled=true
 
       # Not supported on checkito yet
