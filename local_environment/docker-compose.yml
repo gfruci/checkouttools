@@ -265,7 +265,12 @@ services:
       - APP_lara.hystrix.plugins.registration.enabled=false
       - APP_LARA_LASER_HOSTNAME=laser.istio-gateway.backend.k8s.us-west-2.hcom-lab-decaf.aws.hcom
       - APP_assembly.customercare.minos.population.service.shortname=laser
-
+      - APP_bpins.baseUrl=https://bookingpaymentinitializationservice.rcp.us-west-2.lodgingdemand.test-cde.exp-aws.net
+      - APP_beps.baseUrl=https://bookingexternalpaymentservice.rcp.us-west-2.lodgingdemand.test-cde.exp-aws.net
+      - APP_SAPS_HOST=stored-account-payment-service.rcp.us-west-2.lodgingdemand.test-cts.exp-aws.net
+      - APP_SAPS_ACCESS_PROTOCOL=https
+      - APP_BPAS_HOST=bookingpaymentavailabilityservice.rcp.us-west-2.lodgingdemand.test-cts.exp-aws.net
+      - APP_BPAS_ACCESS_PROTOCOL=https
       # Minos/DSC/UDT
       - APP_MINOS_LOCAL_DATACENTER_IDENTIFIER=RCP_US_WEST_2
       - APP_MINOS_DUAL_WRITE_ENABLED=true
