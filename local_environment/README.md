@@ -495,6 +495,25 @@ Please refer to: https://pages.github.expedia.biz/hotels-checkout/bookingapp/tru
     docker rmi $(docker images -q)
     ```
     
+* Password input is not awaited (on Windows) during `vault login`
+
+    Using a non native bash on Windows can result in the behavior that as soon as password is queried from the User it immediately proceeds without waiting on User input. Details about the issue can be found [here](https://github.com/hashicorp/vault/issues/4946).
+
+    ```
+    Logging into eg vault
+    Enter SEA username (...): sea-username
+    Password (will be hidden):
+    Error authenticating: The handle is invalid.
+    ```
+
+    In order to solve this issue modify the vault login command from:
+
+    `vault login -namespace=lab -method=ldap username="$SEA_USER_NAME"`
+
+    to:
+
+    `winpty vault login -namespace=lab -method=ldap username="$SEA_USER_NAME"`
+
 * **Windows Credentials**: if you have recently changed your login password you will need to reconfigure the shared drive.
     
     Docker -> Settings -> Shared drives -> click "Reset credentials...", tick the checkbox next to the "C" drive again, click Apply, then docker prompts you for the new password.
