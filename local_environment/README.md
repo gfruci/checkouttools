@@ -230,6 +230,8 @@ security group.
 Check in [ServiceNow](https://expedia.service-now.com/askeg?id=sc_cat_item_guide&sys_id=bd101a5adb3ac950dc1b287d1396198b) if you've joined the above security group
 
 ### How to run BA/BMA/BCA on an M1 mac (arm64 architecture)
+We can run BA/BMA/BCA on an M1 Mac using Rosetta 2. Rosetta 2 is an emulator designed to bridge the transition between Intel x86 and Apple Silicon ARM processors. It translates apps built for Intel so they will run on Apple Silicon. In short, we need to install a JDK targeting the X86 architecture, build the BA using it and run the application like normal. Rosetta 2 and Docker will take care of the rest under the hood.
+
 1. Upgrade your macOS to Ventura 13.2+
 2. Install Rosetta 2: ```softwareupdate --install-rosetta --agree-to-license```
 3. Download and install the M1 Docker version: https://docs.docker.com/desktop/mac/apple-silicon/
@@ -243,7 +245,9 @@ Check in [ServiceNow](https://expedia.service-now.com/askeg?id=sc_cat_item_guide
    3. Features in development --> Use Rosetta for x86/amd64 emulation on Apple Silicon
    ![enable_rosetta](assets/m1_mac/enable_rosetta.png)
    4. Click "Apply & restart" to save your changes.
-5. Start BA/BMA/BCA locally like normal.
+5. Install JDK 11 for x86 (any vendor). A convenient way to do this is through [SDKMAN!](https://itnext.io/how-to-install-x86-and-arm-jdks-on-the-mac-m1-apple-silicon-using-sdkman-872a5adc050d).
+6. Build the application using JDK 11 for x86.
+7. Start BA/BMA/BCA locally like normal.
 
 ## Checkout the local environment
 
