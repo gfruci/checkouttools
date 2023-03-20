@@ -41,7 +41,8 @@ class LobotReroutingEditor(
                 redirectModifier.createWithItineraryId(authToken, rerouting, PROD, rerouting.newProdHost)
             ),
             listOf(
-                sharedConditionModifier.create(authToken, rerouting, oldLabHost)
+                sharedConditionModifier.create(authToken, rerouting, oldLabHost, LAB),
+                sharedConditionModifier.create(authToken, rerouting, rerouting.oldProdHost, PROD)
             ),
             listOf(
                 routingRuleModifier.createWithEncryptedId(authToken, rerouting.posHumanName, LAB, WEB_VRP_DESKTOP),
