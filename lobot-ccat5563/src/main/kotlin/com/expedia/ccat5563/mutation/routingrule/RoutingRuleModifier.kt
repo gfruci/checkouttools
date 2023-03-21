@@ -39,7 +39,7 @@ class RoutingRuleModifier(
             "sharedCondition": "h2b-hcpb-to-trip-overview-header-with-reroute-value"
           },
           {
-            "sharedCondition": "ccat5563-h2b-pb-$posHumanName-traffic"
+            "sharedCondition": "ccat5563-h2b-pb-$posHumanName-traffic-$environment"
           },
           {
             "sharedCondition": "h2b-link-contains-id-query-param"
@@ -96,7 +96,7 @@ class RoutingRuleModifier(
             "sharedCondition": "h2b-hcpb-to-trip-overview-header-with-reroute-value"
           },
           {
-            "sharedCondition": "ccat5563-h2b-pb-$posHumanName-traffic"
+            "sharedCondition": "ccat5563-h2b-pb-$posHumanName-traffic-$environment"
           },
           {
             "not": [
@@ -167,7 +167,7 @@ class RoutingRuleModifier(
             ]
           },
           {
-            "sharedCondition": "ccat5563-h2b-pb-$posHumanName-traffic"
+            "sharedCondition": "ccat5563-h2b-pb-$posHumanName-traffic-$environment"
           },
           {
             "sharedCondition": "h2b-link-contains-id-query-param"
@@ -229,7 +229,7 @@ class RoutingRuleModifier(
             ]
           },
           {
-            "sharedCondition": "ccat5563-h2b-pb-$posHumanName-traffic"
+            "sharedCondition": "ccat5563-h2b-pb-$posHumanName-traffic-$environment"
           },
           {
             "not": [

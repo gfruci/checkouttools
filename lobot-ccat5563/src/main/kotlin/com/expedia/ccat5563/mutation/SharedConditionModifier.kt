@@ -14,37 +14,25 @@ class SharedConditionModifier(
      * https://github.expedia.biz/Brand-Expedia/lobot-api-java/wiki/Shared-Conditions#create-shared-condition
      * returns: HTML link to the new shared condition
      */
-    fun create(authToken: String, rerouting: Rerouting, oldLabHost: String): String {
-        val sharedConditionIdentifier = "ccat5563-h2b-pb-${rerouting.posHumanName}-traffic"
+    fun create(authToken: String, rerouting: Rerouting, host: String, environment: String): String {
+        val sharedConditionIdentifier = "ccat5563-h2b-pb-${rerouting.posHumanName}-traffic-$environment"
         val requestBody = """
 {
   "query": "mutation addEntity(${'$'}sharedCondition: SharedConditionInput!) { addSharedCondition(sharedCondition: ${'$'}sharedCondition) { id identifier description version conditions audit { createdAt createdBy lastUpdatedAt lastUpdatedBy } } }",
   "variables": {
     "sharedCondition": {
       "identifier": "$sharedConditionIdentifier",
-      "description": "Evaluates whether the HCOM Classic post-booking traffic (to be rerouted to HoB Trip Overview page) comes from ${rerouting.oldPos} pos with ${rerouting.oldLocale} locale. More details: https://jira.expedia.biz/browse/CCAT-5563",
+      "description": "Evaluates whether the HCOM Classic post-booking traffic (to be rerouted to HoB Trip Overview page) comes from ${rerouting.oldPos} pos with ${rerouting.oldLocale} locale in $environment. More details: https://jira.expedia.biz/browse/CCAT-5563",
       "version": 1,
       "conditions": {
         "and": [
           {
-            "or": [
-              {
-                "header": {
-                  "name": "Host",
-                  "match": "EQUAL_IGNORE_CASE",
-                  "type": "request",
-                  "value": "${rerouting.oldProdHost}"
-                }
-              },
-              {
-                "header": {
-                  "name": "Host",
-                  "match": "EQUAL_IGNORE_CASE",
-                  "type": "request",
-                  "value": "$oldLabHost"
-                }
-              }
-            ]
+            "header": {
+              "name": "Host",
+              "match": "EQUAL_IGNORE_CASE",
+              "type": "request",
+              "value": "$host"
+            }
           },
           {
             "query": {
