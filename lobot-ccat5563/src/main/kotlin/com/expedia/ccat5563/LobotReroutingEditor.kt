@@ -11,6 +11,8 @@ private const val PROD = "prod"
 private const val WEB_VRP_DESKTOP = "web-vrp-desktop"
 private const val WEB_VRP_MOBILE = "web-vrp-mobile"
 private const val PRINT_RECEIPT = "print-receipt"
+private const val WITH_ENCRYPTED_ID = true
+private const val WITH_ITINERARY_ID = false
 
 class LobotReroutingEditor(
     private val sharedConditionModifier: SharedConditionModifier,
@@ -88,5 +90,25 @@ class LobotReroutingEditor(
         routingRuleModifier.removeTestHeaderValidationFromRuleWithEncryptedId(authToken, rerouting.posHumanName, PROD, WEB_VRP_MOBILE)
         routingRuleModifier.removeTestHeaderValidationFromRuleWithItineraryId(authToken, rerouting.posHumanName, PROD, WEB_VRP_MOBILE)
         routingRuleModifier.removeTestHeaderValidationFromRuleWithEncryptedId(authToken, rerouting.posHumanName, PROD, PRINT_RECEIPT)
+    }
+
+    /**
+     * Deletes all routing rules for the specified PoSas.
+     * Note: only routing rules are deleted - redirects and shared conditions for the specified PoSas remain untouched!
+     */
+    fun deleteRulesForPoSas(authToken: String, reroutings: List<Rerouting>) =
+        reroutings.forEach{ rerouting -> deleteRulesForPoSa(authToken, rerouting) }
+
+    private fun deleteRulesForPoSa(authToken: String, rerouting: Rerouting) {
+        routingRuleModifier.delete(authToken, rerouting.posHumanName, LAB, WEB_VRP_DESKTOP, WITH_ENCRYPTED_ID)
+        routingRuleModifier.delete(authToken, rerouting.posHumanName, LAB, WEB_VRP_DESKTOP, WITH_ITINERARY_ID)
+        routingRuleModifier.delete(authToken, rerouting.posHumanName, LAB, WEB_VRP_MOBILE, WITH_ENCRYPTED_ID)
+        routingRuleModifier.delete(authToken, rerouting.posHumanName, LAB, WEB_VRP_MOBILE, WITH_ITINERARY_ID)
+        routingRuleModifier.delete(authToken, rerouting.posHumanName, LAB, PRINT_RECEIPT, WITH_ENCRYPTED_ID)
+        routingRuleModifier.delete(authToken, rerouting.posHumanName, PROD, WEB_VRP_DESKTOP, WITH_ENCRYPTED_ID)
+        routingRuleModifier.delete(authToken, rerouting.posHumanName, PROD, WEB_VRP_DESKTOP, WITH_ITINERARY_ID)
+        routingRuleModifier.delete(authToken, rerouting.posHumanName, PROD, WEB_VRP_MOBILE, WITH_ENCRYPTED_ID)
+        routingRuleModifier.delete(authToken, rerouting.posHumanName, PROD, WEB_VRP_MOBILE, WITH_ITINERARY_ID)
+        routingRuleModifier.delete(authToken, rerouting.posHumanName, PROD, PRINT_RECEIPT, WITH_ENCRYPTED_ID)
     }
 }
