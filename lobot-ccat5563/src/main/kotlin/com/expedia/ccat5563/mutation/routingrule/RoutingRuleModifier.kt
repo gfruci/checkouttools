@@ -262,4 +262,21 @@ class RoutingRuleModifier(
         """.trimIndent()
         println(lobotApiClient.httpPostResponseBody(authToken, requestBody))
     }
+
+    fun delete(authToken: String, posHumanName: String, environment: String, endpoint: String, encryptedId: Boolean) {
+        val ruleIdentifier = createRuleIdentifier(posHumanName, environment, endpoint, encryptedId)
+        val ruleId = ruleUpdateParamsRetriever.getIdForIdentifier(authToken, ruleIdentifier)
+        val requestBody = """ 
+{
+  "query": "mutation deleteRoutingRule(${'$'}id: Long!) { deleteEndpointRule(id: ${'$'}id) { id } }",
+  "variables": {
+    "id": "$ruleId"
+  }
+}
+        """.trimIndent()
+        println(lobotApiClient.httpPostResponseBody(authToken, requestBody))
+    }
+
+    private fun createRuleIdentifier(posHumanName: String, environment: String, endpoint: String, encryptedId: Boolean) =
+        "ccat5563-h2b-$endpoint-to-trip-overview-with-${ if (encryptedId) "encrypted" else "itinerary" }-id-$posHumanName-$environment"
 }

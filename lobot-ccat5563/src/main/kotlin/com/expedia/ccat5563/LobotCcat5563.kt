@@ -159,6 +159,12 @@ fun main(args: Array<String>) {
      * (This does not include the promotion of the changes to any environment.)
      */
 //    lobotReroutingEditor.removeTestHeaderValidationFromRoutingRulesForPoSas(authToken, REROUTINGS)
+
+    /**
+     * Deletes all routing rules for the specified PoSas.
+     * Note: only routing rules are deleted - redirects and shared conditions for the specified PoSas remain untouched!
+     */
+//    lobotReroutingEditor.deleteRulesForPoSas(authToken, REROUTINGS)
 }
 
 private fun getAuthToken(lobotApiClient: LobotApiClient, args: Array<String>): String {

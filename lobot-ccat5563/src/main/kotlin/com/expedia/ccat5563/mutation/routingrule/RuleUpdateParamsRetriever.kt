@@ -15,7 +15,7 @@ class RuleUpdateParamsRetriever(
     private val lobotApiClient: LobotApiClient
 ) {
     fun retrieve(authToken: String, ruleIdentifier: String): RuleUpdateParams {
-        val response = sendRequest(ruleIdentifier, authToken)
+        val response = sendRuleUpdateParamsRequest(ruleIdentifier, authToken)
         println(response)
         val subStrings = response.split(DELIMITER_COLON, DELIMITER_CLOSING_CURLY_BRACE, DELIMITER_COMMA, ignoreCase = IGNORE_CASE, limit = SUBSTRING_LIMIT)
         return RuleUpdateParams(subStrings[ID_INDEX], subStrings[VERSION_INDEX])
@@ -24,10 +24,32 @@ class RuleUpdateParamsRetriever(
     /**
      * https://github.expedia.biz/Brand-Expedia/lobot-api-java/blob/920930904a3c1013fe4dd58bace6e76ee87db1cf/src/main/java/com/expedia/www/lobot/highlander/web/query/routing/EndpointRuleQuery.java#L97
      */
-    private fun sendRequest(ruleIdentifier: String, authToken: String): String {
+    private fun sendRuleUpdateParamsRequest(ruleIdentifier: String, authToken: String): String {
         val requestBody = """
             {
-              "query": "query routingRuleIdentifierToId(${'$'}identifier: String!) { endpointRuleByIdentifier(identifier: ${'$'}identifier) { id version } }",
+              "query": "query getUpdateParams(${'$'}identifier: String!) { endpointRuleByIdentifier(identifier: ${'$'}identifier) { id version } }",
+              "variables": {
+                "identifier": "$ruleIdentifier"          
+              }
+            }"
+            """.trimIndent()
+        return lobotApiClient.httpPostResponseBody(authToken, requestBody)
+    }
+
+    fun getIdForIdentifier(authToken: String, ruleIdentifier: String): String {
+        val response = sendIdRequest(ruleIdentifier, authToken)
+        println(response)
+        val subStrings = response.split(DELIMITER_COLON, DELIMITER_CLOSING_CURLY_BRACE, DELIMITER_COMMA, ignoreCase = IGNORE_CASE, limit = SUBSTRING_LIMIT)
+        return subStrings[ID_INDEX]
+    }
+
+    /**
+     * https://github.expedia.biz/Brand-Expedia/lobot-api-java/blob/920930904a3c1013fe4dd58bace6e76ee87db1cf/src/main/java/com/expedia/www/lobot/highlander/web/query/routing/EndpointRuleQuery.java#L97
+     */
+    private fun sendIdRequest(ruleIdentifier: String, authToken: String): String {
+        val requestBody = """
+            {
+              "query": "query routingRuleIdentifierToId(${'$'}identifier: String!) { endpointRuleByIdentifier(identifier: ${'$'}identifier) { id } }",
               "variables": {
                 "identifier": "$ruleIdentifier"          
               }
