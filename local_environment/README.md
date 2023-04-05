@@ -156,6 +156,8 @@ Please update your hosts file with the following.
 
 - Join the SEA `AWS-034324643013-ADFS-Developer` security group: https://expediasg.sea.corp.expecn.com/ExpediaSG/Groups/Properties?identity=ZjA5YTc5YTcyY2IzNGQ0MDkzOTEyYTMzM2ZiNGZkMTl8Z3JvdXA= - Please note that your request will need to be approved before attempting to run BA locally.
 
+- Join `AWS - EWETEST - SEA` Security Group from this page: https://expedia.service-now.com/askeg?id=access_request. It is needed in order to be able to pick the ewe-test account during configuration.
+
 - Download egctl from: https://github.expedia.biz/Brand-Expedia/egctl/releases
 Unzip the file.
   - On Mac: Run the downloaded file, at first time you need to set allow the run in the security settings.
