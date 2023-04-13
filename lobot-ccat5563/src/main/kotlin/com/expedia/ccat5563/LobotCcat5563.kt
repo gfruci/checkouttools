@@ -74,7 +74,7 @@ private val REROUTINGS = listOf(
         "HCOM_MY", "en_MY", "ms.hotels.com"),
     Rerouting("mexico-english",
         "HCOM_LATAM", "en_MX","www.hotels.com",
-        "HCOM_LATAM", "en_US", "www.hoteles.com"),
+        "HCOM_LATAM", "en_US", "www.hoteles.com", "300400003"),
     Rerouting("nicaragua",
         "HCOM_LATAM", "es_NI","www.hoteles.com",
         "HCOM_LATAM", "en_US", "www.hoteles.com"),
@@ -92,7 +92,7 @@ private val REROUTINGS = listOf(
         "HCOM_EMEA", "en_IE", "www.hotels.com"),
     Rerouting("rest-of-latam-english",
         "HCOM_LATAM", "en_LA","www.hotels.com",
-        "HCOM_LATAM", "en_US", "www.hoteles.com"),
+        "HCOM_LATAM", "en_US", "www.hoteles.com", "300000003"),
     Rerouting("slovakia",
         "HCOM_SK", "sk_SK","sk.hotels.com",
         "HCOM_EMEA", "en_IE", "www.hotels.com"),
@@ -161,7 +161,10 @@ private val REROUTINGS = listOf(
         "HCOM_ASIA", "en_AS", "www.hotels.com"),
     Rerouting("united-states",
         "HCOM_US", "en_US","www.hotels.com",
-        "HCOM_US", "en_US", "www.hotels.com")
+        "HCOM_US", "en_US", "www.hotels.com"),
+    Rerouting("brazil",
+        "HCOM_BR", "pt_BR","www.hoteis.com",
+        "HCOM_BR", "pt_BR", "www.hoteis.com")
 )
 
 /**

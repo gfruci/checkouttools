@@ -5,6 +5,7 @@ import com.expedia.ccat5563.documentation.ConfluenceHtmlGenerator
 import com.expedia.ccat5563.domain.Rerouting
 
 private const val REDIRECT_ENTITY_TYPE = "redirects"
+private const val EMPTY = ""
 
 class RedirectModifier(
     private val lobotApiClient: LobotApiClient,
@@ -25,7 +26,7 @@ class RedirectModifier(
       "description": "Redirects HCOM Classic View Reservation Page and Print Receipt URLs to HoB Trip OverView when encrypted id query parameter is present in the URL and environment is ${environment}, setting pos=${rerouting.newPos} and locale=${rerouting.newLocale}. More info: https://jira.expedia.biz/browse/CCAT-5563",
       "version": 1,
       "urlPattern": "^.+?(\\?|&)id=(.[^&]+)",
-      "replacement": "https://$newHost/trips/hcom_eid_${'$'}2?pos=${rerouting.newPos}&locale=${rerouting.newLocale}",
+      "replacement": "https://$newHost/trips/hcom_eid_${'$'}2?pos=${rerouting.newPos}&locale=${rerouting.newLocale}${getOptionalSiteId(rerouting.newSiteId)}",
       "keepQuery": false,
       "statusCode": 301,
       "owners": [
@@ -61,7 +62,7 @@ class RedirectModifier(
       "description": "Redirects HCOM Classic View Reservation Page and Print Receipt URLs to HoB Trip OverView when non-encrypted \"itineraryId\" query parameter is present in the URL and environment is $environment, setting pos=${rerouting.newPos} and locale=${rerouting.newLocale}. More info: https://jira.expedia.biz/browse/CCAT-5563",
       "version": 1,
       "urlPattern": "^.+?(\\?|&)itineraryId=([0-9]+)",
-      "replacement": "https://$newHost/trips/${'$'}2?pos=${rerouting.newPos}&locale=${rerouting.newLocale}",
+      "replacement": "https://$newHost/trips/${'$'}2?pos=${rerouting.newPos}&locale=${rerouting.newLocale}${getOptionalSiteId(rerouting.newSiteId)}",
       "keepQuery": false,
       "statusCode": 301,
       "owners": [
@@ -81,6 +82,9 @@ class RedirectModifier(
         """.trimIndent()
         return sendCreationRequestAndProcessResponse(authToken, requestBody, redirectIdentifier)
     }
+
+    private fun getOptionalSiteId(siteId: String?) =
+        siteId?.let{"&siteid=$it"} ?: EMPTY
 
     private fun sendCreationRequestAndProcessResponse(authToken: String, requestBody: String, identifier: String): String {
         val response = lobotApiClient.httpPostResponseBody(authToken, requestBody)
