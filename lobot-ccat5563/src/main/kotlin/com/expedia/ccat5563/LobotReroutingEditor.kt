@@ -68,6 +68,8 @@ class LobotReroutingEditor(
             prodHost.removeSuffix(".hotels.cn").plus(".staging1-hotels.cn")
         } else if (prodHost.endsWith(".hoteles.com")) {
             prodHost.removeSuffix(".hoteles.com").plus(".staging1-hoteles.com")
+        } else if (prodHost.endsWith(".hoteis.com")) {
+            prodHost.removeSuffix(".hoteis.com").plus(".staging1-hoteis.com")
         } else {
             throw IllegalArgumentException("prodHost has unexpected suffix: $prodHost")
         }
