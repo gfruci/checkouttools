@@ -7,5 +7,6 @@ data class Rerouting(
     val oldProdHost: String,
     val newPos: String,
     val newLocale: String,
-    val newProdHost: String
+    val newProdHost: String,
+    val newSiteId: String? = null
 )
