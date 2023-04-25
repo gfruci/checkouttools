@@ -26,6 +26,7 @@ services:
       - JAVA_OPTS= -Dfile.encoding=UTF-8
       - VAULT_ADDR=https://vault.us-west-2.shared-lab.aws.hcom
       - VAULT_ENGINE=kv-v2
+      - VAULT_TIMEOUT=-v 60
       - INSTANCE_NAME=staging1-styxpres-01
       - APPLICATION_NAME=styxpres
       - SECRETS_PATH=styxpres/kv-v2
@@ -244,7 +245,7 @@ services:
       - APP_SMS_CONFIRMATION_ENABLED=false
       - APP_spring.profiles.active=default,fakeauthentication
       - APP_VAULT_USER_ID=staging-ba-01
-      - APP_VAULT_TIMEOUT=60
+      - APP_VAULT_TIMEOUT=-v 60
       - APP_TOMCAT_EXECUTOR_MAX_THREADS=50
       - APP_TOMCAT_EXECUTOR_MIN_SPARE_THREADS=10
       - APP_TOMCAT_EXECUTOR_MAX_IDLE_TIME=20000
