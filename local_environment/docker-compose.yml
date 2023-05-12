@@ -378,7 +378,6 @@ services:
       - APP_LOYALTY_REST_CLIENT_READ_TIMEOUT=60000
       - APP_LOYALTY_ESTIMATION_SERVICE_CLIENT_READ_TIMEOUT=60000
       - APP_LOYALTY_ESTIMATION_SERVICE_CLIENT_CONNECTION_TIMEOUT=60000
-      - APP_BPAS_ON_PAYMENT_OPTION_REQUEST_CIRCUIT_BREAKER_TIMEOUT_MS=60000
       - APP_OMS_RETRIEVE_ORDER_SERVICE_URL=https://charon-maui.test.fctsordering.expedia.com/retrieve
       - APP_HEADER_SERVICE_URL="http://csvc.istio-gateway.backend.k8s.us-west-2.hcom-lab-decaf.aws.hcom/component_svc"
       - APP_BRS_BASE_URL=http://brs.istio-gateway.backend.k8s.us-west-2.hcom-lab-decaf.aws.hcom
@@ -511,7 +510,6 @@ services:
       - APP_LOYALTY_REST_CLIENT_READ_TIMEOUT=60000
       - APP_LOYALTY_ESTIMATION_SERVICE_CLIENT_READ_TIMEOUT=60000
       - APP_LOYALTY_ESTIMATION_SERVICE_CLIENT_CONNECTION_TIMEOUT=60000
-      - APP_BPAS_ON_PAYMENT_OPTION_REQUEST_CIRCUIT_BREAKER_TIMEOUT_MS=60000
       - APP_MAPPING_SERVICE_URL=maps.istio-gateway.backend.k8s.us-west-2.hcom-lab-decaf.aws.hcom:80
       - APP_MAPPING_SERVICE_BASE_URL=https://maps.istio-gateway.backend.k8s.us-west-2.hcom-lab-decaf.aws.hcom
       - APP_PROPERTY_CATALOGUE_SERVICE_BASE_URL=https://pcs.istio-gateway.backend.k8s.us-west-2.hcom-lab-decaf.aws.hcom/property_catalogue_svc
