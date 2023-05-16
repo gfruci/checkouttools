@@ -38,7 +38,7 @@ export PIO_VERSION="latest"  # N.B.: export only marks variables for automatic e
 export BPE_VERSION="latest"
 START_BPE=false
 START_PIO=false
-STUB_STATUS=
+STUB_STATUS="_no_stub"
 SUIT="default"
 TRUSTSTORE_PATH="/hcom/share/java/default/lib/security/cacerts_plus_internal"
 DEBUG_OPTS="-Xdebug -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:1901"
@@ -211,6 +211,7 @@ function retrieve-secrets-from-eg-vault {
     rm -rf $EG_VAULT_SECRETS_DIR
     mkdir $EG_VAULT_SECRETS_DIR
     touch $EG_VAULT_SECRETS_FILE_PATH
+    chmod a+r $EG_VAULT_SECRETS_FILE_PATH
 
     # generate secrets at secrets.json
     echo "Checking if jq is installed"
@@ -492,9 +493,9 @@ function help {
     echo "Usage: $0 <command> <options>"
     echo "Commands:"
     echo "./local_env.sh start [-proxy]                                            Start the local environment, with no front-end apps (BA)"
-    echo "./local_env.sh start -ba-version <ba-version> [-no-stub] [-proxy] [-j8]  Start the local environment, using the BA version: <ba-version>"
-    echo "./local_env.sh start -bma-version <bma-version> [-no-stub] [-proxy]      Start the local environment, using the BMA version: <bma-version>"
-    echo "./local_env.sh start -bca-version <bca-version> [-no-stub] [-proxy]      Start the local environment, using the BMA version: <bma-version>"
+    echo "./local_env.sh start -ba-version <ba-version> [-stub] [-proxy] [-j8]  Start the local environment, using the BA version: <ba-version>"
+    echo "./local_env.sh start -bma-version <bma-version> [-stub] [-proxy]      Start the local environment, using the BMA version: <bma-version>"
+    echo "./local_env.sh start -bca-version <bca-version> [-stub] [-proxy]      Start the local environment, using the BMA version: <bma-version>"
 	  echo "                                                          Use 'local' as version to start up with local built image"
 	  echo ""
     echo "./local_env.sh stop                                                      Stop the local environment"
@@ -504,20 +505,20 @@ function help {
     echo "./local_env.sh update [<app_id>]                                         Update local environment scripts, along with the specified app ( styxpres chekito mvt )."
     echo "                                                          By default updates styxpres, chekito and mvt docker images"
     echo
-    echo "Start environment related services without any application (no checkito):"
-    echo "./local-env.sh start -no-stub"
+    echo "Start environment related services without any application:"
+    echo "./local-env.sh start"
     echo "BA start examples:"
-    echo "./local_env.sh start-app ba -ba-version local -no-stub"
-    echo "./local_env.sh start-app ba -ba-version bf0538ab789c71793aa2c025400d884813c7bc18 -no-stub"
-    echo "./local_env.sh start-app ba -ba-version af092f20f5bc06af679259d6125c7eb8544c6b44-18627 -no-stub"
+    echo "./local_env.sh start-app ba -ba-version local"
+    echo "./local_env.sh start-app ba -ba-version bf0538ab789c71793aa2c025400d884813c7bc18"
+    echo "./local_env.sh start-app ba -ba-version af092f20f5bc06af679259d6125c7eb8544c6b44-18627"
     echo 
     echo "BMA start examples:"
-    echo "./local_env.sh start-app bma -bma-version local -no-stub"
-    echo "./local_env.sh start-app bma -bma-version dd95b6bc40cfb4227aa4738236fba516e87df669 -no-stub"
-    echo "./local_env.sh start-app bma -bma-version dd95b6bc40cfb4227aa4738236fba516e87df669-18627 -no-stub"
+    echo "./local_env.sh start-app bma -bma-version local"
+    echo "./local_env.sh start-app bma -bma-version dd95b6bc40cfb4227aa4738236fba516e87df669"
+    echo "./local_env.sh start-app bma -bma-version dd95b6bc40cfb4227aa4738236fba516e87df669-18627"
     echo
     echo "Options:"
-    echo "-no-stub                                                  Start the local environment without using checkito as mocking server (by default is using Checkito)"
+    echo "-stub                                                     Start the local environment using checkito as mocking server (default is NOT using Checkito)"
     echo "-proxy                                                    Set the local environment proxy host to docker.for.mac.localhost:8888"
     echo "-j8                                                       Sets Java 8 related options"
     echo "-suit                                                     Configures which suit will be used with checkito"
@@ -537,8 +538,8 @@ function init {
                 export BA_VERSION=$2
                 shift
                 ;;
-            -no-stub)
-                STUB_STATUS=_no_stub
+            -stub)
+                STUB_STATUS=""
                 ;;
             -bma-version)
                 export BMA_VERSION=$2
