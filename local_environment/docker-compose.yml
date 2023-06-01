@@ -334,8 +334,8 @@ services:
       - APP_PROPERTY_CATALOGUE_SERVICE_BASE_URL=https://pcs.istio-gateway.backend.k8s.us-west-2.hcom-lab-decaf.aws.hcom/property_catalogue_svc
       - APP_MVTSERVICE_BASE_URL=https://mvtsvc.istio-gateway.backend.k8s.us-west-2.hcom-lab-decaf.aws.hcom/mvtsvc
       - APP_OMS_HMAC_AUTH_ENABLED=true
-      - APP_OMS_CREATE_ORDER_SERVICE_URL=https://charon-maui.test.fctsordering.expedia.com/create
-      - APP_OMS_RETRIEVE_ORDER_SERVICE_URL=https://charon-maui.test.fctsordering.expedia.com/retrieve
+      - APP_OMS_CREATE_ORDER_SERVICE_URL=https://ord-charon-oms.rcp.orders.test-cts.exp-aws.net/create
+      - APP_OMS_RETRIEVE_ORDER_SERVICE_URL=https://ord-charon-oms.rcp.orders.test-cts.exp-aws.net/retrieve
       - APP_ZIPKIN_SAMPLE_RATE=0
       - APP_TNL_S3_OBJECT_KEY=v3/activeExperiments.json.gz
 
@@ -759,6 +759,7 @@ services:
       - APP_MVTCLIENT_MAX_RETRIES_ON_RESPONSE_EXCEPTION=3
       - APP_HFOX_SERVICE_URL=http://hfox.istio-gateway.backend.k8s.us-west-2.hcom-lab-decaf.aws.hcom/allfxratesbybasecurrency/
       - APP_HFOX_HISTORICAL_SERVICE_URL=http://hfox.istio-gateway.backend.k8s.us-west-2.hcom-lab-decaf.aws.hcom/historicalfxrates/
+      - APP_OMS_HMAC_AUTH_ENABLED=true
 
       # Vault
       - APP_VAULT_ADDR=https://vault.us-west-2.shared-lab.aws.hcom
