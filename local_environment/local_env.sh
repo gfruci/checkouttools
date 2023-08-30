@@ -33,7 +33,6 @@ NO_IMAGE=no_image
 export BA_VERSION=${NO_IMAGE}
 export BMA_VERSION=${NO_IMAGE}
 export BCA_VERSION=${NO_IMAGE}
-export CHECKITO_VERSION=${NO_IMAGE}
 export PIO_VERSION="latest"  # N.B.: export only marks variables for automatic export
 export BPE_VERSION="latest"
 START_BPE=false
@@ -43,7 +42,7 @@ SUIT="default"
 TRUSTSTORE_PATH="/hcom/share/java/default/lib/security/cacerts_plus_internal"
 DEBUG_OPTS="-Xdebug -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:1901"
 
-APPS=( "mvt" "ba" "bma" "bca" "pio" "bpe" "checkito" "styxpres" "nginx")
+APPS=( "mvt" "ba" "bma" "bca" "pio" "bpe" "styxpres" "nginx")
 DOCKER_IMAGE_PREFIX="kumo-docker-release-local.artylab.expedia.biz/library"
 BA_IMAGE_NAME="bookingapp"
 BMA_IMAGE_NAME="bookingmanagementapp"
@@ -64,13 +63,6 @@ app_cmd() {
             echo "grep -e \"styxpres.*ERROR\" ${SCRIPT_DIR}/logs/styxpres.log | grep -v \"locsClientLoader\"";;
         "styxpres,update_cmd")
             echo "docker pull ${DOCKER_IMAGE_PREFIX}/styxpres:release >> ${SCRIPT_DIR}/logs/startup.log 2>&1";;
-
-        "checkito,start_status_cmd")
-            echo "grep \"checkito.*Checkito listening for HTTPS requests\" ${SCRIPT_DIR}/logs/checkito.log";;
-        "checkito,stop_status_cmd")
-            echo "grep -e \"checkito.*ERROR\" ${SCRIPT_DIR}/logs/checkito.log";;
-        "checkito,update_cmd")
-            echo "docker pull ${DOCKER_IMAGE_PREFIX}/checkito:[tag] >> ${SCRIPT_DIR}/logs/startup.log 2>&1";;
 
         "nginx,start_status_cmd")
             echo "grep -E \"nginx.*done|Attaching to nginx\" ${SCRIPT_DIR}/logs/nginx.log";;
@@ -339,16 +331,6 @@ function start-app {
 		fi
     fi
 
-    if [ "${APP}" = "checkito" ]
-    then
-        if [ "${STUB_STATUS}" = "_no_stub" ]
-        then
-            return 1
-        fi
-        export CHECKITO_VERSION="${DOCKER_IMAGE_PREFIX}/checkito:${CHECKITO_VERSION:-latest}"
-        export SUIT
-    fi
-
     if [ "${APP}" = "bpe" ]
     then
         if ! ${START_BPE}
@@ -518,10 +500,8 @@ function help {
     echo "./local_env.sh start-app bma -bma-version dd95b6bc40cfb4227aa4738236fba516e87df669-18627"
     echo
     echo "Options:"
-    echo "-stub                                                     Start the local environment using checkito as mocking server (default is NOT using Checkito)"
     echo "-proxy                                                    Set the local environment proxy host to docker.for.mac.localhost:8888"
     echo "-j8                                                       Sets Java 8 related options"
-    echo "-suit                                                     Configures which suit will be used with checkito"
     echo
     echo "For any other help, please check out README at https://github.expedia.biz/hotels-checkout/checkouttools/blob/master/local_environment/README.md"
     exit 0
@@ -547,10 +527,6 @@ function init {
                 ;;
             -bca-version)
                 export BCA_VERSION=$2
-                shift
-                ;;
-             -checkito-version)
-                export CHECKITO_VERSION=$2
                 shift
                 ;;
             -proxy)
