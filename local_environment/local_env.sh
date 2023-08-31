@@ -37,7 +37,7 @@ export PIO_VERSION="latest"  # N.B.: export only marks variables for automatic e
 export BPE_VERSION="latest"
 START_BPE=false
 START_PIO=false
-STUB_STATUS="_no_stub"
+STUB_STATUS=""
 SUIT="default"
 TRUSTSTORE_PATH="/hcom/share/java/default/lib/security/cacerts_plus_internal"
 DEBUG_OPTS="-Xdebug -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:1901"
@@ -256,7 +256,6 @@ function start-app {
 
     if [ "${APP}" = "ba" ]
     then
-        APP_TYPE=${STUB_STATUS}
         if [ "${BA_VERSION}" = "" ] || [ "${BA_VERSION}" = "$NO_IMAGE" ]
         then
             if [ "${START_MODE}" = "start-all" ]
@@ -283,7 +282,6 @@ function start-app {
 
     if [ "${APP}" = "bma" ]
     then
-        APP_TYPE=${STUB_STATUS}
         if [ "${BMA_VERSION}" = "" ] || [ "${BMA_VERSION}" = "$NO_IMAGE" ]
         then
             if [ "${START_MODE}" = "start-all" ]
@@ -308,7 +306,6 @@ function start-app {
 
     if [ "${APP}" = "bca" ]
     then
-        APP_TYPE=${STUB_STATUS}
         if [ "${BCA_VERSION}" = "" ] || [ "${BCA_VERSION}" = "$NO_IMAGE" ]
         then
             if [ "${START_MODE}" = "start-all" ]
@@ -365,10 +362,10 @@ function start-app {
             fi
             return 1
         fi
-        APP_TYPE=${STUB_STATUS}
     fi
 
     cd ${SCRIPT_DIR}
+    echo $APP_TYPE
     nohup docker-compose up --no-color ${APP}${APP_TYPE} >> logs/${APP}.log 2>&1 &
     cd ${PREV_DIR}
 
@@ -517,9 +514,6 @@ function init {
             -ba-version)
                 export BA_VERSION=$2
                 shift
-                ;;
-            -stub)
-                STUB_STATUS=""
                 ;;
             -bma-version)
                 export BMA_VERSION=$2

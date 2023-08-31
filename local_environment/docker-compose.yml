@@ -60,7 +60,7 @@ services:
     volumes:
       - mvt:/mvt
 
-  ba_no_stub:
+  ba:
     image: ${BA_VERSION}
     container_name: ba
     ports:
@@ -183,7 +183,7 @@ services:
       - APP_COUPON_ROUTING_SERVICE_THERMOS_TIMEOUT_IN_MILLISECONDS=15000
       - APP_USER_SERVICE_THERMOS_TIMEOUT_IN_MILLISECONDS=15000
 
-  bma_no_stub:
+  bma:
     image: ${BMA_VERSION}
     container_name: bma
     ports:
@@ -287,7 +287,7 @@ services:
       - APP_java.rmi.server.hostname=127.0.0.1
       - APP_com.sun.management.jmxremote.rmi.port=38007
 
-  bca_no_stub:
+  bca:
     image: ${BCA_VERSION}
     container_name: bca
     ports:
@@ -456,7 +456,7 @@ services:
   #   - APP_javax.net.debug=ssl:handshake
   #  net: "host"::w
 
-  pio_no_stub:
+  pio:
     image: paymentinitializationorchestrator:latest
     ports:
       - "8080:8080"
