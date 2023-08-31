@@ -365,7 +365,6 @@ function start-app {
     fi
 
     cd ${SCRIPT_DIR}
-    echo $APP_TYPE
     nohup docker-compose up --no-color ${APP}${APP_TYPE} >> logs/${APP}.log 2>&1 &
     cd ${PREV_DIR}
 
