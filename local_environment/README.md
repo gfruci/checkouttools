@@ -6,10 +6,6 @@ It leverages the [local-app-server](https://github.expedia.biz/hotels-platform/l
 
 ![local_env](assets/local_env_arch.png)
 
-#### Stubbed hotels and supported features:
-
-Please refer to the checkito README for a full list of stubbed hotels and supported features: http://stash.hcom/projects/COP/repos/checkito/browse
-
 #### Limitations
 
 TBW
@@ -148,8 +144,6 @@ Please update your hosts file with the following.
 127.0.0.1 hotels.dev-hotelurbano.com ssl.dev-hotelurbano.com
 127.0.0.1 hotels.dev-hcombest.com ssl.dev-hcombest.com
 
-#CHECKITO
-127.0.0.1 checkito.hcom checkito
 ```
 
 ### Set Up AWS token generation
@@ -280,13 +274,13 @@ please check the bash version and upgrade it manually if needed.
     start -bca-version <bca-version> [-no-stub] [-proxy]   Start the local environment, using the BMA version: <bma-version>
     stop                                                   Stop the local environment
     status                                                 Print the local environment status
-    start-app <app_id>                                     Start only the specified app ( mvt ba bma bca checkito styxpres nginx )
-    stop-app <app_id>                                      Stop only the specified app ( mvt ba bma bca checkito styxpres nginx )
-    update [<app_id>]                                      Update local environment scripts, along with the specified app ( checkito styxpres nginx ).
+    start-app <app_id>                                     Start only the specified app ( mvt ba bma bca styxpres nginx )
+    stop-app <app_id>                                      Stop only the specified app ( mvt ba bma bca styxpres nginx )
+    update [<app_id>]                                      Update local environment scripts, along with the specified app ( styxpres nginx ).
                                                            By default updates styxpres, chekito and mvt docker images
     
     Options:
-    -no-stub                                               Start the local environment without using checkito as mocking server (by default is using Checkito)
+    -no-stub                                               Start the local environment without using mocks
     -proxy                                                 Set the local environment proxy host to docker.for.mac.localhost:8888
 
 ----
@@ -331,7 +325,6 @@ In order to check that everything works you can open the following [stubbed hote
 *Examples*
 
 * `./local_env.sh start-app ba -ba-version 123.0.7220`
-* `./local_env.sh start-app checkito`
 
 #### Stop a single app
 
@@ -340,7 +333,6 @@ In order to check that everything works you can open the following [stubbed hote
 *Examples*
 
 * `./local_env.sh stop-app ba`
-* `./local_env.sh start-app checkito`
 
 #### Update
 
@@ -351,14 +343,6 @@ Update local environment scripts, along with the specified `<app_id>`. By defaul
 *Examples*
 
 * `./local_env.sh update`
-* `./local_env.sh update checkito`
-
-### Checkito
-
-Checkito is running with default settings:
-
-* http: 8089
-* https: 8189
 
 ### BA testing
 
@@ -418,10 +402,6 @@ The remote JMX port is exposed on `39007`
 
 The fixed BCA debugging port is `2101`
 You can change this in the local_environment `<local_environment_root_folder>/docker-compose.yml`, but if need to do it please make it configurable via the startup script.
-
-### Checkito DEBUG
-
-The fixed BA debugging port is `2201`
 
 ### Proxying
 
@@ -537,7 +517,6 @@ Please refer to: https://pages.github.expedia.biz/hotels-checkout/bookingapp/tru
     ```
     time="2022-03-11T13:38:24+01:00" level=warning msg="The \"BA_VERSION\" variable is not set. Defaulting to a blank string."
     time="2022-03-11T13:38:24+01:00" level=warning msg="The \"BMA_VERSION\" variable is not set. Defaulting to a blank string."
-    time="2022-03-11T13:38:24+01:00" level=warning msg="The \"CHECKITO_VERSION\" variable is not set. Defaulting to a blank string."
     time="2022-03-11T13:38:24+01:00" level=warning msg="The \"SUIT\" variable is not set. Defaulting to a blank string."
     time="2022-03-11T13:38:24+01:00" level=warning msg="The \"PROXY_CONFIG\" variable is not set. Defaulting to a blank string."
     time="2022-03-11T13:38:24+01:00" level=warning msg="The \"BCA_VERSION\" variable is not set. Defaulting to a blank string."
@@ -669,7 +648,6 @@ Components involved:
 * ngnix: reverse proxy
 * styx: html page rendering
 * CKO FE apps: BA, BMA, BCA
-* checkito: CKO mock servers
 
 Styx DUP plugin only serves the html (rendering the soy files), the assets (JS, CSS) are served by the staging DispatcherApp (DA):
 * the DA reads the JS and CSS from File System DUP folders
