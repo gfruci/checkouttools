@@ -136,7 +136,6 @@ services:
       - APP_DSC_CASSANDRA_AUTH_ENABLED=true
       - APP_DSC_CASSANDRA_VAULT_ROLE_ID=e2558c4d-a309-5824-63be-06ef02143247
       - APP_DSC_CASSANDRA_VAULT_SECRET_ID=c80151e5-a227-8954-2f11-e9efab0a46ee
-      - APP_DSC_AWS_US_WEST_2_DATASTAX_CASSANDRA_HOSTS=cassandra.shared.1.us-west-2.hcom-lab-decaf.aws.hcom,cassandra.shared.2.us-west-2.hcom-lab-decaf.aws.hcom,cassandra.shared.3.us-west-2.hcom-lab-decaf.aws.hcom,cassandra.shared.4.us-west-2.hcom-lab-decaf.aws.hcom,cassandra.shared.5.us-west-2.hcom-lab-decaf.aws.hcom,cassandra.shared.6.us-west-2.hcom-lab-decaf.aws.hcom
       - APP_DSC_LOCAL_DATA_REGION=AWS_US_WEST_2
       - APP_DSC_KNOWN_DATA_REGIONS=AWS_US_WEST_2
       - APP_DSC_OPENSOURCE_AUTH_ENABLED=true
@@ -354,10 +353,6 @@ services:
       - APP_MINOS_DB_PORT_AWS_US_WEST_2=9042
       - APP_aws.us.west.2.minos.connectTimeoutMillis=30000
       - APP_aws.us.west.2.minos.readTimeoutMillis=30000
-      - APP_DSC_CASSANDRA_AUTH_ENABLED=true
-      - APP_DSC_CASSANDRA_VAULT_ROLE_ID=e2558c4d-a309-5824-63be-06ef02143247
-      - APP_DSC_CASSANDRA_VAULT_SECRET_ID=c80151e5-a227-8954-2f11-e9efab0a46ee
-      - APP_DSC_AWS_US_WEST_2_DATASTAX_CASSANDRA_HOSTS=cassandra.shared.1.us-west-2.hcom-lab-decaf.aws.hcom,cassandra.shared.2.us-west-2.hcom-lab-decaf.aws.hcom,cassandra.shared.3.us-west-2.hcom-lab-decaf.aws.hcom,cassandra.shared.4.us-west-2.hcom-lab-decaf.aws.hcom,cassandra.shared.5.us-west-2.hcom-lab-decaf.aws.hcom,cassandra.shared.6.us-west-2.hcom-lab-decaf.aws.hcom
       - APP_DSC_LOCAL_DATA_REGION=AWS_US_WEST_2
       - APP_DSC_KNOWN_DATA_REGIONS=AWS_US_WEST_2
       - APP_DSC_OPENSOURCE_AUTH_ENABLED=true
